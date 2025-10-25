@@ -23,15 +23,15 @@
 ## Phase 2: Core Terminal Engine
 
 ### 3. Build terminal UI foundation
-- Create HTML skeleton with terminal container
-- Implement CSS for retro terminal aesthetics (monospace font, scan lines, glow effects)
-- Build input/output system for command interaction
+- [x] Create HTML skeleton with terminal container
+- [x] Implement CSS for retro terminal aesthetics (monospace font, scan lines, glow effects)
+- [x] Build input/output system for command interaction
 
 ### 4. Develop command system
-- Create command parser and dispatcher
-- Implement hybrid UI navigation (clickable prompts + commands)
-- Add command history (up/down arrows)
-- Implement tab completion
+- [x] Create command parser and dispatcher
+- [ ] Implement hybrid UI navigation (clickable prompts + commands)
+- [x] Add command history (up/down arrows)
+- [x] Implement tab completion
 
 ## Phase 3: Essential Commands & Content
 
