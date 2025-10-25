@@ -29,7 +29,7 @@
 
 ### 4. Develop command system
 - [x] Create command parser and dispatcher
-- [ ] Implement hybrid UI navigation (clickable prompts + commands)
+- [x] Implement hybrid UI navigation (clickable prompts + commands)
 - [x] Add command history (up/down arrows)
 - [x] Implement tab completion
 

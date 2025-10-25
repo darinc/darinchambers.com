@@ -90,4 +90,27 @@ export class Terminal {
   focus(): void {
     this.input.focus();
   }
+
+  async executeCommand(command: string): Promise<void> {
+    // Echo command
+    this.output.writeCommand(this.getPromptString(), command);
+
+    // Add to history
+    this.input.addToHistory(command);
+
+    // Execute command
+    if (command.trim()) {
+      const result = await this.dispatcher.dispatch(command);
+      if (result.output) {
+        if (result.error) {
+          this.output.writeError(result.output);
+        } else {
+          this.output.write(result.output);
+        }
+      }
+    }
+
+    // Ensure input is focused after command execution
+    this.input.focus();
+  }
 }

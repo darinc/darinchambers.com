@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.3] - 2025-10-25
+
+### Added
+- Added hybrid UI navigation with clickable command shortcuts that integrate seamlessly with terminal input
+- Created Navigation component for managing clickable command links
+- Implemented programmatic command execution from navigation clicks
+- Added navigation bar with retro terminal styling and hover effects
+- Navigation items automatically execute commands when clicked
+- Integrated navigation with command history tracking
+- Added mobile-responsive navigation layout
+
 ## [0.0.2] - 2025-10-25
 
 ### Added
