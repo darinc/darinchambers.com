@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2025-10-25
+
+### Added
+- Implemented virtual Linux-like file system with navigation commands (ls, cd, pwd, cat) and directory structure
+- Created FileSystem utility class with support for directories, files, and path resolution
+- Added directory structure: /root, /home/guest, /home/darin, /usr/bin, /usr/local/bin
+- Implemented ls command for listing directory contents
+- Implemented cd command for changing directories with prompt updates
+- Implemented pwd command for displaying current working directory
+- Implemented cat command for reading file contents
+- Added easter egg content in /home/darin directory (.secret file)
+- Created informational files: README.txt, about.txt, projects.txt
+- Terminal prompt now reflects current directory location
+- Updated navigation bar with file system commands
+- Updated help command with file system command documentation
+
 ## [0.0.3] - 2025-10-25
 
 ### Added

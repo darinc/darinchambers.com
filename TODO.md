@@ -36,13 +36,13 @@
 ## Phase 3: Essential Commands & Content
 
 ### 4.5 Implement a mock file system
-- Implement a file system that appears to be similar to a linux system
-- /root - probably won't have anything here
-- /home/darin - that's me, will have some easter egg
-- /home/guest - this is the directory where the non logged in user lands
-- /home/<name> - not implemented yet, could be for logged in users
-- /usr/bin - shows all core commands
-- /usr/local/bin - other, non core commands
+- [x] Implement a file system that appears to be similar to a linux system
+- [x] /root - empty directory (reserved for future use)
+- [x] /home/darin - personal directory with easter egg (.secret file)
+- [x] /home/guest - default user landing directory with README.txt
+- [ ] /home/<name> - not implemented yet, could be for logged in users
+- [x] /usr/bin - shows all core commands (help, clear, ls, cd, pwd, cat)
+- [x] /usr/local/bin - other, non core commands (placeholder for future)
 
 ### 5. Implement core commands
 - `help` - List available commands
