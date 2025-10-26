@@ -60,7 +60,11 @@ export class Terminal {
         } else if (result.output) {
           if (result.error) {
             this.output.writeError(result.output);
+          } else if (result.html) {
+            // Render HTML content
+            this.output.writeHTML(result.output);
           } else {
+            // Regular text output
             this.output.write(result.output);
           }
         }

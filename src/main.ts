@@ -14,6 +14,7 @@ import { createHistoryCommand } from './commands/core/history';
 import { createAliasCommand } from './commands/core/alias';
 import { createUnaliasCommand } from './commands/core/unalias';
 import { createWhoamiCommand } from './commands/core/whoami';
+import { createRenderCommand } from './commands/core/render';
 import { dateCommand } from './commands/core/date';
 import { aboutCommand } from './commands/local/about';
 import { portfolioCommand } from './commands/local/portfolio';
@@ -113,6 +114,9 @@ const whoamiCommand = createWhoamiCommand(terminal);
 // Create blog command
 const blogCommand = createBlogCommand(fileSystem);
 
+// Create render command
+const renderCommand = createRenderCommand(fileSystem);
+
 terminal.registerCommands([
   helpCommand,
   clearCommand,
@@ -126,6 +130,7 @@ terminal.registerCommands([
   pwdCommand,
   catCommand,
   treeCommand,
+  renderCommand,
   aboutCommand,
   portfolioCommand,
   blogCommand,

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.13] - 2025-10-26
+
+### Added
+- Markdown rendering command (render) to display formatted markdown with rich styling
+- MarkdownRenderer utility with support for headers, bold, italic, code blocks, lists, and links
+- HTML output support in command system via html flag in CommandResult interface
+- CSS styles for markdown rendering with proper typography, colors, and spacing
+- writeHTML method in TerminalOutput component for rendering formatted HTML content
+- render command in /usr/bin for converting markdown files to formatted display
+
+### Changed
+- CommandResult interface now supports optional html flag to indicate HTML output
+- Terminal output system can now display both plain text and formatted HTML content
+- Blog posts and markdown files can now be beautifully rendered with the render command
+
 ## [0.0.12] - 2025-10-26
 
 ### Added

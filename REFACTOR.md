@@ -45,15 +45,15 @@
      │   - Support tag filtering: blog --tag AI/ML                                                                                            │
      │                                                                                                                                        │
      │ Part 2: Markdown Rendering Command                                                                                                     │
-     │ - [ ] Create MarkdownRenderer utility to convert markdown to HTML                                                                      │
-     │ - [ ] Implement render command to format markdown for terminal display                                                                 │
-     │ - [ ] Support headers (H1, H2, H3) with different sizes/styles                                                                         │
-     │ - [ ] Support ordered and unordered lists with proper indentation                                                                      │
-     │ - [ ] Support code blocks with distinct styling (potential syntax highlighting)                                                        │
-     │ - [ ] Support inline formatting (bold, italic, inline code, links)                                                                     │
-     │ - [ ] Add CSS styles for markdown rendering in terminal.css                                                                            │
-     │ - [ ] Update TerminalOutput to handle HTML content rendering                                                                           │
-     │ - [ ] Add render command to /usr/bin                                                                                                   │
+     │ - [x] Create MarkdownRenderer utility to convert markdown to HTML                                                                      │
+     │ - [x] Implement render command to format markdown for terminal display                                                                 │
+     │ - [x] Support headers (H1, H2, H3) with different sizes/styles                                                                         │
+     │ - [x] Support ordered and unordered lists with proper indentation                                                                      │
+     │ - [x] Support code blocks with distinct styling (potential syntax highlighting)                                                        │
+     │ - [x] Support inline formatting (bold, italic, inline code, links)                                                                     │
+     │ - [x] Add CSS styles for markdown rendering in terminal.css                                                                            │
+     │ - [x] Update TerminalOutput to handle HTML content rendering                                                                           │
+     │ - [x] Add render command to /usr/bin                                                                                                   │
      │                                                                                                                                        │
      │ Command Name Decision: render                                                                                                          │
      │                                                                                                                                        │

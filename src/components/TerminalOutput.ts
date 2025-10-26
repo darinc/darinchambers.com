@@ -31,6 +31,21 @@ export class TerminalOutput {
     });
   }
 
+  writeHTML(html: string): void {
+    const container = document.createElement('div');
+    container.className = 'output-line';
+    container.innerHTML = html;
+
+    // Insert before the input line if it exists, otherwise append
+    if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
+      this.outputElement.insertBefore(container, this.inputLineElement);
+    } else {
+      this.outputElement.appendChild(container);
+    }
+
+    this.scrollToBottom();
+  }
+
   writeError(text: string): void {
     this.write(text, 'output-error');
   }
