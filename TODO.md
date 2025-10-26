@@ -45,13 +45,13 @@
 - [x] /usr/local/bin - other, non core commands (placeholder for future)
 
 ### 5. Implement core commands
-- `help` - List available commands
-- `about` - Display bio and expertise overview
-- `portfolio` - Showcase projects and accomplishments
-- `blog` - List and read blog posts
-- `contact` - Display contact information
-- `skills` - Interactive display of technical skills
-- `clear` - Clear terminal
+- [x] `help` - List available commands
+- [x] `about` - Display bio and expertise overview
+- [x] `portfolio` - Showcase projects and accomplishments
+- [x] `blog` - List and read blog posts
+- [x] `contact` - Display contact information
+- [x] `skills` - Interactive display of technical skills
+- [x] `clear` - Clear terminal
 
 ### 6. Add whimsy commands
 - `easter-eggs` - Hidden commands (e.g., `matrix`, `hack`, `coffee`)

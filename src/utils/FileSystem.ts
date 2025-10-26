@@ -84,6 +84,17 @@ Building What's Next on Rock-Solid Foundations.
 
 Type 'portfolio' for detailed information.
 `));
+    darin.children!.set('contact.txt', this.createFileNode('contact.txt',
+      `Get in touch with me!
+
+Type 'contact' to see all contact information.
+`));
+    darin.children!.set('blog.txt', this.createFileNode('blog.txt',
+      `Recent thoughts and articles on software engineering,
+AI/ML, distributed systems, and more.
+
+Type 'blog' to read posts.
+`));
 
     // /usr directory
     const usr = this.createDirectoryNode('usr');
@@ -98,6 +109,11 @@ Type 'portfolio' for detailed information.
     bin.children!.set('cd', this.createFileNode('cd', '[Core command: cd]'));
     bin.children!.set('pwd', this.createFileNode('pwd', '[Core command: pwd]'));
     bin.children!.set('cat', this.createFileNode('cat', '[Core command: cat]'));
+    bin.children!.set('about', this.createFileNode('about', '[Core command: about]'));
+    bin.children!.set('portfolio', this.createFileNode('portfolio', '[Core command: portfolio]'));
+    bin.children!.set('blog', this.createFileNode('blog', '[Core command: blog]'));
+    bin.children!.set('contact', this.createFileNode('contact', '[Core command: contact]'));
+    bin.children!.set('skills', this.createFileNode('skills', '[Core command: skills]'));
 
     // /usr/local/bin directory (additional commands)
     const local = this.createDirectoryNode('local');

@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2025-10-25
+
+### Added
+- Implemented core content commands (about, portfolio, blog, contact, skills) with professional information and interactive displays
+- Created about command displaying bio, expertise, experience, and philosophy
+- Created portfolio command showcasing 4 major projects with detailed views
+- Created blog command with 3 blog posts covering AI/ML, distributed systems, and developer experience
+- Created contact command with email, LinkedIn, GitHub, Twitter, and availability information
+- Created skills command displaying technical skills organized by category (AI/ML, Languages, Cloud, Frameworks, Architecture, Leadership)
+- Added comprehensive content data files for all commands
+- Updated file system with additional files in /home/darin (contact.txt, blog.txt)
+- Updated /usr/bin with all new command references
+- Redesigned navigation bar to feature core content commands
+- Enhanced help command with organized command categories
+- Updated welcome message to highlight core features
+
 ## [0.0.4] - 2025-10-25
 
 ### Added

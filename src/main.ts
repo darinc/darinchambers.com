@@ -8,6 +8,11 @@ import { createLsCommand } from './commands/ls';
 import { createCdCommand } from './commands/cd';
 import { createPwdCommand } from './commands/pwd';
 import { createCatCommand } from './commands/cat';
+import { aboutCommand } from './commands/about';
+import { portfolioCommand } from './commands/portfolio';
+import { blogCommand } from './commands/blog';
+import { contactCommand } from './commands/contact';
+import { skillsCommand } from './commands/skills';
 
 // Initialize terminal
 const terminal = new Terminal();
@@ -33,15 +38,26 @@ const helpCommand: Command = {
   execute: () => {
     return {
       output: `Available commands:
-  help     - Display this help message
-  clear    - Clear the terminal screen
-  ls       - List directory contents
-  cd       - Change directory
-  pwd      - Print working directory
-  cat      - Display file contents
 
-Navigation:
-  Try 'ls' to see files, 'cd /home/darin' to explore, 'cat README.txt' to read files.`
+CORE COMMANDS
+  help       - Display this help message
+  clear      - Clear the terminal screen
+  about      - Learn about my background and expertise
+  portfolio  - View my projects and accomplishments
+  blog       - Read my blog posts
+  contact    - Get in touch with me
+  skills     - See my technical skills
+
+FILE SYSTEM COMMANDS
+  ls         - List directory contents
+  cd         - Change directory
+  pwd        - Print working directory
+  cat        - Display file contents
+
+GETTING STARTED
+  Try 'about' to learn more about me
+  Try 'portfolio' to see my work
+  Try 'ls' and explore the file system`
     };
   }
 };
@@ -70,15 +86,22 @@ terminal.registerCommands([
   lsCommand,
   cdCommand,
   pwdCommand,
-  catCommand
+  catCommand,
+  aboutCommand,
+  portfolioCommand,
+  blogCommand,
+  contactCommand,
+  skillsCommand
 ]);
 
 // Set up navigation items
 const navItems: NavItem[] = [
-  { label: 'help', command: 'help' },
-  { label: 'ls', command: 'ls' },
-  { label: 'pwd', command: 'pwd' },
-  { label: 'clear', command: 'clear' }
+  { label: 'about', command: 'about' },
+  { label: 'portfolio', command: 'portfolio' },
+  { label: 'blog', command: 'blog' },
+  { label: 'contact', command: 'contact' },
+  { label: 'skills', command: 'skills' },
+  { label: 'help', command: 'help' }
 ];
 
 navigation.setItems(navItems);
@@ -88,8 +111,8 @@ const welcomeMessage = `Welcome to darinchambers.com
 
 Technologist, Inventor | Building What's Next on Rock-Solid Foundations
 
-Type 'help' to see available commands, or click a command above.
-Try 'cat README.txt' to get started, or 'cd /home/darin' to explore more.
+Type 'help' to see all commands, or click a command above to get started.
+Try 'about' to learn more, 'portfolio' to see my work, or explore with 'ls'.
 `;
 
 terminal.writeWelcome(welcomeMessage);
