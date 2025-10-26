@@ -13,7 +13,7 @@ export class FileSystem {
 
   constructor() {
     this.root = this.createDirectoryNode('');
-    this.currentPath = '/home/guest';
+    this.currentPath = '/home/darin';
     this.initializeFileSystem();
   }
 
@@ -107,6 +107,7 @@ Type 'blog' to read posts.
     bin.children!.set('clear', this.createFileNode('clear', '[Core command: clear]'));
     bin.children!.set('history', this.createFileNode('history', '[Core command: history]'));
     bin.children!.set('date', this.createFileNode('date', '[Core command: date]'));
+    bin.children!.set('whoami', this.createFileNode('whoami', '[Core command: whoami]'));
     bin.children!.set('alias', this.createFileNode('alias', '[Core command: alias]'));
     bin.children!.set('unalias', this.createFileNode('unalias', '[Core command: unalias]'));
     bin.children!.set('ls', this.createFileNode('ls', '[Core command: ls]'));
@@ -132,6 +133,12 @@ Type 'blog' to read posts.
   }
 
   getShortPath(): string {
+    if (this.currentPath === '/home/darin') {
+      return '~';
+    }
+    if (this.currentPath.startsWith('/home/darin/')) {
+      return '~' + this.currentPath.substring('/home/darin'.length);
+    }
     if (this.currentPath === '/home/guest') {
       return '~';
     }

@@ -13,6 +13,7 @@ import { createTreeCommand } from './commands/tree';
 import { createHistoryCommand } from './commands/history';
 import { createAliasCommand } from './commands/alias';
 import { createUnaliasCommand } from './commands/unalias';
+import { createWhoamiCommand } from './commands/whoami';
 import { dateCommand } from './commands/date';
 import { aboutCommand } from './commands/about';
 import { portfolioCommand } from './commands/portfolio';
@@ -54,6 +55,7 @@ CORE COMMANDS
   clear      - Clear the terminal screen
   history    - Display command history
   date       - Display current date and time
+  whoami     - Display current username
   alias      - Create or display command aliases
   unalias    - Remove command aliases
   about      - Learn about my background and expertise
@@ -101,11 +103,15 @@ const historyCommand = createHistoryCommand(terminal.getInput());
 const aliasCommand = createAliasCommand(aliasManager);
 const unaliasCommand = createUnaliasCommand(aliasManager);
 
+// Create whoami command
+const whoamiCommand = createWhoamiCommand(terminal);
+
 terminal.registerCommands([
   helpCommand,
   clearCommand,
   historyCommand,
   dateCommand,
+  whoamiCommand,
   aliasCommand,
   unaliasCommand,
   lsCommand,

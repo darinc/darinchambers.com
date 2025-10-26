@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.10] - 2025-10-26
+
+### Added
+- Implemented whoami command to display current username
+- Added getUsername() method to Terminal component for querying current user
+
+### Changed
+- Changed default logged-in user from 'guest' to 'darin'
+- Updated home directory from /home/guest to /home/darin
+- Updated terminal prompt to display darin@darinchambers.com:~/path$
+- Updated FileSystem path shortening to treat /home/darin as ~ (tilde)
+- Kept /home/guest directory intact in virtual filesystem for future user switching
+
 ## [0.0.9] - 2025-10-25
 
 ### Added

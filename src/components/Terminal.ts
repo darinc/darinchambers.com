@@ -9,7 +9,7 @@ export class Terminal {
   private output: TerminalOutput;
   private dispatcher: CommandDispatcher;
   private aliasManager: AliasManager | null = null;
-  private username: string = 'guest';
+  private username: string = 'darin';
   private hostname: string = 'darinchambers.com';
   private currentPath: string = '~';
 
@@ -96,6 +96,10 @@ export class Terminal {
   setUsername(username: string): void {
     this.username = username;
     this.updatePrompt();
+  }
+
+  getUsername(): string {
+    return this.username;
   }
 
   setCurrentPath(path: string): void {
