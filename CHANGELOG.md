@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6] - 2025-10-25
+
+### Changed
+- Repositioned terminal prompt and input field to flow naturally within terminal output area
+- Terminal input now appears as the last line in the output, scrolling with content like a real terminal
+- Updated TerminalOutput component to insert content before the input line
+- Modified clear command to preserve input line while clearing output
+- Improved terminal scrolling behavior to keep input visible
+
 ## [0.0.5] - 2025-10-25
 
 ### Added

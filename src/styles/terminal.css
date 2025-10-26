@@ -117,11 +117,12 @@ body {
 
 #terminal-output {
   flex: 1;
-  margin-bottom: 10px;
   line-height: 1.5;
   font-size: 14px;
   white-space: pre-wrap;
   word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
 }
 
 .output-line {
@@ -141,6 +142,8 @@ body {
   display: flex;
   align-items: center;
   font-size: 14px;
+  margin-top: 2px;
+  min-height: 20px;
 }
 
 #terminal-prompt {

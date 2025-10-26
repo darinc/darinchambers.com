@@ -1,15 +1,24 @@
 export class TerminalOutput {
   private outputElement: HTMLElement;
+  private inputLineElement: HTMLElement | null;
 
   constructor(outputElement: HTMLElement) {
     this.outputElement = outputElement;
+    this.inputLineElement = document.getElementById('terminal-input-line');
   }
 
   writeLine(text: string, className?: string): void {
     const line = document.createElement('div');
     line.className = 'output-line' + (className ? ` ${className}` : '');
     line.textContent = text;
-    this.outputElement.appendChild(line);
+
+    // Insert before the input line if it exists, otherwise append
+    if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
+      this.outputElement.insertBefore(line, this.inputLineElement);
+    } else {
+      this.outputElement.appendChild(line);
+    }
+
     this.scrollToBottom();
   }
 
@@ -40,12 +49,25 @@ export class TerminalOutput {
 
     line.appendChild(promptSpan);
     line.appendChild(commandSpan);
-    this.outputElement.appendChild(line);
+
+    // Insert before the input line if it exists, otherwise append
+    if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
+      this.outputElement.insertBefore(line, this.inputLineElement);
+    } else {
+      this.outputElement.appendChild(line);
+    }
+
     this.scrollToBottom();
   }
 
   clear(): void {
-    this.outputElement.innerHTML = '';
+    // Clear all content except the input line
+    const children = Array.from(this.outputElement.children);
+    children.forEach(child => {
+      if (child.id !== 'terminal-input-line') {
+        child.remove();
+      }
+    });
   }
 
   private scrollToBottom(): void {

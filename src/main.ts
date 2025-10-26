@@ -66,11 +66,9 @@ const clearCommand: Command = {
   name: 'clear',
   description: 'Clear the terminal screen',
   execute: () => {
-    const outputElement = document.getElementById('terminal-output');
-    if (outputElement) {
-      outputElement.innerHTML = '';
-    }
-    return { output: '' };
+    // This will be handled by Terminal.clear() method or TerminalOutput.clear()
+    // We return a special marker that the terminal should intercept
+    return { output: '__CLEAR__' };
   }
 };
 

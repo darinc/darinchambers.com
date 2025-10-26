@@ -25,7 +25,15 @@ export class Terminal {
     this.dispatcher = new CommandDispatcher();
 
     this.setupInputHandler();
+    this.setupClickHandler(outputElement);
     this.updatePrompt();
+  }
+
+  private setupClickHandler(outputElement: HTMLElement): void {
+    // Click anywhere in terminal output to focus input
+    outputElement.addEventListener('click', () => {
+      this.input.focus();
+    });
   }
 
   private setupInputHandler(): void {
@@ -41,7 +49,11 @@ export class Terminal {
       // Execute command
       if (trimmedValue) {
         const result = await this.dispatcher.dispatch(trimmedValue);
-        if (result.output) {
+
+        // Handle clear command specially
+        if (result.output === '__CLEAR__') {
+          this.output.clear();
+        } else if (result.output) {
           if (result.error) {
             this.output.writeError(result.output);
           } else {
@@ -101,7 +113,11 @@ export class Terminal {
     // Execute command
     if (command.trim()) {
       const result = await this.dispatcher.dispatch(command);
-      if (result.output) {
+
+      // Handle clear command specially
+      if (result.output === '__CLEAR__') {
+        this.output.clear();
+      } else if (result.output) {
         if (result.error) {
           this.output.writeError(result.output);
         } else {
