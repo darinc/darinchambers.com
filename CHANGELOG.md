@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.11] - 2025-10-26
+
+### Changed
+- Reorganized command source code into semantic categories (core, fs, local)
+- Moved content commands (about, portfolio, blog, contact, skills) from /usr/bin to /usr/local/bin in virtual filesystem
+- Core system commands remain in /usr/bin (help, clear, history, date, whoami, alias, unalias)
+- Filesystem commands remain in /usr/bin (ls, cd, pwd, cat, tree)
+- Updated command file structure: src/commands/core/, src/commands/fs/, src/commands/local/
+- No functional changes to command behavior, purely organizational improvements
+
 ## [0.0.10] - 2025-10-26
 
 ### Added

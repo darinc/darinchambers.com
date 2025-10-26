@@ -5,21 +5,21 @@ import { FileSystem } from './utils/FileSystem';
 import { AliasManager } from './utils/AliasManager';
 import type { Command } from './commands/Command';
 import type { NavItem } from './components/Navigation';
-import { createLsCommand } from './commands/ls';
-import { createCdCommand } from './commands/cd';
-import { createPwdCommand } from './commands/pwd';
-import { createCatCommand } from './commands/cat';
-import { createTreeCommand } from './commands/tree';
-import { createHistoryCommand } from './commands/history';
-import { createAliasCommand } from './commands/alias';
-import { createUnaliasCommand } from './commands/unalias';
-import { createWhoamiCommand } from './commands/whoami';
-import { dateCommand } from './commands/date';
-import { aboutCommand } from './commands/about';
-import { portfolioCommand } from './commands/portfolio';
-import { blogCommand } from './commands/blog';
-import { contactCommand } from './commands/contact';
-import { skillsCommand } from './commands/skills';
+import { createLsCommand } from './commands/fs/ls';
+import { createCdCommand } from './commands/fs/cd';
+import { createPwdCommand } from './commands/fs/pwd';
+import { createCatCommand } from './commands/fs/cat';
+import { createTreeCommand } from './commands/fs/tree';
+import { createHistoryCommand } from './commands/core/history';
+import { createAliasCommand } from './commands/core/alias';
+import { createUnaliasCommand } from './commands/core/unalias';
+import { createWhoamiCommand } from './commands/core/whoami';
+import { dateCommand } from './commands/core/date';
+import { aboutCommand } from './commands/local/about';
+import { portfolioCommand } from './commands/local/portfolio';
+import { blogCommand } from './commands/local/blog';
+import { contactCommand } from './commands/local/contact';
+import { skillsCommand } from './commands/local/skills';
 
 // Initialize terminal
 const terminal = new Terminal();
@@ -91,7 +91,11 @@ const clearCommand: Command = {
 
 // Create file system commands
 const lsCommand = createLsCommand(fileSystem);
-const cdCommand = createCdCommand(fileSystem, (path: string) => terminal.setCurrentPath(path));
+const cdCommand = createCdCommand(
+  fileSystem,
+  (path: string) => terminal.setCurrentPath(path),
+  (username: string) => terminal.setUsername(username)
+);
 const pwdCommand = createPwdCommand(fileSystem);
 const catCommand = createCatCommand(fileSystem);
 const treeCommand = createTreeCommand(fileSystem);

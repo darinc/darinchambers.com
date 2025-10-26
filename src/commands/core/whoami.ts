@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import type { Terminal } from '../components/Terminal';
+import type { Command } from '../Command';
+import type { Terminal } from '../../components/Terminal';
 
 export function createWhoamiCommand(terminal: Terminal): Command {
   return {

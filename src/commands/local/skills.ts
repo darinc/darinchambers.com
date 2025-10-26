@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import { skillsData } from '../data/skills';
+import type { Command } from '../Command';
+import { skillsData } from '../../data/skills';
 
 export const skillsCommand: Command = {
   name: 'skills',

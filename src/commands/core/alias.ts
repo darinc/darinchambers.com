@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import type { AliasManager } from '../utils/AliasManager';
+import type { Command } from '../Command';
+import type { AliasManager } from '../../utils/AliasManager';
 
 export function createAliasCommand(aliasManager: AliasManager): Command {
   return {

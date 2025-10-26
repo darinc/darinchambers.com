@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import type { FileSystem } from '../utils/FileSystem';
+import type { Command } from '../Command';
+import type { FileSystem } from '../../utils/FileSystem';
 
 export function createTreeCommand(fs: FileSystem): Command {
   return {
@@ -8,7 +8,7 @@ export function createTreeCommand(fs: FileSystem): Command {
     execute: (args: string[]) => {
       try {
         let path = '.';
-        let maxDepth = 3;
+        let maxDepth = 4;
 
         // Parse arguments
         for (let i = 0; i < args.length; i++) {

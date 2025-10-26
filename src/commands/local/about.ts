@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import { aboutData } from '../data/about';
+import type { Command } from '../Command';
+import { aboutData } from '../../data/about';
 
 export const aboutCommand: Command = {
   name: 'about',

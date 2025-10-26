@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import type { TerminalInput } from '../components/TerminalInput';
+import type { Command } from '../Command';
+import type { TerminalInput } from '../../components/TerminalInput';
 
 export function createHistoryCommand(input: TerminalInput): Command {
   return {

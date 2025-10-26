@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import { portfolioData } from '../data/portfolio';
+import type { Command } from '../Command';
+import { portfolioData } from '../../data/portfolio';
 
 export const portfolioCommand: Command = {
   name: 'portfolio',

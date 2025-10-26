@@ -10,6 +10,7 @@ export interface FileSystemNode {
 export class FileSystem {
   private root: FileSystemNode;
   private currentPath: string;
+  private currentUsername: string = 'darin';
 
   constructor() {
     this.root = this.createDirectoryNode('');
@@ -115,35 +116,34 @@ Type 'blog' to read posts.
     bin.children!.set('pwd', this.createFileNode('pwd', '[Core command: pwd]'));
     bin.children!.set('cat', this.createFileNode('cat', '[Core command: cat]'));
     bin.children!.set('tree', this.createFileNode('tree', '[Core command: tree]'));
-    bin.children!.set('about', this.createFileNode('about', '[Core command: about]'));
-    bin.children!.set('portfolio', this.createFileNode('portfolio', '[Core command: portfolio]'));
-    bin.children!.set('blog', this.createFileNode('blog', '[Core command: blog]'));
-    bin.children!.set('contact', this.createFileNode('contact', '[Core command: contact]'));
-    bin.children!.set('skills', this.createFileNode('skills', '[Core command: skills]'));
 
-    // /usr/local/bin directory (additional commands)
+    // /usr/local/bin directory (custom/content commands)
     const local = this.createDirectoryNode('local');
     usr.children!.set('local', local);
     const localBin = this.createDirectoryNode('bin');
     local.children!.set('bin', localBin);
+    localBin.children!.set('about', this.createFileNode('about', '[Custom command: about]'));
+    localBin.children!.set('portfolio', this.createFileNode('portfolio', '[Custom command: portfolio]'));
+    localBin.children!.set('blog', this.createFileNode('blog', '[Custom command: blog]'));
+    localBin.children!.set('contact', this.createFileNode('contact', '[Custom command: contact]'));
+    localBin.children!.set('skills', this.createFileNode('skills', '[Custom command: skills]'));
   }
 
   getCurrentPath(): string {
     return this.currentPath;
   }
 
+  setCurrentUsername(username: string): void {
+    this.currentUsername = username;
+  }
+
   getShortPath(): string {
-    if (this.currentPath === '/home/darin') {
+    const homeDir = `/home/${this.currentUsername}`;
+    if (this.currentPath === homeDir) {
       return '~';
     }
-    if (this.currentPath.startsWith('/home/darin/')) {
-      return '~' + this.currentPath.substring('/home/darin'.length);
-    }
-    if (this.currentPath === '/home/guest') {
-      return '~';
-    }
-    if (this.currentPath.startsWith('/home/guest/')) {
-      return '~' + this.currentPath.substring('/home/guest'.length);
+    if (this.currentPath.startsWith(homeDir + '/')) {
+      return '~' + this.currentPath.substring(homeDir.length);
     }
     return this.currentPath;
   }
@@ -153,9 +153,9 @@ Type 'blog' to read posts.
       // Absolute path
       return this.normalizePath(path);
     } else if (path === '~') {
-      return '/home/guest';
+      return `/home/${this.currentUsername}`;
     } else if (path.startsWith('~/')) {
-      return '/home/guest' + path.substring(1);
+      return `/home/${this.currentUsername}` + path.substring(1);
     } else {
       // Relative path
       return this.normalizePath(this.currentPath + '/' + path);
@@ -275,7 +275,7 @@ Type 'blog' to read posts.
     current.children!.set(fileName, fileNode);
   }
 
-  getTree(path: string = '.', maxDepth: number = 3): string[] {
+  getTree(path: string = '.', maxDepth: number = 4): string[] {
     const node = this.getNode(path);
 
     if (!node) {

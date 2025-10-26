@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import { contactData } from '../data/contact';
+import type { Command } from '../Command';
+import { contactData } from '../../data/contact';
 
 export const contactCommand: Command = {
   name: 'contact',

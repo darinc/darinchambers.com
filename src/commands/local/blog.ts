@@ -1,5 +1,5 @@
-import type { Command } from './Command';
-import { blogData } from '../data/blog';
+import type { Command } from '../Command';
+import { blogData } from '../../data/blog';
 
 export const blogCommand: Command = {
   name: 'blog',
