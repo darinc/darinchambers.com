@@ -106,6 +106,9 @@ Type 'blog' to read posts.
     bin.children!.set('help', this.createFileNode('help', '[Core command: help]'));
     bin.children!.set('clear', this.createFileNode('clear', '[Core command: clear]'));
     bin.children!.set('history', this.createFileNode('history', '[Core command: history]'));
+    bin.children!.set('date', this.createFileNode('date', '[Core command: date]'));
+    bin.children!.set('alias', this.createFileNode('alias', '[Core command: alias]'));
+    bin.children!.set('unalias', this.createFileNode('unalias', '[Core command: unalias]'));
     bin.children!.set('ls', this.createFileNode('ls', '[Core command: ls]'));
     bin.children!.set('cd', this.createFileNode('cd', '[Core command: cd]'));
     bin.children!.set('pwd', this.createFileNode('pwd', '[Core command: pwd]'));
@@ -237,6 +240,32 @@ Type 'blog' to read posts.
   isFile(path: string): boolean {
     const node = this.getNode(path);
     return node !== null && node.type === 'file';
+  }
+
+  writeFile(path: string, content: string): void {
+    const resolved = this.resolvePath(path);
+    const pathParts = resolved.split('/').filter(p => p.length > 0);
+    const fileName = pathParts.pop();
+
+    if (!fileName) {
+      throw new Error(`Invalid file path: ${path}`);
+    }
+
+    // Navigate to parent directory
+    let current = this.root;
+    for (const part of pathParts) {
+      if (!current.children || !current.children.has(part)) {
+        throw new Error(`Directory does not exist: ${path}`);
+      }
+      current = current.children.get(part)!;
+      if (current.type !== 'directory') {
+        throw new Error(`Not a directory: ${path}`);
+      }
+    }
+
+    // Create or update file
+    const fileNode = this.createFileNode(fileName, content);
+    current.children!.set(fileName, fileNode);
   }
 
   getTree(path: string = '.', maxDepth: number = 3): string[] {

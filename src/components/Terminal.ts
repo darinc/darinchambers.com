@@ -2,11 +2,13 @@ import { TerminalInput } from './TerminalInput';
 import { TerminalOutput } from './TerminalOutput';
 import { CommandDispatcher } from '../utils/CommandDispatcher';
 import type { Command } from '../commands/Command';
+import type { AliasManager } from '../utils/AliasManager';
 
 export class Terminal {
   private input: TerminalInput;
   private output: TerminalOutput;
   private dispatcher: CommandDispatcher;
+  private aliasManager: AliasManager | null = null;
   private username: string = 'guest';
   private hostname: string = 'darinchambers.com';
   private currentPath: string = '~';
@@ -48,7 +50,9 @@ export class Terminal {
 
       // Execute command
       if (trimmedValue) {
-        const result = await this.dispatcher.dispatch(trimmedValue);
+        // Resolve aliases
+        const resolvedCommand = this.aliasManager ? this.aliasManager.resolve(trimmedValue) : trimmedValue;
+        const result = await this.dispatcher.dispatch(resolvedCommand);
 
         // Handle clear command specially
         if (result.output === '__CLEAR__') {
@@ -107,6 +111,10 @@ export class Terminal {
     return this.input;
   }
 
+  setAliasManager(aliasManager: AliasManager): void {
+    this.aliasManager = aliasManager;
+  }
+
   async executeCommand(command: string): Promise<void> {
     // Echo command
     this.output.writeCommand(this.getPromptString(), command);
@@ -116,7 +124,9 @@ export class Terminal {
 
     // Execute command
     if (command.trim()) {
-      const result = await this.dispatcher.dispatch(command);
+      // Resolve aliases
+      const resolvedCommand = this.aliasManager ? this.aliasManager.resolve(command) : command;
+      const result = await this.dispatcher.dispatch(resolvedCommand);
 
       // Handle clear command specially
       if (result.output === '__CLEAR__') {

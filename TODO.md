@@ -41,13 +41,17 @@
 - [x] /home/darin - personal directory with easter egg (.secret file)
 - [x] /home/guest - default user landing directory with README.txt
 - [ ] /home/<name> - not implemented yet, could be for logged in users
-- [x] /usr/bin - shows all core commands (help, clear, history, ls, cd, pwd, cat, tree)
+- [x] /usr/bin - shows all core commands (help, clear, history, date, alias, unalias, ls, cd, pwd, cat, tree)
 - [x] /usr/local/bin - other, non core commands (placeholder for future)
 - [x] `tree` - Display directory tree structure with hierarchical ASCII output
+- [x] `.alias` - Hidden file in /home/guest storing user-defined aliases
 
 ### 5. Implement core commands
 - [x] `help` - List available commands
 - [x] `history` - Display command history with numbered entries
+- [x] `date` - Display current date and time
+- [x] `alias` - Create and display command aliases (persisted to .alias file)
+- [x] `unalias` - Remove command aliases
 - [x] `about` - Display bio and expertise overview
 - [x] `portfolio` - Showcase projects and accomplishments
 - [x] `blog` - List and read blog posts

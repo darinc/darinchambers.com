@@ -2,6 +2,7 @@ import './styles/terminal.css';
 import { Terminal } from './components/Terminal';
 import { Navigation } from './components/Navigation';
 import { FileSystem } from './utils/FileSystem';
+import { AliasManager } from './utils/AliasManager';
 import type { Command } from './commands/Command';
 import type { NavItem } from './components/Navigation';
 import { createLsCommand } from './commands/ls';
@@ -10,6 +11,9 @@ import { createPwdCommand } from './commands/pwd';
 import { createCatCommand } from './commands/cat';
 import { createTreeCommand } from './commands/tree';
 import { createHistoryCommand } from './commands/history';
+import { createAliasCommand } from './commands/alias';
+import { createUnaliasCommand } from './commands/unalias';
+import { dateCommand } from './commands/date';
 import { aboutCommand } from './commands/about';
 import { portfolioCommand } from './commands/portfolio';
 import { blogCommand } from './commands/blog';
@@ -22,6 +26,10 @@ const terminal = new Terminal();
 // Initialize file system
 const fileSystem = new FileSystem();
 terminal.setCurrentPath(fileSystem.getShortPath());
+
+// Initialize alias manager
+const aliasManager = new AliasManager(fileSystem);
+terminal.setAliasManager(aliasManager);
 
 // Initialize navigation
 const navLinksElement = document.getElementById('nav-links');
@@ -45,6 +53,9 @@ CORE COMMANDS
   help       - Display this help message
   clear      - Clear the terminal screen
   history    - Display command history
+  date       - Display current date and time
+  alias      - Create or display command aliases
+  unalias    - Remove command aliases
   about      - Learn about my background and expertise
   portfolio  - View my projects and accomplishments
   blog       - Read my blog posts
@@ -86,10 +97,17 @@ const treeCommand = createTreeCommand(fileSystem);
 // Create history command
 const historyCommand = createHistoryCommand(terminal.getInput());
 
+// Create alias commands
+const aliasCommand = createAliasCommand(aliasManager);
+const unaliasCommand = createUnaliasCommand(aliasManager);
+
 terminal.registerCommands([
   helpCommand,
   clearCommand,
   historyCommand,
+  dateCommand,
+  aliasCommand,
+  unaliasCommand,
   lsCommand,
   cdCommand,
   pwdCommand,

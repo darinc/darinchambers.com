@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.9] - 2025-10-25
+
+### Added
+- Implemented alias command for creating and displaying command aliases
+- Implemented unalias command for removing command aliases
+- Implemented date command to display current date and time
+- Created AliasManager utility class for managing user-defined command aliases
+- Added alias persistence to virtual file system in .alias file at /home/guest/.alias
+- Added writeFile() method to FileSystem for creating and updating files
+- Integrated alias resolution into Terminal command execution flow
+- Added setAliasManager() method to Terminal component
+- Updated help command documentation to include alias, unalias, and date commands
+- Added new commands to /usr/bin in virtual file system
+
 ## [0.0.8] - 2025-10-25
 
 ### Added
