@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.12] - 2025-10-26
+
+### Added
+- Blog posts stored as individual markdown files with YAML frontmatter
+- BlogParser utility for parsing frontmatter and markdown content
+- /home/darin/blog/ directory in virtual filesystem with blog post files
+- Tag filtering support in blog command (blog --tag <tag>)
+- Blog posts accessible via cat command (e.g., cat /home/darin/blog/2024-09-15-ai-production-lessons.md)
+
+### Changed
+- Blog command now reads from filesystem instead of static TypeScript data
+- Blog posts are individual .md files in src/blog/ directory
+- Blog data structure uses YAML frontmatter for metadata (title, date, tags, summary)
+- Removed static blogData array from src/data/blog.ts (kept BlogPost interface)
+
 ## [0.0.11] - 2025-10-26
 
 ### Changed

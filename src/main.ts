@@ -17,7 +17,7 @@ import { createWhoamiCommand } from './commands/core/whoami';
 import { dateCommand } from './commands/core/date';
 import { aboutCommand } from './commands/local/about';
 import { portfolioCommand } from './commands/local/portfolio';
-import { blogCommand } from './commands/local/blog';
+import { createBlogCommand } from './commands/local/blog';
 import { contactCommand } from './commands/local/contact';
 import { skillsCommand } from './commands/local/skills';
 
@@ -109,6 +109,9 @@ const unaliasCommand = createUnaliasCommand(aliasManager);
 
 // Create whoami command
 const whoamiCommand = createWhoamiCommand(terminal);
+
+// Create blog command
+const blogCommand = createBlogCommand(fileSystem);
 
 terminal.registerCommands([
   helpCommand,

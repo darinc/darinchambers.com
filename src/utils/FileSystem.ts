@@ -1,3 +1,8 @@
+// Import blog markdown files
+import aiProductionLessons from '../blog/2024-09-15-ai-production-lessons.md?raw';
+import distributedSystemsReliability from '../blog/2024-07-22-distributed-systems-reliability.md?raw';
+import developerExperience from '../blog/2024-05-10-developer-experience.md?raw';
+
 export type FileSystemNodeType = 'file' | 'directory';
 
 export interface FileSystemNode {
@@ -96,6 +101,16 @@ AI/ML, distributed systems, and more.
 
 Type 'blog' to read posts.
 `));
+
+    // /home/darin/blog directory with markdown blog posts
+    const blog = this.createDirectoryNode('blog');
+    darin.children!.set('blog', blog);
+    blog.children!.set('2024-09-15-ai-production-lessons.md',
+      this.createFileNode('2024-09-15-ai-production-lessons.md', aiProductionLessons));
+    blog.children!.set('2024-07-22-distributed-systems-reliability.md',
+      this.createFileNode('2024-07-22-distributed-systems-reliability.md', distributedSystemsReliability));
+    blog.children!.set('2024-05-10-developer-experience.md',
+      this.createFileNode('2024-05-10-developer-experience.md', developerExperience));
 
     // /usr directory
     const usr = this.createDirectoryNode('usr');
