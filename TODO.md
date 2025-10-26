@@ -41,11 +41,13 @@
 - [x] /home/darin - personal directory with easter egg (.secret file)
 - [x] /home/guest - default user landing directory with README.txt
 - [ ] /home/<name> - not implemented yet, could be for logged in users
-- [x] /usr/bin - shows all core commands (help, clear, ls, cd, pwd, cat)
+- [x] /usr/bin - shows all core commands (help, clear, history, ls, cd, pwd, cat, tree)
 - [x] /usr/local/bin - other, non core commands (placeholder for future)
+- [x] `tree` - Display directory tree structure with hierarchical ASCII output
 
 ### 5. Implement core commands
 - [x] `help` - List available commands
+- [x] `history` - Display command history with numbered entries
 - [x] `about` - Display bio and expertise overview
 - [x] `portfolio` - Showcase projects and accomplishments
 - [x] `blog` - List and read blog posts

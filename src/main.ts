@@ -8,6 +8,8 @@ import { createLsCommand } from './commands/ls';
 import { createCdCommand } from './commands/cd';
 import { createPwdCommand } from './commands/pwd';
 import { createCatCommand } from './commands/cat';
+import { createTreeCommand } from './commands/tree';
+import { createHistoryCommand } from './commands/history';
 import { aboutCommand } from './commands/about';
 import { portfolioCommand } from './commands/portfolio';
 import { blogCommand } from './commands/blog';
@@ -42,6 +44,7 @@ const helpCommand: Command = {
 CORE COMMANDS
   help       - Display this help message
   clear      - Clear the terminal screen
+  history    - Display command history
   about      - Learn about my background and expertise
   portfolio  - View my projects and accomplishments
   blog       - Read my blog posts
@@ -53,11 +56,12 @@ FILE SYSTEM COMMANDS
   cd         - Change directory
   pwd        - Print working directory
   cat        - Display file contents
+  tree       - Display directory tree structure
 
 GETTING STARTED
   Try 'about' to learn more about me
   Try 'portfolio' to see my work
-  Try 'ls' and explore the file system`
+  Try 'tree' to see the directory structure`
     };
   }
 };
@@ -77,14 +81,20 @@ const lsCommand = createLsCommand(fileSystem);
 const cdCommand = createCdCommand(fileSystem, (path: string) => terminal.setCurrentPath(path));
 const pwdCommand = createPwdCommand(fileSystem);
 const catCommand = createCatCommand(fileSystem);
+const treeCommand = createTreeCommand(fileSystem);
+
+// Create history command
+const historyCommand = createHistoryCommand(terminal.getInput());
 
 terminal.registerCommands([
   helpCommand,
   clearCommand,
+  historyCommand,
   lsCommand,
   cdCommand,
   pwdCommand,
   catCommand,
+  treeCommand,
   aboutCommand,
   portfolioCommand,
   blogCommand,

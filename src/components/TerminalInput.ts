@@ -119,6 +119,10 @@ export class TerminalInput {
     this.availableCommands = commands;
   }
 
+  getHistory(): string[] {
+    return [...this.history];
+  }
+
   onSubmit(callback: (value: string) => void): void {
     this.inputElement.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {

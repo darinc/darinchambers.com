@@ -14,7 +14,7 @@
 }
 
 body {
-  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', 'Liberation Mono', 'Courier New', monospace;
   background-color: var(--terminal-bg);
   color: var(--terminal-fg);
   overflow: hidden;
@@ -22,6 +22,7 @@ body {
   width: 100vw;
   display: flex;
   flex-direction: column;
+  font-weight: 500;
 }
 
 /* Navigation Bar */
@@ -117,16 +118,18 @@ body {
 
 #terminal-output {
   flex: 1;
-  line-height: 1.5;
-  font-size: 14px;
-  white-space: pre-wrap;
+  line-height: 1.0;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  white-space: pre;
   word-wrap: break-word;
   display: flex;
   flex-direction: column;
+  letter-spacing: 0.5px;
 }
 
 .output-line {
-  margin-bottom: 2px;
+  margin-bottom: 0;
 }
 
 .output-error {
@@ -141,9 +144,9 @@ body {
 #terminal-input-line {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 16px;
   margin-top: 2px;
-  min-height: 20px;
+  min-height: 24px;
 }
 
 #terminal-prompt {
@@ -234,6 +237,6 @@ body {
 
   #terminal-output,
   #terminal-input-line {
-    font-size: 12px;
+    font-size: 14px;
   }
 }

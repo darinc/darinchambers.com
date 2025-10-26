@@ -103,6 +103,10 @@ export class Terminal {
     this.input.focus();
   }
 
+  getInput(): TerminalInput {
+    return this.input;
+  }
+
   async executeCommand(command: string): Promise<void> {
     // Echo command
     this.output.writeCommand(this.getPromptString(), command);

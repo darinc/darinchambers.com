@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.8] - 2025-10-25
+
+### Added
+- Implemented history command to display command history with numbered entries
+- Added getHistory() method to TerminalInput component for accessing command history
+- Added getInput() method to Terminal component to expose TerminalInput instance
+- Added history command to /usr/bin in virtual file system
+- Updated help command documentation to include history command
+
+### Fixed
+- Fixed terminal font rendering for tree command output by adjusting line-height to 1.0
+- Eliminated gaps in vertical box-drawing characters by removing line margins
+- Improved monospace font rendering with Courier New for consistent character spacing
+- Changed white-space from pre-wrap to pre for better tree visualization
+
+## [0.0.7] - 2025-10-25
+
+### Added
+- Implemented tree command for visualizing directory structure with hierarchical ASCII output
+- Added getTree() method to FileSystem utility for generating directory tree visualization
+- Added buildTree() helper method with support for customizable depth limits
+- Tree command supports -L flag for specifying maximum depth (default: 3 levels)
+- Tree output uses ASCII box-drawing characters (├──, └──, │) for visual hierarchy
+- Directories are sorted before files in tree output for better organization
+- Added tree command to /usr/bin in virtual file system
+- Updated help command documentation to include tree command
+
 ## [0.0.6] - 2025-10-25
 
 ### Changed

@@ -105,10 +105,12 @@ Type 'blog' to read posts.
     usr.children!.set('bin', bin);
     bin.children!.set('help', this.createFileNode('help', '[Core command: help]'));
     bin.children!.set('clear', this.createFileNode('clear', '[Core command: clear]'));
+    bin.children!.set('history', this.createFileNode('history', '[Core command: history]'));
     bin.children!.set('ls', this.createFileNode('ls', '[Core command: ls]'));
     bin.children!.set('cd', this.createFileNode('cd', '[Core command: cd]'));
     bin.children!.set('pwd', this.createFileNode('pwd', '[Core command: pwd]'));
     bin.children!.set('cat', this.createFileNode('cat', '[Core command: cat]'));
+    bin.children!.set('tree', this.createFileNode('tree', '[Core command: tree]'));
     bin.children!.set('about', this.createFileNode('about', '[Core command: about]'));
     bin.children!.set('portfolio', this.createFileNode('portfolio', '[Core command: portfolio]'));
     bin.children!.set('blog', this.createFileNode('blog', '[Core command: blog]'));
@@ -235,5 +237,54 @@ Type 'blog' to read posts.
   isFile(path: string): boolean {
     const node = this.getNode(path);
     return node !== null && node.type === 'file';
+  }
+
+  getTree(path: string = '.', maxDepth: number = 3): string[] {
+    const node = this.getNode(path);
+
+    if (!node) {
+      throw new Error(`tree: cannot access '${path}': No such file or directory`);
+    }
+
+    const lines: string[] = [];
+    const resolved = this.resolvePath(path);
+    lines.push(resolved === '/' ? '/' : resolved);
+
+    if (node.type === 'directory') {
+      this.buildTree(node, '', lines, 1, maxDepth);
+    }
+
+    return lines;
+  }
+
+  private buildTree(
+    node: FileSystemNode,
+    prefix: string,
+    lines: string[],
+    currentDepth: number,
+    maxDepth: number
+  ): void {
+    if (currentDepth > maxDepth || !node.children) {
+      return;
+    }
+
+    const entries = Array.from(node.children.entries()).sort((a, b) => {
+      // Sort directories first, then files
+      if (a[1].type === 'directory' && b[1].type === 'file') return -1;
+      if (a[1].type === 'file' && b[1].type === 'directory') return 1;
+      return a[0].localeCompare(b[0]);
+    });
+
+    entries.forEach(([name, childNode], index) => {
+      const isLast = index === entries.length - 1;
+      const connector = isLast ? '└── ' : '├── ';
+      const childPrefix = isLast ? '    ' : '│   ';
+
+      lines.push(prefix + connector + name);
+
+      if (childNode.type === 'directory') {
+        this.buildTree(childNode, prefix + childPrefix, lines, currentDepth + 1, maxDepth);
+      }
+    });
   }
 }
