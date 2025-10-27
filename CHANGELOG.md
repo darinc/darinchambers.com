@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.16] - 2025-10-26
+
+### Added
+- Rainbow gradient ASCII art header displaying "DARIN CHAMBERS" in large block letters
+- Header component with colorful gradient styling inspired by figlet and lolcat
+- AsciiArt utility for generating ASCII art text
+- Command prompt reference "$ whoami | figlet | lolcat" displayed in header
+- Fully responsive header with progressive scaling across all screen sizes
+- Multiple responsive breakpoints (1169px, 1024px, 768px, 640px, 480px, 375px)
+- Z-index layering to handle header/prompt overlap gracefully
+
+### Changed
+- Replaced "dc.com" navigation brand with prominent ASCII art header
+- Navigation bar now centers command links without brand text
+- Welcome message simplified to remove redundant branding text (now shown in header)
+- Enhanced visual hierarchy with gradient-styled branding at page top
+- Tagline styled in grey for better visual contrast
+- Header prompt positioned on same line as ASCII art on large screens
+- Header prompt automatically hidden on screens below 1169px width
+- Progressive font scaling ensures header fits on mobile devices down to 375px
+
 ## [0.0.15] - 2025-10-26
 
 ### Added

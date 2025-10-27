@@ -1,6 +1,7 @@
 import './styles/terminal.css';
 import { Terminal } from './components/Terminal';
 import { Navigation } from './components/Navigation';
+import { Header } from './components/Header';
 import { FileSystem } from './utils/FileSystem';
 import { AliasManager } from './utils/AliasManager';
 import type { Command } from './commands/Command';
@@ -22,6 +23,13 @@ import { portfolioCommand } from './commands/local/portfolio';
 import { createBlogCommand } from './commands/local/blog';
 import { contactCommand } from './commands/local/contact';
 import { skillsCommand } from './commands/local/skills';
+
+// Initialize header
+const headerElement = document.getElementById('terminal-header');
+if (!headerElement) {
+  throw new Error('Header element not found');
+}
+new Header(headerElement);
 
 // Initialize terminal
 const terminal = new Terminal();
@@ -154,11 +162,7 @@ const navItems: NavItem[] = [
 navigation.setItems(navItems);
 
 // Display welcome message
-const welcomeMessage = `Welcome to darinchambers.com
-
-Technologist, Inventor | Building What's Next on Rock-Solid Foundations
-
-Type 'help' to see all commands, or click a command above to get started.
+const welcomeMessage = `Type 'help' to see all commands, or click a command above to get started.
 Try 'about' to learn more, 'portfolio' to see my work, or explore with 'ls'.
 `;
 
