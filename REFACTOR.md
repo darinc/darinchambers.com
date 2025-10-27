@@ -96,15 +96,15 @@
      │ 3. TerminalOutput renders HTML when flagged as html: true                                                                              │
      │                                                                                                                                        │
      │ Part 3: Command Piping                                                                                                                 │
-     │ - [ ] Enhance CommandResult interface to support raw and html flags                                                                    │
-     │ - [ ] Create PipelineParser utility to parse pipe (|) syntax                                                                           │
-     │ - [ ] Update CommandDispatcher with dispatchPipeline() method                                                                          │
-     │ - [ ] Update Command interface to accept optional stdin parameter                                                                      │
-     │ - [ ] Integrate piping detection in Terminal component                                                                                 │
-     │ - [ ] Update cat command to set raw: true flag when outputting                                                                         │
-     │ - [ ] Ensure render command accepts stdin for piped input                                                                              │
-     │ - [ ] Test pipeline: cat blog/2024-09-15-ai-production.md | render                                                                     │
-     │ - [ ] Handle error cases in pipeline (command not found, empty output, etc.)                                                           │
+     │ - [x] Enhance CommandResult interface to support raw and html flags                                                                    │
+     │ - [x] Create PipelineParser utility to parse pipe (|) syntax                                                                           │
+     │ - [x] Update CommandDispatcher with dispatchPipeline() method                                                                          │
+     │ - [x] Update Command interface to accept optional stdin parameter                                                                      │
+     │ - [x] Integrate piping detection in Terminal component                                                                                 │
+     │ - [x] Update cat command to set raw: true flag when outputting                                                                         │
+     │ - [x] Ensure render command accepts stdin for piped input                                                                              │
+     │ - [x] Test pipeline: cat blog/2024-09-15-ai-production.md | render                                                                     │
+     │ - [x] Handle error cases in pipeline (command not found, empty output, etc.)                                                           │
      │                                                                                                                                        │
      │ Architecture:                                                                                                                          │
      │                                                                                                                                        │

@@ -5,7 +5,7 @@ export function createTreeCommand(fs: FileSystem): Command {
   return {
     name: 'tree',
     description: 'Display directory tree structure',
-    execute: (args: string[]) => {
+    execute: (args: string[], stdin?: string) => {
       try {
         let path = '.';
         let maxDepth = 4;

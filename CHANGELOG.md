@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.14] - 2025-10-26
+
+### Added
+- Command piping support with Unix-style pipe operator (|) for chaining commands
+- PipelineParser utility for parsing pipe syntax while respecting quoted strings
+- stdin parameter to Command interface for receiving piped input
+- raw flag in CommandResult interface to prevent double-display during piping
+- dispatchPipeline method in CommandDispatcher for sequential command execution
+- Pipe detection logic in Terminal component routing to appropriate dispatcher
+
+### Changed
+- cat command now sets raw flag for seamless piping integration
+- render command accepts stdin as alternative to file argument for pipe support
+- All command execute signatures updated with optional stdin parameter
+- Terminal output logic skips display when raw flag is set
+- Pipeline stops execution on first error for clear error reporting
+
 ## [0.0.13] - 2025-10-26
 
 ### Added

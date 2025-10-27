@@ -9,7 +9,7 @@ export function createCdCommand(
   return {
     name: 'cd',
     description: 'Change directory',
-    execute: (args: string[]) => {
+    execute: (args: string[], stdin?: string) => {
       try {
         const path = args[0] || '~';
         fs.changeDirectory(path);

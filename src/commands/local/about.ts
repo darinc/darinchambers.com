@@ -4,7 +4,7 @@ import { aboutData } from '../../data/about';
 export const aboutCommand: Command = {
   name: 'about',
   description: 'Display bio and expertise overview',
-  execute: () => {
+  execute: (args: string[], stdin?: string) => {
     const output = `
 ${aboutData.name}
 ${aboutData.tagline}

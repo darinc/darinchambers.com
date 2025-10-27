@@ -5,7 +5,7 @@ export function createAliasCommand(aliasManager: AliasManager): Command {
   return {
     name: 'alias',
     description: 'Create or display command aliases',
-    execute: (args: string[]) => {
+    execute: (args: string[], stdin?: string) => {
       // If no arguments, display all aliases
       if (args.length === 0) {
         const aliases = aliasManager.getAllAliases();

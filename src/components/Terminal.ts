@@ -1,6 +1,7 @@
 import { TerminalInput } from './TerminalInput';
 import { TerminalOutput } from './TerminalOutput';
 import { CommandDispatcher } from '../utils/CommandDispatcher';
+import { PipelineParser } from '../utils/PipelineParser';
 import type { Command } from '../commands/Command';
 import type { AliasManager } from '../utils/AliasManager';
 
@@ -52,12 +53,17 @@ export class Terminal {
       if (trimmedValue) {
         // Resolve aliases
         const resolvedCommand = this.aliasManager ? this.aliasManager.resolve(trimmedValue) : trimmedValue;
-        const result = await this.dispatcher.dispatch(resolvedCommand);
+
+        // Check for pipe operator and route to appropriate dispatcher
+        const result = PipelineParser.hasPipe(resolvedCommand)
+          ? await this.dispatcher.dispatchPipeline(resolvedCommand)
+          : await this.dispatcher.dispatch(resolvedCommand);
 
         // Handle clear command specially
         if (result.output === '__CLEAR__') {
           this.output.clear();
-        } else if (result.output) {
+        } else if (result.output && !result.raw) {
+          // Skip display if raw flag is set (piping context)
           if (result.error) {
             this.output.writeError(result.output);
           } else if (result.html) {

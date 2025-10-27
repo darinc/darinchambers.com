@@ -4,7 +4,7 @@ import { skillsData } from '../../data/skills';
 export const skillsCommand: Command = {
   name: 'skills',
   description: 'Interactive display of technical skills',
-  execute: () => {
+  execute: (args: string[], stdin?: string) => {
     const output = `
 TECHNICAL SKILLS
 ${'='.repeat(60)}

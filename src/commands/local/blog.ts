@@ -7,7 +7,7 @@ export function createBlogCommand(fs: FileSystem): Command {
   return {
     name: 'blog',
     description: 'List and read blog posts',
-    execute: (args: string[]) => {
+    execute: (args: string[], stdin?: string) => {
       const blogDir = '/home/darin/blog';
 
       try {

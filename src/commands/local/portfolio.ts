@@ -4,7 +4,7 @@ import { portfolioData } from '../../data/portfolio';
 export const portfolioCommand: Command = {
   name: 'portfolio',
   description: 'Showcase projects and accomplishments',
-  execute: (args: string[]) => {
+  execute: (args: string[], stdin?: string) => {
     if (args.length > 0) {
       // Show specific project
       const projectId = args[0];

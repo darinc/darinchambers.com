@@ -47,7 +47,7 @@ const navigation = new Navigation(navLinksElement, (command: string) => {
 const helpCommand: Command = {
   name: 'help',
   description: 'Display available commands',
-  execute: () => {
+  execute: (args: string[], stdin?: string) => {
     return {
       output: `Available commands:
 
@@ -83,7 +83,7 @@ GETTING STARTED
 const clearCommand: Command = {
   name: 'clear',
   description: 'Clear the terminal screen',
-  execute: () => {
+  execute: (args: string[], stdin?: string) => {
     // This will be handled by Terminal.clear() method or TerminalOutput.clear()
     // We return a special marker that the terminal should intercept
     return { output: '__CLEAR__' };

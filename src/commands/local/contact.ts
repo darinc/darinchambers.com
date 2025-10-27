@@ -4,7 +4,7 @@ import { contactData } from '../../data/contact';
 export const contactCommand: Command = {
   name: 'contact',
   description: 'Display contact information',
-  execute: () => {
+  execute: (args: string[], stdin?: string) => {
     const output = `
 CONTACT INFORMATION
 ${'='.repeat(60)}

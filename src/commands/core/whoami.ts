@@ -5,7 +5,7 @@ export function createWhoamiCommand(terminal: Terminal): Command {
   return {
     name: 'whoami',
     description: 'Display current username',
-    execute: () => {
+    execute: (args: string[], stdin?: string) => {
       return { output: terminal.getUsername() };
     }
   };

@@ -5,7 +5,7 @@ export function createCatCommand(fs: FileSystem): Command {
   return {
     name: 'cat',
     description: 'Display file contents',
-    execute: (args: string[]) => {
+    execute: (args: string[], stdin?: string) => {
       if (args.length === 0) {
         return {
           output: 'cat: missing file operand',
@@ -15,7 +15,10 @@ export function createCatCommand(fs: FileSystem): Command {
 
       try {
         const content = fs.readFile(args[0]);
-        return { output: content };
+        return {
+          output: content,
+          raw: true  // Mark as raw for piping
+        };
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),

@@ -5,7 +5,7 @@ export function createUnaliasCommand(aliasManager: AliasManager): Command {
   return {
     name: 'unalias',
     description: 'Remove command aliases',
-    execute: (args: string[]) => {
+    execute: (args: string[], stdin?: string) => {
       if (args.length === 0) {
         return {
           output: 'Usage: unalias name',
