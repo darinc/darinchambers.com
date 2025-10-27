@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.15] - 2025-10-26
+
+### Added
+- echo command for displaying text output with full pipe support
+- Support for -e flag in echo to interpret escape sequences (\n, \t, \\, etc.)
+- Stdin passthrough in echo when no arguments provided (useful in pipelines)
+
+### Changed
+- Help command updated to include echo in CORE COMMANDS section
+
 ## [0.0.14] - 2025-10-26
 
 ### Added

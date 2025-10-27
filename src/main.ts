@@ -16,6 +16,7 @@ import { createUnaliasCommand } from './commands/core/unalias';
 import { createWhoamiCommand } from './commands/core/whoami';
 import { createRenderCommand } from './commands/core/render';
 import { dateCommand } from './commands/core/date';
+import { echoCommand } from './commands/core/echo';
 import { aboutCommand } from './commands/local/about';
 import { portfolioCommand } from './commands/local/portfolio';
 import { createBlogCommand } from './commands/local/blog';
@@ -56,6 +57,7 @@ CORE COMMANDS
   clear      - Clear the terminal screen
   history    - Display command history
   date       - Display current date and time
+  echo       - Display a line of text
   whoami     - Display current username
   alias      - Create or display command aliases
   unalias    - Remove command aliases
@@ -122,6 +124,7 @@ terminal.registerCommands([
   clearCommand,
   historyCommand,
   dateCommand,
+  echoCommand,
   whoamiCommand,
   aliasCommand,
   unaliasCommand,

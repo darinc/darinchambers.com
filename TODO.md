@@ -81,4 +81,26 @@
 
 ---
 
+## Known Issues / Bugs
+
+### echo command -n flag (v0.0.15)
+**Issue:** The `-n` flag is currently not recognized and displays as literal text.
+
+**Current behavior:**
+- `echo -n hi` outputs "-n hi" instead of "hi" without newline
+- The flag parsing was removed because inline rendering doesn't work with current architecture
+
+**Decision needed:**
+1. Remove `-n` flag support entirely (document as unsupported)
+2. Recognize `-n` flag but silently ignore it (suppress from output)
+3. Implement proper inline rendering (requires TerminalOutput refactor to use spans/inline elements instead of block divs)
+
+**Technical context:**
+- Current TerminalOutput uses `<div class="output-line">` for all output
+- Divs are block-level elements, always create new lines
+- For `-n` to work, need to append text to last line using spans or similar
+- Would require changes to TerminalOutput.write() and Terminal output handling
+
+---
+
 **Note:** This plan prioritizes getting a working terminal interface quickly, then iteratively adding commands and content.
