@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.17] - 2025-10-26
+
+### Added
+- Navigation links now automatically clear terminal before executing clicked command for cleaner UX
+- Navigation responsive breakpoints at 480px and 375px for better mobile display
+
+### Fixed
+- Fixed horizontal scrolling on mobile devices (iPhone) in terminal window
+- Navigation links no longer wrap to multiple lines on small mobile devices
+- Added overflow-x: hidden to body, terminal-container, and header-ascii
+- Added max-width constraints (100vw, 100%) to prevent horizontal overflow
+- Progressively reduced font size, padding, and gap spacing to fit all navigation items on one line
+
+### Changed
+- Navigation links scale down to 11px font on screens ≤ 480px
+- Navigation links scale down to 10px font on screens ≤ 375px
+- Reduced gap spacing between navigation items on smaller screens (6px at 480px, 5px at 375px)
+- Adjusted padding to 2px 5px at 480px and 2px 4px at 375px for compact layout
+- Terminal.executeCommand() now accepts optional clearFirst parameter to clear terminal before command execution
+- Note: Did not add overflow-x: hidden to #terminal-output as it breaks scroll-to-bottom behavior
+
 ## [0.0.16] - 2025-10-26
 
 ### Added

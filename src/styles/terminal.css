@@ -18,8 +18,10 @@ body {
   background-color: var(--terminal-bg);
   color: var(--terminal-fg);
   overflow: hidden;
+  overflow-x: hidden;
   height: 100vh;
   width: 100vw;
+  max-width: 100vw;
   display: flex;
   flex-direction: column;
   font-weight: 500;
@@ -45,11 +47,12 @@ body {
 }
 
 .header-ascii {
-  overflow-x: auto;
+  overflow-x: hidden;
   margin-bottom: 5px;
   text-align: center;
   position: relative;
   z-index: 2;
+  max-width: 100%;
 }
 
 .header-ascii-text {
@@ -190,9 +193,11 @@ body {
 
 #terminal-container {
   width: 100%;
+  max-width: 100vw;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -241,6 +246,7 @@ body {
   font-family: 'Courier New', monospace;
   white-space: pre;
   word-wrap: break-word;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   letter-spacing: 0.5px;
@@ -356,6 +362,28 @@ body {
   #terminal-output,
   #terminal-input-line {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-links {
+    gap: 6px;
+  }
+
+  .nav-link {
+    font-size: 11px;
+    padding: 2px 5px;
+  }
+}
+
+@media (max-width: 375px) {
+  .nav-links {
+    gap: 5px;
+  }
+
+  .nav-link {
+    font-size: 10px;
+    padding: 2px 4px;
   }
 }
 

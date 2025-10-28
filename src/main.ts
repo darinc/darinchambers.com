@@ -49,7 +49,7 @@ if (!navLinksElement) {
 }
 
 const navigation = new Navigation(navLinksElement, (command: string) => {
-  terminal.executeCommand(command);
+  terminal.executeCommand(command, true);
 });
 
 // Register basic commands

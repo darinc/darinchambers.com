@@ -129,7 +129,12 @@ export class Terminal {
     this.aliasManager = aliasManager;
   }
 
-  async executeCommand(command: string): Promise<void> {
+  async executeCommand(command: string, clearFirst: boolean = false): Promise<void> {
+    // Clear terminal first if requested (e.g., from navigation clicks)
+    if (clearFirst) {
+      this.output.clear();
+    }
+
     // Echo command
     this.output.writeCommand(this.getPromptString(), command);
 
