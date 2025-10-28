@@ -1,0 +1,18 @@
+/* Main stylesheet - imports all modular CSS components */
+
+/* CSS variables must be imported first */
+@import './variables.css';
+
+/* Base styles */
+@import './base.css';
+
+/* Component styles */
+@import './header.css';
+@import './navigation.css';
+@import './container.css';
+@import './terminal-io.css';
+@import './scrollbar.css';
+@import './markdown.css';
+
+/* Responsive styles should be imported last to override other styles */
+@import './responsive.css';

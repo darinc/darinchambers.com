@@ -1,4 +1,4 @@
-import './styles/terminal.css';
+import './styles/index.css';
 import { Terminal } from './components/Terminal';
 import { Navigation } from './components/Navigation';
 import { Header } from './components/Header';

@@ -1,0 +1,130 @@
+/* Markdown rendering styles */
+.markdown-output {
+  line-height: 1.4;
+  margin: 4px 0;
+  white-space: normal;
+}
+
+.markdown-output h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 8px 0 4px;
+  color: var(--terminal-accent);
+  text-shadow: 0 0 8px var(--terminal-accent);
+}
+
+.markdown-output h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 6px 0 3px;
+  color: var(--terminal-accent);
+}
+
+.markdown-output h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 6px 0 3px;
+  color: var(--terminal-dim);
+}
+
+.markdown-output ul,
+.markdown-output ol {
+  margin: 4px 0 4px 20px;
+}
+
+.markdown-output li {
+  margin: 2px 0;
+}
+
+.markdown-output code {
+  background: rgba(57, 255, 20, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', 'Liberation Mono', 'Courier New', monospace;
+  color: var(--terminal-accent);
+}
+
+.markdown-output pre {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  overflow-x: auto;
+  border-left: 3px solid var(--terminal-dim);
+}
+
+.markdown-output pre code {
+  background: none;
+  padding: 0;
+}
+
+.markdown-output strong {
+  font-weight: bold;
+  color: var(--terminal-accent);
+}
+
+.markdown-output em {
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.markdown-output a {
+  color: var(--terminal-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.markdown-output a:hover {
+  text-shadow: 0 0 8px var(--terminal-accent);
+}
+
+.markdown-output p {
+  margin: 4px 0;
+}
+
+.markdown-output br {
+  display: none;
+}
+
+/* Frontmatter styles */
+.markdown-output .fm-title {
+  font-size: 26px;
+  margin: 4px 0;
+  color: var(--terminal-accent);
+  text-shadow: 0 0 10px var(--terminal-accent);
+}
+
+.markdown-output .fm-meta {
+  margin: 4px 0;
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+.markdown-output .fm-date {
+  color: var(--terminal-dim);
+}
+
+.markdown-output .fm-tags {
+  margin-left: 8px;
+}
+
+.markdown-output .fm-tag {
+  background: rgba(57, 255, 20, 0.15);
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin: 0 4px;
+  font-size: 12px;
+}
+
+.markdown-output .fm-summary {
+  font-style: italic;
+  opacity: 0.9;
+  margin: 6px 0;
+}
+
+.markdown-output .fm-divider {
+  border: none;
+  border-top: 1px solid var(--terminal-dim);
+  margin: 8px 0;
+  opacity: 0.3;
+}

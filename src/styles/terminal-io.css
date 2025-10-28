@@ -1,0 +1,75 @@
+#terminal-output {
+  flex: 1;
+  line-height: 1.0;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  white-space: pre;
+  word-wrap: break-word;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 0.5px;
+}
+
+.output-line {
+  margin-bottom: 0;
+}
+
+.output-error {
+  color: var(--terminal-error);
+}
+
+.output-dim {
+  color: var(--terminal-dim);
+  opacity: 0.7;
+}
+
+#terminal-input-line {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  margin-top: 2px;
+  min-height: 24px;
+}
+
+#terminal-prompt {
+  color: var(--terminal-accent);
+  margin-right: 8px;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+#terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--terminal-fg);
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: var(--terminal-cursor);
+}
+
+#terminal-input::selection {
+  background-color: var(--terminal-accent);
+  color: var(--terminal-bg);
+}
+
+/* Cursor blink animation */
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+#terminal-input {
+  animation: none;
+}
+
+/* Text glow effect */
+.terminal-glow {
+  text-shadow: 0 0 5px var(--terminal-accent);
+}

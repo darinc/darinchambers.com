@@ -1,0 +1,38 @@
+/* Navigation Bar */
+#terminal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--terminal-dim);
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-link {
+  color: var(--terminal-fg);
+  text-decoration: none;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.nav-link:hover {
+  color: var(--terminal-accent);
+  border-color: var(--terminal-accent);
+  text-shadow: 0 0 5px var(--terminal-accent);
+  background-color: rgba(57, 255, 20, 0.1);
+}
+
+.nav-link:active {
+  transform: scale(0.95);
+}

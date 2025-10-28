@@ -1,0 +1,8 @@
+:root {
+  --terminal-bg: #0a0e14;
+  --terminal-fg: #39ff14;
+  --terminal-accent: #39ff14;
+  --terminal-dim: #20c20e;
+  --terminal-error: #ff3333;
+  --terminal-cursor: #39ff14;
+}

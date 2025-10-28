@@ -1,0 +1,66 @@
+/* Terminal Header */
+#terminal-header {
+  padding: 20px 20px 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--terminal-dim);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.header-prompt {
+  color: var(--terminal-fg);
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  position: absolute;
+  left: 10px;
+  top: 20px;
+  z-index: 1;
+}
+
+.header-ascii {
+  overflow-x: hidden;
+  margin-bottom: 5px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  max-width: 100%;
+}
+
+.header-ascii-text {
+  font-family: monospace;
+  font-size: 10px;
+  line-height: 1.0;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    #ff6b35 0%,
+    #ff8c42 8%,
+    #ffaa4f 16%,
+    #ffc85c 24%,
+    #e6e669 32%,
+    #c4e676 40%,
+    #9fe683 48%,
+    #7ae690 56%,
+    #5ad69d 64%,
+    #3ac6aa 72%,
+    #1bb6b7 80%,
+    #00a6c4 88%,
+    #0096d1 96%,
+    #0086de 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  font-weight: bold;
+}
+
+.header-tagline {
+  color: #808080;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 5px;
+  letter-spacing: 0.5px;
+}

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.18] - 2025-10-27
+
+### Changed
+- Refactored monolithic CSS file into modular components for better maintainability
+- Split terminal.css (520 lines) into 10 focused stylesheet modules
+- Organized styles by component: variables, base, header, navigation, container, io, scrollbar, markdown, and responsive
+
 ## [0.0.17] - 2025-10-26
 
 ### Added
