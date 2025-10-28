@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.20] - 2025-10-28
+
+### Changed
+- Refactored MarkdownRenderer to reduce cyclomatic complexity from ~18 to <5 per method
+- Restructured markdown parsing using Chain of Responsibility pattern with dedicated handlers
+- Split monolithic 269-line MarkdownRenderer into modular components for better maintainability
+
+### Added
+- ParseContext class for managing markdown parsing state
+- LineHandler interface for extensible markdown element processing
+- InlineRenderer utility for processing inline markdown (bold, italic, code, links)
+- Specialized handlers: CodeBlockHandler, HeaderHandler, ListHandler, EmptyLineHandler, ParagraphHandler
+- MarkdownParser orchestrator for coordinating handler chain execution
+- FrontmatterParser for YAML frontmatter extraction and rendering
+- Comprehensive code complexity analysis report in audits/ directory
+- Detailed refactoring plan documentation for markdown renderer improvements
+
+### Technical
+- Reduced average method complexity by 83% in markdown rendering system
+- Improved code maintainability and testability through separation of concerns
+- Maintained backward compatibility - no breaking changes to public API
+- MarkdownRenderer facade preserves existing interface while delegating to new architecture
+
 ## [0.0.19] - 2025-10-27
 
 ### Changed
