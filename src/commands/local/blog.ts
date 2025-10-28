@@ -2,6 +2,8 @@ import type { Command } from '../Command';
 import type { FileSystem } from '../../utils/FileSystem';
 import { BlogParser } from '../../utils/BlogParser';
 import type { BlogPost } from '../../data/blog';
+import { ContentFormatter } from '../../utils/ContentFormatter';
+import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 
 export function createBlogCommand(fs: FileSystem): Command {
   return {
@@ -46,19 +48,9 @@ export function createBlogCommand(fs: FileSystem): Command {
             };
           }
 
-          const output = `
-${post.title}
-${post.date}
-${'='.repeat(60)}
-
-${post.content}
-
-${'='.repeat(60)}
-Tags: ${post.tags.join(', ')}
-
-Use 'blog' to see all posts.
-`;
-          return { output: output.trim() };
+          const markdown = ContentFormatter.formatBlogPost(post);
+          const html = MarkdownRenderer.render(markdown);
+          return { output: html, html: true };
         }
 
         // Filter by tag if requested
@@ -77,28 +69,9 @@ Use 'blog' to see all posts.
         }
 
         // List all blog posts (or filtered posts)
-        const header = filterTag
-          ? `BLOG POSTS - Tag: ${filterTag}`
-          : 'BLOG POSTS';
-
-        const output = `
-${header}
-${'='.repeat(60)}
-
-${filteredPosts.map((post, index) => `
-${index + 1}. ${post.title}
-   Date: ${post.date}
-   ${post.summary}
-
-   Tags: ${post.tags.join(', ')}
-   Read: blog ${post.id}
-`).join('\n')}
-${'='.repeat(60)}
-Type 'blog <post-id>' to read a full post.
-${filterTag ? "Type 'blog' to see all posts." : "Type 'blog --tag <tag>' to filter by tag."}
-`;
-
-        return { output: output.trim() };
+        const markdown = ContentFormatter.formatBlogList(filteredPosts, filterTag || undefined);
+        const html = MarkdownRenderer.render(markdown);
+        return { output: html, html: true };
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),

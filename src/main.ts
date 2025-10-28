@@ -18,11 +18,12 @@ import { createWhoamiCommand } from './commands/core/whoami';
 import { createRenderCommand } from './commands/core/render';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
-import { aboutCommand } from './commands/local/about';
+import { createAboutCommand } from './commands/local/about';
 import { portfolioCommand } from './commands/local/portfolio';
 import { createBlogCommand } from './commands/local/blog';
-import { contactCommand } from './commands/local/contact';
-import { skillsCommand } from './commands/local/skills';
+import { createContactCommand } from './commands/local/contact';
+import { createSkillsCommand } from './commands/local/skills';
+import { MarkdownRenderer } from './utils/MarkdownRenderer';
 
 // Initialize header
 const headerElement = document.getElementById('terminal-header');
@@ -57,36 +58,16 @@ const helpCommand: Command = {
   name: 'help',
   description: 'Display available commands',
   execute: (args: string[], stdin?: string) => {
-    return {
-      output: `Available commands:
-
-CORE COMMANDS
-  help       - Display this help message
-  clear      - Clear the terminal screen
-  history    - Display command history
-  date       - Display current date and time
-  echo       - Display a line of text
-  whoami     - Display current username
-  alias      - Create or display command aliases
-  unalias    - Remove command aliases
-  about      - Learn about my background and expertise
-  portfolio  - View my projects and accomplishments
-  blog       - Read my blog posts
-  contact    - Get in touch with me
-  skills     - See my technical skills
-
-FILE SYSTEM COMMANDS
-  ls         - List directory contents
-  cd         - Change directory
-  pwd        - Print working directory
-  cat        - Display file contents
-  tree       - Display directory tree structure
-
-GETTING STARTED
-  Try 'about' to learn more about me
-  Try 'portfolio' to see my work
-  Try 'tree' to see the directory structure`
-    };
+    try {
+      const content = fileSystem.readFile('/home/darin/content/help.md');
+      const html = MarkdownRenderer.render(content);
+      return { output: html, html: true };
+    } catch (error) {
+      return {
+        output: error instanceof Error ? error.message : String(error),
+        error: true
+      };
+    }
   }
 };
 
@@ -121,7 +102,10 @@ const unaliasCommand = createUnaliasCommand(aliasManager);
 // Create whoami command
 const whoamiCommand = createWhoamiCommand(terminal);
 
-// Create blog command
+// Create content commands
+const aboutCommand = createAboutCommand(fileSystem);
+const contactCommand = createContactCommand(fileSystem);
+const skillsCommand = createSkillsCommand(fileSystem);
 const blogCommand = createBlogCommand(fileSystem);
 
 // Create render command

@@ -1,31 +1,22 @@
 import type { Command } from '../Command';
-import { aboutData } from '../../data/about';
+import type { FileSystem } from '../../utils/FileSystem';
+import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 
-export const aboutCommand: Command = {
-  name: 'about',
-  description: 'Display bio and expertise overview',
-  execute: (args: string[], stdin?: string) => {
-    const output = `
-${aboutData.name}
-${aboutData.tagline}
-${'='.repeat(60)}
-
-${aboutData.bio}
-
-EXPERTISE
-${aboutData.expertise.map(item => `  • ${item}`).join('\n')}
-
-EXPERIENCE
-${aboutData.experience}
-
-PHILOSOPHY
-${aboutData.philosophy}
-
-${'='.repeat(60)}
-Type 'portfolio' to see projects, 'skills' for technical skills,
-or 'contact' to get in touch.
-`;
-
-    return { output: output.trim() };
-  }
-};
+export function createAboutCommand(fs: FileSystem): Command {
+  return {
+    name: 'about',
+    description: 'Display bio and expertise overview',
+    execute: (args: string[], stdin?: string) => {
+      try {
+        const content = fs.readFile('/home/darin/content/about.md');
+        const html = MarkdownRenderer.render(content);
+        return { output: html, html: true };
+      } catch (error) {
+        return {
+          output: error instanceof Error ? error.message : String(error),
+          error: true
+        };
+      }
+    }
+  };
+}

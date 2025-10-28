@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.19] - 2025-10-27
+
+### Changed
+- Enhanced all command outputs with rich markdown rendering for improved readability
+- Converted static content commands (about, contact, skills, help) to markdown format
+- Implemented dynamic markdown generation for portfolio and blog list views
+- Added ContentFormatter utility for consistent markdown generation
+- All commands now use MarkdownRenderer with styled HTML output
+
+### Added
+- Created markdown content files in /home/darin/content/ directory
+- Added about.md, contact.md, skills.md, and help.md content files
+
 ## [0.0.18] - 2025-10-27
 
 ### Changed

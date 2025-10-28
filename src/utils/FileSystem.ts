@@ -3,6 +3,12 @@ import aiProductionLessons from '../blog/2024-09-15-ai-production-lessons.md?raw
 import distributedSystemsReliability from '../blog/2024-07-22-distributed-systems-reliability.md?raw';
 import developerExperience from '../blog/2024-05-10-developer-experience.md?raw';
 
+// Import content markdown files
+import aboutMd from '../content/about.md?raw';
+import contactMd from '../content/contact.md?raw';
+import skillsMd from '../content/skills.md?raw';
+import helpMd from '../content/help.md?raw';
+
 export type FileSystemNodeType = 'file' | 'directory';
 
 export interface FileSystemNode {
@@ -111,6 +117,14 @@ Type 'blog' to read posts.
       this.createFileNode('2024-07-22-distributed-systems-reliability.md', distributedSystemsReliability));
     blog.children!.set('2024-05-10-developer-experience.md',
       this.createFileNode('2024-05-10-developer-experience.md', developerExperience));
+
+    // /home/darin/content directory with markdown content files
+    const content = this.createDirectoryNode('content');
+    darin.children!.set('content', content);
+    content.children!.set('about.md', this.createFileNode('about.md', aboutMd));
+    content.children!.set('contact.md', this.createFileNode('contact.md', contactMd));
+    content.children!.set('skills.md', this.createFileNode('skills.md', skillsMd));
+    content.children!.set('help.md', this.createFileNode('help.md', helpMd));
 
     // /usr directory
     const usr = this.createDirectoryNode('usr');

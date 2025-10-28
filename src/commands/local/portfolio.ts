@@ -1,5 +1,7 @@
 import type { Command } from '../Command';
 import { portfolioData } from '../../data/portfolio';
+import { ContentFormatter } from '../../utils/ContentFormatter';
+import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 
 export const portfolioCommand: Command = {
   name: 'portfolio',
@@ -17,40 +19,14 @@ export const portfolioCommand: Command = {
         };
       }
 
-      const output = `
-${project.title} (${project.year})
-${'='.repeat(60)}
-
-${project.description}
-
-TECHNOLOGIES
-  ${project.technologies.join(', ')}
-${project.impact ? `\nIMPACT\n  ${project.impact}` : ''}
-
-${'='.repeat(60)}
-Use 'portfolio' to see all projects.
-`;
-      return { output: output.trim() };
+      const markdown = ContentFormatter.formatPortfolioDetail(project);
+      const html = MarkdownRenderer.render(markdown);
+      return { output: html, html: true };
     }
 
     // List all projects
-    const output = `
-PORTFOLIO
-${'='.repeat(60)}
-
-${portfolioData.map((project, index) => `
-${index + 1}. ${project.title} (${project.year})
-   ${project.description}
-
-   Technologies: ${project.technologies.join(', ')}
-   ${project.impact ? `Impact: ${project.impact}` : ''}
-
-   Details: portfolio ${project.id}
-`).join('\n')}
-${'='.repeat(60)}
-Type 'portfolio <project-id>' to view detailed information.
-`;
-
-    return { output: output.trim() };
+    const markdown = ContentFormatter.formatPortfolioList(portfolioData);
+    const html = MarkdownRenderer.render(markdown);
+    return { output: html, html: true };
   }
 };

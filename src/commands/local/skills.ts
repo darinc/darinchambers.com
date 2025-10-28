@@ -1,22 +1,22 @@
 import type { Command } from '../Command';
-import { skillsData } from '../../data/skills';
+import type { FileSystem } from '../../utils/FileSystem';
+import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 
-export const skillsCommand: Command = {
-  name: 'skills',
-  description: 'Interactive display of technical skills',
-  execute: (args: string[], stdin?: string) => {
-    const output = `
-TECHNICAL SKILLS
-${'='.repeat(60)}
-
-${skillsData.map(category => `
-${category.category.toUpperCase()}
-${category.skills.map(skill => `  • ${skill}`).join('\n')}
-`).join('\n')}
-${'='.repeat(60)}
-Type 'about' for background, 'portfolio' for projects.
-`;
-
-    return { output: output.trim() };
-  }
-};
+export function createSkillsCommand(fs: FileSystem): Command {
+  return {
+    name: 'skills',
+    description: 'Interactive display of technical skills',
+    execute: (args: string[], stdin?: string) => {
+      try {
+        const content = fs.readFile('/home/darin/content/skills.md');
+        const html = MarkdownRenderer.render(content);
+        return { output: html, html: true };
+      } catch (error) {
+        return {
+          output: error instanceof Error ? error.message : String(error),
+          error: true
+        };
+      }
+    }
+  };
+}

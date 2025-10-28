@@ -1,28 +1,22 @@
 import type { Command } from '../Command';
-import { contactData } from '../../data/contact';
+import type { FileSystem } from '../../utils/FileSystem';
+import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 
-export const contactCommand: Command = {
-  name: 'contact',
-  description: 'Display contact information',
-  execute: (args: string[], stdin?: string) => {
-    const output = `
-CONTACT INFORMATION
-${'='.repeat(60)}
-
-Email:     ${contactData.email}
-LinkedIn:  ${contactData.linkedin}
-GitHub:    ${contactData.github}
-Twitter:   ${contactData.twitter}
-
-Location:  ${contactData.location}
-
-${'='.repeat(60)}
-
-${contactData.preferredContact}
-
-${contactData.availability}
-`;
-
-    return { output: output.trim() };
-  }
-};
+export function createContactCommand(fs: FileSystem): Command {
+  return {
+    name: 'contact',
+    description: 'Display contact information',
+    execute: (args: string[], stdin?: string) => {
+      try {
+        const content = fs.readFile('/home/darin/content/contact.md');
+        const html = MarkdownRenderer.render(content);
+        return { output: html, html: true };
+      } catch (error) {
+        return {
+          output: error instanceof Error ? error.message : String(error),
+          error: true
+        };
+      }
+    }
+  };
+}
