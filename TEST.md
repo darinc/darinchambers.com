@@ -93,27 +93,30 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 
 #### 1. Command Parsing System
 
-**CommandParser.ts** (`tests/unit/parsers/CommandParser.test.ts`)
-- Test simple commands: `help`, `ls`, `cd /home`
-- Test quoted arguments: `echo "hello world"`, `cat 'file.txt'`
-- Test mixed quotes and spaces
-- Test edge cases: empty input, unclosed quotes, nested quotes, special characters
-- Test argument extraction and validation
+**CommandParser.ts** (`tests/unit/parsers/CommandParser.test.ts`) ✅ **COMPLETE**
+- ✅ Test simple commands: `help`, `ls`, `cd /home`
+- ✅ Test quoted arguments: `echo "hello world"`, `cat 'file.txt'`
+- ✅ Test mixed quotes and spaces
+- ✅ Test edge cases: empty input, unclosed quotes, nested quotes, special characters
+- ✅ Test argument extraction and validation
+- **17 tests passing | 100% statement coverage**
 
-**PipelineParser.ts** (`tests/unit/parsers/PipelineParser.test.ts`)
-- Test simple pipes: `cat file.md | render`
-- Test multiple pipes: `cmd1 | cmd2 | cmd3`
-- Test pipes within quoted strings (should be ignored)
-- Test edge cases: empty segments, trailing pipes, consecutive pipes
-- Test complex pipeline extraction
+**PipelineParser.ts** (`tests/unit/parsers/PipelineParser.test.ts`) ✅ **COMPLETE**
+- ✅ Test simple pipes: `cat file.md | render`
+- ✅ Test multiple pipes: `cmd1 | cmd2 | cmd3`
+- ✅ Test pipes within quoted strings (should be ignored)
+- ✅ Test edge cases: empty segments, trailing pipes, consecutive pipes
+- ✅ Test complex pipeline extraction
+- **26 tests passing | 100% statement coverage**
 
-**CommandDispatcher.ts** (`tests/unit/utils/CommandDispatcher.test.ts`)
-- Test command registration and lookup
-- Test alias resolution
-- Test pipeline execution with stdin/stdout data flow
-- Test error handling and propagation
-- Test unknown command handling
-- Test command execution context
+**CommandDispatcher.ts** (`tests/unit/utils/CommandDispatcher.test.ts`) ✅ **COMPLETE**
+- ✅ Test command registration and lookup
+- ✅ Test alias resolution
+- ✅ Test pipeline execution with stdin/stdout data flow
+- ✅ Test error handling and propagation
+- ✅ Test unknown command handling
+- ✅ Test command execution context
+- **38 tests passing | 97.5% statement coverage**
 
 #### 2. Markdown Rendering System
 
@@ -164,22 +167,31 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 
 ### Tasks
 
-6. Write comprehensive CommandParser tests
-7. Write comprehensive PipelineParser tests
-8. Write MarkdownParser core functionality tests
-9. Write InlineRenderer tests
-10. Write FrontmatterParser tests
-11. Write FileSystem operation tests
-12. Write CommandDispatcher tests
+6. ✅ Write comprehensive CommandParser tests (COMPLETED - 17 tests)
+7. ✅ Write comprehensive PipelineParser tests (COMPLETED - 26 tests)
+8. ✅ Write CommandDispatcher tests (COMPLETED - 38 tests)
+9. Write MarkdownParser core functionality tests
+10. Write InlineRenderer tests
+11. Write FrontmatterParser tests
+12. Write FileSystem operation tests
 13. Write AliasManager tests
 
 **Deliverables:**
-- ✅ ~8 test files with comprehensive coverage
-- ✅ ~150 individual test cases
-- ✅ All critical parsers and utilities tested
+- 🔄 ~8 test files with comprehensive coverage (3/8 complete - 37.5%)
+- 🔄 ~150 individual test cases (81/150 complete - 54%)
+- 🔄 All critical parsers and utilities tested
+  - ✅ **Command Parsing System COMPLETE**
+    - CommandParser: 17 tests | 100% coverage
+    - PipelineParser: 26 tests | 100% coverage
+    - CommandDispatcher: 38 tests | 97.5% coverage
+  - ⏳ **Markdown Rendering System** (pending)
+  - ⏳ **Virtual File System** (pending)
+  - ⏳ **Alias Management** (pending)
 - ✅ Core bugs identified and fixed (e.g., `echo -n` flag)
 
-**Target Coverage:** ~60%
+**Target Coverage:** ~60% (currently ~12% overall, but 3 core modules at 95%+ coverage)
+
+**Status:** Command Parsing System COMPLETE - v0.0.22 (2025-10-29)
 
 ---
 
