@@ -1,11 +1,11 @@
-import type { FileSystem } from './FileSystem';
+import type { IFileSystem } from './fs/IFileSystem';
 
 export class AliasManager {
   private aliases: Map<string, string> = new Map();
-  private fileSystem: FileSystem;
+  private fileSystem: IFileSystem;
   private aliasFilePath: string = '/home/guest/.alias';
 
-  constructor(fileSystem: FileSystem) {
+  constructor(fileSystem: IFileSystem) {
     this.fileSystem = fileSystem;
     this.loadAliases();
   }

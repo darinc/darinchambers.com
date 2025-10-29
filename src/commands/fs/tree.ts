@@ -1,7 +1,7 @@
 import type { Command } from '../Command';
-import type { FileSystem } from '../../utils/FileSystem';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
 
-export function createTreeCommand(fs: FileSystem): Command {
+export function createTreeCommand(fs: IFileSystem): Command {
   return {
     name: 'tree',
     description: 'Display directory tree structure',

@@ -1,8 +1,8 @@
 import type { Command } from '../Command';
-import type { FileSystem } from '../../utils/FileSystem';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 
-export function createRenderCommand(fs: FileSystem): Command {
+export function createRenderCommand(fs: IFileSystem): Command {
   return {
     name: 'render',
     description: 'Render markdown file with formatting',

@@ -1,11 +1,11 @@
 import type { Command } from '../Command';
-import type { FileSystem } from '../../utils/FileSystem';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { BlogParser } from '../../utils/BlogParser';
 import type { BlogPost } from '../../data/blog';
 import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 
-export function createBlogCommand(fs: FileSystem): Command {
+export function createBlogCommand(fs: IFileSystem): Command {
   return {
     name: 'blog',
     description: 'List and read blog posts',

@@ -2,7 +2,9 @@ import './styles/index.css';
 import { Terminal } from './components/Terminal';
 import { Navigation } from './components/Navigation';
 import { Header } from './components/Header';
-import { FileSystem } from './utils/FileSystem';
+import { FileSystemService } from './utils/fs/FileSystemService';
+import { FileSystemInitializer } from './utils/fs/FileSystemInitializer';
+import type { IFileSystem } from './utils/fs/IFileSystem';
 import { AliasManager } from './utils/AliasManager';
 import type { Command } from './commands/Command';
 import type { NavItem } from './components/Navigation';
@@ -36,7 +38,8 @@ new Header(headerElement);
 const terminal = new Terminal();
 
 // Initialize file system
-const fileSystem = new FileSystem();
+const rootNode = FileSystemInitializer.createDefaultStructure();
+const fileSystem: IFileSystem = new FileSystemService(rootNode);
 terminal.setCurrentPath(fileSystem.getShortPath());
 
 // Initialize alias manager

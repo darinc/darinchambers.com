@@ -1,8 +1,8 @@
 import type { Command } from '../Command';
-import type { FileSystem } from '../../utils/FileSystem';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 
-export function createAboutCommand(fs: FileSystem): Command {
+export function createAboutCommand(fs: IFileSystem): Command {
   return {
     name: 'about',
     description: 'Display bio and expertise overview',

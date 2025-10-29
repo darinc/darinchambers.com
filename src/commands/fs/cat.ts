@@ -1,7 +1,7 @@
 import type { Command } from '../Command';
-import type { FileSystem } from '../../utils/FileSystem';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
 
-export function createCatCommand(fs: FileSystem): Command {
+export function createCatCommand(fs: IFileSystem): Command {
   return {
     name: 'cat',
     description: 'Display file contents',
