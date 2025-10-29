@@ -1,20 +1,36 @@
 {
   "name": "darinchambers.com",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "Terminal-inspired personal website showcasing AI and software engineering expertise",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:host": "vite --host",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:watch": "vitest --watch",
+    "test:run": "vitest run"
   },
-  "keywords": ["terminal", "portfolio", "ai", "typescript"],
+  "keywords": [
+    "terminal",
+    "portfolio",
+    "ai",
+    "typescript"
+  ],
   "author": "Darin Chambers",
   "license": "MIT",
   "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.13.6",
+    "@vitest/coverage-v8": "^4.0.4",
+    "@vitest/ui": "^4.0.4",
+    "jsdom": "^27.0.1",
     "typescript": "^5.7.3",
     "vite": "^6.0.11",
-    "@types/node": "^22.13.6"
+    "vitest": "^4.0.4"
   }
 }

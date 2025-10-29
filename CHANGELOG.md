@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.21] - 2025-10-29
+
+### Added
+- Vitest testing framework with jsdom environment and coverage reporting
+- Test infrastructure with organized directory structure for unit, integration, and E2E tests
+- Testing utilities including @testing-library/dom and @testing-library/user-event
+- Initial test suite with CommandParser and PipelineParser example tests (43 tests passing)
+- Test scripts for running, watching, and generating coverage reports (test, test:ui, test:coverage, test:watch, test:run)
+- Vitest configuration with coverage thresholds set to 80% for lines, functions, branches, and statements
+
 ## [0.0.20] - 2025-10-28
 
 ### Changed
