@@ -1,5 +1,7 @@
 import type { IFileSystem } from './IFileSystem';
 import type { FileSystemNode } from './types';
+import { PATHS } from '../../constants';
+import { FileSystemError } from '../errors';
 
 export class FileSystemService implements IFileSystem {
   private root: FileSystemNode;
@@ -8,7 +10,7 @@ export class FileSystemService implements IFileSystem {
 
   constructor(rootNode: FileSystemNode) {
     this.root = rootNode;
-    this.currentPath = '/home/darin';
+    this.currentPath = PATHS.HOME_DARIN;
   }
 
   getCurrentPath(): string {
@@ -81,10 +83,10 @@ export class FileSystemService implements IFileSystem {
   list(path: string = '.'): string[] {
     const node = this.getNode(path);
     if (!node) {
-      throw new Error(`ls: cannot access '${path}': No such file or directory`);
+      throw new FileSystemError(`ls: cannot access '${path}': No such file or directory`);
     }
     if (node.type !== 'directory') {
-      throw new Error(`ls: ${path}: Not a directory`);
+      throw new FileSystemError(`ls: ${path}: Not a directory`);
     }
 
     return Array.from(node.children!.keys()).sort();
@@ -95,10 +97,10 @@ export class FileSystemService implements IFileSystem {
     const node = this.getNode(resolved);
 
     if (!node) {
-      throw new Error(`cd: ${path}: No such file or directory`);
+      throw new FileSystemError(`cd: ${path}: No such file or directory`);
     }
     if (node.type !== 'directory') {
-      throw new Error(`cd: ${path}: Not a directory`);
+      throw new FileSystemError(`cd: ${path}: Not a directory`);
     }
 
     this.currentPath = resolved || '/';
@@ -108,10 +110,10 @@ export class FileSystemService implements IFileSystem {
     const node = this.getNode(path);
 
     if (!node) {
-      throw new Error(`cat: ${path}: No such file or directory`);
+      throw new FileSystemError(`cat: ${path}: No such file or directory`);
     }
     if (node.type !== 'file') {
-      throw new Error(`cat: ${path}: Is a directory`);
+      throw new FileSystemError(`cat: ${path}: Is a directory`);
     }
 
     return node.content || '';
@@ -137,18 +139,18 @@ export class FileSystemService implements IFileSystem {
     const fileName = pathParts.pop();
 
     if (!fileName) {
-      throw new Error(`Invalid file path: ${path}`);
+      throw new FileSystemError(`Invalid file path: ${path}`);
     }
 
     // Navigate to parent directory
     let current = this.root;
     for (const part of pathParts) {
       if (!current.children || !current.children.has(part)) {
-        throw new Error(`Directory does not exist: ${path}`);
+        throw new FileSystemError(`Directory does not exist: ${path}`);
       }
       current = current.children.get(part)!;
       if (current.type !== 'directory') {
-        throw new Error(`Not a directory: ${path}`);
+        throw new FileSystemError(`Not a directory: ${path}`);
       }
     }
 
@@ -165,7 +167,7 @@ export class FileSystemService implements IFileSystem {
     const node = this.getNode(path);
 
     if (!node) {
-      throw new Error(`tree: cannot access '${path}': No such file or directory`);
+      throw new FileSystemError(`tree: cannot access '${path}': No such file or directory`);
     }
 
     const lines: string[] = [];

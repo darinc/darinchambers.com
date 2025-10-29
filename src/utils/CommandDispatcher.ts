@@ -1,6 +1,7 @@
 import type { Command, CommandResult } from '../commands/Command';
 import { CommandParser, type ParsedCommand } from './CommandParser';
 import { PipelineParser } from './PipelineParser';
+import { AppError, CommandNotFoundError } from './errors';
 
 export class CommandDispatcher {
   private commands: Map<string, Command> = new Map();
@@ -26,8 +27,9 @@ export class CommandDispatcher {
     const command = this.commands.get(parsed.command);
 
     if (!command) {
+      const err = new CommandNotFoundError(parsed.command);
       return {
-        output: `Command not found: ${parsed.command}\nType 'help' for available commands.`,
+        output: `${err.message}\nType 'help' for available commands.`,
         error: true
       };
     }
@@ -35,10 +37,13 @@ export class CommandDispatcher {
     try {
       return await command.execute(parsed.args);
     } catch (error) {
-      return {
-        output: `Error executing command: ${error instanceof Error ? error.message : String(error)}`,
-        error: true
-      };
+      // Standardize all errors into a CommandResult
+      if (error instanceof AppError) {
+        return { output: error.message, error: true };
+      } else if (error instanceof Error) {
+        return { output: `Error: ${error.message}`, error: true };
+      }
+      return { output: 'An unknown error occurred.', error: true };
     }
   }
 
@@ -78,10 +83,13 @@ export class CommandDispatcher {
           return result;
         }
       } catch (error) {
-        return {
-          output: `Error executing command: ${error instanceof Error ? error.message : String(error)}`,
-          error: true
-        };
+        // Standardize all errors into a CommandResult
+        if (error instanceof AppError) {
+          return { output: error.message, error: true };
+        } else if (error instanceof Error) {
+          return { output: `Error: ${error.message}`, error: true };
+        }
+        return { output: 'An unknown error occurred.', error: true };
       }
     }
 

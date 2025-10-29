@@ -1,9 +1,10 @@
 import type { IFileSystem } from './fs/IFileSystem';
+import { PATHS } from '../constants';
 
 export class AliasManager {
   private aliases: Map<string, string> = new Map();
   private fileSystem: IFileSystem;
-  private aliasFilePath: string = '/home/guest/.alias';
+  private aliasFilePath: string = PATHS.CONFIG_ALIASES;
 
   constructor(fileSystem: IFileSystem) {
     this.fileSystem = fileSystem;

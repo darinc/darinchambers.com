@@ -4,6 +4,7 @@ import { CommandDispatcher } from '../utils/CommandDispatcher';
 import { PipelineParser } from '../utils/PipelineParser';
 import type { Command } from '../commands/Command';
 import type { AliasManager } from '../utils/AliasManager';
+import { COMMAND_SIGNALS } from '../constants';
 
 export class Terminal {
   private input: TerminalInput;
@@ -60,7 +61,7 @@ export class Terminal {
           : await this.dispatcher.dispatch(resolvedCommand);
 
         // Handle clear command specially
-        if (result.output === '__CLEAR__') {
+        if (result.output === COMMAND_SIGNALS.CLEAR_SCREEN) {
           this.output.clear();
         } else if (result.output && !result.raw) {
           // Skip display if raw flag is set (piping context)
@@ -148,7 +149,7 @@ export class Terminal {
       const result = await this.dispatcher.dispatch(resolvedCommand);
 
       // Handle clear command specially
-      if (result.output === '__CLEAR__') {
+      if (result.output === COMMAND_SIGNALS.CLEAR_SCREEN) {
         this.output.clear();
       } else if (result.output) {
         if (result.error) {

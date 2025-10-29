@@ -7,6 +7,7 @@ import { FileSystemInitializer } from './utils/fs/FileSystemInitializer';
 import type { IFileSystem } from './utils/fs/IFileSystem';
 import { AliasManager } from './utils/AliasManager';
 import type { Command } from './commands/Command';
+import { PATHS, COMMAND_SIGNALS } from './constants';
 import type { NavItem } from './components/Navigation';
 import { createLsCommand } from './commands/fs/ls';
 import { createCdCommand } from './commands/fs/cd';
@@ -62,7 +63,7 @@ const helpCommand: Command = {
   description: 'Display available commands',
   execute: (args: string[], stdin?: string) => {
     try {
-      const content = fileSystem.readFile('/home/darin/content/help.md');
+      const content = fileSystem.readFile(PATHS.CONTENT_HELP);
       const html = MarkdownRenderer.render(content);
       return { output: html, html: true };
     } catch (error) {
@@ -80,7 +81,7 @@ const clearCommand: Command = {
   execute: (args: string[], stdin?: string) => {
     // This will be handled by Terminal.clear() method or TerminalOutput.clear()
     // We return a special marker that the terminal should intercept
-    return { output: '__CLEAR__' };
+    return { output: COMMAND_SIGNALS.CLEAR_SCREEN };
   }
 };
 

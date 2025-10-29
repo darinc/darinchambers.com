@@ -4,13 +4,14 @@ import { BlogParser } from '../../utils/BlogParser';
 import type { BlogPost } from '../../data/blog';
 import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
+import { PATHS } from '../../constants';
 
 export function createBlogCommand(fs: IFileSystem): Command {
   return {
     name: 'blog',
     description: 'List and read blog posts',
     execute: (args: string[], stdin?: string) => {
-      const blogDir = '/home/darin/blog';
+      const blogDir = PATHS.CONTENT_BLOG;
 
       try {
         // Get all blog files from the filesystem

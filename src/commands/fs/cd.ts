@@ -1,5 +1,6 @@
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import { PATHS } from '../../constants';
 
 export function createCdCommand(
   fs: IFileSystem,
@@ -16,10 +17,10 @@ export function createCdCommand(
         const newPath = fs.getCurrentPath();
 
         // Update username based on home directory
-        if (newPath === '/home/guest' || newPath.startsWith('/home/guest/')) {
+        if (newPath === PATHS.HOME_GUEST || newPath.startsWith(PATHS.HOME_GUEST + '/')) {
           onUsernameChange('guest');
           fs.setCurrentUsername('guest');
-        } else if (newPath === '/home/darin' || newPath.startsWith('/home/darin/')) {
+        } else if (newPath === PATHS.HOME_DARIN || newPath.startsWith(PATHS.HOME_DARIN + '/')) {
           onUsernameChange('darin');
           fs.setCurrentUsername('darin');
         }

@@ -297,21 +297,20 @@ describe('CommandDispatcher', () => {
 
     it('should handle command execution throwing Error object', async () => {
       const result = await dispatcher.dispatch('error');
-      expect(result.output).toContain('Error executing command');
+      expect(result.output).toContain('Error:');
       expect(result.output).toContain('Intentional test error');
       expect(result.error).toBe(true);
     });
 
     it('should handle command execution throwing string error', async () => {
       const result = await dispatcher.dispatch('stringerror');
-      expect(result.output).toContain('Error executing command');
-      expect(result.output).toContain('String error message');
+      expect(result.output).toBe('An unknown error occurred.');
       expect(result.error).toBe(true);
     });
 
     it('should include error details in error message format', async () => {
       const result = await dispatcher.dispatch('error');
-      expect(result.output).toMatch(/Error executing command:/);
+      expect(result.output).toMatch(/Error:/);
     });
 
     it('should stop pipeline on first error', async () => {
