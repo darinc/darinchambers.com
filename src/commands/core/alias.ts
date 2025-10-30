@@ -20,9 +20,10 @@ export function createAliasCommand(aliasManager: AliasManager): Command {
         return { output: lines.join('\n') };
       }
 
-      // Parse alias definition: alias name='command'
+      // Parse alias definition: alias name=command
+      // Note: CommandParser already strips quotes, so we receive "boo=echo boo" not "boo='echo boo'"
       const input = args.join(' ');
-      const match = input.match(/^(\S+)='(.+)'$/);
+      const match = input.match(/^(\S+)=(.+)$/);
 
       if (!match) {
         return {
