@@ -6,6 +6,8 @@ import { FileSystemService } from './utils/fs/FileSystemService';
 import { FileSystemInitializer } from './utils/fs/FileSystemInitializer';
 import type { IFileSystem } from './utils/fs/IFileSystem';
 import { AliasManager } from './utils/AliasManager';
+import { CommandDispatcher } from './utils/CommandDispatcher';
+import { CommandExecutor } from './utils/CommandExecutor';
 import type { Command } from './commands/Command';
 import { PATHS, COMMAND_SIGNALS } from './constants';
 import type { NavItem } from './components/Navigation';
@@ -35,17 +37,18 @@ if (!headerElement) {
 }
 new Header(headerElement);
 
-// Initialize terminal
-const terminal = new Terminal();
-
 // Initialize file system
 const rootNode = FileSystemInitializer.createDefaultStructure();
 const fileSystem: IFileSystem = new FileSystemService(rootNode);
-terminal.setCurrentPath(fileSystem.getShortPath());
 
-// Initialize alias manager
+// Initialize command execution infrastructure
+const dispatcher = new CommandDispatcher();
 const aliasManager = new AliasManager(fileSystem);
-terminal.setAliasManager(aliasManager);
+const executor = new CommandExecutor(dispatcher, aliasManager);
+
+// Initialize terminal with dependencies
+const terminal = new Terminal(dispatcher, executor);
+terminal.setCurrentPath(fileSystem.getShortPath());
 
 // Initialize navigation
 const navLinksElement = document.getElementById('nav-links');

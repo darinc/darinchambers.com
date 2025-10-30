@@ -369,7 +369,7 @@ const postId = cmdArgs.getPositional(0);
 // ... rest of logic
 
 
-Phase 3: Decouple Core UI Logic
+## [x] Phase 3: Decouple Core UI Logic - COMPLETED 2025-10-29 (v0.0.26)
 Source Audit: Finding 2.2 (Moderate Cognitive Load in Terminal.ts).
 Goal: Make Terminal.ts a "dumb" UI component by extracting its execution logic.
 3.1. Refactor: Create CommandExecutor.ts

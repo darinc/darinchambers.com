@@ -1,21 +1,21 @@
 import { TerminalInput } from './TerminalInput';
 import { TerminalOutput } from './TerminalOutput';
 import { CommandDispatcher } from '../utils/CommandDispatcher';
-import { PipelineParser } from '../utils/PipelineParser';
-import type { Command } from '../commands/Command';
-import type { AliasManager } from '../utils/AliasManager';
+import { CommandExecutor } from '../utils/CommandExecutor';
+import type { Command, CommandResult } from '../commands/Command';
 import { COMMAND_SIGNALS } from '../constants';
 
 export class Terminal {
   private input: TerminalInput;
   private output: TerminalOutput;
-  private dispatcher: CommandDispatcher;
-  private aliasManager: AliasManager | null = null;
   private username: string = 'darin';
   private hostname: string = 'darinchambers.com';
   private currentPath: string = '~';
 
-  constructor() {
+  constructor(
+    private dispatcher: CommandDispatcher,
+    private executor: CommandExecutor
+  ) {
     const outputElement = document.getElementById('terminal-output');
     const inputElement = document.getElementById('terminal-input') as HTMLInputElement;
     const promptElement = document.getElementById('terminal-prompt') as HTMLElement;
@@ -26,7 +26,6 @@ export class Terminal {
 
     this.output = new TerminalOutput(outputElement);
     this.input = new TerminalInput(inputElement, promptElement);
-    this.dispatcher = new CommandDispatcher();
 
     this.setupInputHandler();
     this.setupClickHandler(outputElement);
@@ -50,37 +49,38 @@ export class Terminal {
       // Add to history
       this.input.addToHistory(trimmedValue);
 
-      // Execute command
+      // Execute command via executor
       if (trimmedValue) {
-        // Resolve aliases
-        const resolvedCommand = this.aliasManager ? this.aliasManager.resolve(trimmedValue) : trimmedValue;
-
-        // Check for pipe operator and route to appropriate dispatcher
-        const result = PipelineParser.hasPipe(resolvedCommand)
-          ? await this.dispatcher.dispatchPipeline(resolvedCommand)
-          : await this.dispatcher.dispatch(resolvedCommand);
-
-        // Handle clear command specially
-        if (result.output === COMMAND_SIGNALS.CLEAR_SCREEN) {
-          this.output.clear();
-        } else if (result.output && !result.raw) {
-          // Skip display if raw flag is set (piping context)
-          if (result.error) {
-            this.output.writeError(result.output);
-          } else if (result.html) {
-            // Render HTML content
-            this.output.writeHTML(result.output);
-          } else {
-            // Regular text output
-            this.output.write(result.output);
-          }
-        }
+        const result = await this.executor.execute(trimmedValue);
+        this.displayResult(result);
       }
 
-      // Clear input
+      // Clear input and focus
       this.input.clear();
       this.input.focus();
     });
+  }
+
+  /**
+   * Display command result to terminal output.
+   * Handles special signals, errors, HTML, and plain text output.
+   */
+  private displayResult(result: CommandResult): void {
+    // Handle clear command specially
+    if (result.output === COMMAND_SIGNALS.CLEAR_SCREEN) {
+      this.output.clear();
+    } else if (result.output && !result.raw) {
+      // Skip display if raw flag is set (piping context)
+      if (result.error) {
+        this.output.writeError(result.output);
+      } else if (result.html) {
+        // Render HTML content
+        this.output.writeHTML(result.output);
+      } else {
+        // Regular text output
+        this.output.write(result.output);
+      }
+    }
   }
 
   private getPromptString(): string {
@@ -126,10 +126,13 @@ export class Terminal {
     return this.input;
   }
 
-  setAliasManager(aliasManager: AliasManager): void {
-    this.aliasManager = aliasManager;
-  }
-
+  /**
+   * Execute a command programmatically (e.g., from navigation clicks).
+   * Supports pipelines, aliases, and all command features via CommandExecutor.
+   *
+   * @param command - The command string to execute
+   * @param clearFirst - Whether to clear the terminal before execution
+   */
   async executeCommand(command: string, clearFirst: boolean = false): Promise<void> {
     // Clear terminal first if requested (e.g., from navigation clicks)
     if (clearFirst) {
@@ -142,25 +145,10 @@ export class Terminal {
     // Add to history
     this.input.addToHistory(command);
 
-    // Execute command
+    // Execute command via executor
     if (command.trim()) {
-      // Resolve aliases
-      const resolvedCommand = this.aliasManager ? this.aliasManager.resolve(command) : command;
-      const result = await this.dispatcher.dispatch(resolvedCommand);
-
-      // Handle clear command specially
-      if (result.output === COMMAND_SIGNALS.CLEAR_SCREEN) {
-        this.output.clear();
-      } else if (result.output) {
-        if (result.error) {
-          this.output.writeError(result.output);
-        } else if (result.html) {
-          // Render HTML content
-          this.output.writeHTML(result.output);
-        } else {
-          this.output.write(result.output);
-        }
-      }
+      const result = await this.executor.execute(command);
+      this.displayResult(result);
     }
 
     // Ensure input is focused after command execution
