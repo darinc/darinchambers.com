@@ -36,7 +36,7 @@ export class ParseContext {
 
   flushList(): void {
     if (this.listItems.length > 0 && this.listType) {
-      const listHtml = `<${this.listType}>\n${this.listItems.join('\n')}\n</${this.listType}>`;
+      const listHtml = `<${this.listType}>${this.listItems.join('')}</${this.listType}>`;
       this.addHtml(listHtml);
       this.listItems = [];
       this.listType = null;
