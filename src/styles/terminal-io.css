@@ -28,8 +28,8 @@
   display: flex;
   align-items: center;
   font-size: 16px;
-  margin-top: 2px;
-  min-height: 24px;
+  margin-top: 0;
+  line-height: 1.0;
 }
 
 #terminal-prompt {
