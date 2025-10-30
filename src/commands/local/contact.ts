@@ -7,7 +7,7 @@ export function createContactCommand(fs: IFileSystem): Command {
   return {
     name: 'contact',
     description: 'Display contact information',
-    execute: (args: string[], stdin?: string) => {
+    execute: (_args: string[], _stdin?: string) => {
       try {
         const content = fs.readFile(PATHS.CONTENT_CONTACT);
         const html = MarkdownRenderer.render(content);

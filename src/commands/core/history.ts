@@ -5,7 +5,7 @@ export function createHistoryCommand(input: TerminalInput): Command {
   return {
     name: 'history',
     description: 'Display command history',
-    execute: (args: string[], stdin?: string) => {
+    execute: (_args: string[], _stdin?: string) => {
       const history = input.getHistory();
 
       if (history.length === 0) {

@@ -61,7 +61,7 @@ const navigation = new Navigation(navLinksElement, (command: string) => {
 const helpCommand: Command = {
   name: 'help',
   description: 'Display available commands',
-  execute: (args: string[], stdin?: string) => {
+  execute: (_args: string[], _stdin?: string) => {
     try {
       const content = fileSystem.readFile(PATHS.CONTENT_HELP);
       const html = MarkdownRenderer.render(content);
@@ -78,7 +78,7 @@ const helpCommand: Command = {
 const clearCommand: Command = {
   name: 'clear',
   description: 'Clear the terminal screen',
-  execute: (args: string[], stdin?: string) => {
+  execute: (_args: string[], _stdin?: string) => {
     // This will be handled by Terminal.clear() method or TerminalOutput.clear()
     // We return a special marker that the terminal should intercept
     return { output: COMMAND_SIGNALS.CLEAR_SCREEN };

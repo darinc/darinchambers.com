@@ -6,7 +6,7 @@ import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 export const portfolioCommand: Command = {
   name: 'portfolio',
   description: 'Showcase projects and accomplishments',
-  execute: (args: string[], stdin?: string) => {
+  execute: (args: string[], _stdin?: string) => {
     if (args.length > 0) {
       // Show specific project
       const projectId = args[0];

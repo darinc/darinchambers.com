@@ -5,12 +5,13 @@ import type { BlogPost } from '../../data/blog';
 import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
 import { PATHS } from '../../constants';
+import { CommandArgs } from '../../utils/CommandArgs';
 
 export function createBlogCommand(fs: IFileSystem): Command {
   return {
     name: 'blog',
     description: 'List and read blog posts',
-    execute: (args: string[], stdin?: string) => {
+    execute: (args: string[], _stdin?: string) => {
       const blogDir = PATHS.CONTENT_BLOG;
 
       try {
@@ -18,17 +19,10 @@ export function createBlogCommand(fs: IFileSystem): Command {
         const files = fs.list(blogDir);
         const blogFiles = files.filter(f => f.endsWith('.md')).sort().reverse(); // Newest first
 
-        // Check for tag filtering
-        let filterTag: string | null = null;
-        let postId: string | null = null;
-
-        if (args.length > 0) {
-          if (args[0] === '--tag' && args.length > 1) {
-            filterTag = args[1];
-          } else {
-            postId = args[0];
-          }
-        }
+        // Parse command arguments
+        const cmdArgs = new CommandArgs(args);
+        const filterTag = cmdArgs.getFlag('tag') as string | undefined;
+        const postId = cmdArgs.getPositional(0);
 
         // Parse all blog posts
         const posts: BlogPost[] = [];
@@ -70,7 +64,7 @@ export function createBlogCommand(fs: IFileSystem): Command {
         }
 
         // List all blog posts (or filtered posts)
-        const markdown = ContentFormatter.formatBlogList(filteredPosts, filterTag || undefined);
+        const markdown = ContentFormatter.formatBlogList(filteredPosts, filterTag);
         const html = MarkdownRenderer.render(markdown);
         return { output: html, html: true };
       } catch (error) {

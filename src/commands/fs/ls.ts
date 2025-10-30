@@ -5,7 +5,7 @@ export function createLsCommand(fs: IFileSystem): Command {
   return {
     name: 'ls',
     description: 'List directory contents',
-    execute: (args: string[], stdin?: string) => {
+    execute: (args: string[], _stdin?: string) => {
       try {
         const path = args[0] || '.';
         const items = fs.list(path);

@@ -5,7 +5,7 @@ export function createCatCommand(fs: IFileSystem): Command {
   return {
     name: 'cat',
     description: 'Display file contents',
-    execute: (args: string[], stdin?: string) => {
+    execute: (args: string[], _stdin?: string) => {
       if (args.length === 0) {
         return {
           output: 'cat: missing file operand',

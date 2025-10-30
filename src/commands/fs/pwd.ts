@@ -5,7 +5,7 @@ export function createPwdCommand(fs: IFileSystem): Command {
   return {
     name: 'pwd',
     description: 'Print working directory',
-    execute: (args: string[], stdin?: string) => {
+    execute: (_args: string[], _stdin?: string) => {
       return { output: fs.getCurrentPath() };
     }
   };

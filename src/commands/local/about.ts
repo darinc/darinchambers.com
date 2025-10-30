@@ -7,7 +7,7 @@ export function createAboutCommand(fs: IFileSystem): Command {
   return {
     name: 'about',
     description: 'Display bio and expertise overview',
-    execute: (args: string[], stdin?: string) => {
+    execute: (_args: string[], _stdin?: string) => {
       try {
         const content = fs.readFile(PATHS.CONTENT_ABOUT);
         const html = MarkdownRenderer.render(content);

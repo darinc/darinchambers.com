@@ -206,7 +206,7 @@ export function createLsCommand(fs: IFileSystem): Command { /* ... */ }
 
 Now all your commands are fully testable by mocking IFileSystem.
 
-## [x] Phase 2: Standardize Core Systems - COMPLETED 2025-10-29
+## [x] Phase 2: Standardize Core Systems - COMPLETED 2025-10-29 (v0.0.24, enhanced v0.0.25)
 Goal: Clean up scattered logic (magic strings, errors) and make command parsing robust.
 2.1. Refactor: Centralize Constants
 Source Audit: Finding 6.2 (Magic Strings).
