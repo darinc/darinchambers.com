@@ -1,10 +1,12 @@
+import { escapeHtml } from './htmlEscape';
+
 export class InlineRenderer {
   /**
    * Render inline markdown (bold, italic, code, links)
    */
   static render(text: string): string {
     // Escape HTML first
-    let result = this.escapeHtml(text);
+    let result = escapeHtml(text);
 
     // Links: [text](url)
     result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
@@ -21,14 +23,5 @@ export class InlineRenderer {
     result = result.replace(/_([^_]+)_/g, '<em>$1</em>');
 
     return result;
-  }
-
-  private static escapeHtml(text: string): string {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
   }
 }

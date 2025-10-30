@@ -1,3 +1,5 @@
+import { escapeHtml } from './htmlEscape';
+
 export interface FrontmatterData {
   [key: string]: string | string[];
 }
@@ -74,16 +76,16 @@ export class FrontmatterParser {
     const parts: string[] = [];
 
     if (frontmatter.title && typeof frontmatter.title === 'string') {
-      parts.push(`<h1 class="fm-title">${this.escapeHtml(frontmatter.title)}</h1>`);
+      parts.push(`<h1 class="fm-title">${escapeHtml(frontmatter.title)}</h1>`);
     }
 
     const meta: string[] = [];
     if (frontmatter.date && typeof frontmatter.date === 'string') {
-      meta.push(`<span class="fm-date">${this.escapeHtml(frontmatter.date)}</span>`);
+      meta.push(`<span class="fm-date">${escapeHtml(frontmatter.date)}</span>`);
     }
     if (frontmatter.tags && Array.isArray(frontmatter.tags)) {
       const tags = frontmatter.tags
-        .map((tag: string) => `<span class="fm-tag">${this.escapeHtml(tag)}</span>`)
+        .map((tag: string) => `<span class="fm-tag">${escapeHtml(tag)}</span>`)
         .join(' ');
       meta.push(`<span class="fm-tags">${tags}</span>`);
     }
@@ -93,7 +95,7 @@ export class FrontmatterParser {
     }
 
     if (frontmatter.summary && typeof frontmatter.summary === 'string') {
-      parts.push(`<p class="fm-summary">${this.escapeHtml(frontmatter.summary)}</p>`);
+      parts.push(`<p class="fm-summary">${escapeHtml(frontmatter.summary)}</p>`);
     }
 
     if (parts.length > 0) {
@@ -101,14 +103,5 @@ export class FrontmatterParser {
     }
 
     return parts.join('\n');
-  }
-
-  private static escapeHtml(text: string): string {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
   }
 }

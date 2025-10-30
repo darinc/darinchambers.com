@@ -1,3 +1,5 @@
+import { escapeHtml } from './htmlEscape';
+
 export class ParseContext {
   private htmlLines: string[] = [];
   private state: 'normal' | 'code_block' | 'list' = 'normal';
@@ -51,19 +53,10 @@ export class ParseContext {
   flushCodeBlock(): void {
     if (this.codeBlockLines.length > 0) {
       const escaped = this.codeBlockLines
-        .map(line => this.escapeHtml(line))
+        .map(line => escapeHtml(line))
         .join('\n');
       this.addHtml(`<pre><code>${escaped}</code></pre>`);
       this.codeBlockLines = [];
     }
-  }
-
-  private escapeHtml(text: string): string {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
   }
 }
