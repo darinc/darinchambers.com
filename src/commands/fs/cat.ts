@@ -16,8 +16,7 @@ export function createCatCommand(fs: IFileSystem): Command {
       try {
         const content = fs.readFile(args[0]);
         return {
-          output: content,
-          raw: true  // Mark as raw for piping
+          output: content
         };
       } catch (error) {
         return {
