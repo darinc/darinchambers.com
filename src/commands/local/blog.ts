@@ -3,7 +3,7 @@ import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { BlogParser } from '../../utils/BlogParser';
 import type { BlogPost } from '../../data/blog';
 import { ContentFormatter } from '../../utils/ContentFormatter';
-import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
+import { MarkdownService } from '../../utils/MarkdownService';
 import { PATHS } from '../../constants';
 import { CommandArgs } from '../../utils/CommandArgs';
 
@@ -44,7 +44,7 @@ export function createBlogCommand(fs: IFileSystem): Command {
           }
 
           const markdown = ContentFormatter.formatBlogPost(post);
-          const html = MarkdownRenderer.render(markdown);
+          const html = MarkdownService.render(markdown);
           return { output: html, html: true };
         }
 
@@ -65,7 +65,7 @@ export function createBlogCommand(fs: IFileSystem): Command {
 
         // List all blog posts (or filtered posts)
         const markdown = ContentFormatter.formatBlogList(filteredPosts, filterTag);
-        const html = MarkdownRenderer.render(markdown);
+        const html = MarkdownService.render(markdown);
         return { output: html, html: true };
       } catch (error) {
         return {

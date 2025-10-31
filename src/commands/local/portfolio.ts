@@ -1,7 +1,7 @@
 import type { Command } from '../Command';
 import { portfolioData } from '../../data/portfolio';
 import { ContentFormatter } from '../../utils/ContentFormatter';
-import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
+import { MarkdownService } from '../../utils/MarkdownService';
 
 export const portfolioCommand: Command = {
   name: 'portfolio',
@@ -20,13 +20,13 @@ export const portfolioCommand: Command = {
       }
 
       const markdown = ContentFormatter.formatPortfolioDetail(project);
-      const html = MarkdownRenderer.render(markdown);
+      const html = MarkdownService.render(markdown);
       return { output: html, html: true };
     }
 
     // List all projects
     const markdown = ContentFormatter.formatPortfolioList(portfolioData);
-    const html = MarkdownRenderer.render(markdown);
+    const html = MarkdownService.render(markdown);
     return { output: html, html: true };
   }
 };

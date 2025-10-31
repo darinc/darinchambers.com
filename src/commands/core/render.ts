@@ -1,6 +1,6 @@
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
-import { MarkdownRenderer } from '../../utils/MarkdownRenderer';
+import { MarkdownService } from '../../utils/MarkdownService';
 
 export function createRenderCommand(fs: IFileSystem): Command {
   return {
@@ -55,7 +55,7 @@ export function createRenderCommand(fs: IFileSystem): Command {
       const hasFrontmatter = content.trim().startsWith('---');
 
       // Render markdown to HTML
-      const html = MarkdownRenderer.render(content, hasFrontmatter);
+      const html = MarkdownService.render(content, hasFrontmatter);
 
       return {
         output: html,

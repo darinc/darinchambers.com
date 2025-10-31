@@ -28,7 +28,7 @@ import { portfolioCommand } from './commands/local/portfolio';
 import { createBlogCommand } from './commands/local/blog';
 import { createContactCommand } from './commands/local/contact';
 import { createSkillsCommand } from './commands/local/skills';
-import { MarkdownRenderer } from './utils/MarkdownRenderer';
+import { MarkdownService } from './utils/MarkdownService';
 
 // Initialize header
 const headerElement = document.getElementById('terminal-header');
@@ -67,7 +67,7 @@ const helpCommand: Command = {
   execute: (_args: string[], _stdin?: string) => {
     try {
       const content = fileSystem.readFile(PATHS.CONTENT_HELP);
-      const html = MarkdownRenderer.render(content);
+      const html = MarkdownService.render(content);
       return { output: html, html: true };
     } catch (error) {
       return {
