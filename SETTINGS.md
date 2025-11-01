@@ -994,7 +994,7 @@ settings reset
 ### Step 1: Foundation (Phase 1)
 1. ✅ Create `src/types/settings.ts`
 2. ✅ Create `src/utils/SettingsManager.ts`
-3. Create `src/utils/ThemeManager.ts`
+3. ✅ Create `src/utils/ThemeManager.ts`
 4. ✅ Update `src/constants.ts`
 
 ### Step 2: CLI Interface (Phase 2)
@@ -1028,7 +1028,7 @@ settings reset
 
 ### Step 7: Testing (Phase 6)
 24. ✅ Write SettingsManager unit tests
-25. Write ThemeManager unit tests
+25. ✅ Write ThemeManager unit tests
 26. Write settings command unit tests
 27. Write integration tests
 28. Verify test coverage (target: 80%+)
