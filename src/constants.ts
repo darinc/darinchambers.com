@@ -3,6 +3,8 @@
  * This eliminates magic strings throughout the codebase.
  */
 
+import type { SettingsConfig } from './types/settings';
+
 export const PATHS = {
   HOME_DARIN: '/home/darin',
   HOME_GUEST: '/home/guest',
@@ -11,10 +13,31 @@ export const PATHS = {
   CONTENT_ABOUT: '/home/darin/content/about.md',
   CONTENT_CONTACT: '/home/darin/content/contact.md',
   CONTENT_SKILLS: '/home/darin/content/skills.md',
-  CONFIG_ALIASES: '/home/guest/.alias'
+  CONFIG_ALIASES: '/home/guest/.alias',
+  CONFIG_SETTINGS: '/home/darin/.settings'
 } as const;
 
 export const COMMAND_SIGNALS = {
   CLEAR_SCREEN: '__CLEAR__',
   NO_OUTPUT: '__NO_OUTPUT__'
+} as const;
+
+export const STORAGE_KEYS = {
+  SETTINGS: 'terminal-settings'
+} as const;
+
+export const DEFAULT_SETTINGS: SettingsConfig = {
+  theme: {
+    preset: 'green',
+    customColors: undefined
+  },
+  font: {
+    size: 14,
+    family: 'Courier New'
+  },
+  effects: {
+    crt: true,
+    animationSpeed: 1.0,
+    soundEffects: false
+  }
 } as const;

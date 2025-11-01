@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.31] - 2025-11-01
+
+### Added
+- SettingsManager service for managing user-configurable terminal preferences
+- Settings type definitions with theme, font, and effects configuration
+- Dual storage system using localStorage and virtual filesystem
+
 ## [0.0.30] - 2025-10-31
 
 ### Changed
