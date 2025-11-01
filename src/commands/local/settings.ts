@@ -1,0 +1,304 @@
+/**
+ * Settings Command
+ *
+ * CLI interface for managing terminal settings and preferences.
+ * Supports theme switching, font configuration, effects toggling, and settings display.
+ */
+
+import type { Command, CommandResult } from '../Command';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { SettingsManager } from '../../utils/SettingsManager';
+import type { ThemeManager } from '../../utils/ThemeManager';
+import type { ThemePresetName, FontFamily, ColorScheme } from '../../types/settings';
+import { CommandArgs } from '../../utils/CommandArgs';
+import { MarkdownService } from '../../utils/MarkdownService';
+
+/**
+ * Creates the settings command with full CLI interface.
+ *
+ * @param fs File system for potential future file-based settings
+ * @param settingsManager Settings persistence manager
+ * @param themeManager Theme application manager
+ * @returns Settings command
+ */
+export function createSettingsCommand(
+  _fs: IFileSystem,
+  settingsManager: SettingsManager,
+  themeManager: ThemeManager
+): Command {
+  return {
+    name: 'settings',
+    description: 'Manage terminal settings and preferences',
+    aliases: ['preferences', 'config'],
+    execute: (args: string[], _stdin?: string) => {
+      const cmdArgs = new CommandArgs(args);
+
+      // No args: show current settings
+      if (args.length === 0) {
+        return handleList(settingsManager, themeManager);
+      }
+
+      const subcommand = cmdArgs.getPositional(0);
+
+      switch (subcommand) {
+        case 'list':
+          return handleList(settingsManager, themeManager);
+
+        case 'set':
+          return handleSet(cmdArgs, settingsManager, themeManager);
+
+        case 'reset':
+          return handleReset(settingsManager, themeManager);
+
+        default:
+          return {
+            output: `Unknown subcommand: ${subcommand}. Use 'help' for usage.`,
+            error: true
+          };
+      }
+    }
+  };
+}
+
+/**
+ * Displays current settings in a formatted view.
+ */
+function handleList(
+  settingsManager: SettingsManager,
+  themeManager: ThemeManager
+): CommandResult {
+  const markdown = formatSettingsAsMarkdown(settingsManager, themeManager);
+  const html = MarkdownService.render(markdown);
+  return { output: html, html: true };
+}
+
+/**
+ * Handles setting updates.
+ */
+function handleSet(
+  args: CommandArgs,
+  settingsManager: SettingsManager,
+  themeManager: ThemeManager
+): CommandResult {
+  const setting = args.getPositional(1);
+  const value = args.getPositional(2);
+
+  if (!setting || !value) {
+    return {
+      output: 'Usage: settings set <setting> <value>',
+      error: true
+    };
+  }
+
+  try {
+    switch (setting) {
+      case 'theme': {
+        const validThemes: ThemePresetName[] = ['green', 'yellow', 'white', 'light-blue'];
+        if (!validThemes.includes(value as ThemePresetName)) {
+          return {
+            output: `Invalid theme: ${value}. Available: ${validThemes.join(', ')}`,
+            error: true
+          };
+        }
+        themeManager.applyTheme(value as ThemePresetName);
+        return { output: `Theme changed to: ${value}` };
+      }
+
+      case 'color': {
+        const colorVar = args.getPositional(2);
+        const colorValue = args.getPositional(3);
+
+        if (!colorVar || !colorValue) {
+          return {
+            output: 'Usage: settings set color <variable> <value>\nExample: settings set color --terminal-accent #ff0000',
+            error: true
+          };
+        }
+
+        const colors: Partial<ColorScheme> = {
+          [colorVar]: colorValue
+        };
+        themeManager.applyCustomColors(colors);
+        return { output: `Color ${colorVar} set to ${colorValue}` };
+      }
+
+      case 'font-size': {
+        const size = parseInt(value, 10);
+        if (isNaN(size)) {
+          return {
+            output: 'Font size must be a number (8-24)',
+            error: true
+          };
+        }
+        settingsManager.setFontSize(size);
+        applyFontSettings(settingsManager);
+        return { output: `Font size set to: ${size}px` };
+      }
+
+      case 'font-family': {
+        const validFamilies: FontFamily[] = ['Courier New', 'Consolas', 'Monaco', 'monospace'];
+        if (!validFamilies.includes(value as FontFamily)) {
+          return {
+            output: `Invalid font family: ${value}. Available: ${validFamilies.join(', ')}`,
+            error: true
+          };
+        }
+        settingsManager.setFontFamily(value as FontFamily);
+        applyFontSettings(settingsManager);
+        return { output: `Font family set to: ${value}` };
+      }
+
+      case 'crt-effects': {
+        if (value !== 'on' && value !== 'off') {
+          return {
+            output: 'CRT effects must be "on" or "off"',
+            error: true
+          };
+        }
+        const enabled = value === 'on';
+        settingsManager.setCRTEffects(enabled);
+        applyCRTEffects(enabled);
+        return { output: `CRT effects: ${value}` };
+      }
+
+      case 'animation-speed': {
+        const speed = parseFloat(value);
+        if (isNaN(speed)) {
+          return {
+            output: 'Animation speed must be a number (0.5-2.0)',
+            error: true
+          };
+        }
+        settingsManager.setAnimationSpeed(speed);
+        applyAnimationSpeed(speed);
+        return { output: `Animation speed set to: ${speed}x` };
+      }
+
+      case 'sound-effects': {
+        if (value !== 'on' && value !== 'off') {
+          return {
+            output: 'Sound effects must be "on" or "off"',
+            error: true
+          };
+        }
+        const enabled = value === 'on';
+        settingsManager.setSoundEffects(enabled);
+        return { output: `Sound effects: ${value}` };
+      }
+
+      default:
+        return {
+          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, crt-effects, animation-speed, sound-effects`,
+          error: true
+        };
+    }
+  } catch (error) {
+    return {
+      output: error instanceof Error ? error.message : String(error),
+      error: true
+    };
+  }
+}
+
+/**
+ * Resets all settings to defaults.
+ */
+function handleReset(
+  settingsManager: SettingsManager,
+  themeManager: ThemeManager
+): CommandResult {
+  settingsManager.reset();
+  themeManager.applyCurrentTheme();
+  applyFontSettings(settingsManager);
+  applyCRTEffects(settingsManager.getCRTEffects());
+  applyAnimationSpeed(settingsManager.getAnimationSpeed());
+
+  return { output: 'Settings reset to defaults.' };
+}
+
+/**
+ * Formats current settings as markdown.
+ */
+function formatSettingsAsMarkdown(
+  settingsManager: SettingsManager,
+  themeManager: ThemeManager
+): string {
+  const settings = settingsManager.loadSettings();
+  const presets = themeManager.getPresets();
+
+  const themeName = settings.theme.preset === 'custom'
+    ? 'Custom'
+    : presets.find(p => p.name === settings.theme.preset)?.displayName || settings.theme.preset;
+
+  return `# Terminal Settings
+
+## Current Configuration
+
+### Theme
+**${themeName}**
+
+### Font
+- **Size:** ${settings.font.size}px
+- **Family:** ${settings.font.family}
+
+### Effects
+- **CRT Effects:** ${settings.effects.crt ? 'Enabled' : 'Disabled'}
+- **Animation Speed:** ${settings.effects.animationSpeed}x
+- **Sound Effects:** ${settings.effects.soundEffects ? 'Enabled' : 'Disabled'}
+
+## Available Themes
+
+${presets.map(p => `- **${p.name}**: ${p.displayName}`).join('\n')}
+
+## Usage Examples
+
+\`\`\`bash
+settings set theme green            # Change to green theme
+settings set theme yellow           # Change to yellow theme
+settings set font-size 16           # Set font to 16px
+settings set font-family Monaco     # Change font family
+settings set crt-effects off        # Disable CRT effects
+settings set animation-speed 1.5    # Speed up animations
+settings reset                      # Reset all to defaults
+\`\`\`
+
+For custom colors:
+\`\`\`bash
+settings set color --terminal-accent #ff0000
+\`\`\`
+`;
+}
+
+/**
+ * Applies font settings to the DOM.
+ */
+function applyFontSettings(settingsManager: SettingsManager): void {
+  const font = settingsManager.getSetting('font');
+
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.setProperty('--terminal-font-size', `${font.size}px`);
+    document.documentElement.style.setProperty('--terminal-font-family', font.family);
+  }
+}
+
+/**
+ * Applies CRT effects toggle to the DOM.
+ */
+function applyCRTEffects(enabled: boolean): void {
+  if (typeof document !== 'undefined') {
+    if (enabled) {
+      document.body.classList.remove('no-crt-effects');
+    } else {
+      document.body.classList.add('no-crt-effects');
+    }
+  }
+}
+
+/**
+ * Applies animation speed to the DOM.
+ */
+function applyAnimationSpeed(speed: number): void {
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.setProperty('--terminal-animation-speed', speed.toString());
+  }
+}

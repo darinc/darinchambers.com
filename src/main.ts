@@ -29,6 +29,9 @@ import { createBlogCommand } from './commands/local/blog';
 import { createContactCommand } from './commands/local/contact';
 import { createSkillsCommand } from './commands/local/skills';
 import { MarkdownService } from './utils/MarkdownService';
+import { SettingsManager } from './utils/SettingsManager';
+import { ThemeManager } from './utils/ThemeManager';
+import { createSettingsCommand } from './commands/local/settings';
 
 // Initialize header
 const headerElement = document.getElementById('terminal-header');
@@ -40,6 +43,13 @@ new Header(headerElement);
 // Initialize file system
 const rootNode = FileSystemInitializer.createDefaultStructure();
 const fileSystem: IFileSystem = new FileSystemService(rootNode);
+
+// Initialize settings management
+const settingsManager = new SettingsManager(fileSystem);
+const themeManager = new ThemeManager(settingsManager);
+
+// Apply saved theme BEFORE terminal initialization
+themeManager.applyCurrentTheme();
 
 // Initialize command execution infrastructure
 const dispatcher = new CommandDispatcher();
@@ -118,6 +128,9 @@ const blogCommand = createBlogCommand(fileSystem);
 // Create render command
 const renderCommand = createRenderCommand(fileSystem);
 
+// Create settings command
+const settingsCommand = createSettingsCommand(fileSystem, settingsManager, themeManager);
+
 terminal.registerCommands([
   helpCommand,
   clearCommand,
@@ -137,7 +150,8 @@ terminal.registerCommands([
   portfolioCommand,
   blogCommand,
   contactCommand,
-  skillsCommand
+  skillsCommand,
+  settingsCommand
 ]);
 
 // Set up navigation items
@@ -147,6 +161,7 @@ const navItems: NavItem[] = [
   { label: 'blog', command: 'blog' },
   { label: 'contact', command: 'contact' },
   { label: 'skills', command: 'skills' },
+  { label: 'settings', command: 'settings' },
   { label: 'help', command: 'help' }
 ];
 

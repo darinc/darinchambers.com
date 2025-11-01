@@ -998,10 +998,10 @@ settings reset
 4. ✅ Update `src/constants.ts`
 
 ### Step 2: CLI Interface (Phase 2)
-5. Create `src/commands/local/settings.ts`
-6. Update `src/main.ts` - initialize managers
-7. Update `src/main.ts` - register command
-8. Update `src/main.ts` - add to navigation
+5. ✅ Create `src/commands/local/settings.ts`
+6. ✅ Update `src/main.ts` - initialize managers
+7. ✅ Update `src/main.ts` - register command
+8. ✅ Update `src/main.ts` - add to navigation
 
 ### Step 3: Interactive UI (Phase 3)
 9. Create `src/components/SettingsUI.ts`
