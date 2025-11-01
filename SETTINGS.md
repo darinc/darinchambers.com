@@ -1010,10 +1010,10 @@ settings reset
 12. ✅ Update `src/components/Terminal.ts` - event listener
 
 ### Step 4: Basic Theme Switching
-13. Test theme switching via CLI
-14. Test theme switching via UI
-15. Verify localStorage persistence
-16. Verify virtual FS sync
+13. ✅ Test theme switching via CLI
+14. ✅ Test theme switching via UI
+15. ✅ Verify localStorage persistence
+16. ✅ Verify virtual FS sync
 
 ### Step 5: Additional Features (Phase 4)
 17. Implement font size/family settings

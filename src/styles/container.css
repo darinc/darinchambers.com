@@ -45,3 +45,13 @@
   pointer-events: none;
   z-index: 999;
 }
+
+/* Disable scan lines when toggled off */
+body.no-scan-lines #terminal-container::before {
+  display: none;
+}
+
+/* Disable glow when toggled off */
+body.no-glow #terminal-container::after {
+  display: none;
+}

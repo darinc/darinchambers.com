@@ -52,7 +52,8 @@ export interface SettingsConfig {
     family: FontFamily;
   };
   effects: {
-    crt: boolean;
+    scanLines: boolean;
+    glow: boolean;
     animationSpeed: number; // 0.5-2.0x multiplier
     soundEffects: boolean;
   };

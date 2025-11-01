@@ -48,8 +48,37 @@ const fileSystem: IFileSystem = new FileSystemService(rootNode);
 const settingsManager = new SettingsManager(fileSystem);
 const themeManager = new ThemeManager(settingsManager);
 
-// Apply saved theme BEFORE terminal initialization
+// Apply saved settings BEFORE terminal initialization
 themeManager.applyCurrentTheme();
+
+// Apply font settings
+const fontSettings = settingsManager.getSetting('font');
+if (typeof document !== 'undefined') {
+  document.documentElement.style.setProperty('--terminal-font-size', `${fontSettings.size}px`);
+  document.documentElement.style.setProperty('--terminal-font-family', fontSettings.family);
+}
+
+// Apply scan lines
+const scanLinesEnabled = settingsManager.getScanLines();
+if (typeof document !== 'undefined') {
+  if (!scanLinesEnabled) {
+    document.body.classList.add('no-scan-lines');
+  }
+}
+
+// Apply glow effect
+const glowEnabled = settingsManager.getGlow();
+if (typeof document !== 'undefined') {
+  if (!glowEnabled) {
+    document.body.classList.add('no-glow');
+  }
+}
+
+// Apply animation speed
+const animSpeed = settingsManager.getAnimationSpeed();
+if (typeof document !== 'undefined') {
+  document.documentElement.style.setProperty('--terminal-animation-speed', animSpeed.toString());
+}
 
 // Initialize command execution infrastructure
 const dispatcher = new CommandDispatcher();

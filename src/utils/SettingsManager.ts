@@ -230,19 +230,37 @@ export class SettingsManager {
   }
 
   /**
-   * Gets the CRT effects enabled state.
+   * Gets the scan lines enabled state.
    */
-  getCRTEffects(): boolean {
-    return this.settings.effects.crt;
+  getScanLines(): boolean {
+    return this.settings.effects.scanLines;
   }
 
   /**
-   * Sets the CRT effects enabled state.
+   * Sets the scan lines enabled state.
    *
-   * @param enabled Whether CRT effects should be enabled
+   * @param enabled Whether scan lines should be enabled
    */
-  setCRTEffects(enabled: boolean): void {
-    this.settings.effects.crt = enabled;
+  setScanLines(enabled: boolean): void {
+    this.settings.effects.scanLines = enabled;
+    this.saveToLocalStorage();
+    this.syncToFileSystem();
+  }
+
+  /**
+   * Gets the glow effect enabled state.
+   */
+  getGlow(): boolean {
+    return this.settings.effects.glow;
+  }
+
+  /**
+   * Sets the glow effect enabled state.
+   *
+   * @param enabled Whether glow should be enabled
+   */
+  setGlow(enabled: boolean): void {
+    this.settings.effects.glow = enabled;
     this.saveToLocalStorage();
     this.syncToFileSystem();
   }

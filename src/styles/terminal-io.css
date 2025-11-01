@@ -1,8 +1,8 @@
 #terminal-output {
   flex: 1;
   line-height: 1.0;
-  font-size: 16px;
-  font-family: 'Courier New', monospace;
+  font-size: var(--terminal-font-size, 14px);
+  font-family: var(--terminal-font-family, 'Courier New', monospace);
   white-space: pre;
   word-wrap: break-word;
   max-width: 100%;
@@ -27,7 +27,8 @@
 #terminal-input-line {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: var(--terminal-font-size, 14px);
+  font-family: var(--terminal-font-family, 'Courier New', monospace);
   margin-top: 0;
   line-height: 1.0;
 }

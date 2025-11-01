@@ -46,6 +46,12 @@ export class Terminal {
       const customEvent = e as CustomEvent<string>;
       this.executeCommand(customEvent.detail, false);
     });
+
+    // Expose executeCommand globally for inline onclick handlers
+    (window as any).executeCommand = (cmd: string) => {
+      const event = new CustomEvent('terminal-command', { detail: cmd });
+      document.dispatchEvent(event);
+    };
   }
 
   private setupInputHandler(): void {

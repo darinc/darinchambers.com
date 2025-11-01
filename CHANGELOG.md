@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.35] - 2025-11-01
+
+### Changed
+- Split CRT effects into separate scan lines and glow controls
+- Theme buttons now display in their respective theme colors
+- Improved slider track visibility with theme-aware styling
+
+### Fixed
+- Slider thumb now properly centered on track with rounded rectangle shape
+- Settings panel spacing adjusted for better visual hierarchy
+
 ## [0.0.34] - 2025-11-01
 
 ### Added

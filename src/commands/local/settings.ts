@@ -87,7 +87,15 @@ function handleSet(
   const setting = args.getPositional(1);
   const value = args.getPositional(2);
 
-  if (!setting || !value) {
+  if (!setting) {
+    return {
+      output: 'Usage: settings set <setting> <value>',
+      error: true
+    };
+  }
+
+  // Color command has different syntax, skip value check
+  if (setting !== 'color' && !value) {
     return {
       output: 'Usage: settings set <setting> <value>',
       error: true
@@ -109,8 +117,21 @@ function handleSet(
       }
 
       case 'color': {
-        const colorVar = args.getPositional(2);
-        const colorValue = args.getPositional(3);
+        // Color variables are parsed as flags by CommandArgs (they start with --)
+        // So we need to get the first flag that looks like a CSS variable
+        const cssVars = ['terminal-bg', 'terminal-fg', 'terminal-accent', 'terminal-dim', 'terminal-error', 'terminal-cursor'];
+
+        let colorVar: string | undefined;
+        let colorValue: string | undefined;
+
+        for (const cssVar of cssVars) {
+          const flagValue = args.getFlag(cssVar);
+          if (flagValue && typeof flagValue === 'string') {
+            colorVar = '--' + cssVar;
+            colorValue = flagValue;
+            break;
+          }
+        }
 
         if (!colorVar || !colorValue) {
           return {
@@ -127,6 +148,7 @@ function handleSet(
       }
 
       case 'font-size': {
+        if (!value) return { output: 'Font size value required', error: true };
         const size = parseInt(value, 10);
         if (isNaN(size)) {
           return {
@@ -140,6 +162,7 @@ function handleSet(
       }
 
       case 'font-family': {
+        if (!value) return { output: 'Font family value required', error: true };
         const validFamilies: FontFamily[] = ['Courier New', 'Consolas', 'Monaco', 'monospace'];
         if (!validFamilies.includes(value as FontFamily)) {
           return {
@@ -152,20 +175,36 @@ function handleSet(
         return { output: `Font family set to: ${value}` };
       }
 
-      case 'crt-effects': {
+      case 'scan-lines': {
+        if (!value) return { output: 'Scan lines value required (on/off)', error: true };
         if (value !== 'on' && value !== 'off') {
           return {
-            output: 'CRT effects must be "on" or "off"',
+            output: 'Scan lines must be "on" or "off"',
             error: true
           };
         }
         const enabled = value === 'on';
-        settingsManager.setCRTEffects(enabled);
-        applyCRTEffects(enabled);
-        return { output: `CRT effects: ${value}` };
+        settingsManager.setScanLines(enabled);
+        applyScanLines(enabled);
+        return { output: `Scan lines: ${value}` };
+      }
+
+      case 'glow': {
+        if (!value) return { output: 'Glow value required (on/off)', error: true };
+        if (value !== 'on' && value !== 'off') {
+          return {
+            output: 'Glow must be "on" or "off"',
+            error: true
+          };
+        }
+        const enabled = value === 'on';
+        settingsManager.setGlow(enabled);
+        applyGlow(enabled);
+        return { output: `Glow: ${value}` };
       }
 
       case 'animation-speed': {
+        if (!value) return { output: 'Animation speed value required', error: true };
         const speed = parseFloat(value);
         if (isNaN(speed)) {
           return {
@@ -179,6 +218,7 @@ function handleSet(
       }
 
       case 'sound-effects': {
+        if (!value) return { output: 'Sound effects value required (on/off)', error: true };
         if (value !== 'on' && value !== 'off') {
           return {
             output: 'Sound effects must be "on" or "off"',
@@ -192,7 +232,7 @@ function handleSet(
 
       default:
         return {
-          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, crt-effects, animation-speed, sound-effects`,
+          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, animation-speed, sound-effects`,
           error: true
         };
     }
@@ -214,7 +254,8 @@ function handleReset(
   settingsManager.reset();
   themeManager.applyCurrentTheme();
   applyFontSettings(settingsManager);
-  applyCRTEffects(settingsManager.getCRTEffects());
+  applyScanLines(settingsManager.getScanLines());
+  applyGlow(settingsManager.getGlow());
   applyAnimationSpeed(settingsManager.getAnimationSpeed());
 
   return { output: 'Settings reset to defaults.' };
@@ -246,7 +287,8 @@ function formatSettingsAsMarkdown(
 - **Family:** ${settings.font.family}
 
 ### Effects
-- **CRT Effects:** ${settings.effects.crt ? 'Enabled' : 'Disabled'}
+- **Scan Lines:** ${settings.effects.scanLines ? 'Enabled' : 'Disabled'}
+- **Glow:** ${settings.effects.glow ? 'Enabled' : 'Disabled'}
 - **Animation Speed:** ${settings.effects.animationSpeed}x
 - **Sound Effects:** ${settings.effects.soundEffects ? 'Enabled' : 'Disabled'}
 
@@ -261,7 +303,8 @@ settings set theme green            # Change to green theme
 settings set theme yellow           # Change to yellow theme
 settings set font-size 16           # Set font to 16px
 settings set font-family Monaco     # Change font family
-settings set crt-effects off        # Disable CRT effects
+settings set scan-lines off         # Disable scan lines
+settings set glow off               # Disable glow effect
 settings set animation-speed 1.5    # Speed up animations
 settings reset                      # Reset all to defaults
 \`\`\`
@@ -286,14 +329,27 @@ function applyFontSettings(settingsManager: SettingsManager): void {
 }
 
 /**
- * Applies CRT effects toggle to the DOM.
+ * Applies scan lines toggle to the DOM.
  */
-function applyCRTEffects(enabled: boolean): void {
+function applyScanLines(enabled: boolean): void {
   if (typeof document !== 'undefined') {
     if (enabled) {
-      document.body.classList.remove('no-crt-effects');
+      document.body.classList.remove('no-scan-lines');
     } else {
-      document.body.classList.add('no-crt-effects');
+      document.body.classList.add('no-scan-lines');
+    }
+  }
+}
+
+/**
+ * Applies glow effect toggle to the DOM.
+ */
+function applyGlow(enabled: boolean): void {
+  if (typeof document !== 'undefined') {
+    if (enabled) {
+      document.body.classList.remove('no-glow');
+    } else {
+      document.body.classList.add('no-glow');
     }
   }
 }
