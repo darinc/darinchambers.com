@@ -13,6 +13,7 @@
 @import './terminal-io.css';
 @import './scrollbar.css';
 @import './markdown.css';
+@import './settings.css';
 
 /* Responsive styles should be imported last to override other styles */
 @import './responsive.css';

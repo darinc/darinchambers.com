@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.34] - 2025-11-01
+
+### Added
+- Interactive settings UI with clickable controls for managing preferences
+- Theme selection buttons with color preview circles
+- Font size slider and family dropdown controls
+- Collapsible advanced section for custom color picking
+- Real-time CSS updates via custom event system
+
 ## [0.0.33] - 2025-11-01
 
 ### Added

@@ -12,6 +12,7 @@ import type { ThemeManager } from '../../utils/ThemeManager';
 import type { ThemePresetName, FontFamily, ColorScheme } from '../../types/settings';
 import { CommandArgs } from '../../utils/CommandArgs';
 import { MarkdownService } from '../../utils/MarkdownService';
+import { generateSettingsUI } from '../../components/SettingsUI';
 
 /**
  * Creates the settings command with full CLI interface.
@@ -33,9 +34,12 @@ export function createSettingsCommand(
     execute: (args: string[], _stdin?: string) => {
       const cmdArgs = new CommandArgs(args);
 
-      // No args: show current settings
+      // No args: show interactive UI
       if (args.length === 0) {
-        return handleList(settingsManager, themeManager);
+        return {
+          output: generateSettingsUI(settingsManager, themeManager),
+          html: true
+        };
       }
 
       const subcommand = cmdArgs.getPositional(0);

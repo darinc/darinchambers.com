@@ -1,0 +1,274 @@
+/**
+ * Settings Panel Styles
+ *
+ * Styling for the interactive settings UI matching the retro terminal aesthetic.
+ */
+
+/* Main Container */
+.settings-panel {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-panel h2 {
+  color: var(--terminal-accent);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--terminal-dim);
+  padding-bottom: 10px;
+}
+
+/* Settings Sections */
+.settings-section {
+  margin: 30px 0;
+  padding: 20px;
+  border: 1px solid var(--terminal-dim);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.settings-section h3 {
+  color: var(--terminal-accent);
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  text-transform: uppercase;
+}
+
+/* Theme Buttons */
+.theme-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  margin: 5px;
+  background: rgba(57, 255, 20, 0.05);
+  border: 1px solid var(--terminal-dim);
+  color: var(--terminal-fg);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+
+.theme-button:hover {
+  border-color: var(--terminal-accent);
+  background: rgba(57, 255, 20, 0.1);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+}
+
+.theme-button.active {
+  border-color: var(--terminal-accent);
+  background: rgba(57, 255, 20, 0.15);
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+}
+
+.theme-preview {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--terminal-dim);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Color Pickers */
+.color-picker-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.color-picker-group label {
+  min-width: 120px;
+  color: var(--terminal-fg);
+}
+
+.color-picker-group input[type="color"] {
+  width: 60px;
+  height: 40px;
+  border: 1px solid var(--terminal-dim);
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.color-picker-group input[type="color"]:hover {
+  border-color: var(--terminal-accent);
+}
+
+.color-value {
+  font-family: 'Courier New', monospace;
+  color: var(--terminal-dim);
+  font-size: 12px;
+}
+
+/* Setting Groups */
+.setting-group {
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-group label {
+  color: var(--terminal-fg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Sliders */
+input[type="range"] {
+  width: 100%;
+  height: 6px;
+  background: rgba(57, 255, 20, 0.1);
+  border: 1px solid var(--terminal-dim);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--terminal-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--terminal-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+}
+
+input[type="range"]:hover::-moz-range-thumb {
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+}
+
+/* Checkboxes */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--terminal-accent);
+}
+
+/* Select Dropdowns */
+select {
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--terminal-dim);
+  color: var(--terminal-fg);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  min-width: 200px;
+}
+
+select:hover {
+  border-color: var(--terminal-accent);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--terminal-accent);
+  box-shadow: 0 0 5px rgba(57, 255, 20, 0.3);
+}
+
+select option {
+  background: #0a0e14;
+  color: var(--terminal-fg);
+}
+
+/* Action Buttons */
+.settings-actions {
+  margin-top: 30px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--terminal-dim);
+}
+
+.btn-reset {
+  padding: 12px 30px;
+  background: rgba(255, 51, 51, 0.1);
+  border: 1px solid var(--terminal-error);
+  color: var(--terminal-error);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.2s;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.btn-reset:hover {
+  background: rgba(255, 51, 51, 0.2);
+  box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+}
+
+/* Collapsible Details */
+details {
+  margin-top: 10px;
+}
+
+details summary {
+  cursor: pointer;
+  color: var(--terminal-accent);
+  padding: 10px;
+  border: 1px solid var(--terminal-dim);
+  border-radius: 4px;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+}
+
+details summary:hover {
+  background: rgba(57, 255, 20, 0.05);
+  border-color: var(--terminal-accent);
+}
+
+details[open] summary {
+  margin-bottom: 15px;
+  background: rgba(57, 255, 20, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .settings-panel {
+    padding: 15px;
+  }
+
+  .theme-button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .color-picker-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .color-picker-group label {
+    min-width: auto;
+  }
+}

@@ -29,6 +29,7 @@ export class Terminal {
 
     this.setupInputHandler();
     this.setupClickHandler(outputElement);
+    this.setupSettingsUIHandler();
     this.updatePrompt();
   }
 
@@ -36,6 +37,14 @@ export class Terminal {
     // Click anywhere in terminal output to focus input
     outputElement.addEventListener('click', () => {
       this.input.focus();
+    });
+  }
+
+  private setupSettingsUIHandler(): void {
+    // Listen for settings commands from UI
+    document.addEventListener('terminal-command', (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      this.executeCommand(customEvent.detail, false);
     });
   }
 
