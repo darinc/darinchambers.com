@@ -34,7 +34,7 @@ export function generateSettingsUI(
  * @returns HTML string for theme buttons
  */
 function generateThemePresetButtons(presets: ThemePreset[], current: string): string {
-  return '<div class="theme-buttons-container">' + presets.map(preset => `<button class="theme-button ${preset.name === current ? 'active' : ''}" onclick="executeCommand('settings set theme ${preset.name}')" data-theme="${preset.name}" style="color: ${preset.colors['--terminal-accent']}; border-color: ${preset.colors['--terminal-accent']};"><span class="theme-preview" style="background: ${preset.colors['--terminal-accent']}"></span>${preset.displayName}</button>`).join('') + '</div>';
+  return '<div class="theme-buttons-container">' + presets.map(preset => `<button class="theme-button ${preset.name === current ? 'active' : ''}" onclick="executeCommand('settings set theme ${preset.name}')" data-theme="${preset.name}" style="background: ${preset.colors['--terminal-bg']}; color: ${preset.colors['--terminal-accent']}; border-color: ${preset.colors['--terminal-accent']};"><span class="theme-preview" style="background: ${preset.colors['--terminal-accent']}"></span>${preset.displayName}</button>`).join('') + '</div>';
 }
 
 /**

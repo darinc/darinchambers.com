@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.38] - 2025-11-02
+
+### Added
+- Paper theme with teal accent and light backgrounds for panels
+- Secondary background color system for theme-aware panels and headers
+
+### Changed
+- Theme buttons now display with their actual theme background colors
+- Simplified theme labels: Green, Amber, White, Cyan, Paper
+- Default settings: scan lines off, glow off, border on
+
+### Fixed
+- Page border now properly visible around header and navigation
+- Glow effect now uses theme accent color instead of hardcoded green
+
 ## [0.0.37] - 2025-11-02
 
 ### Fixed

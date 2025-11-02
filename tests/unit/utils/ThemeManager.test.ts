@@ -52,35 +52,35 @@ describe('ThemeManager', () => {
   describe('Initialization', () => {
     it('should initialize with preset themes', () => {
       const presets = themeManager.getPresets();
-      expect(presets).toHaveLength(4);
+      expect(presets).toHaveLength(5);
     });
 
     it('should have green preset', () => {
       const green = themeManager.getPreset('green');
       expect(green).not.toBeNull();
       expect(green?.name).toBe('green');
-      expect(green?.displayName).toBe('Green (Default)');
+      expect(green?.displayName).toBe('Green');
     });
 
     it('should have yellow preset', () => {
       const yellow = themeManager.getPreset('yellow');
       expect(yellow).not.toBeNull();
       expect(yellow?.name).toBe('yellow');
-      expect(yellow?.displayName).toBe('Yellow (Amber)');
+      expect(yellow?.displayName).toBe('Amber');
     });
 
     it('should have white preset', () => {
       const white = themeManager.getPreset('white');
       expect(white).not.toBeNull();
       expect(white?.name).toBe('white');
-      expect(white?.displayName).toBe('White (Light)');
+      expect(white?.displayName).toBe('White');
     });
 
     it('should have light-blue preset', () => {
       const lightBlue = themeManager.getPreset('light-blue');
       expect(lightBlue).not.toBeNull();
       expect(lightBlue?.name).toBe('light-blue');
-      expect(lightBlue?.displayName).toBe('Light Blue (Cyan)');
+      expect(lightBlue?.displayName).toBe('Cyan');
     });
   });
 

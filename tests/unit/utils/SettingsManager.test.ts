@@ -54,9 +54,9 @@ describe('SettingsManager', () => {
       expect(settings.theme.preset).toBe('green');
       expect(settings.font.size).toBe(14);
       expect(settings.font.family).toBe('Courier New');
-      expect(settings.effects.scanLines).toBe(true);
-      expect(settings.effects.glow).toBe(true);
-      expect(settings.effects.border).toBe(false);
+      expect(settings.effects.scanLines).toBe(false);
+      expect(settings.effects.glow).toBe(false);
+      expect(settings.effects.border).toBe(true);
       expect(settings.effects.animationSpeed).toBe(1.0);
       expect(settings.effects.soundEffects).toBe(false);
     });
@@ -220,30 +220,30 @@ describe('SettingsManager', () => {
 
   describe('Effects Settings', () => {
     it('should get scan lines state', () => {
-      expect(settingsManager.getScanLines()).toBe(true);
-    });
-
-    it('should set scan lines state', () => {
-      settingsManager.setScanLines(false);
       expect(settingsManager.getScanLines()).toBe(false);
     });
 
-    it('should get glow state', () => {
-      expect(settingsManager.getGlow()).toBe(true);
+    it('should set scan lines state', () => {
+      settingsManager.setScanLines(true);
+      expect(settingsManager.getScanLines()).toBe(true);
     });
 
-    it('should set glow state', () => {
-      settingsManager.setGlow(false);
+    it('should get glow state', () => {
       expect(settingsManager.getGlow()).toBe(false);
     });
 
+    it('should set glow state', () => {
+      settingsManager.setGlow(true);
+      expect(settingsManager.getGlow()).toBe(true);
+    });
+
     it('should get border state', () => {
-      expect(settingsManager.getBorder()).toBe(false);
+      expect(settingsManager.getBorder()).toBe(true);
     });
 
     it('should set border state', () => {
-      settingsManager.setBorder(true);
-      expect(settingsManager.getBorder()).toBe(true);
+      settingsManager.setBorder(false);
+      expect(settingsManager.getBorder()).toBe(false);
     });
 
     it('should get animation speed', () => {
@@ -313,9 +313,9 @@ describe('SettingsManager', () => {
       expect(fontSettings.size).toBe(14);
 
       const effectsSettings = settingsManager.getSetting('effects');
-      expect(effectsSettings.scanLines).toBe(true);
-      expect(effectsSettings.glow).toBe(true);
-      expect(effectsSettings.border).toBe(false);
+      expect(effectsSettings.scanLines).toBe(false);
+      expect(effectsSettings.glow).toBe(false);
+      expect(effectsSettings.border).toBe(true);
     });
 
     it('should set setting by key', () => {
@@ -346,9 +346,9 @@ describe('SettingsManager', () => {
       // Make some changes
       settingsManager.setThemePreset('yellow');
       settingsManager.setFontSize(20);
-      settingsManager.setScanLines(false);
-      settingsManager.setGlow(false);
-      settingsManager.setBorder(true);
+      settingsManager.setScanLines(true);
+      settingsManager.setGlow(true);
+      settingsManager.setBorder(false);
 
       // Reset
       settingsManager.reset();
@@ -356,9 +356,9 @@ describe('SettingsManager', () => {
       // Verify defaults restored
       expect(settingsManager.getThemePreset()).toBe('green');
       expect(settingsManager.getFontSize()).toBe(14);
-      expect(settingsManager.getScanLines()).toBe(true);
-      expect(settingsManager.getGlow()).toBe(true);
-      expect(settingsManager.getBorder()).toBe(false);
+      expect(settingsManager.getScanLines()).toBe(false);
+      expect(settingsManager.getGlow()).toBe(false);
+      expect(settingsManager.getBorder()).toBe(true);
     });
 
     it('should clear and rewrite localStorage on reset', () => {

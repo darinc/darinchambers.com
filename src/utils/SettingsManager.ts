@@ -341,7 +341,7 @@ export class SettingsManager {
    * Validates a theme preset name.
    */
   private validateThemePreset(preset: string): preset is ThemePresetName {
-    const validPresets: ThemePresetName[] = ['green', 'yellow', 'white', 'light-blue', 'custom'];
+    const validPresets: ThemePresetName[] = ['green', 'yellow', 'white', 'light-blue', 'paper', 'custom'];
     return validPresets.includes(preset as ThemePresetName);
   }
 

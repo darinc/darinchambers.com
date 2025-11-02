@@ -4,7 +4,7 @@
 }
 
 #terminal-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--terminal-bg-secondary);
 }
 
 #terminal-container::-webkit-scrollbar-thumb {

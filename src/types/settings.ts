@@ -14,6 +14,7 @@ export interface CustomColors {
   dim: string;
   error: string;
   cursor: string;
+  backgroundSecondary: string;
 }
 
 /**
@@ -27,6 +28,7 @@ export interface ColorScheme {
   '--terminal-dim': string;
   '--terminal-error': string;
   '--terminal-cursor': string;
+  '--terminal-bg-secondary': string;
 }
 
 /**
@@ -63,7 +65,7 @@ export interface SettingsConfig {
 /**
  * Available theme preset names.
  */
-export type ThemePresetName = 'green' | 'yellow' | 'white' | 'light-blue' | 'custom';
+export type ThemePresetName = 'green' | 'yellow' | 'white' | 'light-blue' | 'paper' | 'custom';
 
 /**
  * Available monospace font families.

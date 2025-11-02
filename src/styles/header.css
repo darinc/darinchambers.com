@@ -1,7 +1,7 @@
 /* Terminal Header */
 #terminal-header {
   padding: 20px 20px 10px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--terminal-bg-secondary);
   border-bottom: 1px solid var(--terminal-dim);
   position: relative;
   flex-shrink: 0;

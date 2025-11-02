@@ -36,9 +36,9 @@ export const DEFAULT_SETTINGS: SettingsConfig = {
     family: 'Courier New'
   },
   effects: {
-    scanLines: true,
-    glow: true,
-    border: false,
+    scanLines: false,
+    glow: false,
+    border: true,
     animationSpeed: 1.0,
     soundEffects: false
   }

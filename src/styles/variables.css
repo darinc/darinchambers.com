@@ -5,4 +5,5 @@
   --terminal-dim: #20c20e;
   --terminal-error: #ff3333;
   --terminal-cursor: #39ff14;
+  --terminal-bg-secondary: rgba(0, 0, 0, 0.3);
 }

@@ -31,50 +31,67 @@ export class ThemeManager {
     const presets: ThemePreset[] = [
       {
         name: 'green',
-        displayName: 'Green (Default)',
+        displayName: 'Green',
         colors: {
           '--terminal-bg': '#0a0e14',
           '--terminal-fg': '#39ff14',
           '--terminal-accent': '#39ff14',
           '--terminal-dim': '#20c20e',
           '--terminal-error': '#ff3333',
-          '--terminal-cursor': '#39ff14'
+          '--terminal-cursor': '#39ff14',
+          '--terminal-bg-secondary': '#0d1117'
         }
       },
       {
         name: 'yellow',
-        displayName: 'Yellow (Amber)',
+        displayName: 'Amber',
         colors: {
           '--terminal-bg': '#1a1410',
           '--terminal-fg': '#ffb000',
           '--terminal-accent': '#ffd700',
           '--terminal-dim': '#cc8800',
           '--terminal-error': '#ff3333',
-          '--terminal-cursor': '#ffb000'
+          '--terminal-cursor': '#ffb000',
+          '--terminal-bg-secondary': '#241c14'
         }
       },
       {
         name: 'white',
-        displayName: 'White (Light)',
+        displayName: 'White',
         colors: {
           '--terminal-bg': '#1a1a1a',
           '--terminal-fg': '#e0e0e0',
           '--terminal-accent': '#ffffff',
           '--terminal-dim': '#999999',
           '--terminal-error': '#ff5555',
-          '--terminal-cursor': '#ffffff'
+          '--terminal-cursor': '#ffffff',
+          '--terminal-bg-secondary': '#242424'
         }
       },
       {
         name: 'light-blue',
-        displayName: 'Light Blue (Cyan)',
+        displayName: 'Cyan',
         colors: {
           '--terminal-bg': '#0a1420',
           '--terminal-fg': '#00d4ff',
           '--terminal-accent': '#00ffff',
           '--terminal-dim': '#0088aa',
           '--terminal-error': '#ff3333',
-          '--terminal-cursor': '#00d4ff'
+          '--terminal-cursor': '#00d4ff',
+          '--terminal-bg-secondary': '#0d1825'
+        }
+      },
+      {
+        name: 'paper',
+        displayName: 'Paper',
+        colors: {
+          '--terminal-bg': '#ffffff',
+          '--terminal-fg': '#1a1a1a',
+          '--terminal-accent': '#008cb4',
+          '--terminal-dim': '#919191',
+          '--terminal-error': '#cc0000',
+          '--terminal-cursor': '#1a1a1a',
+          '--terminal-bg-secondary': '#f0f0f0'
         }
       }
     ];
