@@ -54,6 +54,7 @@ export interface SettingsConfig {
   effects: {
     scanLines: boolean;
     glow: boolean;
+    border: boolean;
     animationSpeed: number; // 0.5-2.0x multiplier
     soundEffects: boolean;
   };

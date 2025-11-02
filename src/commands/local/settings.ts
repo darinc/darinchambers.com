@@ -113,6 +113,7 @@ function handleSet(
           };
         }
         themeManager.applyTheme(value as ThemePresetName);
+        broadcastSettingsChange();
         return { output: `Theme changed to: ${value}` };
       }
 
@@ -144,6 +145,7 @@ function handleSet(
           [colorVar]: colorValue
         };
         themeManager.applyCustomColors(colors);
+        broadcastSettingsChange();
         return { output: `Color ${colorVar} set to ${colorValue}` };
       }
 
@@ -158,6 +160,7 @@ function handleSet(
         }
         settingsManager.setFontSize(size);
         applyFontSettings(settingsManager);
+        broadcastSettingsChange();
         return { output: `Font size set to: ${size}px` };
       }
 
@@ -172,6 +175,7 @@ function handleSet(
         }
         settingsManager.setFontFamily(value as FontFamily);
         applyFontSettings(settingsManager);
+        broadcastSettingsChange();
         return { output: `Font family set to: ${value}` };
       }
 
@@ -186,6 +190,7 @@ function handleSet(
         const enabled = value === 'on';
         settingsManager.setScanLines(enabled);
         applyScanLines(enabled);
+        broadcastSettingsChange();
         return { output: `Scan lines: ${value}` };
       }
 
@@ -200,7 +205,23 @@ function handleSet(
         const enabled = value === 'on';
         settingsManager.setGlow(enabled);
         applyGlow(enabled);
+        broadcastSettingsChange();
         return { output: `Glow: ${value}` };
+      }
+
+      case 'border': {
+        if (!value) return { output: 'Border value required (on/off)', error: true };
+        if (value !== 'on' && value !== 'off') {
+          return {
+            output: 'Border must be "on" or "off"',
+            error: true
+          };
+        }
+        const enabled = value === 'on';
+        settingsManager.setBorder(enabled);
+        applyBorder(enabled);
+        broadcastSettingsChange();
+        return { output: `Border: ${value}` };
       }
 
       case 'animation-speed': {
@@ -214,6 +235,7 @@ function handleSet(
         }
         settingsManager.setAnimationSpeed(speed);
         applyAnimationSpeed(speed);
+        broadcastSettingsChange();
         return { output: `Animation speed set to: ${speed}x` };
       }
 
@@ -227,12 +249,13 @@ function handleSet(
         }
         const enabled = value === 'on';
         settingsManager.setSoundEffects(enabled);
+        broadcastSettingsChange();
         return { output: `Sound effects: ${value}` };
       }
 
       default:
         return {
-          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, animation-speed, sound-effects`,
+          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, border, animation-speed, sound-effects`,
           error: true
         };
     }
@@ -256,7 +279,9 @@ function handleReset(
   applyFontSettings(settingsManager);
   applyScanLines(settingsManager.getScanLines());
   applyGlow(settingsManager.getGlow());
+  applyBorder(settingsManager.getBorder());
   applyAnimationSpeed(settingsManager.getAnimationSpeed());
+  broadcastSettingsChange();
 
   return { output: 'Settings reset to defaults.' };
 }
@@ -289,6 +314,7 @@ function formatSettingsAsMarkdown(
 ### Effects
 - **Scan Lines:** ${settings.effects.scanLines ? 'Enabled' : 'Disabled'}
 - **Glow:** ${settings.effects.glow ? 'Enabled' : 'Disabled'}
+- **Border:** ${settings.effects.border ? 'Enabled' : 'Disabled'}
 - **Animation Speed:** ${settings.effects.animationSpeed}x
 - **Sound Effects:** ${settings.effects.soundEffects ? 'Enabled' : 'Disabled'}
 
@@ -305,6 +331,7 @@ settings set font-size 16           # Set font to 16px
 settings set font-family Monaco     # Change font family
 settings set scan-lines off         # Disable scan lines
 settings set glow off               # Disable glow effect
+settings set border on              # Enable page border
 settings set animation-speed 1.5    # Speed up animations
 settings reset                      # Reset all to defaults
 \`\`\`
@@ -355,10 +382,33 @@ function applyGlow(enabled: boolean): void {
 }
 
 /**
+ * Applies page border toggle to the DOM.
+ */
+function applyBorder(enabled: boolean): void {
+  if (typeof document !== 'undefined') {
+    if (enabled) {
+      document.body.classList.add('border-enabled');
+    } else {
+      document.body.classList.remove('border-enabled');
+    }
+  }
+}
+
+/**
  * Applies animation speed to the DOM.
  */
 function applyAnimationSpeed(speed: number): void {
   if (typeof document !== 'undefined') {
     document.documentElement.style.setProperty('--terminal-animation-speed', speed.toString());
+  }
+}
+
+/**
+ * Broadcasts settings change event to update all settings panels.
+ */
+function broadcastSettingsChange(): void {
+  if (typeof document !== 'undefined') {
+    const event = new CustomEvent('settings-changed');
+    document.dispatchEvent(event);
   }
 }

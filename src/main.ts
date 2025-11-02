@@ -74,6 +74,14 @@ if (typeof document !== 'undefined') {
   }
 }
 
+// Apply page border
+const borderEnabled = settingsManager.getBorder();
+if (typeof document !== 'undefined') {
+  if (borderEnabled) {
+    document.body.classList.add('border-enabled');
+  }
+}
+
 // Apply animation speed
 const animSpeed = settingsManager.getAnimationSpeed();
 if (typeof document !== 'undefined') {
@@ -86,7 +94,7 @@ const aliasManager = new AliasManager(fileSystem);
 const executor = new CommandExecutor(dispatcher, aliasManager);
 
 // Initialize terminal with dependencies
-const terminal = new Terminal(dispatcher, executor);
+const terminal = new Terminal(dispatcher, executor, settingsManager, themeManager);
 terminal.setCurrentPath(fileSystem.getShortPath());
 
 // Initialize navigation

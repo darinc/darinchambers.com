@@ -4,6 +4,9 @@ import { CommandDispatcher } from '../utils/CommandDispatcher';
 import { CommandExecutor } from '../utils/CommandExecutor';
 import type { Command, CommandResult } from '../commands/Command';
 import { COMMAND_SIGNALS } from '../constants';
+import type { SettingsManager } from '../utils/SettingsManager';
+import type { ThemeManager } from '../utils/ThemeManager';
+import { generateSettingsUI } from './SettingsUI';
 
 export class Terminal {
   private input: TerminalInput;
@@ -14,7 +17,9 @@ export class Terminal {
 
   constructor(
     private dispatcher: CommandDispatcher,
-    private executor: CommandExecutor
+    private executor: CommandExecutor,
+    private settingsManager?: SettingsManager,
+    private themeManager?: ThemeManager
   ) {
     const outputElement = document.getElementById('terminal-output');
     const inputElement = document.getElementById('terminal-input') as HTMLInputElement;
@@ -52,6 +57,31 @@ export class Terminal {
       const event = new CustomEvent('terminal-command', { detail: cmd });
       document.dispatchEvent(event);
     };
+
+    // Listen for settings changes to refresh all settings panels
+    document.addEventListener('settings-changed', () => {
+      this.refreshSettingsPanels();
+    });
+  }
+
+  private refreshSettingsPanels(): void {
+    if (!this.settingsManager || !this.themeManager) {
+      return;
+    }
+
+    // Find all settings panels in the DOM
+    const panels = document.querySelectorAll('[data-settings-panel]');
+    if (panels.length === 0) {
+      return;
+    }
+
+    // Generate fresh HTML with current settings
+    const freshHTML = generateSettingsUI(this.settingsManager, this.themeManager);
+
+    // Update each panel's content
+    panels.forEach(panel => {
+      panel.innerHTML = freshHTML.replace('<div class="settings-panel" data-settings-panel="true">', '').replace(/<\/div>$/, '');
+    });
   }
 
   private setupInputHandler(): void {

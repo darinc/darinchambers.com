@@ -266,6 +266,24 @@ export class SettingsManager {
   }
 
   /**
+   * Gets the page border enabled state.
+   */
+  getBorder(): boolean {
+    return this.settings.effects.border;
+  }
+
+  /**
+   * Sets the page border enabled state.
+   *
+   * @param enabled Whether page border should be enabled
+   */
+  setBorder(enabled: boolean): void {
+    this.settings.effects.border = enabled;
+    this.saveToLocalStorage();
+    this.syncToFileSystem();
+  }
+
+  /**
    * Gets the animation speed multiplier.
    */
   getAnimationSpeed(): number {

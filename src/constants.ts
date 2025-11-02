@@ -38,6 +38,7 @@ export const DEFAULT_SETTINGS: SettingsConfig = {
   effects: {
     scanLines: true,
     glow: true,
+    border: false,
     animationSpeed: 1.0,
     soundEffects: false
   }
