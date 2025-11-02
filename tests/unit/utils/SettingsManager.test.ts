@@ -54,7 +54,9 @@ describe('SettingsManager', () => {
       expect(settings.theme.preset).toBe('green');
       expect(settings.font.size).toBe(14);
       expect(settings.font.family).toBe('Courier New');
-      expect(settings.effects.crt).toBe(true);
+      expect(settings.effects.scanLines).toBe(true);
+      expect(settings.effects.glow).toBe(true);
+      expect(settings.effects.border).toBe(false);
       expect(settings.effects.animationSpeed).toBe(1.0);
       expect(settings.effects.soundEffects).toBe(false);
     });
@@ -63,7 +65,7 @@ describe('SettingsManager', () => {
       const customSettings: SettingsConfig = {
         theme: { preset: 'yellow', customColors: undefined },
         font: { size: 16, family: 'Monaco' },
-        effects: { crt: false, animationSpeed: 1.5, soundEffects: true }
+        effects: { scanLines: false, glow: false, border: true, animationSpeed: 1.5, soundEffects: true }
       };
 
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(customSettings));
@@ -74,7 +76,9 @@ describe('SettingsManager', () => {
       expect(settings.theme.preset).toBe('yellow');
       expect(settings.font.size).toBe(16);
       expect(settings.font.family).toBe('Monaco');
-      expect(settings.effects.crt).toBe(false);
+      expect(settings.effects.scanLines).toBe(false);
+      expect(settings.effects.glow).toBe(false);
+      expect(settings.effects.border).toBe(true);
       expect(settings.effects.animationSpeed).toBe(1.5);
       expect(settings.effects.soundEffects).toBe(true);
     });
@@ -215,13 +219,31 @@ describe('SettingsManager', () => {
   });
 
   describe('Effects Settings', () => {
-    it('should get CRT effects state', () => {
-      expect(settingsManager.getCRTEffects()).toBe(true);
+    it('should get scan lines state', () => {
+      expect(settingsManager.getScanLines()).toBe(true);
     });
 
-    it('should set CRT effects state', () => {
-      settingsManager.setCRTEffects(false);
-      expect(settingsManager.getCRTEffects()).toBe(false);
+    it('should set scan lines state', () => {
+      settingsManager.setScanLines(false);
+      expect(settingsManager.getScanLines()).toBe(false);
+    });
+
+    it('should get glow state', () => {
+      expect(settingsManager.getGlow()).toBe(true);
+    });
+
+    it('should set glow state', () => {
+      settingsManager.setGlow(false);
+      expect(settingsManager.getGlow()).toBe(false);
+    });
+
+    it('should get border state', () => {
+      expect(settingsManager.getBorder()).toBe(false);
+    });
+
+    it('should set border state', () => {
+      settingsManager.setBorder(true);
+      expect(settingsManager.getBorder()).toBe(true);
     });
 
     it('should get animation speed', () => {
@@ -265,14 +287,18 @@ describe('SettingsManager', () => {
     });
 
     it('should persist effects changes to localStorage', () => {
-      settingsManager.setCRTEffects(false);
+      settingsManager.setScanLines(false);
+      settingsManager.setGlow(false);
+      settingsManager.setBorder(true);
       settingsManager.setAnimationSpeed(1.5);
       settingsManager.setSoundEffects(true);
 
       const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
       const parsed = JSON.parse(stored!);
 
-      expect(parsed.effects.crt).toBe(false);
+      expect(parsed.effects.scanLines).toBe(false);
+      expect(parsed.effects.glow).toBe(false);
+      expect(parsed.effects.border).toBe(true);
       expect(parsed.effects.animationSpeed).toBe(1.5);
       expect(parsed.effects.soundEffects).toBe(true);
     });
@@ -287,7 +313,9 @@ describe('SettingsManager', () => {
       expect(fontSettings.size).toBe(14);
 
       const effectsSettings = settingsManager.getSetting('effects');
-      expect(effectsSettings.crt).toBe(true);
+      expect(effectsSettings.scanLines).toBe(true);
+      expect(effectsSettings.glow).toBe(true);
+      expect(effectsSettings.border).toBe(false);
     });
 
     it('should set setting by key', () => {
@@ -318,7 +346,9 @@ describe('SettingsManager', () => {
       // Make some changes
       settingsManager.setThemePreset('yellow');
       settingsManager.setFontSize(20);
-      settingsManager.setCRTEffects(false);
+      settingsManager.setScanLines(false);
+      settingsManager.setGlow(false);
+      settingsManager.setBorder(true);
 
       // Reset
       settingsManager.reset();
@@ -326,7 +356,9 @@ describe('SettingsManager', () => {
       // Verify defaults restored
       expect(settingsManager.getThemePreset()).toBe('green');
       expect(settingsManager.getFontSize()).toBe(14);
-      expect(settingsManager.getCRTEffects()).toBe(true);
+      expect(settingsManager.getScanLines()).toBe(true);
+      expect(settingsManager.getGlow()).toBe(true);
+      expect(settingsManager.getBorder()).toBe(false);
     });
 
     it('should clear and rewrite localStorage on reset', () => {
@@ -363,7 +395,7 @@ describe('SettingsManager', () => {
       const newSettings: SettingsConfig = {
         theme: { preset: 'white', customColors: undefined },
         font: { size: 18, family: 'Monaco' },
-        effects: { crt: false, animationSpeed: 1.2, soundEffects: true }
+        effects: { scanLines: false, glow: true, border: false, animationSpeed: 1.2, soundEffects: true }
       };
 
       settingsManager.saveSettings(newSettings);
@@ -376,7 +408,7 @@ describe('SettingsManager', () => {
       const newSettings: SettingsConfig = {
         theme: { preset: 'light-blue', customColors: undefined },
         font: { size: 12, family: 'Consolas' },
-        effects: { crt: true, animationSpeed: 0.8, soundEffects: false }
+        effects: { scanLines: true, glow: false, border: true, animationSpeed: 0.8, soundEffects: false }
       };
 
       settingsManager.saveSettings(newSettings);
