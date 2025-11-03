@@ -139,8 +139,7 @@ const clearCommand: Command = {
 const lsCommand = createLsCommand(fileSystem);
 const cdCommand = createCdCommand(
   fileSystem,
-  (path: string) => terminal.setCurrentPath(path),
-  (username: string) => terminal.setUsername(username)
+  (path: string) => terminal.setCurrentPath(path)
 );
 const pwdCommand = createPwdCommand(fileSystem);
 const catCommand = createCatCommand(fileSystem);

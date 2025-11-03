@@ -140,6 +140,7 @@ Type 'blog' to read posts.
     localBin.children!.set('blog', this.createFileNode('blog', '[Custom command: blog]'));
     localBin.children!.set('contact', this.createFileNode('contact', '[Custom command: contact]'));
     localBin.children!.set('skills', this.createFileNode('skills', '[Custom command: skills]'));
+    localBin.children!.set('settings', this.createFileNode('settings', '[Custom command: settings]'));
 
     return root;
   }

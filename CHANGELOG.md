@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.41] - 2025-11-02
+
+### Added
+- Settings command to virtual filesystem at /usr/local/bin/settings
+
+### Fixed
+- cd command no longer changes username based on directory navigation
+- User remains consistent when navigating to different home directories
+
 ## [0.0.40] - 2025-11-02
 
 ### Added
