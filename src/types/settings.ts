@@ -60,6 +60,9 @@ export interface SettingsConfig {
     animationSpeed: number; // 0.5-2.0x multiplier
     soundEffects: boolean;
   };
+  prompt: {
+    format: string; // Prompt format string (bash-style escapes supported)
+  };
 }
 
 /**

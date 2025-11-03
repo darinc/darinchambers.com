@@ -49,7 +49,7 @@ export class SettingsManager {
       const parsed = JSON.parse(stored) as SettingsConfig;
 
       // Basic validation - ensure required top-level keys exist
-      if (!parsed.theme || !parsed.font || !parsed.effects) {
+      if (!parsed.theme || !parsed.font || !parsed.effects || !parsed.prompt) {
         console.warn('SettingsManager: Invalid settings structure in localStorage, using defaults');
         return null;
       }
@@ -150,6 +150,7 @@ export class SettingsManager {
   /**
    * Sets the theme preset.
    * Validates the preset name before applying.
+   * Clears custom colors when switching to a preset theme.
    *
    * @param preset Theme preset name
    */
@@ -159,6 +160,12 @@ export class SettingsManager {
     }
 
     this.settings.theme.preset = preset;
+
+    // Clear custom colors when switching to a preset theme (not 'custom')
+    if (preset !== 'custom') {
+      this.settings.theme.customColors = undefined;
+    }
+
     this.saveToLocalStorage();
     this.syncToFileSystem();
   }
@@ -320,6 +327,25 @@ export class SettingsManager {
    */
   setSoundEffects(enabled: boolean): void {
     this.settings.effects.soundEffects = enabled;
+    this.saveToLocalStorage();
+    this.syncToFileSystem();
+  }
+
+  /**
+   * Gets the current prompt format string.
+   */
+  getPromptFormat(): string {
+    return this.settings.prompt.format;
+  }
+
+  /**
+   * Sets the prompt format string.
+   * Supports bash-style escape sequences.
+   *
+   * @param format Prompt format string
+   */
+  setPromptFormat(format: string): void {
+    this.settings.prompt.format = format;
     this.saveToLocalStorage();
     this.syncToFileSystem();
   }

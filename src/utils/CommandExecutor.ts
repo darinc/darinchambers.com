@@ -1,5 +1,6 @@
 import type { CommandDispatcher } from './CommandDispatcher';
 import type { AliasManager } from './AliasManager';
+import type { EnvVarManager } from './EnvVarManager';
 import { PipelineParser } from './PipelineParser';
 import type { CommandResult } from '../commands/Command';
 
@@ -13,11 +14,13 @@ import type { CommandResult } from '../commands/Command';
 export class CommandExecutor {
   constructor(
     private dispatcher: CommandDispatcher,
-    private aliasManager: AliasManager
+    private aliasManager: AliasManager,
+    private envVarManager?: EnvVarManager
   ) {}
 
   /**
-   * Execute a command string, handling alias resolution and pipeline detection.
+   * Execute a command string, handling variable expansion, alias resolution,
+   * and pipeline detection.
    *
    * @param command - The raw command string to execute
    * @returns Promise resolving to the command result
@@ -30,8 +33,13 @@ export class CommandExecutor {
       return { output: '' };
     }
 
+    // Expand environment variables first (before alias resolution)
+    const expandedCommand = this.envVarManager
+      ? this.envVarManager.expandVariables(trimmedValue)
+      : trimmedValue;
+
     // Resolve any aliases
-    const resolvedCommand = this.aliasManager.resolve(trimmedValue);
+    const resolvedCommand = this.aliasManager.resolve(expandedCommand);
 
     // Detect pipelines and dispatch to appropriate handler
     const result = PipelineParser.hasPipe(resolvedCommand)

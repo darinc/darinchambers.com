@@ -176,7 +176,8 @@ export class ThemeManager {
       accent: mergedColors['--terminal-accent'],
       dim: mergedColors['--terminal-dim'],
       error: mergedColors['--terminal-error'],
-      cursor: mergedColors['--terminal-cursor']
+      cursor: mergedColors['--terminal-cursor'],
+      backgroundSecondary: mergedColors['--terminal-bg-secondary']
     };
 
     // Persist to settings (automatically sets preset to 'custom')
@@ -199,7 +200,8 @@ export class ThemeManager {
         '--terminal-accent': customColors.accent,
         '--terminal-dim': customColors.dim,
         '--terminal-error': customColors.error,
-        '--terminal-cursor': customColors.cursor
+        '--terminal-cursor': customColors.cursor,
+        '--terminal-bg-secondary': customColors.backgroundSecondary
       };
       this.updateCSSVariables(colorScheme);
     } else if (preset !== 'custom') {
@@ -239,7 +241,8 @@ export class ThemeManager {
       '--terminal-accent': computedStyle.getPropertyValue('--terminal-accent').trim() || '#39ff14',
       '--terminal-dim': computedStyle.getPropertyValue('--terminal-dim').trim() || '#20c20e',
       '--terminal-error': computedStyle.getPropertyValue('--terminal-error').trim() || '#ff3333',
-      '--terminal-cursor': computedStyle.getPropertyValue('--terminal-cursor').trim() || '#39ff14'
+      '--terminal-cursor': computedStyle.getPropertyValue('--terminal-cursor').trim() || '#39ff14',
+      '--terminal-bg-secondary': computedStyle.getPropertyValue('--terminal-bg-secondary').trim() || '#0d1117'
     };
   }
 
@@ -289,7 +292,8 @@ export class ThemeManager {
       '--terminal-accent': custom['--terminal-accent'] || base['--terminal-accent'],
       '--terminal-dim': custom['--terminal-dim'] || base['--terminal-dim'],
       '--terminal-error': custom['--terminal-error'] || base['--terminal-error'],
-      '--terminal-cursor': custom['--terminal-cursor'] || base['--terminal-cursor']
+      '--terminal-cursor': custom['--terminal-cursor'] || base['--terminal-cursor'],
+      '--terminal-bg-secondary': custom['--terminal-bg-secondary'] || base['--terminal-bg-secondary']
     };
   }
 }

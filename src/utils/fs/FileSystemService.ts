@@ -22,6 +22,11 @@ export class FileSystemService implements IFileSystem {
   }
 
   getShortPath(): string {
+    // Root directory should always be shown as '/'
+    if (this.currentPath === '/') {
+      return '/';
+    }
+
     const homeDir = `/home/${this.currentUsername}`;
     if (this.currentPath === homeDir) {
       return '~';

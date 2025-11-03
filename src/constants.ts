@@ -14,7 +14,8 @@ export const PATHS = {
   CONTENT_CONTACT: '/home/darin/content/contact.md',
   CONTENT_SKILLS: '/home/darin/content/skills.md',
   CONFIG_ALIASES: '/home/guest/.alias',
-  CONFIG_SETTINGS: '/home/darin/.settings'
+  CONFIG_SETTINGS: '/home/darin/.settings',
+  CONFIG_ENV: '/home/darin/.env'
 } as const;
 
 export const COMMAND_SIGNALS = {
@@ -23,7 +24,8 @@ export const COMMAND_SIGNALS = {
 } as const;
 
 export const STORAGE_KEYS = {
-  SETTINGS: 'terminal-settings'
+  SETTINGS: 'terminal-settings',
+  ENVIRONMENT: 'terminal-env-vars'
 } as const;
 
 export const DEFAULT_SETTINGS: SettingsConfig = {
@@ -41,5 +43,8 @@ export const DEFAULT_SETTINGS: SettingsConfig = {
     border: true,
     animationSpeed: 1.0,
     soundEffects: false
+  },
+  prompt: {
+    format: '\\W \\$ '
   }
 } as const;

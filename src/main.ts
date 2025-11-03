@@ -21,6 +21,8 @@ import { createAliasCommand } from './commands/core/alias';
 import { createUnaliasCommand } from './commands/core/unalias';
 import { createWhoamiCommand } from './commands/core/whoami';
 import { createRenderCommand } from './commands/core/render';
+import { createEnvCommand } from './commands/core/env';
+import { createExportCommand } from './commands/core/export';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
 import { createAboutCommand } from './commands/local/about';
@@ -31,6 +33,7 @@ import { createSkillsCommand } from './commands/local/skills';
 import { MarkdownService } from './utils/MarkdownService';
 import { SettingsManager } from './utils/SettingsManager';
 import { ThemeManager } from './utils/ThemeManager';
+import { EnvVarManager } from './utils/EnvVarManager';
 import { createSettingsCommand } from './commands/local/settings';
 
 // Initialize header
@@ -47,6 +50,9 @@ const fileSystem: IFileSystem = new FileSystemService(rootNode);
 // Initialize settings management
 const settingsManager = new SettingsManager(fileSystem);
 const themeManager = new ThemeManager(settingsManager);
+
+// Initialize environment variables
+const envVarManager = new EnvVarManager(fileSystem, 'darin', 'darinchambers.com');
 
 // Apply saved settings BEFORE terminal initialization
 themeManager.applyCurrentTheme();
@@ -91,10 +97,10 @@ if (typeof document !== 'undefined') {
 // Initialize command execution infrastructure
 const dispatcher = new CommandDispatcher();
 const aliasManager = new AliasManager(fileSystem);
-const executor = new CommandExecutor(dispatcher, aliasManager);
+const executor = new CommandExecutor(dispatcher, aliasManager, envVarManager);
 
 // Initialize terminal with dependencies
-const terminal = new Terminal(dispatcher, executor, settingsManager, themeManager);
+const terminal = new Terminal(dispatcher, executor, settingsManager, themeManager, envVarManager);
 terminal.setCurrentPath(fileSystem.getShortPath());
 
 // Initialize navigation
@@ -139,7 +145,8 @@ const clearCommand: Command = {
 const lsCommand = createLsCommand(fileSystem);
 const cdCommand = createCdCommand(
   fileSystem,
-  (path: string) => terminal.setCurrentPath(path)
+  (path: string) => terminal.setCurrentPath(path),
+  envVarManager
 );
 const pwdCommand = createPwdCommand(fileSystem);
 const catCommand = createCatCommand(fileSystem);
@@ -167,6 +174,10 @@ const renderCommand = createRenderCommand(fileSystem);
 // Create settings command
 const settingsCommand = createSettingsCommand(fileSystem, settingsManager, themeManager);
 
+// Create environment variable commands
+const envCommand = createEnvCommand(envVarManager);
+const exportCommand = createExportCommand(envVarManager);
+
 terminal.registerCommands([
   helpCommand,
   clearCommand,
@@ -176,6 +187,8 @@ terminal.registerCommands([
   whoamiCommand,
   aliasCommand,
   unaliasCommand,
+  envCommand,
+  exportCommand,
   lsCommand,
   cdCommand,
   pwdCommand,

@@ -253,9 +253,16 @@ function handleSet(
         return { output: `Sound effects: ${value}` };
       }
 
+      case 'prompt': {
+        if (!value) return { output: 'Prompt format value required', error: true };
+        settingsManager.setPromptFormat(value);
+        broadcastSettingsChange();
+        return { output: `Prompt format set to: ${value}` };
+      }
+
       default:
         return {
-          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, border, animation-speed, sound-effects`,
+          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, border, animation-speed, sound-effects, prompt`,
           error: true
         };
     }
@@ -311,6 +318,9 @@ function formatSettingsAsMarkdown(
 - **Size:** ${settings.font.size}px
 - **Family:** ${settings.font.family}
 
+### Prompt
+- **Format:** \`${settings.prompt.format}\`
+
 ### Effects
 - **Scan Lines:** ${settings.effects.scanLines ? 'Enabled' : 'Disabled'}
 - **Glow:** ${settings.effects.glow ? 'Enabled' : 'Disabled'}
@@ -340,6 +350,22 @@ For custom colors:
 \`\`\`bash
 settings set color --terminal-accent #ff0000
 \`\`\`
+
+For custom prompt (bash-style escapes supported):
+\`\`\`bash
+settings set prompt "\\\\u@\\\\h:\\\\W\\\\$ "    # user@host:lastdir$
+settings set prompt "\\\\W\\\\$ "              # lastdir$ (minimal)
+settings set prompt "[\\\\u] \\\\W> "          # [user] lastdir>
+\`\`\`
+
+Available prompt escapes:
+- \\\\u = username
+- \\\\h = hostname
+- \\\\w = full working directory
+- \\\\W = last directory name only
+- \\\\$ = $ (or # if root)
+- \\\\t = current time (24-hour HH:MM:SS)
+- \\\\d = current date
 `;
 }
 

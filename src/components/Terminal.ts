@@ -6,6 +6,8 @@ import type { Command, CommandResult } from '../commands/Command';
 import { COMMAND_SIGNALS } from '../constants';
 import type { SettingsManager } from '../utils/SettingsManager';
 import type { ThemeManager } from '../utils/ThemeManager';
+import type { EnvVarManager } from '../utils/EnvVarManager';
+import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
 import { generateSettingsUI } from './SettingsUI';
 
 export class Terminal {
@@ -14,12 +16,14 @@ export class Terminal {
   private username: string = 'darin';
   private hostname: string = 'darinchambers.com';
   private currentPath: string = '~';
+  private promptFormatter: PromptFormatter;
 
   constructor(
     private dispatcher: CommandDispatcher,
     private executor: CommandExecutor,
     private settingsManager?: SettingsManager,
-    private themeManager?: ThemeManager
+    private themeManager?: ThemeManager,
+    private envVarManager?: EnvVarManager
   ) {
     const outputElement = document.getElementById('terminal-output');
     const inputElement = document.getElementById('terminal-input') as HTMLInputElement;
@@ -31,6 +35,7 @@ export class Terminal {
 
     this.output = new TerminalOutput(outputElement);
     this.input = new TerminalInput(inputElement, promptElement);
+    this.promptFormatter = new PromptFormatter(envVarManager);
 
     this.setupInputHandler();
     this.setupClickHandler(outputElement);
@@ -58,9 +63,10 @@ export class Terminal {
       document.dispatchEvent(event);
     };
 
-    // Listen for settings changes to refresh all settings panels
+    // Listen for settings changes to refresh all settings panels and update prompt
     document.addEventListener('settings-changed', () => {
       this.refreshSettingsPanels();
+      this.updatePrompt();
     });
   }
 
@@ -129,7 +135,21 @@ export class Terminal {
   }
 
   private getPromptString(): string {
-    return `${this.username}@${this.hostname}:${this.currentPath}$`;
+    // Build prompt context
+    const context: PromptContext = {
+      user: this.username,
+      hostname: this.hostname,
+      pwd: this.envVarManager?.getVariable('PWD') || this.currentPath,
+      shortPwd: this.currentPath,
+      lastDir: PromptFormatter.getLastDir(this.currentPath),
+      isRoot: this.username === 'root'
+    };
+
+    // Get prompt format from settings or use default
+    const format = this.settingsManager?.getSetting('prompt')?.format || '\\u@\\h:\\W\\$ ';
+
+    // Format and return prompt
+    return this.promptFormatter.format(format, context);
   }
 
   private updatePrompt(): void {

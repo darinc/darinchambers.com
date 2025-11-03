@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.42] - 2025-11-03
+
+### Added
+- Environment variable system with platform variables (HOME, USER, PWD, OLDPWD, HOSTNAME)
+- Variable expansion in commands using $VAR and ${VAR} syntax
+- env and export commands for managing environment variables
+- Customizable prompt format with bash-style escape sequences
+
+### Changed
+- Default prompt format simplified to "\W \$ " showing only last directory
+- Prompt updates immediately when changed via settings command
+
+### Fixed
+- Root directory now correctly displays as "/" instead of "~" in prompt
+- Custom colors properly cleared when switching to preset themes
+- cd command now supports "cd -" to return to previous directory
+
 ## [0.0.41] - 2025-11-02
 
 ### Added
