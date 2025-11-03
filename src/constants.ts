@@ -30,7 +30,7 @@ export const STORAGE_KEYS = {
 
 export const DEFAULT_SETTINGS: SettingsConfig = {
   theme: {
-    preset: 'green',
+    preset: 'yellow',
     customColors: undefined
   },
   font: {

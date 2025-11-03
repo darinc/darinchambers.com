@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.43] - 2025-11-03
+
+### Added
+- Automatically execute about command on page load for better first impression
+
+### Changed
+- Default theme changed from Green to Amber
+- Header prompt font size reduced from 16px to 14px
+
+### Fixed
+- Header tagline now uses theme-aware color for proper contrast on Paper theme
+
 ## [0.0.42] - 2025-11-03
 
 ### Added

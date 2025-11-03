@@ -222,4 +222,8 @@ Try 'about' to learn more, 'portfolio' to see my work, or explore with 'ls'.
 `;
 
 terminal.writeWelcome(welcomeMessage);
+
+// Automatically execute 'about' command on page load
+terminal.executeCommand('about', false);
+
 terminal.focus();

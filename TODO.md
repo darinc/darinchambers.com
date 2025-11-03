@@ -17,6 +17,7 @@ Priority levels based on software development best practices:
 - [ ] Verify test coverage meets 80%+ target
 
 ### P1 - High (User Experience & Reliability)
+- [x] Fix header contrast for Paper theme (light background needs dark text)
 - [ ] Test settings UI on different browsers (Chrome, Firefox, Safari)
 - [ ] Test responsive behavior on mobile/tablet devices
 - [ ] Accessibility features (high contrast mode, screen reader support, reduced motion)
