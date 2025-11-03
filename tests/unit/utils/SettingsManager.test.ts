@@ -51,7 +51,7 @@ describe('SettingsManager', () => {
     it('should initialize with default settings when localStorage is empty', () => {
       const settings = settingsManager.loadSettings();
 
-      expect(settings.theme.preset).toBe('green');
+      expect(settings.theme.preset).toBe('yellow');
       expect(settings.font.size).toBe(14);
       expect(settings.font.family).toBe('Courier New');
       expect(settings.effects.scanLines).toBe(false);
@@ -65,7 +65,8 @@ describe('SettingsManager', () => {
       const customSettings: SettingsConfig = {
         theme: { preset: 'yellow', customColors: undefined },
         font: { size: 16, family: 'Monaco' },
-        effects: { scanLines: false, glow: false, border: true, animationSpeed: 1.5, soundEffects: true }
+        effects: { scanLines: false, glow: false, border: true, animationSpeed: 1.5, soundEffects: true },
+        prompt: { format: '\\u@\\h:\\W\\$ ' }
       };
 
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(customSettings));
@@ -90,7 +91,7 @@ describe('SettingsManager', () => {
       const newManager = new SettingsManager(fs);
       const settings = newManager.loadSettings();
 
-      expect(settings.theme.preset).toBe('green'); // Falls back to defaults
+      expect(settings.theme.preset).toBe('yellow'); // Falls back to defaults
       expect(consoleSpy).toHaveBeenCalled();
 
       consoleSpy.mockRestore();
@@ -103,13 +104,13 @@ describe('SettingsManager', () => {
       const content = fs.readFile(PATHS.CONFIG_SETTINGS);
       const parsed = JSON.parse(content);
 
-      expect(parsed.theme.preset).toBe('green');
+      expect(parsed.theme.preset).toBe('yellow');
     });
   });
 
   describe('Theme Settings', () => {
     it('should get current theme preset', () => {
-      expect(settingsManager.getThemePreset()).toBe('green');
+      expect(settingsManager.getThemePreset()).toBe('yellow');
     });
 
     it('should set theme preset', () => {
@@ -307,7 +308,7 @@ describe('SettingsManager', () => {
   describe('Generic Getters/Setters', () => {
     it('should get setting by key', () => {
       const themeSettings = settingsManager.getSetting('theme');
-      expect(themeSettings.preset).toBe('green');
+      expect(themeSettings.preset).toBe('yellow');
 
       const fontSettings = settingsManager.getSetting('font');
       expect(fontSettings.size).toBe(14);
@@ -354,7 +355,7 @@ describe('SettingsManager', () => {
       settingsManager.reset();
 
       // Verify defaults restored
-      expect(settingsManager.getThemePreset()).toBe('green');
+      expect(settingsManager.getThemePreset()).toBe('yellow');
       expect(settingsManager.getFontSize()).toBe(14);
       expect(settingsManager.getScanLines()).toBe(false);
       expect(settingsManager.getGlow()).toBe(false);
@@ -368,7 +369,7 @@ describe('SettingsManager', () => {
       const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
       const parsed = JSON.parse(stored!);
 
-      expect(parsed.theme.preset).toBe('green');
+      expect(parsed.theme.preset).toBe('yellow');
     });
 
     it('should sync reset to filesystem', () => {
@@ -378,7 +379,7 @@ describe('SettingsManager', () => {
       const content = fs.readFile(PATHS.CONFIG_SETTINGS);
       const parsed = JSON.parse(content);
 
-      expect(parsed.theme.preset).toBe('green');
+      expect(parsed.theme.preset).toBe('yellow');
     });
   });
 

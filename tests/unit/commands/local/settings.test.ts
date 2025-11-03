@@ -655,7 +655,7 @@ describe('Settings Command', () => {
       expect(result.output).toContain('Settings reset to defaults');
 
       // Verify all settings are back to defaults
-      expect(settingsManager.getThemePreset()).toBe('green');
+      expect(settingsManager.getThemePreset()).toBe('yellow');
       expect(settingsManager.getFontSize()).toBe(14);
       expect(settingsManager.getFontFamily()).toBe('Courier New');
       expect(settingsManager.getScanLines()).toBe(false);
@@ -666,11 +666,11 @@ describe('Settings Command', () => {
     });
 
     it('should apply default theme', () => {
-      settingsManager.setThemePreset('yellow');
+      settingsManager.setThemePreset('green');
       settingsCommand.execute(['reset']);
 
       // ThemeManager should apply the default theme
-      expect(settingsManager.getThemePreset()).toBe('green');
+      expect(settingsManager.getThemePreset()).toBe('yellow');
     });
 
     it('should apply default font settings to DOM', () => {

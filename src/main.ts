@@ -35,6 +35,7 @@ import { SettingsManager } from './utils/SettingsManager';
 import { ThemeManager } from './utils/ThemeManager';
 import { EnvVarManager } from './utils/EnvVarManager';
 import { createSettingsCommand } from './commands/local/settings';
+import { Router } from './utils/Router';
 
 // Initialize header
 const headerElement = document.getElementById('terminal-header');
@@ -103,15 +104,13 @@ const executor = new CommandExecutor(dispatcher, aliasManager, envVarManager);
 const terminal = new Terminal(dispatcher, executor, settingsManager, themeManager, envVarManager);
 terminal.setCurrentPath(fileSystem.getShortPath());
 
-// Initialize navigation
+// Initialize navigation (will be updated with router after router creation)
 const navLinksElement = document.getElementById('nav-links');
 if (!navLinksElement) {
   throw new Error('Navigation links element not found');
 }
 
-const navigation = new Navigation(navLinksElement, (command: string) => {
-  terminal.executeCommand(command, true);
-});
+let navigation: Navigation;
 
 // Register basic commands
 const helpCommand: Command = {
@@ -214,8 +213,6 @@ const navItems: NavItem[] = [
   { label: 'help', command: 'help' }
 ];
 
-navigation.setItems(navItems);
-
 // Display welcome message
 const welcomeMessage = `Type 'help' to see all commands, or click a command above to get started.
 Try 'about' to learn more, 'portfolio' to see my work, or explore with 'ls'.
@@ -223,7 +220,37 @@ Try 'about' to learn more, 'portfolio' to see my work, or explore with 'ls'.
 
 terminal.writeWelcome(welcomeMessage);
 
-// Automatically execute 'about' command on page load
-terminal.executeCommand('about', false);
+// Initialize router for URL-based navigation
+const router = new Router(terminal);
+
+// Connect router to terminal for URL sync when typing commands
+terminal.setRouter(router);
+
+// Initialize navigation with router integration
+navigation = new Navigation(navLinksElement, (command: string) => {
+  // Determine the path for this command
+  const commandToPath: Record<string, string> = {
+    'about': '/about',
+    'portfolio': '/portfolio',
+    'blog': '/blog',
+    'contact': '/contact',
+    'skills': '/skills',
+    'settings': '/settings',
+    'help': '/help'
+  };
+
+  const path = commandToPath[command];
+  if (path) {
+    router.navigate(path, true);
+  } else {
+    terminal.executeCommand(command, true);
+  }
+});
+
+// Set navigation items
+navigation.setItems(navItems);
+
+// Handle initial route based on URL
+router.handleInitialRoute();
 
 terminal.focus();

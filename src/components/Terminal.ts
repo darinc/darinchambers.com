@@ -10,6 +10,11 @@ import type { EnvVarManager } from '../utils/EnvVarManager';
 import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
 import { generateSettingsUI } from './SettingsUI';
 
+// Forward declaration to avoid circular dependency
+interface IRouter {
+  syncUrlToCommand(command: string): void;
+}
+
 export class Terminal {
   private input: TerminalInput;
   private output: TerminalOutput;
@@ -17,6 +22,7 @@ export class Terminal {
   private hostname: string = 'darinchambers.com';
   private currentPath: string = '~';
   private promptFormatter: PromptFormatter;
+  private router?: IRouter;
 
   constructor(
     private dispatcher: CommandDispatcher,
@@ -104,6 +110,11 @@ export class Terminal {
       if (trimmedValue) {
         const result = await this.executor.execute(trimmedValue);
         this.displayResult(result);
+
+        // Sync URL to match the command that was executed
+        if (this.router) {
+          this.router.syncUrlToCommand(trimmedValue);
+        }
       }
 
       // Clear input and focus
@@ -120,6 +131,11 @@ export class Terminal {
     // Handle clear command specially
     if (result.output === COMMAND_SIGNALS.CLEAR_SCREEN) {
       this.output.clear();
+
+      // Reset URL to home route when clearing terminal
+      if (this.router && window.location.pathname !== '/') {
+        window.history.pushState({}, '', '/');
+      }
     } else if (result.output && !result.raw) {
       // Skip display if raw flag is set (piping context)
       if (result.error) {
@@ -189,6 +205,16 @@ export class Terminal {
 
   getInput(): TerminalInput {
     return this.input;
+  }
+
+  /**
+   * Set the router for URL synchronization.
+   * Call this after both Terminal and Router are initialized.
+   *
+   * @param router - Router instance
+   */
+  setRouter(router: IRouter): void {
+    this.router = router;
   }
 
   /**

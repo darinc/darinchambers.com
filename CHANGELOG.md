@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.44] - 2025-11-03
+
+### Added
+- URL routing system with History API for shareable deep links
+- Support for direct navigation to blog posts and pages via URLs
+- Automatic URL sync when typing commands in terminal
+
+### Changed
+- Clear command now resets URL to home route
+
+### Fixed
+- Updated all tests to reflect default theme change to Amber
+
 ## [0.0.43] - 2025-11-03
 
 ### Added
