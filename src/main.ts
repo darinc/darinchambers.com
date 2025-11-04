@@ -25,6 +25,7 @@ import { createEnvCommand } from './commands/core/env';
 import { createExportCommand } from './commands/core/export';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
+import { ddateCommand } from './commands/novelty/ddate';
 import { createAboutCommand } from './commands/local/about';
 import { portfolioCommand } from './commands/local/portfolio';
 import { createBlogCommand } from './commands/local/blog';
@@ -199,7 +200,8 @@ terminal.registerCommands([
   blogCommand,
   contactCommand,
   skillsCommand,
-  settingsCommand
+  settingsCommand,
+  ddateCommand
 ]);
 
 // Set up navigation items

@@ -82,6 +82,16 @@ Render markdown files with beautiful formatting
 - Usage: `render <file>`
 - Example: `render ~/blog/post.md`
 
+## Novelty Commands
+
+### `ddate`
+Display date in Discordian calendar format
+- Usage: `ddate` (current date)
+- Usage: `ddate "YYYY-MM-DD"` (specific date)
+- Usage: `ddate --help` (show help)
+- The Discordian calendar has 5 seasons: Chaos, Discord, Confusion, Bureaucracy, The Aftermath
+- Features special days like St. Tib's Day (Feb 29) and Apostle Days
+
 ## Advanced Features
 
 ### Command Piping

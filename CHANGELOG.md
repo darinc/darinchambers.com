@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.49] - 2025-11-03
+
+### Fixed
+- ddate command numeric argument order now correctly uses month-day-year format
+
+## [0.0.48] - 2025-11-03
+
+### Added
+- ddate command for displaying dates in Discordian calendar format
+- Discordian calendar utility with full conversion logic
+- New NOVELTY COMMANDS category in help documentation
+- Support for St. Tib's Day (Feb 29) and Apostle Day detection
+- Created /src/commands/novelty/ directory for esoteric commands
+
 ## [0.0.47] - 2025-11-03
 
 ### Added
