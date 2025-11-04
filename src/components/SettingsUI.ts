@@ -46,6 +46,7 @@ function generateThemePresetButtons(presets: ThemePreset[], current: string): st
 function generateColorPickers(colors?: CustomColors): string {
   const vars = [
     { key: '--terminal-bg', label: 'Background', prop: 'background' as keyof CustomColors },
+    { key: '--terminal-bg-secondary', label: 'Background (Secondary)', prop: 'backgroundSecondary' as keyof CustomColors },
     { key: '--terminal-fg', label: 'Foreground', prop: 'foreground' as keyof CustomColors },
     { key: '--terminal-accent', label: 'Accent', prop: 'accent' as keyof CustomColors },
     { key: '--terminal-dim', label: 'Dim', prop: 'dim' as keyof CustomColors },

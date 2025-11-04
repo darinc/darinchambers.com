@@ -120,7 +120,7 @@ function handleSet(
       case 'color': {
         // Color variables are parsed as flags by CommandArgs (they start with --)
         // So we need to get the first flag that looks like a CSS variable
-        const cssVars = ['terminal-bg', 'terminal-fg', 'terminal-accent', 'terminal-dim', 'terminal-error', 'terminal-cursor'];
+        const cssVars = ['terminal-bg', 'terminal-fg', 'terminal-accent', 'terminal-dim', 'terminal-error', 'terminal-cursor', 'terminal-bg-secondary'];
 
         let colorVar: string | undefined;
         let colorValue: string | undefined;

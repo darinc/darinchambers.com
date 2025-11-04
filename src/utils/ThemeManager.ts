@@ -52,7 +52,7 @@ export class ThemeManager {
           '--terminal-dim': '#cc8800',
           '--terminal-error': '#ff3333',
           '--terminal-cursor': '#ffb000',
-          '--terminal-bg-secondary': '#241c14'
+          '--terminal-bg-secondary': '#0f0b08'
         }
       },
       {

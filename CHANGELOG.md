@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.47] - 2025-11-03
+
+### Added
+- Secondary background color customization in settings CLI and UI
+- Background (Secondary) color picker in settings advanced section
+
+### Changed
+- Amber theme secondary background color darkened from #241c14 to #0f0b08 for better contrast
+
 ## [0.0.46] - 2025-11-03
 
 ### Fixed
