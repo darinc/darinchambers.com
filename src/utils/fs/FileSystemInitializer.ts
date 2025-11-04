@@ -133,6 +133,7 @@ Type 'blog' to read posts.
     bin.children!.set('history', this.createFileNode('history', '[Core command: history]'));
     bin.children!.set('date', this.createFileNode('date', '[Core command: date]'));
     bin.children!.set('ddate', this.createFileNode('ddate', '[Novelty command: ddate]'));
+    bin.children!.set('figlet', this.createFileNode('figlet', '[Novelty command: figlet]'));
     bin.children!.set('whoami', this.createFileNode('whoami', '[Core command: whoami]'));
     bin.children!.set('alias', this.createFileNode('alias', '[Core command: alias]'));
     bin.children!.set('unalias', this.createFileNode('unalias', '[Core command: unalias]'));

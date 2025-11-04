@@ -92,6 +92,14 @@ Display date in Discordian calendar format
 - The Discordian calendar has 5 seasons: Chaos, Discord, Confusion, Bureaucracy, The Aftermath
 - Features special days like St. Tib's Day (Feb 29) and Apostle Days
 
+### `figlet`
+Convert text to ASCII art banners
+- Usage: `figlet "Hello"` (default font)
+- Usage: `figlet -f banner "Text"` (use banner font)
+- Usage: `figlet -c "Centered"` (center output)
+- Usage: `echo "Hello" | figlet` (from stdin)
+- Available fonts: standard, slant, banner, small
+
 ## Advanced Features
 
 ### Command Piping

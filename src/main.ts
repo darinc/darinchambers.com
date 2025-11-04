@@ -26,6 +26,7 @@ import { createExportCommand } from './commands/core/export';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
 import { ddateCommand } from './commands/novelty/ddate';
+import { figletCommand } from './commands/novelty/figlet';
 import { createAboutCommand } from './commands/local/about';
 import { portfolioCommand } from './commands/local/portfolio';
 import { createBlogCommand } from './commands/local/blog';
@@ -201,7 +202,8 @@ terminal.registerCommands([
   contactCommand,
   skillsCommand,
   settingsCommand,
-  ddateCommand
+  ddateCommand,
+  figletCommand
 ]);
 
 // Set up navigation items
