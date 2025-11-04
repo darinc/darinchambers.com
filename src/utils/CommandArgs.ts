@@ -7,12 +7,26 @@ export class CommandArgs {
   private positionals: string[] = [];
 
   constructor(args: string[]) {
-    for (let i = 0; i < args.length; i++) {
-      const arg = args[i];
+    // First pass: expand combined short flags like -alh to -a -l -h
+    const expandedArgs: string[] = [];
+    for (const arg of args) {
+      if (arg.startsWith('-') && !arg.startsWith('--') && arg.length > 2) {
+        // Combined short flags like -alh
+        for (let j = 1; j < arg.length; j++) {
+          expandedArgs.push(`-${arg[j]}`);
+        }
+      } else {
+        expandedArgs.push(arg);
+      }
+    }
+
+    // Second pass: parse the expanded args
+    for (let i = 0; i < expandedArgs.length; i++) {
+      const arg = expandedArgs[i];
       if (arg.startsWith('--')) {
         const flagName = arg.substring(2);
         // Check if next arg exists and is not a flag (value for this flag)
-        const nextArg = args[i + 1];
+        const nextArg = expandedArgs[i + 1];
         if (nextArg !== undefined && !nextArg.startsWith('--') && !nextArg.startsWith('-')) {
           this.flags.set(flagName, nextArg); // e.g., --tag foo
           i++; // Skip the value in next iteration
@@ -22,12 +36,14 @@ export class CommandArgs {
       } else if (arg.startsWith('-') && arg.length === 2) {
         // Single letter flags like -L
         const flagName = arg.substring(1);
-        const nextArg = args[i + 1];
-        if (nextArg !== undefined && !nextArg.startsWith('-')) {
+        const nextArg = expandedArgs[i + 1];
+        // Only treat next arg as a value if it looks like a number (for flags like -L 3)
+        // Otherwise, treat the flag as boolean
+        if (nextArg !== undefined && !nextArg.startsWith('-') && /^\d+$/.test(nextArg)) {
           this.flags.set(flagName, nextArg); // e.g., -L 3
           i++; // Skip the value in next iteration
         } else {
-          this.flags.set(flagName, true); // e.g., -v
+          this.flags.set(flagName, true); // e.g., -v, -a, -l, -h
         }
       } else {
         // It's a positional argument

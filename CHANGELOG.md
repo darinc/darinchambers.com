@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.46] - 2025-11-03
+
+### Fixed
+- CommandArgs flag parsing now correctly handles positional arguments after combined flags
+- ls command with flags and file argument now works in any order (e.g., `ls -alh .secret`)
+
+## [0.0.45] - 2025-11-03
+
+### Added
+- ls command now supports -a, -l, and -h flags for enhanced directory listing
+- Long format listing with permissions, owner, size, date, and filename
+- Human-readable file sizes (e.g., 1.1K, 2.4M) with -h flag
+- Show hidden files (starting with .) with -a flag
+
+### Changed
+- CommandArgs now expands combined short flags (e.g., -alh → -a -l -h)
+- FileSystemNode interface extended with metadata fields (permissions, owner, size, modifiedTime, isHidden)
+
 ## [0.0.44] - 2025-11-03
 
 ### Added

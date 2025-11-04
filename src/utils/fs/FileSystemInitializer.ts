@@ -13,18 +13,30 @@ import type { FileSystemNode } from './types';
 
 export class FileSystemInitializer {
   private static createDirectoryNode(name: string): FileSystemNode {
+    const isHidden = name.startsWith('.');
     return {
       name,
       type: 'directory',
-      children: new Map()
+      children: new Map(),
+      permissions: 'drwxr-xr-x',
+      owner: 'darin',
+      size: 4096,
+      modifiedTime: new Date(),
+      isHidden
     };
   }
 
   private static createFileNode(name: string, content: string): FileSystemNode {
+    const isHidden = name.startsWith('.');
     return {
       name,
       type: 'file',
-      content
+      content,
+      permissions: '-rw-r--r--',
+      owner: 'darin',
+      size: content.length,
+      modifiedTime: new Date(),
+      isHidden
     };
   }
 
