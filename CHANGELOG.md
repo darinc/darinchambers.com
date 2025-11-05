@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.52] - 2025-11-05
+
+### Changed
+- H1 and H2 headings now use cyan color via hue-rotate filter for better visual hierarchy
+- H1 headings styled with background tint and bottom border instead of glow effect
+
 ## [0.0.51] - 2025-11-04
 
 ### Fixed
