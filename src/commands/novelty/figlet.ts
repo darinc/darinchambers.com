@@ -1,6 +1,16 @@
 import type { Command } from '../Command';
 import { CommandArgs } from '../../utils/CommandArgs';
 import figlet from 'figlet';
+import standardFont from 'figlet/importable-fonts/Standard';
+import slantFont from 'figlet/importable-fonts/Slant';
+import bannerFont from 'figlet/importable-fonts/Banner';
+import smallFont from 'figlet/importable-fonts/Small';
+
+// Parse and load fonts
+figlet.parseFont('Standard', standardFont);
+figlet.parseFont('Slant', slantFont);
+figlet.parseFont('Banner', bannerFont);
+figlet.parseFont('Small', smallFont);
 
 /**
  * figlet command - Convert text to ASCII art
@@ -11,7 +21,7 @@ import figlet from 'figlet';
 export const figletCommand: Command = {
   name: 'figlet',
   description: 'Convert text to ASCII art',
-  execute: async (args: string[], stdin?: string) => {
+  execute: (args: string[], stdin?: string) => {
     const cmdArgs = new CommandArgs(args);
 
     // Check for help flag
@@ -56,8 +66,12 @@ Available fonts:
       };
     }
 
-    // Get font (default: standard)
-    const font = (cmdArgs.getFlag('f') as string) || 'standard';
+    // Get font (default: Standard)
+    const fontFlag = cmdArgs.getFlag('f');
+    const fontName = (typeof fontFlag === 'string' ? fontFlag : 'Standard');
+
+    // Normalize font name (capitalize first letter)
+    const font = fontName.charAt(0).toUpperCase() + fontName.slice(1).toLowerCase();
 
     // Get alignment
     let horizontalLayout: figlet.KerningMethods = 'default';
@@ -68,31 +82,19 @@ Available fonts:
     }
 
     try {
-      // Generate ASCII art
-      const output = await new Promise<string>((resolve, reject) => {
-        figlet.text(
-          text,
-          {
-            font: font as figlet.Fonts,
-            horizontalLayout
-          },
-          (err, result) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(result || '');
-            }
-          }
-        );
+      // Generate ASCII art using textSync (works in browser)
+      const output = figlet.textSync(text, {
+        font: font as figlet.Fonts,
+        horizontalLayout
       });
 
       return { output };
     } catch (error) {
       // Handle font not found or other errors
       if (error instanceof Error) {
-        if (error.message.includes('font') || error.message.includes('Font')) {
+        if (error.message.includes('font') || error.message.includes('Font') || error.message.includes('FIGlet')) {
           return {
-            output: `figlet: font '${font}' not found\nAvailable fonts: standard, slant, banner, small`,
+            output: `figlet: font '${font}' not found or invalid\nAvailable fonts: standard, slant, banner, small`,
             error: true
           };
         }

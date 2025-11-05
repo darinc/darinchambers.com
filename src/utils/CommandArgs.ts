@@ -6,6 +6,9 @@ export class CommandArgs {
   private flags: Map<string, string | boolean> = new Map();
   private positionals: string[] = [];
 
+  // Single-letter flags that expect string values (not boolean)
+  private static VALUE_FLAGS = new Set(['f', 'L', 'w']);
+
   constructor(args: string[]) {
     // First pass: expand combined short flags like -alh to -a -l -h
     const expandedArgs: string[] = [];
@@ -37,10 +40,13 @@ export class CommandArgs {
         // Single letter flags like -L
         const flagName = arg.substring(1);
         const nextArg = expandedArgs[i + 1];
-        // Only treat next arg as a value if it looks like a number (for flags like -L 3)
+        // Treat next arg as a value if:
+        // 1. The flag is in VALUE_FLAGS (expects string values), OR
+        // 2. It looks like a number (for numeric flags like -L 3)
         // Otherwise, treat the flag as boolean
-        if (nextArg !== undefined && !nextArg.startsWith('-') && /^\d+$/.test(nextArg)) {
-          this.flags.set(flagName, nextArg); // e.g., -L 3
+        if (nextArg !== undefined && !nextArg.startsWith('-') &&
+            (CommandArgs.VALUE_FLAGS.has(flagName) || /^\d+$/.test(nextArg))) {
+          this.flags.set(flagName, nextArg); // e.g., -f slant, -L 3
           i++; // Skip the value in next iteration
         } else {
           this.flags.set(flagName, true); // e.g., -v, -a, -l, -h
