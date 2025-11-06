@@ -1,23 +1,24 @@
-import type { BlogPost } from '../types/blog';
+import type { Project } from '../types/portfolio';
 
-export interface BlogFrontmatter {
+export interface PortfolioFrontmatter {
+  id: string;
   title: string;
-  date: string;
-  tags: string[];
-  summary: string;
+  technologies: string[];
+  impact?: string;
+  year: string;
 }
 
-export class BlogParser {
+export class PortfolioParser {
   /**
    * Parse YAML frontmatter from markdown content
    * Expected format:
    * ---
    * key: value
-   * tags: [tag1, tag2]
+   * technologies: ["tech1", "tech2"]
    * ---
    * Content here...
    */
-  static parseFrontmatter(content: string): { frontmatter: BlogFrontmatter; markdown: string } {
+  static parseFrontmatter(content: string): { frontmatter: PortfolioFrontmatter; markdown: string } {
     const lines = content.split('\n');
 
     // Check if content starts with frontmatter delimiter
@@ -51,7 +52,7 @@ export class BlogParser {
       const key = line.substring(0, colonIndex).trim();
       let value = line.substring(colonIndex + 1).trim();
 
-      // Handle array values like tags: [tag1, tag2]
+      // Handle array values like technologies: ["tech1", "tech2"]
       if (value.startsWith('[') && value.endsWith(']')) {
         // Remove brackets and split by comma
         const arrayContent = value.substring(1, value.length - 1);
@@ -66,40 +67,36 @@ export class BlogParser {
     }
 
     return {
-      frontmatter: frontmatter as BlogFrontmatter,
+      frontmatter: frontmatter as PortfolioFrontmatter,
       markdown: markdownLines.join('\n').trim()
     };
   }
 
   /**
-   * Parse a blog post from markdown content with frontmatter
-   * Returns a BlogPost object
+   * Parse a portfolio project from markdown content with frontmatter
+   * Returns a Project object
    */
-  static parseBlogPost(filename: string, content: string): BlogPost {
+  static parseProject(filename: string, content: string): Project {
     const { frontmatter, markdown } = this.parseFrontmatter(content);
 
-    // Extract ID from filename (remove date prefix and .md extension)
-    // e.g., "2024-09-15-ai-production-lessons.md" -> "ai-production-lessons"
-    const id = filename
-      .replace(/^\d{4}-\d{2}-\d{2}-/, '')
-      .replace(/\.md$/, '');
+    // Extract ID from filename (remove .md extension)
+    // e.g., "ai-ml-systems.md" -> "ai-ml-systems"
+    const id = frontmatter.id || filename.replace(/\.md$/, '');
 
     return {
       id,
       title: frontmatter.title,
-      date: frontmatter.date,
-      summary: frontmatter.summary,
-      content: markdown,
-      tags: frontmatter.tags
+      description: markdown,
+      technologies: frontmatter.technologies,
+      impact: frontmatter.impact,
+      year: frontmatter.year
     };
   }
 
   /**
-   * Get blog post ID from filename
+   * Get project ID from filename
    */
   static getIdFromFilename(filename: string): string {
-    return filename
-      .replace(/^\d{4}-\d{2}-\d{2}-/, '')
-      .replace(/\.md$/, '');
+    return filename.replace(/\.md$/, '');
   }
 }

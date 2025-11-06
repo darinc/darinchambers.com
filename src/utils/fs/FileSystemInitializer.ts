@@ -1,7 +1,13 @@
 // Import blog markdown files
-import aiProductionLessons from '../../blog/2024-09-15-ai-production-lessons.md?raw';
-import distributedSystemsReliability from '../../blog/2024-07-22-distributed-systems-reliability.md?raw';
-import developerExperience from '../../blog/2024-05-10-developer-experience.md?raw';
+import aiProductionLessons from '../../content/blog/2024-09-15-ai-production-lessons.md?raw';
+import distributedSystemsReliability from '../../content/blog/2024-07-22-distributed-systems-reliability.md?raw';
+import developerExperience from '../../content/blog/2024-05-10-developer-experience.md?raw';
+
+// Import portfolio markdown files
+import aiMlSystems from '../../content/portfolio/ai-ml-systems.md?raw';
+import distributedPlatform from '../../content/portfolio/distributed-platform.md?raw';
+import developerTools from '../../content/portfolio/developer-tools.md?raw';
+import enterpriseArchitecture from '../../content/portfolio/enterprise-architecture.md?raw';
 
 // Import content markdown files
 import aboutMd from '../../content/about.md?raw';
@@ -120,6 +126,14 @@ Type 'blog' to read posts.
     content.children!.set('contact.md', this.createFileNode('contact.md', contactMd));
     content.children!.set('skills.md', this.createFileNode('skills.md', skillsMd));
     content.children!.set('help.md', this.createFileNode('help.md', helpMd));
+
+    // /home/darin/portfolio directory with markdown portfolio files
+    const portfolio = this.createDirectoryNode('portfolio');
+    darin.children!.set('portfolio', portfolio);
+    portfolio.children!.set('ai-ml-systems.md', this.createFileNode('ai-ml-systems.md', aiMlSystems));
+    portfolio.children!.set('distributed-platform.md', this.createFileNode('distributed-platform.md', distributedPlatform));
+    portfolio.children!.set('developer-tools.md', this.createFileNode('developer-tools.md', developerTools));
+    portfolio.children!.set('enterprise-architecture.md', this.createFileNode('enterprise-architecture.md', enterpriseArchitecture));
 
     // /usr directory
     const usr = this.createDirectoryNode('usr');

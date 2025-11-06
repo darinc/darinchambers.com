@@ -28,7 +28,7 @@ import { echoCommand } from './commands/core/echo';
 import { ddateCommand } from './commands/novelty/ddate';
 import { figletCommand } from './commands/novelty/figlet';
 import { createAboutCommand } from './commands/local/about';
-import { portfolioCommand } from './commands/local/portfolio';
+import { createPortfolioCommand } from './commands/local/portfolio';
 import { createBlogCommand } from './commands/local/blog';
 import { createContactCommand } from './commands/local/contact';
 import { createSkillsCommand } from './commands/local/skills';
@@ -167,6 +167,7 @@ const whoamiCommand = createWhoamiCommand(terminal);
 const aboutCommand = createAboutCommand(fileSystem);
 const contactCommand = createContactCommand(fileSystem);
 const skillsCommand = createSkillsCommand(fileSystem);
+const portfolioCommand = createPortfolioCommand(fileSystem);
 const blogCommand = createBlogCommand(fileSystem);
 
 // Create render command

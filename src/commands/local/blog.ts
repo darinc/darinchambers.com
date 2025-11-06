@@ -1,7 +1,7 @@
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { BlogParser } from '../../utils/BlogParser';
-import type { BlogPost } from '../../data/blog';
+import type { BlogPost } from '../../types/blog';
 import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownService } from '../../utils/MarkdownService';
 import { PATHS } from '../../constants';

@@ -9,6 +9,7 @@ export const PATHS = {
   HOME_DARIN: '/home/darin',
   HOME_GUEST: '/home/guest',
   CONTENT_BLOG: '/home/darin/blog',
+  CONTENT_PORTFOLIO: '/home/darin/portfolio',
   CONTENT_HELP: '/home/darin/content/help.md',
   CONTENT_ABOUT: '/home/darin/content/about.md',
   CONTENT_CONTACT: '/home/darin/content/contact.md',
