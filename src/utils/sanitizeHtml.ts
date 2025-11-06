@@ -53,7 +53,7 @@ export function sanitizeHtml(html: string): string {
  */
 export function sanitizeHtmlCustom(
   html: string,
-  config: DOMPurify.Config
+  config: Parameters<typeof DOMPurify.sanitize>[1]
 ): string {
   return DOMPurify.sanitize(html, config);
 }

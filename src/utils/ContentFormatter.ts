@@ -1,3 +1,6 @@
+import type { Project } from '../types/portfolio';
+import type { BlogPost } from '../types/blog';
+
 /**
  * ContentFormatter - Utility for generating markdown from structured data
  * Used by commands to create consistent, formatted markdown output
@@ -7,7 +10,7 @@ export class ContentFormatter {
   /**
    * Format a portfolio list as markdown
    */
-  static formatPortfolioList(projects: any[]): string {
+  static formatPortfolioList(projects: Project[]): string {
     const items = projects.map((project, index) => {
       const tech = project.technologies.join(', ');
       const impact = project.impact ? `\n   **Impact:** ${project.impact}` : '';
@@ -29,7 +32,7 @@ ${items}`;
   /**
    * Format a single portfolio project as markdown
    */
-  static formatPortfolioDetail(project: any): string {
+  static formatPortfolioDetail(project: Project): string {
     const tech = project.technologies.join(', ');
     const impact = project.impact ? `\n\n## Impact\n\n${project.impact}` : '';
 
@@ -53,7 +56,7 @@ ${tech}${impact}
   /**
    * Format blog posts list as markdown
    */
-  static formatBlogList(posts: any[], filterTag?: string): string {
+  static formatBlogList(posts: BlogPost[], filterTag?: string): string {
     const header = filterTag ? `# Blog Posts - Tag: ${filterTag}` : '# Blog Posts';
 
     const items = posts.map((post, index) => {
@@ -82,8 +85,8 @@ ${items}${footer}`;
   /**
    * Format a single blog post as markdown
    */
-  static formatBlogPost(post: any): string {
-    const tags = post.tags.map((t: string) => `\`${t}\``).join(' ');
+  static formatBlogPost(post: BlogPost): string {
+    const tags = post.tags.map((t) => `\`${t}\``).join(' ');
 
     return `# ${post.title}
 

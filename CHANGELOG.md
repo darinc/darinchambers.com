@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.56] - 2025-11-05
+
+### Changed
+- Eliminated all unsafe any type usage across codebase
+- Added type guards for frontmatter validation in BlogParser and PortfolioParser
+- Replaced any types with proper interfaces in ContentFormatter
+
+### Fixed
+- Runtime validation now catches invalid frontmatter before processing
+- Better error messages for missing or malformed content fields
+
 ## [0.0.55] - 2025-11-05
 
 ### Added

@@ -7,6 +7,25 @@ export interface BlogFrontmatter {
   summary: string;
 }
 
+/**
+ * Type guard to validate frontmatter structure
+ */
+function isBlogFrontmatter(data: unknown): data is BlogFrontmatter {
+  if (typeof data !== 'object' || data === null) {
+    return false;
+  }
+
+  const obj = data as Record<string, unknown>;
+
+  return (
+    typeof obj.title === 'string' &&
+    typeof obj.date === 'string' &&
+    typeof obj.summary === 'string' &&
+    Array.isArray(obj.tags) &&
+    obj.tags.every(tag => typeof tag === 'string')
+  );
+}
+
 export class BlogParser {
   /**
    * Parse YAML frontmatter from markdown content
@@ -43,7 +62,7 @@ export class BlogParser {
     const markdownLines = lines.slice(endIndex + 1);
 
     // Parse frontmatter
-    const frontmatter: any = {};
+    const frontmatter: Record<string, string | string[]> = {};
     for (const line of frontmatterLines) {
       const colonIndex = line.indexOf(':');
       if (colonIndex === -1) continue;
@@ -65,8 +84,21 @@ export class BlogParser {
       }
     }
 
+    // Validate frontmatter structure
+    if (!isBlogFrontmatter(frontmatter)) {
+      const missing: string[] = [];
+      if (!frontmatter.title) missing.push('title');
+      if (!frontmatter.date) missing.push('date');
+      if (!frontmatter.summary) missing.push('summary');
+      if (!Array.isArray(frontmatter.tags)) missing.push('tags');
+
+      throw new Error(
+        `Invalid blog frontmatter: missing or invalid fields: ${missing.join(', ')}`
+      );
+    }
+
     return {
-      frontmatter: frontmatter as BlogFrontmatter,
+      frontmatter,
       markdown: markdownLines.join('\n').trim()
     };
   }

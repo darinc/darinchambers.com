@@ -8,6 +8,26 @@ export interface PortfolioFrontmatter {
   year: string;
 }
 
+/**
+ * Type guard to validate frontmatter structure
+ */
+function isPortfolioFrontmatter(data: unknown): data is PortfolioFrontmatter {
+  if (typeof data !== 'object' || data === null) {
+    return false;
+  }
+
+  const obj = data as Record<string, unknown>;
+
+  return (
+    typeof obj.id === 'string' &&
+    typeof obj.title === 'string' &&
+    typeof obj.year === 'string' &&
+    Array.isArray(obj.technologies) &&
+    obj.technologies.every(tech => typeof tech === 'string') &&
+    (obj.impact === undefined || typeof obj.impact === 'string')
+  );
+}
+
 export class PortfolioParser {
   /**
    * Parse YAML frontmatter from markdown content
@@ -44,7 +64,7 @@ export class PortfolioParser {
     const markdownLines = lines.slice(endIndex + 1);
 
     // Parse frontmatter
-    const frontmatter: any = {};
+    const frontmatter: Record<string, string | string[]> = {};
     for (const line of frontmatterLines) {
       const colonIndex = line.indexOf(':');
       if (colonIndex === -1) continue;
@@ -66,8 +86,21 @@ export class PortfolioParser {
       }
     }
 
+    // Validate frontmatter structure
+    if (!isPortfolioFrontmatter(frontmatter)) {
+      const missing: string[] = [];
+      if (!frontmatter.id) missing.push('id');
+      if (!frontmatter.title) missing.push('title');
+      if (!frontmatter.year) missing.push('year');
+      if (!Array.isArray(frontmatter.technologies)) missing.push('technologies');
+
+      throw new Error(
+        `Invalid portfolio frontmatter: missing or invalid fields: ${missing.join(', ')}`
+      );
+    }
+
     return {
-      frontmatter: frontmatter as PortfolioFrontmatter,
+      frontmatter,
       markdown: markdownLines.join('\n').trim()
     };
   }
