@@ -1,3 +1,5 @@
+import { sanitizeHtml } from '../utils/sanitizeHtml';
+
 export class TerminalOutput {
   private outputElement: HTMLElement;
   private inputLineElement: HTMLElement | null;
@@ -34,7 +36,8 @@ export class TerminalOutput {
   writeHTML(html: string): void {
     const container = document.createElement('div');
     container.className = 'output-line';
-    container.innerHTML = html;
+    // Sanitize HTML to prevent XSS attacks
+    container.innerHTML = sanitizeHtml(html);
 
     // Insert before the input line if it exists, otherwise append
     if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {

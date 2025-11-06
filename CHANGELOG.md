@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.55] - 2025-11-05
+
+### Added
+- DOMPurify sanitization for all innerHTML usage to prevent XSS attacks
+- Strict Content Security Policy in index.html and Cloudflare Pages headers
+- Comprehensive security test suite with XSS and CSP compliance tests
+
+### Changed
+- Refactored settings UI to use event delegation instead of inline handlers
+- Removed global window.executeCommand exposure for improved security
+
 ## [0.0.54] - 2025-11-05
 
 ### Fixed

@@ -1,6 +1,6 @@
 {
   "name": "darinchambers.com",
-  "version": "0.0.54",
+  "version": "0.0.55",
   "description": "Terminal-inspired personal website showcasing AI and software engineering expertise",
   "type": "module",
   "scripts": {
@@ -35,7 +35,9 @@
     "vitest": "^4.0.4"
   },
   "dependencies": {
+    "@types/dompurify": "^3.0.5",
     "@types/marked": "^5.0.2",
+    "dompurify": "^3.3.0",
     "figlet": "^1.9.3",
     "marked": "^16.4.1"
   }

@@ -9,6 +9,7 @@ import type { ThemeManager } from '../utils/ThemeManager';
 import type { EnvVarManager } from '../utils/EnvVarManager';
 import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
 import { generateSettingsUI } from './SettingsUI';
+import { sanitizeHtml } from '../utils/sanitizeHtml';
 
 // Forward declaration to avoid circular dependency
 interface IRouter {
@@ -63,11 +64,80 @@ export class Terminal {
       this.executeCommand(customEvent.detail, false);
     });
 
-    // Expose executeCommand globally for inline onclick handlers
-    (window as any).executeCommand = (cmd: string) => {
-      const event = new CustomEvent('terminal-command', { detail: cmd });
-      document.dispatchEvent(event);
-    };
+    // Event delegation for settings UI controls (replaces inline event handlers)
+    // This enables strict CSP by avoiding inline onclick/onchange handlers
+    document.addEventListener('click', (e: Event) => {
+      const target = e.target as HTMLElement;
+
+      // Handle buttons with data-command attribute
+      if (target.closest('[data-command]')) {
+        const button = target.closest('[data-command]') as HTMLElement;
+        const command = button.getAttribute('data-command');
+        if (command) {
+          this.executeCommand(command, false);
+        }
+      }
+    });
+
+    // Handle input changes (checkboxes, ranges, selects, color pickers)
+    document.addEventListener('change', (e: Event) => {
+      const target = e.target as HTMLInputElement | HTMLSelectElement;
+      const commandTemplate = target.getAttribute('data-command-template');
+      const settingType = target.getAttribute('data-setting-type');
+
+      if (!commandTemplate) return;
+
+      let command = '';
+
+      // Handle checkboxes
+      if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+        command = `${commandTemplate} ${target.checked ? 'on' : 'off'}`;
+      }
+      // Handle color pickers
+      else if (target instanceof HTMLInputElement && target.type === 'color') {
+        command = `${commandTemplate} ${target.value}`;
+      }
+      // Handle range sliders
+      else if (target instanceof HTMLInputElement && target.type === 'range') {
+        command = `${commandTemplate} ${target.value}`;
+      }
+      // Handle select dropdowns (font-family needs quotes)
+      else if (target instanceof HTMLSelectElement) {
+        if (settingType === 'font-family') {
+          command = `${commandTemplate} "${target.value}"`;
+        } else {
+          command = `${commandTemplate} ${target.value}`;
+        }
+      }
+
+      if (command) {
+        this.executeCommand(command, false);
+      }
+    });
+
+    // Handle range input updates for live value display
+    document.addEventListener('input', (e: Event) => {
+      const target = e.target as HTMLInputElement;
+
+      if (target.type === 'range') {
+        const settingType = target.getAttribute('data-setting-type');
+
+        // Update font size display
+        if (settingType === 'font-size') {
+          const displayElement = document.getElementById('font-size-value');
+          if (displayElement) {
+            displayElement.textContent = `${target.value}px`;
+          }
+        }
+        // Update animation speed display
+        else if (settingType === 'animation-speed') {
+          const displayElement = document.getElementById('animation-speed-value');
+          if (displayElement) {
+            displayElement.textContent = `${target.value}x`;
+          }
+        }
+      }
+    });
 
     // Listen for settings changes to refresh all settings panels and update prompt
     document.addEventListener('settings-changed', () => {
@@ -90,9 +160,10 @@ export class Terminal {
     // Generate fresh HTML with current settings
     const freshHTML = generateSettingsUI(this.settingsManager, this.themeManager);
 
-    // Update each panel's content
+    // Update each panel's content (sanitize to prevent XSS)
     panels.forEach(panel => {
-      panel.innerHTML = freshHTML.replace('<div class="settings-panel" data-settings-panel="true">', '').replace(/<\/div>$/, '');
+      const cleanHTML = freshHTML.replace('<div class="settings-panel" data-settings-panel="true">', '').replace(/<\/div>$/, '');
+      panel.innerHTML = sanitizeHtml(cleanHTML);
     });
   }
 

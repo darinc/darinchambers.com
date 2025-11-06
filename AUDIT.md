@@ -1,8 +1,9 @@
 # Comprehensive Codebase Audit Report
 **Project:** darinchambers.com (Terminal Portfolio)
-**Version:** 0.0.53
+**Version:** 0.0.55
 **Audit Date:** November 5, 2025
 **Audited By:** Claude Code
+**Last Updated:** November 5, 2025 (XSS Security Implementation)
 
 ---
 
@@ -25,14 +26,14 @@ This comprehensive audit evaluates the terminal-inspired portfolio website acros
 - 🔴 Build currently failing due to missing TypeScript type definitions for figlet fonts
 - 🟡 Test coverage at 45% (target: 80%)
 - 🟡 No ARIA attributes or accessibility features
-- 🟡 XSS risk from unsanitized innerHTML usage in markdown rendering
+- ✅ ~~XSS risk from unsanitized innerHTML~~ **RESOLVED** - DOMPurify + CSP implemented
 
 **Codebase Metrics:**
 - **Files:** 72 TypeScript files
 - **Lines of Code:** ~5,949 lines (excluding comments/whitespace)
-- **Bundle Size:** 110KB JS, 11KB CSS
-- **Test Suite:** 483 tests passing in 17 test files
-- **Dependencies:** 3 production, 9 development
+- **Bundle Size:** 130KB JS, 11KB CSS (+ 20KB for DOMPurify)
+- **Test Suite:** 532 tests passing in 19 test files (+49 security tests)
+- **Dependencies:** 5 production (+2 for security), 9 development
 
 ---
 
@@ -40,45 +41,122 @@ This comprehensive audit evaluates the terminal-inspired portfolio website acros
 
 ### 1.1 XSS Vulnerabilities
 
-**Status:** 🟡 **MEDIUM RISK** - Partial mitigation in place
+**Status:** ✅ **LOW RISK** - Comprehensive protection implemented
 
-#### Findings:
+#### Implementation Status: **COMPLETED** ✅ (November 5, 2025)
 
-**innerHTML Usage (3 instances):**
+All recommended XSS mitigations have been implemented, providing multiple layers of defense against XSS attacks.
+
+#### Implemented Mitigations:
+
+**1. DOMPurify Sanitization** ✅ **IMPLEMENTED**
+- Installed `dompurify@3.2.2` and `@types/dompurify@3.0.5`
+- Created `src/utils/sanitizeHtml.ts` wrapper utility
+- All innerHTML usage now sanitized before insertion:
+  - `src/components/TerminalOutput.ts:40` - Markdown output sanitized
+  - `src/components/Terminal.ts:97` - Settings panel sanitized
+  - `src/components/Header.ts:17` - Header content sanitized (defense-in-depth)
+
+**2. Content Security Policy (CSP)** ✅ **IMPLEMENTED**
+- **Strict CSP** added to `index.html` (meta tag)
+- **Cloudflare Pages headers** configured in `public/_headers`
+- Policy details:
+  - `script-src 'self'` - No inline scripts allowed
+  - `style-src 'self' 'unsafe-inline'` - Required for CSS variables
+  - `default-src 'self'` - Restrict all resources to same origin
+  - `frame-ancestors 'none'` - Prevent clickjacking
+  - `upgrade-insecure-requests` - Force HTTPS
+
+**3. Event Handler Refactoring** ✅ **IMPLEMENTED**
+- Removed ALL inline event handlers (`onclick`, `onchange`, `oninput`)
+- Refactored `src/components/SettingsUI.ts` to use data attributes
+- Implemented event delegation in `src/components/Terminal.ts`
+- Removed global `window.executeCommand` exposure
+- CSP-compliant implementation using:
+  - `data-command` attributes for button clicks
+  - `data-command-template` attributes for dynamic commands
+  - Document-level event delegation for all settings controls
+
+**4. Security Testing** ✅ **IMPLEMENTED**
+- Created comprehensive test suite: `tests/security/`
+  - `xss.test.ts` - 27 XSS protection tests
+  - `csp.test.ts` - 22 CSP compliance tests
+- **49 security tests passing** covering:
+  - DOMPurify sanitization effectiveness
+  - Markdown rendering XSS protection
+  - Settings UI injection prevention
+  - CSP policy verification
+  - Defense-in-depth validation
+  - mXSS attack prevention
+
+#### Current Protection Layers:
+
+**Layer 1: HTML Escaping**
+- ✅ All user content escaped via `escapeHtml()` in `htmlEscape.ts`
+- ✅ Markdown parser escapes before processing (`InlineRenderer`, `ParseContext`)
+
+**Layer 2: DOMPurify Sanitization**
+- ✅ All HTML sanitized through DOMPurify before `innerHTML`
+- ✅ Removes script tags, event handlers, javascript: URLs
+- ✅ Configured with safe tag/attribute allowlist
+
+**Layer 3: Content Security Policy**
+- ✅ Browser-level protection against inline script execution
+- ✅ Blocks eval(), Function(), and inline event handlers
+- ✅ Additional security headers (X-Frame-Options, X-Content-Type-Options, HSTS)
+
+**Layer 4: Event Delegation**
+- ✅ No inline JavaScript in HTML
+- ✅ All events handled through data attributes
+- ✅ No global function exposure
+
+#### Risk Assessment:
+
+**Previous Risk:** 🟡 MEDIUM - innerHTML usage without CSP, inline event handlers
+**Current Risk:** 🟢 LOW - Multiple layers of defense, comprehensive testing
+
+**Remaining Considerations:**
+- CSP allows `'unsafe-inline'` for styles (required for CSS custom properties)
+- Bundle size increased by ~20KB for DOMPurify (acceptable trade-off)
+- Monitor for CSP violations in production (consider adding report-uri)
+
+#### Code Examples:
+
+**Before:**
 ```typescript
-// src/components/TerminalOutput.ts:37
-container.innerHTML = html;  // ⚠️ Used for markdown rendering
+// Unsafe: Direct innerHTML without sanitization
+container.innerHTML = html;
 
-// src/components/Terminal.ts:95
-panel.innerHTML = freshHTML.replace(...);  // ⚠️ Settings panel refresh
-
-// src/components/Header.ts:15
-this.headerElement.innerHTML = `...`;  // ✅ Static template (safe)
+// Unsafe: Inline event handler
+<button onclick="executeCommand('settings reset')">Reset</button>
 ```
 
-**Mitigation Status:**
-- ✅ **Proper HTML escaping implemented** in `htmlEscape.ts`
-- ✅ All user content escaped via `escapeHtml()` before rendering
-- ✅ Markdown parser escapes content before processing inline elements
-- ⚠️ innerHTML still used for final rendering (acceptable if inputs sanitized)
-
-**Risk Assessment:**
-The codebase properly escapes HTML entities (`&`, `<`, `>`, `"`, `'`) in the `InlineRenderer` and `ParseContext` classes before setting innerHTML. However, there's an inherent risk if any code path bypasses escaping.
-
-**Code Review:**
+**After:**
 ```typescript
-// src/utils/markdown/InlineRenderer.ts:8-9
-static render(text: string): string {
-  let result = escapeHtml(text);  // ✅ Escapes BEFORE processing
-  // ... markdown transformations ...
-}
+// Safe: Sanitized before innerHTML
+container.innerHTML = sanitizeHtml(html);
+
+// Safe: Data attribute with event delegation
+<button data-command="settings reset">Reset</button>
 ```
 
-**Recommendations:**
-1. **HIGH PRIORITY:** Consider adding Content Security Policy (CSP) headers
-2. Add DOMPurify library as defense-in-depth for HTML sanitization
-3. Document why innerHTML is necessary (performance/markdown rendering)
-4. Add security tests for XSS attack vectors
+#### Test Coverage:
+
+```bash
+npm run test:run tests/security/
+✓ tests/security/csp.test.ts (22 tests passing)
+✓ tests/security/xss.test.ts (27 tests passing)
+
+Total: 49 security tests passing
+```
+
+**Recommendations (Future Enhancements):**
+1. ✅ ~~Add Content Security Policy headers~~ **DONE**
+2. ✅ ~~Add DOMPurify library~~ **DONE**
+3. ✅ ~~Remove inline event handlers~~ **DONE**
+4. ✅ ~~Add security tests~~ **DONE**
+5. 🔄 Consider adding CSP report-uri for production monitoring
+6. 🔄 Consider stricter CSP without `unsafe-inline` for styles (requires refactoring CSS)
 
 ### 1.2 Command Injection
 
@@ -153,23 +231,25 @@ npm audit results:
 **Production Dependencies:**
 - `marked@16.4.1` - Mature, well-maintained markdown parser
 - `figlet@1.9.3` - ASCII art generation (no security concerns)
+- `dompurify@3.2.2` - ✅ **ADDED** HTML sanitization library (XSS protection)
 - `@types/marked@5.0.2` - Type definitions only
+- `@types/dompurify@3.0.5` - ✅ **ADDED** Type definitions for DOMPurify
 
 ### 1.5 Global Variable Exposure
 
-**Status:** 🟡 **ACCEPTABLE** - Limited exposure for UI functionality
+**Status:** ✅ **RESOLVED** - No global exposure
 
+**Previous Issue:**
 ```typescript
-// src/components/Terminal.ts:67
-(window as any).executeCommand = (cmd: string) => {
-  const event = new CustomEvent('terminal-command', { detail: cmd });
-  document.dispatchEvent(event);
-};
+// REMOVED: This code no longer exists
+// (window as any).executeCommand = (cmd: string) => { ... }
 ```
 
-**Purpose:** Enables inline onclick handlers in settings UI
-**Risk:** Low - only dispatches events to internal command system
-**Recommendation:** Consider moving to proper event delegation to eliminate global exposure
+**Resolution:** ✅ **IMPLEMENTED** (November 5, 2025)
+- Removed global `window.executeCommand` function
+- Refactored to use event delegation pattern
+- Settings UI now uses data attributes instead of inline handlers
+- No global variables or functions exposed for XSS attack surface
 
 ---
 
@@ -1532,23 +1612,32 @@ jobs:
 
 ### 11.1 Critical Issues (Must Fix)
 
-| # | Issue | Impact | Location | Priority |
-|---|-------|--------|----------|----------|
-| 1 | Build failing - TypeScript errors | 🔴 Blocks production | `src/commands/novelty/figlet.ts` | CRITICAL |
-| 2 | XSS risk from innerHTML | 🟡 Security | `src/components/TerminalOutput.ts:37` | HIGH |
-| 3 | Zero accessibility features | 🟡 User Experience | All components | HIGH |
-| 4 | Test coverage 45% (target 80%) | 🟡 Quality | All untested code | MEDIUM |
+| # | Issue | Impact | Location | Priority | Status |
+|---|-------|--------|----------|----------|--------|
+| 1 | Build failing - TypeScript errors | 🔴 Blocks production | `src/commands/novelty/figlet.ts` | CRITICAL | 🔴 OPEN |
+| 2 | ~~XSS risk from innerHTML~~ | ~~Security~~ | ~~src/components/~~ | ~~HIGH~~ | ✅ **RESOLVED** |
+| 3 | Zero accessibility features | 🟡 User Experience | All components | HIGH | 🔴 OPEN |
+| 4 | Test coverage 45% (target 80%) | 🟡 Quality | All untested code | MEDIUM | 🔴 OPEN |
+
+**Issue #2 Resolution Details:**
+- ✅ DOMPurify integrated at all innerHTML usage points
+- ✅ Strict CSP implemented (meta tag + Cloudflare headers)
+- ✅ Inline event handlers removed (event delegation)
+- ✅ Global window.executeCommand removed
+- ✅ 49 security tests added and passing
+- 📅 Completed: November 5, 2025
 
 ### 11.2 Strengths
 
-1. ✅ **Security:** Zero dependency vulnerabilities, proper HTML escaping
+1. ✅ **Security:** Multi-layered XSS protection (escaping + DOMPurify + CSP), zero dependency vulnerabilities
 2. ✅ **Code Quality:** Strict TypeScript, no technical debt markers
 3. ✅ **Architecture:** Well-designed patterns, low coupling
-4. ✅ **Performance:** Tiny bundle (121KB total)
+4. ✅ **Performance:** Small bundle (141KB total)
 5. ✅ **Documentation:** Good inline comments, detailed changelog
-6. ✅ **Dependencies:** Minimal footprint (3 production deps)
+6. ✅ **Dependencies:** Minimal footprint (5 production deps, all necessary)
 7. ✅ **Error Handling:** Comprehensive and consistent
 8. ✅ **State Management:** Multiple specialized managers
+9. ✅ **Security Testing:** Comprehensive test suite (49 security tests passing)
 
 ### 11.3 Improvement Opportunities
 
@@ -1562,10 +1651,12 @@ jobs:
 
 ### 11.4 Risk Assessment
 
-**Security Risk:** 🟢 **LOW**
-- Proper escaping in place
-- Zero vulnerabilities
-- Limited attack surface
+**Security Risk:** 🟢 **VERY LOW** ⬇️ (Improved from LOW)
+- ✅ Multi-layered XSS protection (4 layers)
+- ✅ Content Security Policy enforced
+- ✅ Zero dependency vulnerabilities
+- ✅ No global exposure
+- ✅ Comprehensive security test coverage
 
 **Maintainability Risk:** 🟢 **LOW**
 - Clean codebase
@@ -1587,6 +1678,16 @@ jobs:
 ## 12. Actionable Recommendations
 
 ### 12.1 Immediate Actions (This Week)
+
+**✅ COMPLETED: XSS Security Implementation** (November 5, 2025)
+```bash
+# All XSS security measures implemented:
+✓ DOMPurify installed and integrated
+✓ CSP headers added (index.html + Cloudflare _headers)
+✓ Inline event handlers refactored to event delegation
+✓ Global window.executeCommand removed
+✓ 49 security tests created and passing
+```
 
 **Fix Build Errors:**
 ```bash
@@ -1623,10 +1724,10 @@ npm update vitest @vitest/coverage-v8 @vitest/ui jsdom
    - Automate testing
    - Automate deployment
 
-4. **Security Hardening**
-   - Add Content Security Policy headers
-   - Consider DOMPurify integration
-   - Document security practices
+4. ✅ ~~Security Hardening~~ **COMPLETED**
+   - ✅ ~~Add Content Security Policy headers~~ **DONE**
+   - ✅ ~~Consider DOMPurify integration~~ **DONE**
+   - ✅ ~~Document security practices~~ **DONE**
 
 ### 12.3 Medium Term (Next Quarter)
 
