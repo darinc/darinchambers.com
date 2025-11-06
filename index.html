@@ -13,17 +13,19 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 <body>
-  <div id="terminal-header"></div>
-  <nav id="terminal-nav">
+  <header id="terminal-header" role="banner"></header>
+  <nav id="terminal-nav" role="navigation" aria-label="Main navigation">
     <div class="nav-links" id="nav-links"></div>
   </nav>
-  <div id="terminal-container">
-    <div id="terminal-output">
+  <main id="terminal-container" role="main">
+    <div id="terminal-output" role="log" aria-live="polite" aria-atomic="false">
       <div id="terminal-input-line">
         <span id="terminal-prompt"></span>
         <input
           type="text"
           id="terminal-input"
+          aria-label="Terminal command input"
+          aria-describedby="terminal-prompt"
           autocomplete="off"
           autocorrect="off"
           autocapitalize="off"
@@ -32,7 +34,7 @@
         >
       </div>
     </div>
-  </div>
+  </main>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

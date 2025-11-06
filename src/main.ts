@@ -255,7 +255,18 @@ navigation = new Navigation(navLinksElement, (command: string) => {
 // Set navigation items
 navigation.setItems(navItems);
 
+// Connect router to navigation for aria-current updates
+router.onRouteChange((command: string) => {
+  navigation.setActiveItem(command);
+});
+
 // Handle initial route based on URL
 router.handleInitialRoute();
+
+// Set initial active navigation item
+const initialCommand = router.getCurrentCommand();
+if (initialCommand) {
+  navigation.setActiveItem(initialCommand);
+}
 
 terminal.focus();

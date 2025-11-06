@@ -19,7 +19,7 @@ export class Header {
       <div class="header-ascii">
         <pre class="header-ascii-text">${asciiText}</pre>
       </div>
-      <div class="header-tagline">${tagline}</div>
+      <p class="header-tagline">${tagline}</p>
     `);
   }
 }

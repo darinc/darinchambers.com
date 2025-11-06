@@ -49,8 +49,42 @@ export class TerminalOutput {
     this.scrollToBottom();
   }
 
-  writeError(text: string): void {
-    this.write(text, 'output-error');
+  writeError(text: string, associatedElementId?: string): void {
+    const lines = text.split('\n');
+    lines.forEach((line, index) => {
+      if (index < lines.length - 1 || line) {
+        const errorLine = document.createElement('div');
+        errorLine.className = 'output-line output-error';
+        errorLine.textContent = line;
+
+        // Add unique ID and role="alert" for immediate announcement
+        const errorId = `error-${Date.now()}-${index}`;
+        errorLine.id = errorId;
+        errorLine.setAttribute('role', 'alert');
+
+        // If there's an associated element, link it with aria-describedby
+        if (associatedElementId && index === 0) {
+          const associatedElement = document.getElementById(associatedElementId);
+          if (associatedElement) {
+            const existingDescribedBy = associatedElement.getAttribute('aria-describedby');
+            if (existingDescribedBy) {
+              associatedElement.setAttribute('aria-describedby', `${existingDescribedBy} ${errorId}`);
+            } else {
+              associatedElement.setAttribute('aria-describedby', errorId);
+            }
+          }
+        }
+
+        // Insert before the input line if it exists, otherwise append
+        if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
+          this.outputElement.insertBefore(errorLine, this.inputLineElement);
+        } else {
+          this.outputElement.appendChild(errorLine);
+        }
+      }
+    });
+
+    this.scrollToBottom();
   }
 
   writeCommand(prompt: string, command: string): void {

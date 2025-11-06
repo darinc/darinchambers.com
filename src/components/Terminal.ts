@@ -47,6 +47,7 @@ export class Terminal {
     this.setupInputHandler();
     this.setupClickHandler(outputElement);
     this.setupSettingsUIHandler();
+    this.setupKeyboardHandlers();
     this.updatePrompt();
   }
 
@@ -54,6 +55,24 @@ export class Terminal {
     // Click anywhere in terminal output to focus input
     outputElement.addEventListener('click', () => {
       this.input.focus();
+    });
+  }
+
+  private setupKeyboardHandlers(): void {
+    // Handle Escape key to close settings panels and return focus to input
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        // Find any open settings panels
+        const settingsPanels = document.querySelectorAll('[data-settings-panel]');
+        if (settingsPanels.length > 0) {
+          // If we're inside a settings panel, return focus to terminal input
+          const activeElement = document.activeElement;
+          if (activeElement && settingsPanels[0].contains(activeElement)) {
+            e.preventDefault();
+            this.input.focus();
+          }
+        }
+      }
     });
   }
 
@@ -157,14 +176,43 @@ export class Terminal {
       return;
     }
 
+    // Store currently focused element to restore focus after refresh
+    const wasInPanel = Array.from(panels).some(panel => panel.contains(document.activeElement));
+
     // Generate fresh HTML with current settings
     const freshHTML = generateSettingsUI(this.settingsManager, this.themeManager);
 
     // Update each panel's content (sanitize to prevent XSS)
     panels.forEach(panel => {
-      const cleanHTML = freshHTML.replace('<div class="settings-panel" data-settings-panel="true">', '').replace(/<\/div>$/, '');
+      const cleanHTML = freshHTML.replace('<aside class="settings-panel" role="complementary" aria-label="Terminal settings" data-settings-panel="true">', '').replace(/<\/aside>$/, '');
       panel.innerHTML = sanitizeHtml(cleanHTML);
     });
+
+    // If focus was in the panel before refresh, move it to first focusable element
+    if (wasInPanel && panels.length > 0) {
+      const firstPanel = panels[0];
+      const firstFocusable = firstPanel.querySelector('button, input, select') as HTMLElement;
+      if (firstFocusable) {
+        firstFocusable.focus();
+      }
+    }
+  }
+
+  /**
+   * Focus first focusable element in newly rendered settings panel.
+   * Called after settings command output is displayed.
+   */
+  private focusSettingsPanelIfPresent(): void {
+    // Use setTimeout to wait for DOM update
+    setTimeout(() => {
+      const settingsPanel = document.querySelector('[data-settings-panel]');
+      if (settingsPanel) {
+        const firstFocusable = settingsPanel.querySelector('button, input, select') as HTMLElement;
+        if (firstFocusable) {
+          firstFocusable.focus();
+        }
+      }
+    }, 0);
   }
 
   private setupInputHandler(): void {
@@ -214,6 +262,9 @@ export class Terminal {
       } else if (result.html) {
         // Render HTML content
         this.output.writeHTML(result.output);
+
+        // Focus settings panel if it was just rendered
+        this.focusSettingsPanelIfPresent();
       } else {
         // Regular text output
         this.output.write(result.output);

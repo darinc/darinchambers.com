@@ -16,6 +16,7 @@ export class Router {
   private terminal: Terminal;
   private routes: Route[];
   private isNavigating: boolean = false;
+  private onRouteChangeCallback: ((command: string) => void) | null = null;
 
   /**
    * Creates a new Router instance.
@@ -113,6 +114,11 @@ export class Router {
       this.isNavigating = true;
       this.terminal.executeCommand(command, clearTerminal);
       this.isNavigating = false;
+
+      // Notify callback of route change (for aria-current updates)
+      if (this.onRouteChangeCallback) {
+        this.onRouteChangeCallback(command);
+      }
     } else {
       // Unknown route - redirect to home
       this.navigate('/', true);
@@ -197,5 +203,29 @@ export class Router {
       // Update URL without executing command again
       window.history.pushState({}, '', path);
     }
+
+    // Notify callback of command execution (for aria-current updates)
+    if (this.onRouteChangeCallback) {
+      this.onRouteChangeCallback(command);
+    }
+  }
+
+  /**
+   * Register a callback to be notified when routes change.
+   * Useful for updating aria-current on navigation elements.
+   *
+   * @param callback Function to call with the executed command
+   */
+  onRouteChange(callback: (command: string) => void): void {
+    this.onRouteChangeCallback = callback;
+  }
+
+  /**
+   * Get the current command based on the current URL.
+   *
+   * @returns Current command string or null if no match
+   */
+  getCurrentCommand(): string | null {
+    return this.parseRoute(window.location.pathname);
   }
 }

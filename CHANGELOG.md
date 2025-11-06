@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.58] - 2025-11-06
+
+### Added
+- Comprehensive ARIA attributes for terminal input, navigation, and form controls
+- Dynamic aria-current support for active navigation state with Router integration
+- Error messages with role="alert" and aria-describedby linking
+- Automatic focus management for settings panel with Escape key support
+
+### Changed
+- Navigation now uses aria-current to indicate active page
+- Range sliders announce current values with aria-value attributes
+- Accessibility risk reduced from MEDIUM to LOW in audit
+
 ## [0.0.57] - 2025-11-06
 
 ### Added
