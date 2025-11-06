@@ -448,23 +448,33 @@ TypeScript compilation errors (6):
 
 ### 3.1 Coverage Metrics
 
-**Status:** 🟡 **NEEDS IMPROVEMENT**
+**Status:** 🟡 **IMPROVING** - Phase 2 Complete (Target: 80%)
 
-**Current Coverage:** 44.99% statements (Target: 80%)
+**Current Coverage:** 70.14% statements (+25.15% from baseline)
 
 ```
 Overall Coverage:
-- Statements: 44.99%
-- Branches: 45.5%
-- Functions: 41.57%
-- Lines: 45.65%
+- Statements: 69.62% (+24.63% from 44.99%)
+- Branches: 66.19% (+20.69% from 45.5%)
+- Functions: 71.46% (+29.89% from 41.57%)
+- Lines: 70.14% (+24.49% from 45.65%)
 ```
 
 **Test Suite Health:**
-- ✅ 483 tests passing
-- ✅ 17 test files
-- ✅ Fast execution (1.16s total)
+- ✅ 895 tests passing (+412 new tests)
+- ✅ 40 test files (+23 new test files)
+- ✅ Fast execution (~2.5s total)
 - ✅ Zero flaky tests
+
+**Phase 1 Implementation (November 6, 2025):**
+- ✅ Added 201 new tests across 8 files
+- ✅ Created reusable test helpers (dom-setup.ts, mock-filesystem.ts)
+- ✅ Achieved 60% coverage (up from 45%)
+
+**Phase 2 Implementation (November 6, 2025):**
+- ✅ Added 166 new tests across 14 command files
+- ✅ Comprehensive command testing with mocked dependencies
+- ✅ Achieved 70% coverage (up from 60%)
 
 ### 3.2 Well-Tested Areas (>90% coverage)
 
@@ -479,25 +489,83 @@ Overall Coverage:
 - ✅ ParseContext - >90%
 - ✅ FrontmatterParser - >90%
 
-### 3.3 Critical Coverage Gaps (0% coverage)
+### 3.3 Critical Coverage Gaps - Phase 1 & 2 COMPLETED ✅
 
-**Components (0% coverage):**
-- ❌ Terminal.ts - Main terminal component
-- ❌ TerminalInput.ts - Input handling
-- ❌ TerminalOutput.ts - Output rendering
-- ❌ Navigation.ts - Navigation UI
-- ❌ Header.ts - Header component
+**Phase 1: Foundation & Utilities** ✅ **COMPLETED** (November 6, 2025)
 
-**Commands (0% coverage):**
-- ❌ Core commands (echo, date, env, etc.) - 9 files
-- ❌ Filesystem commands (ls, cd, pwd, cat, tree) - 5 files
-- ❌ Local content commands (about, portfolio, blog) - partially tested
+**Components (Phase 1 - COMPLETED):**
+- ✅ TerminalInput.ts - 94.44% coverage (33 tests) - Input handling, history, tab completion
+- ✅ TerminalOutput.ts - 97.61% coverage (24 tests) - Output rendering, sanitization
+- ✅ Navigation.ts - 100% coverage (22 tests) - Navigation UI, click handling
+- ⏳ Terminal.ts - 0% coverage - Main terminal component (Phase 3)
+- ⏳ Header.ts - 0% coverage - Header component (Phase 3)
 
-**Utilities (0% coverage):**
-- ❌ Router.ts - URL routing
-- ❌ AliasManager.ts - Command aliasing
-- ❌ BlogParser.ts - Blog parsing
-- ❌ PortfolioParser.ts - Portfolio parsing
+**Utilities (Phase 1 - COMPLETED):**
+- ✅ Router.ts - 97.61% coverage (36 tests) - URL routing, navigation, command sync
+- ✅ AliasManager.ts - 100% coverage (35 tests) - Command aliasing, validation
+- ✅ BlogParser.ts - 97.87% coverage (25 tests) - Frontmatter parsing, type guards
+- ✅ PortfolioParser.ts - 97.82% coverage (26 tests) - Project parsing, validation
+
+**Test Files Created in Phase 1:**
+1. `tests/helpers/dom-setup.ts` - Reusable DOM setup utilities
+2. `tests/helpers/mock-filesystem.ts` - Mock filesystem creation helpers
+3. `tests/unit/utils/Router.test.ts` - 36 tests
+4. `tests/unit/utils/AliasManager.test.ts` - 35 tests
+5. `tests/unit/utils/BlogParser.test.ts` - 25 tests
+6. `tests/unit/utils/PortfolioParser.test.ts` - 26 tests
+7. `tests/unit/components/TerminalInput.test.ts` - 33 tests
+8. `tests/unit/components/TerminalOutput.test.ts` - 24 tests
+9. `tests/unit/components/Navigation.test.ts` - 22 tests
+
+**Total Phase 1 Impact:**
+- 201 new tests added
+- 8 files now fully tested (>94% coverage)
+- +15% overall coverage increase
+- Strong foundation for Phase 2 command testing
+
+---
+
+**Phase 2: Command Coverage** ✅ **COMPLETED** (November 6, 2025)
+
+**Core Commands (Phase 2 - COMPLETED):**
+- ✅ echo.test.ts - 28 tests - Basic output, escape sequences, stdin
+- ✅ date.test.ts - 6 tests - Timestamp generation, formatting
+- ✅ whoami.test.ts - 5 tests - User identification
+- ✅ history.test.ts - 9 tests - Command history, clearing, numbering
+- ✅ env.test.ts - 8 tests - Environment variable display
+- ✅ export.test.ts - 10 tests - Variable setting, validation, error handling
+- ✅ alias.test.ts - 7 tests - Alias creation, listing, errors
+- ✅ unalias.test.ts - 5 tests - Alias removal, validation
+- ✅ render.test.ts - 10 tests - Markdown rendering, sanitization
+
+**Filesystem Commands (Phase 2 - COMPLETED):**
+- ✅ pwd.test.ts - 6 tests - Current path display
+- ✅ cd.test.ts - 13 tests - Directory navigation, env vars (PWD/OLDPWD), cd -
+- ✅ cat.test.ts - 11 tests - File reading, error handling, special chars
+- ✅ ls.test.ts - 28 tests - Directory listing, -a/-l flags, sorting
+- ✅ tree.test.ts - 20 tests - Tree display, -L depth flag, formatting
+
+**Test Files Created in Phase 2:**
+1. `tests/unit/commands/core/echo.test.ts` - 28 tests
+2. `tests/unit/commands/core/date.test.ts` - 6 tests
+3. `tests/unit/commands/core/whoami.test.ts` - 5 tests
+4. `tests/unit/commands/core/history.test.ts` - 9 tests
+5. `tests/unit/commands/core/env.test.ts` - 8 tests
+6. `tests/unit/commands/core/export.test.ts` - 10 tests
+7. `tests/unit/commands/core/alias.test.ts` - 7 tests
+8. `tests/unit/commands/core/unalias.test.ts` - 5 tests
+9. `tests/unit/commands/core/render.test.ts` - 10 tests
+10. `tests/unit/commands/fs/pwd.test.ts` - 6 tests
+11. `tests/unit/commands/fs/cd.test.ts` - 13 tests
+12. `tests/unit/commands/fs/cat.test.ts` - 11 tests
+13. `tests/unit/commands/fs/ls.test.ts` - 28 tests
+14. `tests/unit/commands/fs/tree.test.ts` - 20 tests
+
+**Total Phase 2 Impact:**
+- 166 new tests added (88 core + 78 filesystem)
+- 14 command files now fully tested
+- +10% overall coverage increase (60% → 70%)
+- Comprehensive command layer coverage
 
 ### 3.4 Test Quality
 

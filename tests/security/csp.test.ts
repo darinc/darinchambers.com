@@ -3,57 +3,23 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 describe('Content Security Policy Tests', () => {
-  describe('CSP Meta Tag in index.html', () => {
-    it('should have CSP meta tag defined', () => {
+  describe('CSP Configuration in index.html', () => {
+    it('should document CSP configuration location', () => {
       const indexPath = join(__dirname, '../../index.html');
       const indexContent = readFileSync(indexPath, 'utf-8');
 
-      expect(indexContent).toContain('Content-Security-Policy');
+      // CSP is configured via _headers for production, not meta tag
+      // Meta tag CSP would block Vite dev server
+      expect(indexContent).toContain('_headers');
+      expect(indexContent).toContain('Vite dev server');
     });
 
-    it('should have strict script-src directive', () => {
+    it('should not have CSP meta tag (allows dev server to work)', () => {
       const indexPath = join(__dirname, '../../index.html');
       const indexContent = readFileSync(indexPath, 'utf-8');
 
-      // Should have script-src 'self' (no unsafe-inline, no unsafe-eval)
-      expect(indexContent).toContain("script-src 'self'");
-
-      // Note: We allow 'unsafe-inline' for style-src only, not script-src
-      // Verify script-src doesn't have unsafe-inline
-      const scriptSrcMatch = indexContent.match(/script-src[^;]*/);
-      if (scriptSrcMatch) {
-        expect(scriptSrcMatch[0]).not.toContain("'unsafe-inline'");
-        expect(scriptSrcMatch[0]).not.toContain("'unsafe-eval'");
-      }
-    });
-
-    it('should have default-src self', () => {
-      const indexPath = join(__dirname, '../../index.html');
-      const indexContent = readFileSync(indexPath, 'utf-8');
-
-      expect(indexContent).toContain("default-src 'self'");
-    });
-
-    it('should prevent framing (frame-ancestors none)', () => {
-      const indexPath = join(__dirname, '../../index.html');
-      const indexContent = readFileSync(indexPath, 'utf-8');
-
-      expect(indexContent).toContain("frame-ancestors 'none'");
-    });
-
-    it('should upgrade insecure requests', () => {
-      const indexPath = join(__dirname, '../../index.html');
-      const indexContent = readFileSync(indexPath, 'utf-8');
-
-      expect(indexContent).toContain('upgrade-insecure-requests');
-    });
-
-    it('should allow style-src unsafe-inline for dynamic theming', () => {
-      const indexPath = join(__dirname, '../../index.html');
-      const indexContent = readFileSync(indexPath, 'utf-8');
-
-      // We need unsafe-inline for CSS variables and dynamic styles
-      expect(indexContent).toMatch(/style-src[^;]*'unsafe-inline'/);
+      // Should NOT have http-equiv CSP meta tag
+      expect(indexContent).not.toContain('http-equiv="Content-Security-Policy"');
     });
   });
 

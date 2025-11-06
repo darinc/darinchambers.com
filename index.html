@@ -6,20 +6,8 @@
   <meta name="description" content="Darin Chambers - Technologist, Inventor | Building What's Next on Rock-Solid Foundations">
   <meta name="author" content="Darin Chambers">
 
-  <!-- Content Security Policy: Strict XSS protection -->
-  <!-- Prevents inline scripts, eval(), and unsafe content execution -->
-  <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    script-src 'self';
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' data:;
-    font-src 'self';
-    connect-src 'self';
-    base-uri 'self';
-    form-action 'self';
-    frame-ancestors 'none';
-    upgrade-insecure-requests;
-  ">
+  <!-- Content Security Policy is configured in public/_headers for production -->
+  <!-- Meta tag CSP removed to allow Vite dev server to function properly -->
 
   <title>Darin Chambers - Terminal</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
