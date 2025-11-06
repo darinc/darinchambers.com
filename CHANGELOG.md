@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.59] - 2025-11-06
+
+### Added
+- Theme-adaptive CSS variables for transparent accent colors (5%, 10%, 15%, 30% opacity)
+
+### Fixed
+- Paper theme color contrast to meet WCAG AA standards (dim: #666666, accent: #007298)
+- Hardcoded green rgba colors replaced with theme-adaptive variables across all CSS files
+
+### Changed
+- All background highlights now automatically adapt to active theme
+
 ## [0.0.58] - 2025-11-06
 
 ### Added

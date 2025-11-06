@@ -87,8 +87,8 @@ export class ThemeManager {
         colors: {
           '--terminal-bg': '#ffffff',
           '--terminal-fg': '#1a1a1a',
-          '--terminal-accent': '#008cb4',
-          '--terminal-dim': '#919191',
+          '--terminal-accent': '#007298',
+          '--terminal-dim': '#666666',
           '--terminal-error': '#cc0000',
           '--terminal-cursor': '#1a1a1a',
           '--terminal-bg-secondary': '#f0f0f0'

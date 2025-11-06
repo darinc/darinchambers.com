@@ -6,4 +6,10 @@
   --terminal-error: #ff3333;
   --terminal-cursor: #39ff14;
   --terminal-bg-secondary: rgba(0, 0, 0, 0.3);
+
+  /* Theme-adaptive transparency variables using color-mix() */
+  --terminal-accent-05: color-mix(in srgb, var(--terminal-accent) 5%, transparent);
+  --terminal-accent-10: color-mix(in srgb, var(--terminal-accent) 10%, transparent);
+  --terminal-accent-15: color-mix(in srgb, var(--terminal-accent) 15%, transparent);
+  --terminal-accent-30: color-mix(in srgb, var(--terminal-accent) 30%, transparent);
 }

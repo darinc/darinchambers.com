@@ -35,7 +35,7 @@
   color: var(--terminal-accent);
   border-color: var(--terminal-accent);
   text-shadow: 0 0 5px var(--terminal-accent);
-  background-color: rgba(57, 255, 20, 0.1);
+  background-color: var(--terminal-accent-10);
 }
 
 .nav-link:active {
