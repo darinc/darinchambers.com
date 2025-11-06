@@ -1,10 +1,10 @@
 import type { Command } from '../Command';
 import { CommandArgs } from '../../utils/CommandArgs';
 import figlet from 'figlet';
-import standardFont from 'figlet/importable-fonts/Standard';
-import slantFont from 'figlet/importable-fonts/Slant';
-import bannerFont from 'figlet/importable-fonts/Banner';
-import smallFont from 'figlet/importable-fonts/Small';
+import standardFont from 'figlet/importable-fonts/Standard.js';
+import slantFont from 'figlet/importable-fonts/Slant.js';
+import bannerFont from 'figlet/importable-fonts/Banner.js';
+import smallFont from 'figlet/importable-fonts/Small.js';
 
 // Parse and load fonts
 figlet.parseFont('Standard', standardFont);
