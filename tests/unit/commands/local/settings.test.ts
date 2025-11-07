@@ -703,8 +703,9 @@ describe('Settings Command', () => {
       const result = settingsCommand.execute(['invalid']);
 
       expect(result.error).toBe(true);
-      expect(result.output).toContain('Unknown subcommand: invalid');
-      expect(result.output).toContain("Use 'help' for usage");
+      expect(result.output).toBe(
+        "Unknown subcommand: invalid.\nTry 'settings --help' for more information"
+      );
     });
 
     it('should show error for typo in list', () => {

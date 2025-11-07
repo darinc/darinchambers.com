@@ -151,8 +151,9 @@ describe('render command', () => {
       const command = createRenderCommand(mockFs);
       const result = command.execute([]);
 
-      expect(result.output).toContain('Usage: render');
-      expect(result.output).toContain('Example:');
+      expect(result.output).toBe(
+        "render: missing file operand\nTry 'render --help' for more information"
+      );
       expect(result.error).toBe(true);
     });
   });

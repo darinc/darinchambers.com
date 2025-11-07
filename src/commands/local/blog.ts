@@ -19,6 +19,25 @@ export function createBlogCommand(fs: IFileSystem): Command {
     name: 'blog',
     description: 'List and read blog posts',
     execute: (args: string[], _stdin?: string) => {
+      const cmdArgs = new CommandArgs(args);
+
+      if (cmdArgs.hasFlag('help')) {
+        return {
+          output: `Usage: blog [options] [post-id]
+
+Description:
+  List and read blog posts
+
+Options:
+  --tag <tag>          Filter posts by tag
+
+Examples:
+  blog                 # List all posts
+  blog --tag ai        # Filter by tag
+  blog post-id         # Read specific post`,
+        };
+      }
+
       const blogDir = PATHS.CONTENT_BLOG;
 
       try {
@@ -30,7 +49,6 @@ export function createBlogCommand(fs: IFileSystem): Command {
           .reverse(); // Newest first
 
         // Parse command arguments
-        const cmdArgs = new CommandArgs(args);
         const filterTag = cmdArgs.getFlag('tag') as string | undefined;
         const postId = cmdArgs.getPositional(0);
 
@@ -48,7 +66,7 @@ export function createBlogCommand(fs: IFileSystem): Command {
 
           if (!post) {
             return {
-              output: `Blog post '${postId}' not found.\nUse 'blog' to list all posts.`,
+              output: `Blog post '${postId}' not found.\nUse 'blog' to list all posts.\nTry 'blog --help' for more information`,
               error: true,
             };
           }

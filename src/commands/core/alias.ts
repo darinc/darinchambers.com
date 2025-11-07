@@ -5,6 +5,7 @@
  * Allows users to define shortcuts (e.g., alias ll='ls -la') and list all active aliases.
  * Aliases are persisted to the virtual filesystem.
  */
+import { CommandArgs } from '../../utils/CommandArgs';
 import type { AliasManager } from '../../utils/AliasManager';
 import type { Command } from '../Command';
 
@@ -13,6 +14,25 @@ export function createAliasCommand(aliasManager: AliasManager): Command {
     name: 'alias',
     description: 'Create or display command aliases',
     execute: (args: string[], _stdin?: string) => {
+      const cmdArgs = new CommandArgs(args);
+
+      if (cmdArgs.hasFlag('help')) {
+        return {
+          output: `Usage: alias [name='command']
+
+Description:
+  Create or display command aliases for shortening commands
+
+Options:
+  (no args)            List all defined aliases
+
+Examples:
+  alias                # List all aliases
+  alias ll='ls -la'    # Create an alias
+  alias blog-ai='blog --tag ai'  # Alias with flags`,
+        };
+      }
+
       // If no arguments, display all aliases
       if (args.length === 0) {
         const aliases = aliasManager.getAllAliases();

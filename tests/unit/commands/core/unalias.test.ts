@@ -36,7 +36,7 @@ describe('unalias command', () => {
     const command = createUnaliasCommand(mockManager);
     const result = command.execute([]);
 
-    expect(result.output).toBe('Usage: unalias name');
+    expect(result.output).toBe("Usage: unalias name\nTry 'unalias --help' for more information.");
     expect(result.error).toBe(true);
   });
 

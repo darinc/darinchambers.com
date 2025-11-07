@@ -1,3 +1,4 @@
+import { CommandArgs } from '../../utils/CommandArgs';
 import type { EnvVarManager } from '../../utils/EnvVarManager';
 import type { Command } from '../Command';
 
@@ -17,6 +18,22 @@ export function createExportCommand(envVarManager: EnvVarManager): Command {
     name: 'export',
     description: 'Set or display environment variables',
     execute: (args: string[], _stdin?: string) => {
+      const cmdArgs = new CommandArgs(args);
+
+      if (cmdArgs.hasFlag('help')) {
+        return {
+          output: `Usage: export [VAR=value] [VAR]
+
+Description:
+  Set or display environment variables
+
+Examples:
+  export               # List all variables
+  export PATH=/bin     # Set variable
+  export USER          # Display single variable`,
+        };
+      }
+
       try {
         // No arguments: display all variables (like env)
         if (args.length === 0) {

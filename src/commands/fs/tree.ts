@@ -17,6 +17,24 @@ export function createTreeCommand(fs: IFileSystem): Command {
       try {
         // Parse command arguments
         const cmdArgs = new CommandArgs(args);
+
+        if (cmdArgs.hasFlag('help')) {
+          return {
+            output: `Usage: tree [options] [path]
+
+Description:
+  Display directory tree structure
+
+Options:
+  -L <depth>           Limit tree depth (default: 4)
+
+Examples:
+  tree                 # Show tree of current directory
+  tree ~/blog          # Show tree of specific directory
+  tree -L 2            # Limit depth to 2 levels`,
+          };
+        }
+
         const path = cmdArgs.getPositional(0) ?? '.';
         let maxDepth = 4;
 
@@ -25,14 +43,16 @@ export function createTreeCommand(fs: IFileSystem): Command {
         if (depthFlag !== undefined) {
           if (typeof depthFlag === 'boolean') {
             return {
-              output: 'tree: -L flag requires a depth value',
+              output:
+                "tree: -L flag requires a depth value\nTry 'tree --help' for more information",
               error: true,
             };
           }
           const depth = parseInt(depthFlag, 10);
           if (isNaN(depth) || depth < 1) {
             return {
-              output: 'tree: invalid level, must be a positive integer',
+              output:
+                "tree: invalid level, must be a positive integer\nTry 'tree --help' for more information",
               error: true,
             };
           }

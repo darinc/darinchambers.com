@@ -34,6 +34,28 @@ export function createSettingsCommand(
     execute: (args: string[], _stdin?: string) => {
       const cmdArgs = new CommandArgs(args);
 
+      if (cmdArgs.hasFlag('help')) {
+        return {
+          output: `Usage: settings [subcommand] [options]
+
+Description:
+  Manage terminal settings and preferences
+
+Subcommands:
+  (no args)            Show interactive settings UI
+  list                 Display current settings
+  set <setting> <val>  Change a setting
+  reset                Reset to defaults
+
+Examples:
+  settings             # Interactive UI
+  settings list        # Show all settings
+  settings set theme green  # Change theme
+  settings set font-size 16  # Set font size
+  settings reset       # Reset all settings`,
+        };
+      }
+
       // No args: show interactive UI
       if (args.length === 0) {
         return {
@@ -56,7 +78,7 @@ export function createSettingsCommand(
 
         default:
           return {
-            output: `Unknown subcommand: ${subcommand}. Use 'help' for usage.`,
+            output: `Unknown subcommand: ${subcommand}.\nTry 'settings --help' for more information`,
             error: true,
           };
       }
@@ -86,7 +108,7 @@ function handleSet(
 
   if (!setting) {
     return {
-      output: 'Usage: settings set <setting> <value>',
+      output: "Usage: settings set <setting> <value>\nTry 'settings --help' for more information",
       error: true,
     };
   }
@@ -94,7 +116,7 @@ function handleSet(
   // Color command has different syntax, skip value check
   if (setting !== 'color' && !value) {
     return {
-      output: 'Usage: settings set <setting> <value>',
+      output: "Usage: settings set <setting> <value>\nTry 'settings --help' for more information",
       error: true,
     };
   }

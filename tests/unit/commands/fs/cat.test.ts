@@ -34,7 +34,7 @@ describe('cat command', () => {
     const command = createCatCommand(mockFs);
     const result = command.execute([]);
 
-    expect(result.output).toBe('cat: missing file operand');
+    expect(result.output).toBe("cat: missing file operand\nTry 'cat --help' for more information");
     expect(result.error).toBe(true);
     expect(mockFs.readFile).not.toHaveBeenCalled();
   });

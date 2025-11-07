@@ -7,6 +7,7 @@
  * is requested. Demonstrates practical application of skills across various domains.
  */
 import { PATHS } from '../../constants';
+import { CommandArgs } from '../../utils/CommandArgs';
 import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownService } from '../../utils/MarkdownService';
 import { PortfolioParser } from '../../utils/PortfolioParser';
@@ -19,6 +20,21 @@ export function createPortfolioCommand(fs: IFileSystem): Command {
     name: 'portfolio',
     description: 'Showcase projects and accomplishments',
     execute: (args: string[], _stdin?: string) => {
+      const cmdArgs = new CommandArgs(args);
+
+      if (cmdArgs.hasFlag('help')) {
+        return {
+          output: `Usage: portfolio [project-id]
+
+Description:
+  Showcase projects and accomplishments
+
+Examples:
+  portfolio            # List all projects
+  portfolio proj-id    # View specific project`,
+        };
+      }
+
       const portfolioDir = PATHS.CONTENT_PORTFOLIO;
 
       try {
@@ -47,7 +63,7 @@ export function createPortfolioCommand(fs: IFileSystem): Command {
 
           if (!project) {
             return {
-              output: `Project '${projectId}' not found.\nUse 'portfolio' to list all projects.`,
+              output: `Project '${projectId}' not found.\nUse 'portfolio' to list all projects.\nTry 'portfolio --help' for more information`,
               error: true,
             };
           }

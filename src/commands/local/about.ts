@@ -6,6 +6,7 @@
  * This is typically the first content visitors see when accessing the portfolio.
  */
 import { PATHS } from '../../constants';
+import { CommandArgs } from '../../utils/CommandArgs';
 import { MarkdownService } from '../../utils/MarkdownService';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { Command } from '../Command';
@@ -14,7 +15,21 @@ export function createAboutCommand(fs: IFileSystem): Command {
   return {
     name: 'about',
     description: 'Display bio and expertise overview',
-    execute: (_args: string[], _stdin?: string) => {
+    execute: (args: string[], _stdin?: string) => {
+      const cmdArgs = new CommandArgs(args);
+
+      if (cmdArgs.hasFlag('help')) {
+        return {
+          output: `Usage: about
+
+Description:
+  Display professional bio and expertise overview
+
+Examples:
+  about                # Show bio and background`,
+        };
+      }
+
       try {
         const content = fs.readFile(PATHS.CONTENT_ABOUT);
         const html = MarkdownService.render(content);

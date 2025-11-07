@@ -5,6 +5,7 @@
  * and relative paths, tilde (~) expansion for home directory, and special '-' argument
  * to return to the previous directory. Updates PWD and OLDPWD environment variables.
  */
+import { CommandArgs } from '../../utils/CommandArgs';
 import type { EnvVarManager } from '../../utils/EnvVarManager';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { Command } from '../Command';
@@ -18,6 +19,22 @@ export function createCdCommand(
     name: 'cd',
     description: 'Change directory (supports - for previous directory)',
     execute: (args: string[], _stdin?: string) => {
+      const cmdArgs = new CommandArgs(args);
+
+      if (cmdArgs.hasFlag('help')) {
+        return {
+          output: `Usage: cd [directory]
+
+Description:
+  Change current working directory
+
+Examples:
+  cd                   # Go to home directory
+  cd ~/blog            # Change to blog directory
+  cd -                 # Go to previous directory`,
+        };
+      }
+
       try {
         let targetPath = args[0] || '~';
 

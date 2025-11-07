@@ -26,6 +26,7 @@ import { Navigation } from './components/Navigation';
 import { Terminal } from './components/Terminal';
 import { PATHS, COMMAND_SIGNALS } from './constants';
 import { AliasManager } from './utils/AliasManager';
+import { CommandArgs } from './utils/CommandArgs';
 import { CommandDispatcher } from './utils/CommandDispatcher';
 import { CommandExecutor } from './utils/CommandExecutor';
 import { EnvVarManager } from './utils/EnvVarManager';
@@ -116,8 +117,17 @@ if (!navLinksElement) {
 const helpCommand: Command = {
   name: 'help',
   description: 'Display available commands',
-  execute: (_args: string[], _stdin?: string) => {
+  execute: async (args: string[], _stdin?: string) => {
     try {
+      // If a command name is provided, show help for that command
+      if (args.length > 0) {
+        const commandName = args[0];
+        // Try to execute the command with --help flag
+        const result = await dispatcher.dispatch(`${commandName} --help`);
+        return result;
+      }
+
+      // Otherwise show the main help content
       const content = fileSystem.readFile(PATHS.CONTENT_HELP);
       const html = MarkdownService.render(content);
       return { output: html, html: true };
@@ -133,7 +143,23 @@ const helpCommand: Command = {
 const clearCommand: Command = {
   name: 'clear',
   description: 'Clear the terminal screen',
-  execute: (_args: string[], _stdin?: string) => {
+  execute: (args: string[], _stdin?: string) => {
+    // Parse arguments
+    const cmdArgs = new CommandArgs(args);
+
+    // Check for help flag
+    if (cmdArgs.hasFlag('help')) {
+      return {
+        output: `Usage: clear
+
+Description:
+  Clear the terminal screen and remove all output
+
+Examples:
+  clear                # Clear the screen`,
+      };
+    }
+
     // This will be handled by Terminal.clear() method or TerminalOutput.clear()
     // We return a special marker that the terminal should intercept
     return { output: COMMAND_SIGNALS.CLEAR_SCREEN };

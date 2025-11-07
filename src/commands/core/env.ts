@@ -5,6 +5,7 @@
  * their values in NAME=value format, sorted alphabetically for easy reading. Environment
  * variables persist across commands and can be set with the export command.
  */
+import { CommandArgs } from '../../utils/CommandArgs';
 import type { EnvVarManager } from '../../utils/EnvVarManager';
 import type { Command } from '../Command';
 
@@ -18,7 +19,22 @@ export function createEnvCommand(envVarManager: EnvVarManager): Command {
   return {
     name: 'env',
     description: 'Display all environment variables',
-    execute: (_args: string[], _stdin?: string) => {
+    execute: (args: string[], _stdin?: string) => {
+      const cmdArgs = new CommandArgs(args);
+
+      if (cmdArgs.hasFlag('help')) {
+        return {
+          output: `Usage: env
+
+Description:
+  Display all environment variables
+
+Examples:
+  env                  # List all variables
+  env | grep PATH      # Filter variables`,
+        };
+      }
+
       try {
         const allVars = envVarManager.getAllVariables();
 

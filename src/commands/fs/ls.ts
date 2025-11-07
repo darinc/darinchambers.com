@@ -18,6 +18,26 @@ export function createLsCommand(fs: IFileSystem): Command {
     execute: (args: string[], _stdin?: string) => {
       try {
         const cmdArgs = new CommandArgs(args);
+
+        if (cmdArgs.hasFlag('help')) {
+          return {
+            output: `Usage: ls [options] [path]
+
+Description:
+  List directory contents
+
+Options:
+  -a                   Show hidden files
+  -l                   Long format with details
+  -h                   Human-readable sizes
+
+Examples:
+  ls                   # List current directory
+  ls -la               # List all files with details
+  ls ~/blog            # List specific directory`,
+          };
+        }
+
         const path = cmdArgs.getPositional(0) ?? '.';
 
         // Parse flags
@@ -29,7 +49,7 @@ export function createLsCommand(fs: IFileSystem): Command {
         const dirNode = fs.getNode(path);
         if (!dirNode) {
           return {
-            output: `ls: cannot access '${path}': No such file or directory`,
+            output: `ls: cannot access '${path}': No such file or directory\nTry 'ls --help' for more information`,
             error: true,
           };
         }

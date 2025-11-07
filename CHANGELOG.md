@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-11-07
+
+### Added
+- Universal --help flag support across all 24 commands
+- help command now supports 'help <command>' syntax
+
+### Changed
+- Redesigned help.md to focus on command discovery (reduced from 142 to 69 lines)
+- All error messages now include helpful "Try '<command> --help'" hints
+- Standardized help output format across all commands
+
 ## [0.2.1] - 2025-11-06
 
 ### Fixed

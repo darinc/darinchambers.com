@@ -5,12 +5,32 @@
  * with the -e flag for formatting like newlines (\n) and tabs (\t). Can also read from
  * stdin for use in command pipelines.
  */
+import { CommandArgs } from '../../utils/CommandArgs';
 import type { Command } from '../Command';
 
 export const echoCommand: Command = {
   name: 'echo',
   description: 'Display a line of text',
   execute: (args: string[], stdin?: string) => {
+    const cmdArgs = new CommandArgs(args);
+
+    if (cmdArgs.hasFlag('help')) {
+      return {
+        output: `Usage: echo [options] [text...]
+
+Description:
+  Display a line of text or pass through stdin content
+
+Options:
+  -e                   Enable interpretation of escape sequences
+
+Examples:
+  echo "Hello World"   # Display text
+  echo -e "Line1\\nLine2"  # Use escape sequences
+  cat file.txt | echo  # Pass through stdin`,
+      };
+    }
+
     let interpretEscapes = false;
     const textArgs: string[] = [];
 

@@ -1,141 +1,73 @@
 # Terminal Help
 
-Welcome to the interactive terminal experience! This terminal emulates a Unix-like command-line interface.
+Welcome to my interactive terminal! This is a Unix-like command-line interface where you can explore my work, read my blog, and discover my skills.
 
-## Core Commands
+## Getting Help
 
-### `help`
-Display this help message
+- **`help`** - Show this help message
+- **`help <command>`** - Show detailed help for a specific command
+- **`<command> --help`** - Show detailed help for any command
 
-### `clear`
-Clear the terminal screen
+**Example:** `help ls` or `ls --help`
 
-### `history`
-Display command history with numbered entries
+## Available Commands
 
-### `date`
-Display current date and time
+### Content & Navigation
 
-### `echo`
-Display a line of text. Supports `-e` flag for escape sequences (`\n`, `\t`, `\\`)
+- **`about`** - Learn about my background and expertise
+- **`portfolio`** - View my projects and accomplishments
+- **`blog`** - Read my blog posts and articles
+- **`skills`** - See my technical skills by category
+- **`contact`** - Get in touch with me
 
-### `whoami`
-Display current username
+### File System
 
-### `alias`
-Create or display command aliases
-- Usage: `alias` (list all aliases)
-- Usage: `alias name='command'` (create alias)
+- **`ls`** - List directory contents
+- **`cd`** - Change directory
+- **`pwd`** - Print working directory
+- **`cat`** - Display file contents
+- **`tree`** - Show directory structure
+- **`render`** - Render markdown files
 
-### `unalias`
-Remove command aliases
-- Usage: `unalias <name>`
+### Core Utilities
 
-## Content Commands
+- **`echo`** - Display text
+- **`date`** - Show current date/time
+- **`clear`** - Clear the screen
+- **`history`** - Show command history
+- **`alias`** - Create command shortcuts
+- **`whoami`** - Display current user
 
-### `about`
-Learn about my background and expertise
+### Novelty
 
-### `portfolio`
-View my projects and accomplishments
-- Usage: `portfolio` (list all projects)
-- Usage: `portfolio <project-id>` (view project details)
+- **`figlet`** - ASCII art text banners
+- **`ddate`** - Discordian calendar date
 
-### `blog`
-Read my blog posts
-- Usage: `blog` (list all posts)
-- Usage: `blog <post-id>` (read specific post)
-- Usage: `blog --tag <tag>` (filter by tag)
-
-### `contact`
-Get in touch with me - email, LinkedIn, GitHub, and availability
-
-### `skills`
-See my technical skills organized by category
-
-## File System Commands
-
-### `ls`
-List directory contents
-- Usage: `ls [path]`
-
-### `cd`
-Change directory
-- Usage: `cd <path>`
-- Special: `cd ~` (go to home directory)
-- Special: `cd ..` (go up one directory)
-
-### `pwd`
-Print working directory
-
-### `cat`
-Display file contents
-- Usage: `cat <file>`
-
-### `tree`
-Display directory tree structure
-- Usage: `tree [path]`
-- Usage: `tree -L <depth>` (limit depth)
-
-### `render`
-Render markdown files with beautiful formatting
-- Usage: `render <file>`
-- Example: `render ~/blog/post.md`
-
-## Novelty Commands
-
-### `ddate`
-Display date in Discordian calendar format
-- Usage: `ddate` (current date)
-- Usage: `ddate "YYYY-MM-DD"` (specific date)
-- Usage: `ddate --help` (show help)
-- The Discordian calendar has 5 seasons: Chaos, Discord, Confusion, Bureaucracy, The Aftermath
-- Features special days like St. Tib's Day (Feb 29) and Apostle Days
-
-### `figlet`
-Convert text to ASCII art banners
-- Usage: `figlet "Hello"` (default font)
-- Usage: `figlet -f banner "Text"` (use banner font)
-- Usage: `figlet -c "Centered"` (center output)
-- Usage: `echo "Hello" | figlet` (from stdin)
-- Available fonts: standard, slant, banner, small
-
-## Advanced Features
-
-### Command Piping
-
-Chain commands together using the pipe operator (`|`):
-
-```
-cat ~/blog/post.md | render
-echo "Hello" | cat
-```
-
-### Command History Navigation
-
-- **Up Arrow** - Previous command
-- **Down Arrow** - Next command
-- **Tab** - Auto-complete commands
-
-### Aliases
-
-Create shortcuts for frequently used commands:
-
-```
-alias ll='ls -la'
-alias blog-ai='blog --tag ai'
-```
-
-## Getting Started
+## Quick Start
 
 Try these commands to explore:
 
-1. `about` - Learn more about me
-2. `portfolio` - See my work
-3. `blog` - Read my blog posts
-4. `tree` - Explore the directory structure
-5. `ls ~` - List files in home directory
+```
+about           # Learn about me
+portfolio       # See my work
+blog            # Read my posts
+tree            # Explore the file structure
+ls ~            # List home directory
+```
+
+## Advanced Features
+
+**Command Piping:** Chain commands with `|`
+
+```
+cat ~/blog/post.md | render
+echo "Hello" | figlet
+```
+
+**Navigation:** Use arrow keys for command history, Tab for auto-complete
+
+**Aliases:** Create shortcuts with `alias ll='ls -la'`
 
 ---
 
-**Pro Tip:** Use the navigation links at the top for quick access to main sections!
+**Tip:** For detailed help on any command, use `<command> --help` or `help <command>`
