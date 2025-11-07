@@ -117,7 +117,7 @@ export class ThemeManager {
    * @returns Theme preset or null if not found
    */
   getPreset(name: ThemePresetName): ThemePreset | null {
-    return this.presets.get(name) || null;
+    return this.presets.get(name) ?? null;
   }
 
   /**
@@ -263,7 +263,7 @@ export class ThemeManager {
 
     // Apply each CSS variable
     Object.entries(colors).forEach(([variable, value]) => {
-      root.style.setProperty(variable, value);
+      root.style.setProperty(variable, value as string);
     });
   }
 
@@ -288,14 +288,14 @@ export class ThemeManager {
    */
   private mergeColors(base: ColorScheme, custom: Partial<ColorScheme>): ColorScheme {
     return {
-      '--terminal-bg': custom['--terminal-bg'] || base['--terminal-bg'],
-      '--terminal-fg': custom['--terminal-fg'] || base['--terminal-fg'],
-      '--terminal-accent': custom['--terminal-accent'] || base['--terminal-accent'],
-      '--terminal-dim': custom['--terminal-dim'] || base['--terminal-dim'],
-      '--terminal-error': custom['--terminal-error'] || base['--terminal-error'],
-      '--terminal-cursor': custom['--terminal-cursor'] || base['--terminal-cursor'],
+      '--terminal-bg': custom['--terminal-bg'] ?? base['--terminal-bg'],
+      '--terminal-fg': custom['--terminal-fg'] ?? base['--terminal-fg'],
+      '--terminal-accent': custom['--terminal-accent'] ?? base['--terminal-accent'],
+      '--terminal-dim': custom['--terminal-dim'] ?? base['--terminal-dim'],
+      '--terminal-error': custom['--terminal-error'] ?? base['--terminal-error'],
+      '--terminal-cursor': custom['--terminal-cursor'] ?? base['--terminal-cursor'],
       '--terminal-bg-secondary':
-        custom['--terminal-bg-secondary'] || base['--terminal-bg-secondary'],
+        custom['--terminal-bg-secondary'] ?? base['--terminal-bg-secondary'],
     };
   }
 }

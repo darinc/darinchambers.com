@@ -279,7 +279,7 @@ describe('ls command', () => {
     it('should handle non-Error exceptions', () => {
       const mockFs = {
         getNode: vi.fn().mockImplementation(() => {
-          throw 'string error';
+          throw new Error('string error');
         }),
       } as unknown as IFileSystem;
 

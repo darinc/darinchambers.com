@@ -69,6 +69,6 @@ export class ListHandler implements LineHandler {
   }
 
   private isListItem(line: string): boolean {
-    return !!((/^[-*]\s+/.exec(line)) || (/^\d+\.\s+/.exec(line)));
+    return !!(/^[-*]\s+/.exec(line) ?? /^\d+\.\s+/.exec(line));
   }
 }

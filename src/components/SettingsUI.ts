@@ -74,11 +74,11 @@ function generateColorPickers(colors?: CustomColors): string {
   return vars
     .map((v) => {
       const currentColor =
-        colors?.[v.prop] ||
+        colors?.[v.prop] ??
         (typeof window !== 'undefined'
           ? getComputedStyle(document.documentElement).getPropertyValue(v.key).trim()
           : '#000000');
-      return `<div class="color-picker-group"><label>${v.label}</label><input type="color" value="${currentColor}" data-command-template="settings set color ${v.key}" data-color-var="${v.key}"/><span class="color-value">${colors?.[v.prop] || 'default'}</span></div>`;
+      return `<div class="color-picker-group"><label>${v.label}</label><input type="color" value="${currentColor}" data-command-template="settings set color ${v.key}" data-color-var="${v.key}"/><span class="color-value">${colors?.[v.prop] ?? 'default'}</span></div>`;
     })
     .join('');
 }

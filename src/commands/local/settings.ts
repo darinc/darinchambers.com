@@ -309,7 +309,8 @@ function formatSettingsAsMarkdown(
   const themeName =
     settings.theme.preset === 'custom'
       ? 'Custom'
-      : presets.find((p) => p.name === settings.theme.preset)?.displayName || settings.theme.preset;
+      : (presets.find((p) => p.name === settings.theme.preset)?.displayName ??
+        settings.theme.preset);
 
   return `# Terminal Settings
 

@@ -27,7 +27,7 @@ export class SettingsManager {
    */
   constructor(fileSystem: IFileSystem) {
     this.fileSystem = fileSystem;
-    this.settings = this.loadFromLocalStorage() || this.getDefaults();
+    this.settings = this.loadFromLocalStorage() ?? this.getDefaults();
 
     // Sync initial settings to filesystem
     this.syncToFileSystem();
@@ -158,7 +158,7 @@ export class SettingsManager {
    */
   setThemePreset(preset: ThemePresetName): void {
     if (!this.validateThemePreset(preset)) {
-      throw new Error(`Invalid theme preset: ${preset}`);
+      throw new Error(`Invalid theme preset: ${String(preset)}`);
     }
 
     this.settings.theme.preset = preset;
@@ -230,7 +230,7 @@ export class SettingsManager {
    */
   setFontFamily(family: FontFamily): void {
     if (!this.validateFontFamily(family)) {
-      throw new Error(`Invalid font family: ${family}`);
+      throw new Error(`Invalid font family: ${String(family)}`);
     }
 
     this.settings.font.family = family;

@@ -17,7 +17,7 @@ export function createTreeCommand(fs: IFileSystem): Command {
       try {
         // Parse command arguments
         const cmdArgs = new CommandArgs(args);
-        const path = cmdArgs.getPositional(0) || '.';
+        const path = cmdArgs.getPositional(0) ?? '.';
         let maxDepth = 4;
 
         // Check for -L flag (depth limit)

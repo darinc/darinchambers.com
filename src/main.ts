@@ -1,11 +1,11 @@
 import './styles/index.css';
 import { createAliasCommand } from './commands/core/alias';
-import { createRenderCommand } from './commands/core/render';
-import { createEnvCommand } from './commands/core/env';
-import { createExportCommand } from './commands/core/export';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
+import { createEnvCommand } from './commands/core/env';
+import { createExportCommand } from './commands/core/export';
 import { createHistoryCommand } from './commands/core/history';
+import { createRenderCommand } from './commands/core/render';
 import { createUnaliasCommand } from './commands/core/unalias';
 import { createWhoamiCommand } from './commands/core/whoami';
 import { createCatCommand } from './commands/fs/cat';
@@ -111,8 +111,6 @@ const navLinksElement = document.getElementById('nav-links');
 if (!navLinksElement) {
   throw new Error('Navigation links element not found');
 }
-
-let navigation: Navigation;
 
 // Register basic commands
 const helpCommand: Command = {
@@ -232,7 +230,7 @@ const router = new Router(terminal);
 terminal.setRouter(router);
 
 // Initialize navigation with router integration
-navigation = new Navigation(navLinksElement, (command: string) => {
+const navigation = new Navigation(navLinksElement, (command: string) => {
   // Determine the path for this command
   const commandToPath: Record<string, string> = {
     about: '/about',
@@ -248,7 +246,7 @@ navigation = new Navigation(navLinksElement, (command: string) => {
   if (path) {
     router.navigate(path, true);
   } else {
-    terminal.executeCommand(command, true);
+    void terminal.executeCommand(command, true);
   }
 });
 

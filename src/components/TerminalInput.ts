@@ -121,11 +121,11 @@ export class TerminalInput {
     return [...this.history];
   }
 
-  onSubmit(callback: (value: string) => void): void {
+  onSubmit(callback: (value: string) => void | Promise<void>): void {
     this.inputElement.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         const value = this.getValue();
-        callback(value);
+        void callback(value);
       }
     });
   }

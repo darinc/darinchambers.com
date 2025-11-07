@@ -121,7 +121,7 @@ export class FileSystemService implements IFileSystem {
       throw new FileSystemError(`cat: ${path}: Is a directory`);
     }
 
-    return node.content || '';
+    return node.content ?? '';
   }
 
   exists(path: string): boolean {

@@ -18,7 +18,7 @@ export function createLsCommand(fs: IFileSystem): Command {
     execute: (args: string[], _stdin?: string) => {
       try {
         const cmdArgs = new CommandArgs(args);
-        const path = cmdArgs.getPositional(0) || '.';
+        const path = cmdArgs.getPositional(0) ?? '.';
 
         // Parse flags
         const showAll = cmdArgs.hasFlag('a');

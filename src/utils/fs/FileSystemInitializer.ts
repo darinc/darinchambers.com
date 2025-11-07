@@ -1,18 +1,16 @@
-// Import blog markdown files
+// Import content markdown files
 import aboutMd from '../../content/about.md?raw';
+// Import blog markdown files
 import developerExperience from '../../content/blog/2024-05-10-developer-experience.md?raw';
 import distributedSystemsReliability from '../../content/blog/2024-07-22-distributed-systems-reliability.md?raw';
 import aiProductionLessons from '../../content/blog/2024-09-15-ai-production-lessons.md?raw';
-
-// Import portfolio markdown files
 import contactMd from '../../content/contact.md?raw';
 import helpMd from '../../content/help.md?raw';
+// Import portfolio markdown files
 import aiMlSystems from '../../content/portfolio/ai-ml-systems.md?raw';
 import developerTools from '../../content/portfolio/developer-tools.md?raw';
 import distributedPlatform from '../../content/portfolio/distributed-platform.md?raw';
 import enterpriseArchitecture from '../../content/portfolio/enterprise-architecture.md?raw';
-
-// Import content markdown files
 import skillsMd from '../../content/skills.md?raw';
 import type { FileSystemNode } from './types';
 

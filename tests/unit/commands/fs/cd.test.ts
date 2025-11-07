@@ -177,7 +177,7 @@ describe('cd command', () => {
     it('should handle non-Error exceptions', () => {
       const mockFs = {
         changeDirectory: vi.fn().mockImplementation(() => {
-          throw 'string error';
+          throw new Error('string error');
         }),
         getCurrentPath: vi.fn(),
         getShortPath: vi.fn(),

@@ -139,7 +139,7 @@ describe('export command', () => {
     it('should handle non-Error exceptions', () => {
       const mockManager = {
         getAllVariables: vi.fn().mockImplementation(() => {
-          throw 'error string';
+          throw new Error('error string');
         }),
         setVariable: vi.fn(),
         getVariable: vi.fn(),

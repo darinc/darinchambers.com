@@ -27,7 +27,7 @@ export class AliasManager {
           }
         });
       }
-    } catch (error) {
+    } catch {
       // If file doesn't exist or can't be read, start with empty aliases
     }
   }

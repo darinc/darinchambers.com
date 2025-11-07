@@ -18,7 +18,7 @@ beforeEach(() => {
 
 describe('render command', () => {
   describe('File Input', () => {
-    it('should render markdown from file', async () => {
+    it('should render markdown from file', () => {
       const mockFs = {
         exists: vi.fn().mockReturnValue(true),
         isFile: vi.fn().mockReturnValue(true),

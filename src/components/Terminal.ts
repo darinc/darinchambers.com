@@ -80,7 +80,7 @@ export class Terminal {
     // Listen for settings commands from UI
     document.addEventListener('terminal-command', (e: Event) => {
       const customEvent = e as CustomEvent<string>;
-      this.executeCommand(customEvent.detail, false);
+      void this.executeCommand(customEvent.detail, false);
     });
 
     // Event delegation for settings UI controls (replaces inline event handlers)
@@ -94,7 +94,7 @@ export class Terminal {
         const button = target.closest('[data-command]')!;
         const command = button.getAttribute('data-command');
         if (command) {
-          this.executeCommand(command, false);
+          void this.executeCommand(command, false);
         }
       }
     });
@@ -131,7 +131,7 @@ export class Terminal {
       }
 
       if (command) {
-        this.executeCommand(command, false);
+        void this.executeCommand(command, false);
       }
     });
 
@@ -283,14 +283,14 @@ export class Terminal {
     const context: PromptContext = {
       user: this.username,
       hostname: this.hostname,
-      pwd: this.envVarManager?.getVariable('PWD') || this.currentPath,
+      pwd: this.envVarManager?.getVariable('PWD') ?? this.currentPath,
       shortPwd: this.currentPath,
       lastDir: PromptFormatter.getLastDir(this.currentPath),
       isRoot: this.username === 'root',
     };
 
     // Get prompt format from settings or use default
-    const format = this.settingsManager?.getSetting('prompt')?.format || '\\u@\\h:\\W\\$ ';
+    const format = this.settingsManager?.getSetting('prompt')?.format ?? '\\u@\\h:\\W\\$ ';
 
     // Format and return prompt
     return this.promptFormatter.format(format, context);

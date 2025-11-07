@@ -112,7 +112,7 @@ export class Router {
     if (command) {
       // Prevent infinite loop - don't trigger navigate() from command execution
       this.isNavigating = true;
-      this.terminal.executeCommand(command, clearTerminal);
+      void this.terminal.executeCommand(command, clearTerminal);
       this.isNavigating = false;
 
       // Notify callback of route change (for aria-current updates)

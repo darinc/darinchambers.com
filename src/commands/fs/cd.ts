@@ -35,7 +35,7 @@ export function createCdCommand(
 
         // Store current directory as OLDPWD before changing
         if (envVarManager) {
-          const currentPwd = envVarManager.getVariable('PWD') || fs.getCurrentPath();
+          const currentPwd = envVarManager.getVariable('PWD') ?? fs.getCurrentPath();
           envVarManager.setVariable('OLDPWD', currentPwd);
         }
 

@@ -61,9 +61,9 @@ export function createPortfolioCommand(fs: IFileSystem): Command {
         const markdown = ContentFormatter.formatPortfolioList(projects);
         const html = MarkdownService.render(markdown);
         return { output: html, html: true };
-      } catch (error) {
+      } catch (error: unknown) {
         return {
-          output: `Error loading portfolio: ${error}`,
+          output: `Error loading portfolio: ${String(error)}`,
           error: true,
         };
       }

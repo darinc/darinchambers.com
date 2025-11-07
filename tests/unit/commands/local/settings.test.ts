@@ -74,7 +74,7 @@ describe('Settings Command', () => {
 
     // Mock getComputedStyle for SettingsUI
     // Need to do this at the window level since jsdom validates the element parameter
-    const originalGetComputedStyle = window.getComputedStyle;
+    const _originalGetComputedStyle = window.getComputedStyle;
     window.getComputedStyle = vi.fn(() => {
       return {
         getPropertyValue: (prop: string) => {

@@ -54,12 +54,12 @@ export function formatModifiedTime(date: Date): string {
  * Format a single file entry in long listing format
  */
 export function formatLongListing(node: FileSystemNode, humanReadable: boolean): string {
-  const permissions = node.permissions || '-rw-r--r--';
+  const permissions = node.permissions ?? '-rw-r--r--';
   const links = '1'; // Simplified: always show 1 link
-  const owner = node.owner || 'darin';
+  const owner = node.owner ?? 'darin';
   const group = 'staff'; // Simplified: always show staff as group
-  const size = formatFileSize(node.size || 0, humanReadable);
-  const modTime = formatModifiedTime(node.modifiedTime || new Date());
+  const size = formatFileSize(node.size ?? 0, humanReadable);
+  const modTime = formatModifiedTime(node.modifiedTime ?? new Date());
   const name = node.name;
 
   // Pad size column to align properly (right-align)
@@ -74,6 +74,6 @@ export function formatLongListing(node: FileSystemNode, humanReadable: boolean):
 export function calculateTotalBlocks(nodes: FileSystemNode[]): number {
   // In real ls, blocks are typically 512-byte or 1024-byte blocks
   // We'll use a simplified calculation: sum of sizes / 512
-  const totalBytes = nodes.reduce((sum, node) => sum + (node.size || 0), 0);
+  const totalBytes = nodes.reduce((sum, node) => sum + (node.size ?? 0), 0);
   return Math.ceil(totalBytes / 512);
 }

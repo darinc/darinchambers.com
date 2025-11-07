@@ -1,9 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import {
-  FrontmatterParser
-} from '../../../../src/utils/markdown/FrontmatterParser';
-import type {
-  FrontmatterData} from '../../../../src/utils/markdown/FrontmatterParser';
+import { FrontmatterParser } from '../../../../src/utils/markdown/FrontmatterParser';
+import type { FrontmatterData } from '../../../../src/utils/markdown/FrontmatterParser';
 
 describe('FrontmatterParser', () => {
   describe('parse() - Valid Frontmatter', () => {
@@ -178,7 +175,7 @@ Content`;
       expect(result.frontmatter?.title).toBe('Test');
       expect(result.frontmatter?.date).toBe('2024-01-15');
       // Invalid line should be ignored
-      expect(Object.keys(result.frontmatter || {}).length).toBe(2);
+      expect(Object.keys(result.frontmatter ?? {}).length).toBe(2);
     });
 
     it('should handle empty frontmatter section', () => {

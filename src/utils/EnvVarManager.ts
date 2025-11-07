@@ -53,7 +53,7 @@ export class EnvVarManager {
       // Try localStorage first (primary storage)
       const stored = localStorage.getItem(STORAGE_KEYS.ENVIRONMENT);
       if (stored) {
-        const vars: EnvironmentVariables = JSON.parse(stored);
+        const vars = JSON.parse(stored) as EnvironmentVariables;
         Object.entries(vars).forEach(([key, value]) => {
           this.userVars.set(key, value);
         });
@@ -202,15 +202,15 @@ export class EnvVarManager {
     let result = text;
 
     // Expand ${VAR} first (more specific)
-    result = result.replace(/\$\{([A-Z_][A-Z0-9_]*)\}/gi, (match, varName) => {
+    result = result.replace(/\$\{([A-Z_][A-Z0-9_]*)\}/gi, (match, varName: string) => {
       const value = this.getVariable(varName);
-      return value !== undefined ? value : match;
+      return value ?? match;
     });
 
     // Expand $VAR (but not if escaped \$VAR)
-    result = result.replace(/(?<!\\)\$([A-Z_][A-Z0-9_]*)/gi, (match, varName) => {
+    result = result.replace(/(?<!\\)\$([A-Z_][A-Z0-9_]*)/gi, (match, varName: string) => {
       const value = this.getVariable(varName);
-      return value !== undefined ? value : match;
+      return value ?? match;
     });
 
     // Remove escape character from \$VAR

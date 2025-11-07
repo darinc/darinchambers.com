@@ -9,7 +9,7 @@ class MockEchoCommand implements Command {
   aliases = ['e'];
 
   execute(args: string[], stdin?: string): CommandResult {
-    const output = stdin !== undefined ? stdin : args.join(' ');
+    const output = stdin ?? args.join(' ');
     return { output };
   }
 }
@@ -39,7 +39,7 @@ class MockErrorCommand implements Command {
   name = 'error';
   description = 'Always throws an error';
 
-  execute(args: string[], stdin?: string): CommandResult {
+  execute(_args: string[], _stdin?: string): CommandResult {
     throw new Error('Intentional test error');
   }
 }
@@ -48,7 +48,8 @@ class MockStringErrorCommand implements Command {
   name = 'stringerror';
   description = 'Throws a string error';
 
-  execute(args: string[], stdin?: string): CommandResult {
+  execute(_args: string[], _stdin?: string): CommandResult {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw 'String error message';
   }
 }
@@ -57,7 +58,7 @@ class MockEmptyCommand implements Command {
   name = 'empty';
   description = 'Returns empty output';
 
-  execute(args: string[], stdin?: string): CommandResult {
+  execute(_args: string[], _stdin?: string): CommandResult {
     return { output: '' };
   }
 }
@@ -66,7 +67,7 @@ class MockErrorResultCommand implements Command {
   name = 'errresult';
   description = 'Returns error result';
 
-  execute(args: string[], stdin?: string): CommandResult {
+  execute(_args: string[], _stdin?: string): CommandResult {
     return { output: 'Error occurred', error: true };
   }
 }

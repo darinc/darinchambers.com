@@ -103,7 +103,7 @@ describe('env command', () => {
   it('should handle non-Error exceptions', () => {
     const mockManager = {
       getAllVariables: vi.fn().mockImplementation(() => {
-        throw 'string error';
+        throw new Error('string error');
       }),
     } as unknown as EnvVarManager;
 

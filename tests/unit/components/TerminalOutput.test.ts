@@ -38,7 +38,7 @@ describe('TerminalOutput', () => {
     });
 
     it('should insert before input line if it exists', () => {
-      const inputLine = getElement('terminal-input-line');
+      const _inputLine = getElement('terminal-input-line');
 
       terminalOutput.writeLine('Line 1');
       terminalOutput.writeLine('Line 2');

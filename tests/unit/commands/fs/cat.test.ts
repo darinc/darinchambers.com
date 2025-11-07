@@ -118,7 +118,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['file1.txt', 'file2.txt', 'file3.txt']);
+    command.execute(['file1.txt', 'file2.txt', 'file3.txt']);
 
     expect(mockFs.readFile).toHaveBeenCalledWith('file1.txt');
     expect(mockFs.readFile).toHaveBeenCalledTimes(1);
@@ -127,7 +127,7 @@ describe('cat command', () => {
   it('should handle non-Error exceptions', () => {
     const mockFs = {
       readFile: vi.fn().mockImplementation(() => {
-        throw 'string error';
+        throw new Error('string error');
       }),
     } as unknown as IFileSystem;
 
