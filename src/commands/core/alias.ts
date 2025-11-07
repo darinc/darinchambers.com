@@ -1,3 +1,10 @@
+/**
+ * Alias Command
+ *
+ * Creates and displays command aliases for shortening or customizing command names.
+ * Allows users to define shortcuts (e.g., alias ll='ls -la') and list all active aliases.
+ * Aliases are persisted to the virtual filesystem.
+ */
 import type { Command } from '../Command';
 import type { AliasManager } from '../../utils/AliasManager';
 

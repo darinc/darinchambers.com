@@ -1,3 +1,9 @@
+/**
+ * Whoami Command
+ *
+ * Displays the current username from the terminal session. Mimics the Unix whoami
+ * command, providing a simple way to identify the active user in the virtual terminal.
+ */
 import type { Command } from '../Command';
 import type { Terminal } from '../../components/Terminal';
 

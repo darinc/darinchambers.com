@@ -1,3 +1,10 @@
+/**
+ * Env Command
+ *
+ * Displays all environment variables in the current session. Shows variable names and
+ * their values in NAME=value format, sorted alphabetically for easy reading. Environment
+ * variables persist across commands and can be set with the export command.
+ */
 import type { Command } from '../Command';
 import type { EnvVarManager } from '../../utils/EnvVarManager';
 

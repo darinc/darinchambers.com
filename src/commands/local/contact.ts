@@ -1,3 +1,10 @@
+/**
+ * Contact Command
+ *
+ * Displays contact information and professional links. Renders the contact.md file
+ * with email, social media, GitHub, LinkedIn, and other professional contact methods.
+ * Provides visitors with multiple ways to get in touch.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { MarkdownService } from '../../utils/MarkdownService';

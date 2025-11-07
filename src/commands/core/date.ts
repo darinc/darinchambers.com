@@ -1,4 +1,10 @@
-import type { Command } from '../Command';
+/**
+ * Date Command
+ *
+ * Displays the current date and time in the system's default format.
+ * Provides a quick way to check the current timestamp.
+ */
+import type { Command} from '../Command';
 
 export const dateCommand: Command = {
   name: 'date',

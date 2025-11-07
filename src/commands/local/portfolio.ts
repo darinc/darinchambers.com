@@ -1,3 +1,11 @@
+/**
+ * Portfolio Command
+ *
+ * Showcases professional projects and accomplishments. Lists all projects with titles,
+ * years, and technology stacks, or displays detailed project information including
+ * descriptions, achievements, and technical implementations when a specific project
+ * is requested. Demonstrates practical application of skills across various domains.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { Project } from '../../types/portfolio';

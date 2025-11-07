@@ -1,3 +1,10 @@
+/**
+ * Echo Command
+ *
+ * Displays a line of text to the terminal output. Supports escape sequence interpretation
+ * with the -e flag for formatting like newlines (\n) and tabs (\t). Can also read from
+ * stdin for use in command pipelines.
+ */
 import type { Command } from '../Command';
 
 export const echoCommand: Command = {

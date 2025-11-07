@@ -1,3 +1,10 @@
+/**
+ * History Command
+ *
+ * Displays the command history from the current terminal session. Shows previously
+ * executed commands with line numbers, allowing users to review their command usage.
+ * Supports clearing history with the -c flag.
+ */
 import type { Command } from '../Command';
 import type { TerminalInput } from '../../components/TerminalInput';
 

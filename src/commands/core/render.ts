@@ -1,3 +1,10 @@
+/**
+ * Render Command
+ *
+ * Renders markdown files with full formatting and styling. Converts markdown syntax
+ * into formatted HTML output, supporting headers, code blocks, lists, and inline
+ * formatting. Can read from files or stdin for use in pipelines.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { MarkdownService } from '../../utils/MarkdownService';

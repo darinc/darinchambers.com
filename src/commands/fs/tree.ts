@@ -1,3 +1,10 @@
+/**
+ * Tree Command
+ *
+ * Displays directory structure in a visual tree format with ASCII art branch characters.
+ * Supports the -L flag to limit directory depth and shows file counts at the bottom.
+ * Provides an intuitive way to visualize the filesystem hierarchy.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { CommandArgs } from '../../utils/CommandArgs';

@@ -1,3 +1,10 @@
+/**
+ * Cat Command
+ *
+ * Displays the contents of files from the virtual filesystem. Can concatenate multiple
+ * files and supports reading from stdin for use in command pipelines. Outputs raw file
+ * content without interpretation or formatting.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 

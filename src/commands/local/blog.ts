@@ -1,3 +1,10 @@
+/**
+ * Blog Command
+ *
+ * Lists and displays blog posts with support for filtering by tags. Shows post summaries
+ * with dates and tags when listing, or renders full post content with markdown formatting
+ * when a specific post is requested. Supports --tag flag for filtering posts by category.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { BlogParser } from '../../utils/BlogParser';

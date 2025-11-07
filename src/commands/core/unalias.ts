@@ -1,3 +1,9 @@
+/**
+ * Unalias Command
+ *
+ * Removes command aliases created with the alias command. Accepts one or more alias
+ * names to remove, allowing users to clean up their custom command shortcuts.
+ */
 import type { Command } from '../Command';
 import type { AliasManager } from '../../utils/AliasManager';
 

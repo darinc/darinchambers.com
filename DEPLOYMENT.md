@@ -133,20 +133,25 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false,        // Disable sourcemaps for production
-    target: 'es2015',        // Broad browser support
-    minify: 'esbuild',       // Fast minification
-    rollupOptions: {
-      output: {
-        manualChunks: undefined  // Single chunk (small app)
-      }
-    }
+    sourcemap: false        // Disable sourcemaps for production
+    // Uses Vite 7 default: baseline-widely-available
+    // Targets: Chrome 107+, Firefox 104+, Safari 16+
   },
   server: {
     port: 5173
   }
 });
 ```
+
+#### Browser Support
+
+Vite 7 uses the `baseline-widely-available` target strategy, which supports:
+- **Chrome 107+** (October 2022)
+- **Firefox 104+** (August 2022)
+- **Safari 16+** (September 2022)
+- **~88% of global browser usage** (as of late 2024)
+
+This provides modern JavaScript features while maintaining broad compatibility with recent browsers.
 
 ### TypeScript Configuration
 
@@ -613,5 +618,6 @@ If you encounter deployment issues:
 
 **Last Updated**: November 6, 2025
 **Deployment Platform**: Cloudflare Pages
-**Build Tool**: Vite 6.0.11
+**Build Tool**: Vite 7.2.1
 **Node.js Version**: 20.x
+**Browser Support**: Chrome 107+, Firefox 104+, Safari 16+

@@ -1,3 +1,10 @@
+/**
+ * Skills Command
+ *
+ * Interactive display of technical skills and expertise areas. Renders the skills.md
+ * file with organized categories of programming languages, frameworks, tools, and
+ * methodologies. Showcases technical depth and breadth across various domains.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { MarkdownService } from '../../utils/MarkdownService';

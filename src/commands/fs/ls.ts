@@ -1,3 +1,10 @@
+/**
+ * Ls Command
+ *
+ * Lists directory contents in the virtual filesystem. Supports multiple flags including
+ * -l for long format with permissions and sizes, -a to show hidden files, -h for
+ * human-readable sizes, and -r for reverse sorting. Output is color-coded by file type.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { FileSystemNode } from '../../utils/fs/types';

@@ -1,3 +1,10 @@
+/**
+ * Cd Command
+ *
+ * Changes the current working directory in the virtual filesystem. Supports absolute
+ * and relative paths, tilde (~) expansion for home directory, and special '-' argument
+ * to return to the previous directory. Updates PWD and OLDPWD environment variables.
+ */
 import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { EnvVarManager } from '../../utils/EnvVarManager';
