@@ -5,8 +5,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false,
-    target: 'es2015'
+    sourcemap: false
   },
   // Development server configuration
   server: {
