@@ -89,7 +89,8 @@ export class Terminal {
       const target = e.target as HTMLElement;
 
       // Handle buttons with data-command attribute
-      if (target.closest('[data-command]')) {
+      // Exclude navigation buttons (they have their own click handlers that should run first)
+      if (target.closest('[data-command]') && !target.closest('.nav-link')) {
         const button = target.closest('[data-command]') as HTMLElement;
         const command = button.getAttribute('data-command');
         if (command) {
