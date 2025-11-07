@@ -1,12 +1,12 @@
-import { MarkdownParser } from './markdown/MarkdownParser';
 import { FrontmatterParser } from './markdown/FrontmatterParser';
+import { MarkdownParser } from './markdown/MarkdownParser';
 
 export class MarkdownRenderer {
   /**
    * Convert markdown text to HTML with CSS classes
    * Optionally renders YAML frontmatter as formatted metadata
    */
-  static render(markdown: string, renderFrontmatter: boolean = false): string {
+  static render(markdown: string, renderFrontmatter = false): string {
     let content = markdown;
     let frontmatterHtml = '';
 

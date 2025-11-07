@@ -15,7 +15,7 @@ interface Route {
 export class Router {
   private terminal: Terminal;
   private routes: Route[];
-  private isNavigating: boolean = false;
+  private isNavigating = false;
   private onRouteChangeCallback: ((command: string) => void) | null = null;
 
   /**
@@ -37,48 +37,48 @@ export class Router {
       // Blog post route: /blog/:postId
       {
         pattern: /^\/blog\/([a-zA-Z0-9-]+)$/,
-        commandBuilder: (matches) => `blog ${matches[1]}`
+        commandBuilder: (matches) => `blog ${matches[1]}`,
       },
       // Blog list route: /blog
       {
         pattern: /^\/blog\/?$/,
-        commandBuilder: () => 'blog'
+        commandBuilder: () => 'blog',
       },
       // About route: /about
       {
         pattern: /^\/about\/?$/,
-        commandBuilder: () => 'about'
+        commandBuilder: () => 'about',
       },
       // Portfolio route: /portfolio
       {
         pattern: /^\/portfolio\/?$/,
-        commandBuilder: () => 'portfolio'
+        commandBuilder: () => 'portfolio',
       },
       // Contact route: /contact
       {
         pattern: /^\/contact\/?$/,
-        commandBuilder: () => 'contact'
+        commandBuilder: () => 'contact',
       },
       // Skills route: /skills
       {
         pattern: /^\/skills\/?$/,
-        commandBuilder: () => 'skills'
+        commandBuilder: () => 'skills',
       },
       // Settings route: /settings
       {
         pattern: /^\/settings\/?$/,
-        commandBuilder: () => 'settings'
+        commandBuilder: () => 'settings',
       },
       // Help route: /help
       {
         pattern: /^\/help\/?$/,
-        commandBuilder: () => 'help'
+        commandBuilder: () => 'help',
       },
       // Home route: /
       {
         pattern: /^\/$/,
-        commandBuilder: () => 'about'
-      }
+        commandBuilder: () => 'about',
+      },
     ];
   }
 
@@ -148,7 +148,7 @@ export class Router {
    * @param path URL path to navigate to (e.g., '/blog' or '/about')
    * @param clearTerminal Whether to clear terminal before executing command
    */
-  navigate(path: string, clearTerminal: boolean = true): void {
+  navigate(path: string, clearTerminal = true): void {
     // Don't push state if we're already handling a route change
     if (this.isNavigating) {
       return;
@@ -179,13 +179,13 @@ export class Router {
 
     // Handle simple command mappings
     const commandMap: Record<string, string> = {
-      'blog': '/blog',
-      'about': '/about',
-      'portfolio': '/portfolio',
-      'contact': '/contact',
-      'skills': '/skills',
-      'settings': '/settings',
-      'help': '/help'
+      blog: '/blog',
+      about: '/about',
+      portfolio: '/portfolio',
+      contact: '/contact',
+      skills: '/skills',
+      settings: '/settings',
+      help: '/help',
     };
 
     return commandMap[trimmed] || null;

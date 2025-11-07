@@ -31,7 +31,7 @@ const YOLD_OFFSET = 1166;
  * Checks if a year is a leap year in the Gregorian calendar.
  */
 function isLeapYear(year: number): boolean {
-  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 }
 
 /**
@@ -74,7 +74,7 @@ export function toDiscordian(date: Date): DiscordianDate {
       season: '',
       dayOfSeason: 0,
       yold,
-      isStTibsDay: true
+      isStTibsDay: true,
     };
   }
 
@@ -104,7 +104,7 @@ export function toDiscordian(date: Date): DiscordianDate {
     dayOfSeason,
     yold,
     isStTibsDay: false,
-    apostleDay
+    apostleDay,
   };
 }
 

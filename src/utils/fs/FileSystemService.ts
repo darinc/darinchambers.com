@@ -1,12 +1,12 @@
-import type { IFileSystem } from './IFileSystem';
-import type { FileSystemNode } from './types';
 import { PATHS } from '../../constants';
 import { FileSystemError } from '../errors';
+import type { IFileSystem } from './IFileSystem';
+import type { FileSystemNode } from './types';
 
 export class FileSystemService implements IFileSystem {
   private root: FileSystemNode;
   private currentPath: string;
-  private currentUsername: string = 'darin';
+  private currentUsername = 'darin';
 
   constructor(rootNode: FileSystemNode) {
     this.root = rootNode;
@@ -52,7 +52,7 @@ export class FileSystemService implements IFileSystem {
   }
 
   private normalizePath(path: string): string {
-    const parts = path.split('/').filter(p => p.length > 0);
+    const parts = path.split('/').filter((p) => p.length > 0);
     const normalized: string[] = [];
 
     for (const part of parts) {
@@ -72,11 +72,11 @@ export class FileSystemService implements IFileSystem {
       return this.root;
     }
 
-    const parts = resolved.split('/').filter(p => p.length > 0);
+    const parts = resolved.split('/').filter((p) => p.length > 0);
     let current = this.root;
 
     for (const part of parts) {
-      if (!current.children || !current.children.has(part)) {
+      if (!current.children?.has(part)) {
         return null;
       }
       current = current.children.get(part)!;
@@ -85,7 +85,7 @@ export class FileSystemService implements IFileSystem {
     return current;
   }
 
-  list(path: string = '.'): string[] {
+  list(path = '.'): string[] {
     const node = this.getNode(path);
     if (!node) {
       throw new FileSystemError(`ls: cannot access '${path}': No such file or directory`);
@@ -140,7 +140,7 @@ export class FileSystemService implements IFileSystem {
 
   writeFile(path: string, content: string): void {
     const resolved = this.resolvePath(path);
-    const pathParts = resolved.split('/').filter(p => p.length > 0);
+    const pathParts = resolved.split('/').filter((p) => p.length > 0);
     const fileName = pathParts.pop();
 
     if (!fileName) {
@@ -150,7 +150,7 @@ export class FileSystemService implements IFileSystem {
     // Navigate to parent directory
     let current = this.root;
     for (const part of pathParts) {
-      if (!current.children || !current.children.has(part)) {
+      if (!current.children?.has(part)) {
         throw new FileSystemError(`Directory does not exist: ${path}`);
       }
       current = current.children.get(part)!;
@@ -163,12 +163,12 @@ export class FileSystemService implements IFileSystem {
     const fileNode: FileSystemNode = {
       name: fileName,
       type: 'file',
-      content
+      content,
     };
     current.children!.set(fileName, fileNode);
   }
 
-  getTree(path: string = '.', maxDepth: number = 4): string[] {
+  getTree(path = '.', maxDepth = 4): string[] {
     const node = this.getNode(path);
 
     if (!node) {

@@ -7,6 +7,7 @@ This is a terminal-inspired interactive personal website built with TypeScript a
 ## Testing Framework: Vitest
 
 **Why Vitest?**
+
 - Native Vite integration (zero configuration conflicts)
 - Fast execution with HMR
 - Jest-compatible API (familiar syntax)
@@ -27,6 +28,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 ### Tasks
 
 1. ✅ **Install Vitest dependencies** (COMPLETED)
+
    ```bash
    npm install -D vitest @vitest/ui @vitest/coverage-v8 jsdom
    npm install -D @testing-library/dom @testing-library/user-event
@@ -39,6 +41,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
    - Set coverage thresholds
 
 3. ✅ **Add test scripts to package.json** (COMPLETED)
+
    ```json
    {
      "scripts": {
@@ -52,6 +55,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
    ```
 
 4. ✅ **Create test directory structure** (COMPLETED)
+
    ```
    /tests/
    ├── unit/
@@ -74,6 +78,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
    - Run tests to ensure infrastructure works correctly
 
 **Deliverables:**
+
 - ✅ Vitest configured and working (COMPLETED)
 - ✅ Test directory structure created (COMPLETED)
 - ✅ 2-3 passing example tests (COMPLETED - 163 tests now passing)
@@ -94,6 +99,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 #### 1. Command Parsing System
 
 **CommandParser.ts** (`tests/unit/parsers/CommandParser.test.ts`) ✅ **COMPLETE**
+
 - ✅ Test simple commands: `help`, `ls`, `cd /home`
 - ✅ Test quoted arguments: `echo "hello world"`, `cat 'file.txt'`
 - ✅ Test mixed quotes and spaces
@@ -102,6 +108,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - **17 tests passing | 100% statement coverage**
 
 **PipelineParser.ts** (`tests/unit/parsers/PipelineParser.test.ts`) ✅ **COMPLETE**
+
 - ✅ Test simple pipes: `cat file.md | render`
 - ✅ Test multiple pipes: `cmd1 | cmd2 | cmd3`
 - ✅ Test pipes within quoted strings (should be ignored)
@@ -110,6 +117,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - **26 tests passing | 100% statement coverage**
 
 **CommandDispatcher.ts** (`tests/unit/utils/CommandDispatcher.test.ts`) ✅ **COMPLETE**
+
 - ✅ Test command registration and lookup
 - ✅ Test alias resolution
 - ✅ Test pipeline execution with stdin/stdout data flow
@@ -119,6 +127,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - **38 tests passing | 91.83% statement coverage**
 
 **CommandExecutor.ts** (`tests/unit/utils/CommandExecutor.test.ts`) ✅ **COMPLETE**
+
 - ✅ Test command orchestration and execution flow
 - ✅ Test alias resolution integration
 - ✅ Test pipeline execution coordination
@@ -127,6 +136,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - **23 tests passing | 100% statement coverage**
 
 **CommandArgs.ts** (`tests/unit/utils/CommandArgs.test.ts`) ✅ **COMPLETE**
+
 - ✅ Test flag parsing (short and long flags)
 - ✅ Test positional argument extraction
 - ✅ Test flag presence checking
@@ -135,6 +145,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - **15 tests passing | 100% statement coverage**
 
 **errors.ts** (`tests/unit/utils/errors.test.ts`) ✅ **COMPLETE**
+
 - ✅ Test custom error class creation
 - ✅ Test error message formatting
 - ✅ Test error inheritance
@@ -143,6 +154,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 #### 2. Markdown Rendering System
 
 **MarkdownParser.ts** (`tests/unit/parsers/markdown/MarkdownParser.test.ts`)
+
 - Test headers (H1-H6): `# Header`, `## Subheader`
 - Test paragraphs and line breaks
 - Test code blocks (with/without language specification)
@@ -151,6 +163,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - Test handler chain priority and delegation
 
 **InlineRenderer.ts** (`tests/unit/parsers/markdown/InlineRenderer.test.ts`)
+
 - Test bold: `**text**`, `__text__`
 - Test italic: `*text*`, `_text_`
 - Test inline code: `` `code` ``
@@ -159,6 +172,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - Test edge cases: unmatched markers, escaped characters, overlapping styles
 
 **FrontmatterParser.ts** (`tests/unit/parsers/markdown/FrontmatterParser.test.ts`)
+
 - Test valid YAML frontmatter parsing
 - Test missing frontmatter (no delimiters)
 - Test malformed YAML
@@ -168,6 +182,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 #### 3. Virtual File System
 
 **FileSystemService.ts** (`tests/unit/utils/fs/FileSystemService.test.ts`) ✅ **COMPLETE**
+
 - ✅ Test path normalization: `../`, `./`, `~`
 - ✅ Test absolute vs relative path resolution
 - ✅ Test directory traversal and navigation (cd operations)
@@ -180,6 +195,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - **35 tests passing | 92.07% statement coverage**
 
 **FileSystemInitializer.ts** (`tests/unit/utils/fs/FileSystemInitializer.test.ts`) ✅ **COMPLETE**
+
 - ✅ Test virtual file system structure initialization
 - ✅ Test content file loading and registration
 - ✅ Test directory creation
@@ -189,6 +205,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 #### 4. Alias Management
 
 **AliasManager.ts** (`tests/unit/utils/AliasManager.test.ts`)
+
 - Test creating aliases
 - Test resolving aliases (single and chained)
 - Test deleting aliases
@@ -214,6 +231,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 18. Write AliasManager tests
 
 **Deliverables:**
+
 - 🔄 ~13 test files with comprehensive coverage (8/13 complete - 61.5%)
 - ✅ ~150 individual test cases (EXCEEDED - 163/150 complete - 108.7%)
 - 🔄 All critical parsers and utilities tested
@@ -246,6 +264,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 #### Markdown Handlers
 
 **tests/unit/parsers/markdown/handlers/**
+
 - `CodeBlockHandler.test.ts` - Fenced code blocks, language detection
 - `HeaderHandler.test.ts` - Header level detection, parsing
 - `ListHandler.test.ts` - Ordered/unordered lists, nesting
@@ -255,6 +274,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 #### Command Implementations
 
 **File System Commands** (`tests/unit/commands/fs/`)
+
 - `ls.test.ts` - Directory listing, flags (-a, -l, etc.)
 - `cd.test.ts` - Directory navigation, path resolution
 - `pwd.test.ts` - Current directory display
@@ -262,6 +282,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - `tree.test.ts` - Directory tree generation
 
 **Core Commands** (`tests/unit/commands/core/`)
+
 - `echo.test.ts` - Text output, `-n` flag (fix known issue)
 - `date.test.ts` - Date/time display
 - `history.test.ts` - Command history management
@@ -271,6 +292,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 - `render.test.ts` - Markdown rendering via command
 
 **Content Commands** (`tests/unit/commands/local/`)
+
 - `about.test.ts` - About page rendering
 - `blog.test.ts` - Blog post listing and display
 - `contact.test.ts` - Contact information display
@@ -280,6 +302,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 #### Utility Classes
 
 **tests/unit/utils/**
+
 - `BlogParser.test.ts` - Blog post metadata extraction
 - `ContentFormatter.test.ts` - Content formatting logic
 - `AsciiArt.test.ts` - ASCII art generation
@@ -287,6 +310,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 #### UI Components (with jsdom)
 
 **tests/unit/components/**
+
 - `Terminal.test.ts` - Command execution flow, error handling, output rendering
 - `TerminalInput.test.ts` - History navigation, tab completion, input clearing
 - `TerminalOutput.test.ts` - Text/HTML rendering, clear operations, scroll behavior
@@ -296,6 +320,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 ### Integration Tests
 
 **tests/integration/**
+
 - `pipeline.test.ts` - Multi-stage command pipeline execution with data flow
 - `markdown-rendering.test.ts` - End-to-end markdown parsing and rendering
 - `filesystem-commands.test.ts` - FileSystem + FS command integration
@@ -305,6 +330,7 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 ### E2E/Browser Tests
 
 **tests/e2e/**
+
 - `terminal-interaction.test.ts` - Full terminal interaction flows
 - `blog-navigation.test.ts` - Blog post browsing and rendering
 - `command-history.test.ts` - Command history persistence and navigation
@@ -313,14 +339,15 @@ This testing implementation follows a three-phase approach: **Minimal → Core �
 ### CI/CD Setup
 
 **`.github/workflows/test.yml`**
+
 ```yaml
 name: Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   test:
@@ -382,6 +409,7 @@ jobs:
 20. Update documentation (README, testing guides)
 
 **Deliverables:**
+
 - ✅ 60+ test files
 - ✅ 300+ individual test cases
 - ✅ 80%+ code coverage
@@ -400,53 +428,64 @@ jobs:
 The codebase underwent significant refactoring to improve testability, modularity, and maintainability:
 
 #### 1. FileSystem Modularization (Commit 7e972cc)
+
 **Problem:** Monolithic FileSystem class handling all virtual file operations.
 
 **Solution:** Split into modular architecture with clear separation of concerns:
+
 - `IFileSystem` - Interface defining file system contract
 - `FileSystemService` - Core file operations (read, write, cd, ls, tree)
 - `FileSystemInitializer` - Virtual FS structure creation and content loading
 
 **Impact:**
+
 - ✅ 41 new tests added (FileSystemService: 35, FileSystemInitializer: 6)
 - ✅ 92-100% test coverage on file system modules
 - ✅ All commands updated to use new architecture
 - ✅ Improved testability through dependency injection
 
 #### 2. CommandExecutor Extraction (Commit 5af01ab)
+
 **Problem:** Terminal component had too many responsibilities (UI + command execution).
 
 **Solution:** Extracted command execution orchestration into dedicated `CommandExecutor` class:
+
 - Handles command parsing, alias resolution, pipeline execution
 - Manages error handling and user feedback
 - Coordinates between CommandDispatcher and AliasManager
 - Separates business logic from UI concerns
 
 **Impact:**
+
 - ✅ 23 new tests added
 - ✅ 100% test coverage
 - ✅ Terminal component simplified
 - ✅ Better separation of concerns
 
 #### 3. Standardized Argument Parsing (Commit 7685872)
+
 **Problem:** Inconsistent argument parsing across commands, duplicated logic.
 
 **Solution:** Created unified `CommandArgs` utility class:
+
 - Parses flags (short: `-a`, long: `--all`)
 - Extracts positional arguments
 - Provides type-safe flag checking and value retrieval
 - Centralized argument handling logic
 
 **Impact:**
+
 - ✅ 15 new tests added
 - ✅ 100% test coverage
 - ✅ Consistent API across all commands
 - ✅ Reduced code duplication
 
 #### 4. Custom Error Classes (Commit 7685872)
+
 **Problem:** Generic error handling made debugging difficult.
 
 **Solution:** Created domain-specific error classes:
+
 - `FileNotFoundError` - For missing file operations
 - `DirectoryNotFoundError` - For missing directory operations
 - `InvalidPathError` - For malformed paths
@@ -454,34 +493,38 @@ The codebase underwent significant refactoring to improve testability, modularit
 - `CommandNotFoundError` - For unknown commands
 
 **Impact:**
+
 - ✅ 3 new tests added
 - ✅ 100% test coverage
 - ✅ Better error messages for users
 - ✅ Easier debugging and error handling
 
 #### 5. Constants Centralization (Commit 7685872)
+
 **Problem:** Magic strings and configuration scattered across codebase.
 
 **Solution:** Created `constants.ts` for centralized configuration:
+
 - File system paths and structure
 - Command names and aliases
 - Default values and settings
 - Application-wide constants
 
 **Impact:**
+
 - ✅ 100% test coverage
 - ✅ Single source of truth for configuration
 - ✅ Easier to modify and maintain
 
 ### Test Suite Growth
 
-| Milestone | Tests | Coverage | Date |
-|-----------|-------|----------|------|
-| Phase 1 Completion | 43 | ~10% | 2025-10-21 |
-| FileSystem Refactor | 84 | ~18% | 2025-10-25 |
-| CommandExecutor Extraction | 107 | ~23% | 2025-10-27 |
-| Phase 1 & 2 Foundation | 163 | 32.04% | 2025-10-29 |
-| Phase 2 Complete | 895 | 70.14% | 2025-11-06 |
+| Milestone                  | Tests | Coverage | Date       |
+| -------------------------- | ----- | -------- | ---------- |
+| Phase 1 Completion         | 43    | ~10%     | 2025-10-21 |
+| FileSystem Refactor        | 84    | ~18%     | 2025-10-25 |
+| CommandExecutor Extraction | 107   | ~23%     | 2025-10-27 |
+| Phase 1 & 2 Foundation     | 163   | 32.04%   | 2025-10-29 |
+| Phase 2 Complete           | 895   | 70.14%   | 2025-11-06 |
 
 **Progress:** 601% increase in test coverage with 832 new tests added.
 
@@ -489,15 +532,15 @@ The codebase underwent significant refactoring to improve testability, modularit
 
 ## Test Coverage Goals by Module
 
-| Module | Target Coverage | Priority |
-|--------|----------------|----------|
-| Parsers (Command, Pipeline, Markdown) | 90%+ | HIGH |
-| Utilities (FileSystem, Dispatcher, Alias) | 85%+ | HIGH |
-| Markdown Handlers | 85%+ | MEDIUM-HIGH |
-| Commands (FS, Core, Content) | 80%+ | MEDIUM |
-| Components (Terminal, Input, Output) | 70%+ | MEDIUM |
-| Integration Tests | N/A | MEDIUM-HIGH |
-| **Overall Project** | **80%+** | - |
+| Module                                    | Target Coverage | Priority    |
+| ----------------------------------------- | --------------- | ----------- |
+| Parsers (Command, Pipeline, Markdown)     | 90%+            | HIGH        |
+| Utilities (FileSystem, Dispatcher, Alias) | 85%+            | HIGH        |
+| Markdown Handlers                         | 85%+            | MEDIUM-HIGH |
+| Commands (FS, Core, Content)              | 80%+            | MEDIUM      |
+| Components (Terminal, Input, Output)      | 70%+            | MEDIUM      |
+| Integration Tests                         | N/A             | MEDIUM-HIGH |
+| **Overall Project**                       | **80%+**        | -           |
 
 ---
 
@@ -512,23 +555,27 @@ The codebase underwent significant refactoring to improve testability, modularit
 ## Testing Best Practices
 
 ### Test Organization
+
 - One test file per source file
 - Group related tests with `describe()` blocks
 - Use descriptive test names: `it('should parse simple command correctly')`
 - Follow AAA pattern: Arrange, Act, Assert
 
 ### Mocking Strategy
+
 - Mock external dependencies (DOM, localStorage, etc.)
 - Use Vitest's `vi.mock()` for module mocking
 - Create test fixtures for complex data (markdown samples, file systems)
 
 ### Test Data
+
 - Create `tests/fixtures/` directory for test data
 - Sample markdown files
 - Sample file system structures
 - Sample command outputs
 
 ### Code Coverage
+
 - Aim for high coverage but prioritize meaningful tests
 - Don't write tests just to hit coverage numbers
 - Focus on edge cases and error paths
@@ -539,6 +586,7 @@ The codebase underwent significant refactoring to improve testability, modularit
 ## Running Tests
 
 ### Basic Commands
+
 ```bash
 # Run all tests (watch mode)
 npm test
@@ -560,10 +608,13 @@ npm test -- --grep "markdown"
 ```
 
 ### Watch Mode
+
 Tests automatically re-run when files change in watch mode.
 
 ### Coverage Reports
+
 Coverage reports are generated in `./coverage/` directory:
+
 - `coverage/index.html` - Interactive HTML report
 - `coverage/coverage-summary.json` - JSON summary
 - Terminal output shows summary
@@ -573,17 +624,20 @@ Coverage reports are generated in `./coverage/` directory:
 ## Success Metrics
 
 ### Phase 1 Complete When:
+
 - ✅ Vitest runs successfully (COMPLETED - v0.0.21)
 - ✅ Example tests pass (COMPLETED - 43 tests passing)
 - ✅ Coverage report generates (COMPLETED)
 
 ### Phase 2 Complete When:
+
 - ✅ All critical parsers tested (13 test files) - COMPLETE
 - ✅ ~150 tests passing - EXCEEDED at 895 tests
 - ✅ Coverage reaches ~60% - EXCEEDED at 70.14%
 - ✅ Known bugs identified and tracked
 
 ### Phase 3 Complete When:
+
 - ✅ All modules tested (60+ test files)
 - ✅ 300+ tests passing
 - ✅ Coverage reaches 80%+
@@ -594,27 +648,30 @@ Coverage reports are generated in `./coverage/` directory:
 
 ## Timeline Estimate
 
-| Phase | Duration | Effort |
-|-------|----------|--------|
-| Phase 1: Minimal Setup | 2-4 hours | Low |
-| Phase 2: Core Testing | 1-2 days | Medium |
-| Phase 3: Comprehensive | 3-5 days | High |
-| **Total** | **~1 week** | **Full implementation** |
+| Phase                  | Duration    | Effort                  |
+| ---------------------- | ----------- | ----------------------- |
+| Phase 1: Minimal Setup | 2-4 hours   | Low                     |
+| Phase 2: Core Testing  | 1-2 days    | Medium                  |
+| Phase 3: Comprehensive | 3-5 days    | High                    |
+| **Total**              | **~1 week** | **Full implementation** |
 
 ---
 
 ## Resources
 
 ### Vitest Documentation
+
 - [Vitest Official Docs](https://vitest.dev/)
 - [Vitest API Reference](https://vitest.dev/api/)
 - [Coverage with Vitest](https://vitest.dev/guide/coverage.html)
 
 ### Testing Library
+
 - [Testing Library DOM](https://testing-library.com/docs/dom-testing-library/intro)
 - [User Event](https://testing-library.com/docs/user-event/intro)
 
 ### Best Practices
+
 - [JavaScript Testing Best Practices](https://github.com/goldbergyoni/javascript-testing-best-practices)
 - [TypeScript Testing Guide](https://www.typescriptlang.org/docs/handbook/testing.html)
 
@@ -623,6 +680,7 @@ Coverage reports are generated in `./coverage/` directory:
 ## Maintenance
 
 ### Ongoing Testing Practices
+
 1. Write tests for all new features
 2. Update tests when refactoring
 3. Monitor coverage trends (don't let it drop below 80%)
@@ -630,6 +688,7 @@ Coverage reports are generated in `./coverage/` directory:
 5. Keep test suite fast (< 30 seconds for full suite)
 
 ### Test Suite Health Metrics (Current)
+
 - **Test count:** 895 tests (target: 300+) ✅
 - **Execution time:** < 5 seconds (target: < 30 seconds) ✅
 - **Coverage:** 70.14% (target: 80%+) - 87.7% complete
@@ -638,4 +697,4 @@ Coverage reports are generated in `./coverage/` directory:
 
 ---
 
-*Last Updated: 2025-11-06*
+_Last Updated: 2025-11-06_

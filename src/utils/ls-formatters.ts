@@ -18,9 +18,7 @@ export function formatFileSize(bytes: number, humanReadable: boolean): string {
   }
 
   // Format with one decimal place if not bytes
-  const formatted = unitIndex === 0
-    ? size.toString()
-    : size.toFixed(1);
+  const formatted = unitIndex === 0 ? size.toString() : size.toFixed(1);
 
   return `${formatted}${units[unitIndex]}`;
 }
@@ -29,8 +27,20 @@ export function formatFileSize(bytes: number, humanReadable: boolean): string {
  * Format modification time to match ls -l output (e.g., "Oct 27 15:59")
  */
 export function formatModifiedTime(date: Date): string {
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
   const month = months[date.getMonth()];
   const day = date.getDate().toString().padStart(2, ' ');
@@ -43,10 +53,7 @@ export function formatModifiedTime(date: Date): string {
 /**
  * Format a single file entry in long listing format
  */
-export function formatLongListing(
-  node: FileSystemNode,
-  humanReadable: boolean
-): string {
+export function formatLongListing(node: FileSystemNode, humanReadable: boolean): string {
   const permissions = node.permissions || '-rw-r--r--';
   const links = '1'; // Simplified: always show 1 link
   const owner = node.owner || 'darin';

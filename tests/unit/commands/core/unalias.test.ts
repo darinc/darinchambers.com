@@ -5,7 +5,7 @@ import type { AliasManager } from '../../../../src/utils/AliasManager';
 describe('unalias command', () => {
   it('should remove existing alias', () => {
     const mockManager = {
-      removeAlias: vi.fn().mockReturnValue(true)
+      removeAlias: vi.fn().mockReturnValue(true),
     } as unknown as AliasManager;
 
     const command = createUnaliasCommand(mockManager);
@@ -18,7 +18,7 @@ describe('unalias command', () => {
 
   it('should show error for non-existent alias', () => {
     const mockManager = {
-      removeAlias: vi.fn().mockReturnValue(false)
+      removeAlias: vi.fn().mockReturnValue(false),
     } as unknown as AliasManager;
 
     const command = createUnaliasCommand(mockManager);
@@ -30,7 +30,7 @@ describe('unalias command', () => {
 
   it('should show usage when no arguments', () => {
     const mockManager = {
-      removeAlias: vi.fn()
+      removeAlias: vi.fn(),
     } as unknown as AliasManager;
 
     const command = createUnaliasCommand(mockManager);
@@ -42,7 +42,7 @@ describe('unalias command', () => {
 
   it('should only use first argument', () => {
     const mockManager = {
-      removeAlias: vi.fn().mockReturnValue(true)
+      removeAlias: vi.fn().mockReturnValue(true),
     } as unknown as AliasManager;
 
     const command = createUnaliasCommand(mockManager);
@@ -54,7 +54,7 @@ describe('unalias command', () => {
 
   it('should have correct name and description', () => {
     const mockManager = {
-      removeAlias: vi.fn()
+      removeAlias: vi.fn(),
     } as unknown as AliasManager;
 
     const command = createUnaliasCommand(mockManager);

@@ -9,9 +9,9 @@
  * in the setupSettingsUIHandler method.
  */
 
+import type { ThemePreset, CustomColors } from '../types/settings';
 import type { SettingsManager } from '../utils/SettingsManager';
 import type { ThemeManager } from '../utils/ThemeManager';
-import type { ThemePreset, CustomColors } from '../types/settings';
 
 /**
  * Generates the complete interactive settings UI.
@@ -38,7 +38,16 @@ export function generateSettingsUI(
  * @returns HTML string for theme buttons
  */
 function generateThemePresetButtons(presets: ThemePreset[], current: string): string {
-  return '<div class="theme-buttons-container">' + presets.map(preset => `<button class="theme-button ${preset.name === current ? 'active' : ''}" data-command="settings set theme ${preset.name}" data-theme="${preset.name}" style="background: ${preset.colors['--terminal-bg']}; color: ${preset.colors['--terminal-accent']}; border-color: ${preset.colors['--terminal-accent']};"><span class="theme-preview" style="background: ${preset.colors['--terminal-accent']}"></span>${preset.displayName}</button>`).join('') + '</div>';
+  return (
+    '<div class="theme-buttons-container">' +
+    presets
+      .map(
+        (preset) =>
+          `<button class="theme-button ${preset.name === current ? 'active' : ''}" data-command="settings set theme ${preset.name}" data-theme="${preset.name}" style="background: ${preset.colors['--terminal-bg']}; color: ${preset.colors['--terminal-accent']}; border-color: ${preset.colors['--terminal-accent']};"><span class="theme-preview" style="background: ${preset.colors['--terminal-accent']}"></span>${preset.displayName}</button>`
+      )
+      .join('') +
+    '</div>'
+  );
 }
 
 /**
@@ -50,18 +59,28 @@ function generateThemePresetButtons(presets: ThemePreset[], current: string): st
 function generateColorPickers(colors?: CustomColors): string {
   const vars = [
     { key: '--terminal-bg', label: 'Background', prop: 'background' as keyof CustomColors },
-    { key: '--terminal-bg-secondary', label: 'Background (Secondary)', prop: 'backgroundSecondary' as keyof CustomColors },
+    {
+      key: '--terminal-bg-secondary',
+      label: 'Background (Secondary)',
+      prop: 'backgroundSecondary' as keyof CustomColors,
+    },
     { key: '--terminal-fg', label: 'Foreground', prop: 'foreground' as keyof CustomColors },
     { key: '--terminal-accent', label: 'Accent', prop: 'accent' as keyof CustomColors },
     { key: '--terminal-dim', label: 'Dim', prop: 'dim' as keyof CustomColors },
     { key: '--terminal-error', label: 'Error', prop: 'error' as keyof CustomColors },
-    { key: '--terminal-cursor', label: 'Cursor', prop: 'cursor' as keyof CustomColors }
+    { key: '--terminal-cursor', label: 'Cursor', prop: 'cursor' as keyof CustomColors },
   ];
 
-  return vars.map(v => {
-    const currentColor = colors?.[v.prop] || (typeof window !== 'undefined' ? getComputedStyle(document.documentElement).getPropertyValue(v.key).trim() : '#000000');
-    return `<div class="color-picker-group"><label>${v.label}</label><input type="color" value="${currentColor}" data-command-template="settings set color ${v.key}" data-color-var="${v.key}"/><span class="color-value">${colors?.[v.prop] || 'default'}</span></div>`;
-  }).join('');
+  return vars
+    .map((v) => {
+      const currentColor =
+        colors?.[v.prop] ||
+        (typeof window !== 'undefined'
+          ? getComputedStyle(document.documentElement).getPropertyValue(v.key).trim()
+          : '#000000');
+      return `<div class="color-picker-group"><label>${v.label}</label><input type="color" value="${currentColor}" data-command-template="settings set color ${v.key}" data-color-var="${v.key}"/><span class="color-value">${colors?.[v.prop] || 'default'}</span></div>`;
+    })
+    .join('');
 }
 
 /**
@@ -72,7 +91,7 @@ function generateColorPickers(colors?: CustomColors): string {
  */
 function generateFontControls(font: { size: number; family: string }): string {
   const families = ['Courier New', 'Consolas', 'Monaco', 'monospace'];
-  return `<div class="setting-group"><label>Font Size: <span id="font-size-value">${font.size}px</span></label><input type="range" min="8" max="24" step="1" value="${font.size}" aria-label="Font size" aria-valuemin="8" aria-valuemax="24" aria-valuenow="${font.size}" aria-valuetext="${font.size} pixels" data-command-template="settings set font-size" data-setting-type="font-size"/></div><div class="setting-group"><label>Font Family</label><select aria-label="Font family" data-command-template="settings set font-family" data-setting-type="font-family">${families.map(f => `<option value="${f}" ${f === font.family ? 'selected' : ''}>${f}</option>`).join('')}</select></div>`;
+  return `<div class="setting-group"><label>Font Size: <span id="font-size-value">${font.size}px</span></label><input type="range" min="8" max="24" step="1" value="${font.size}" aria-label="Font size" aria-valuemin="8" aria-valuemax="24" aria-valuenow="${font.size}" aria-valuetext="${font.size} pixels" data-command-template="settings set font-size" data-setting-type="font-size"/></div><div class="setting-group"><label>Font Family</label><select aria-label="Font family" data-command-template="settings set font-family" data-setting-type="font-family">${families.map((f) => `<option value="${f}" ${f === font.family ? 'selected' : ''}>${f}</option>`).join('')}</select></div>`;
 }
 
 /**
@@ -81,7 +100,12 @@ function generateFontControls(font: { size: number; family: string }): string {
  * @param effects Current effect settings
  * @returns HTML string for effect controls
  */
-function generateEffectControls(effects: { scanLines: boolean; glow: boolean; border: boolean; animationSpeed: number; soundEffects: boolean }): string {
+function generateEffectControls(effects: {
+  scanLines: boolean;
+  glow: boolean;
+  border: boolean;
+  animationSpeed: number;
+  soundEffects: boolean;
+}): string {
   return `<div class="setting-group"><label><input type="checkbox" ${effects.scanLines ? 'checked' : ''} data-command-template="settings set scan-lines" data-setting-type="scan-lines"/>Scan Lines</label></div><div class="setting-group"><label><input type="checkbox" ${effects.glow ? 'checked' : ''} data-command-template="settings set glow" data-setting-type="glow"/>Glow Effect</label></div><div class="setting-group"><label><input type="checkbox" ${effects.border ? 'checked' : ''} data-command-template="settings set border" data-setting-type="border"/>Page Border</label></div><div class="setting-group"><label>Animation Speed: <span id="animation-speed-value">${effects.animationSpeed}x</span></label><input type="range" min="0.5" max="2.0" step="0.1" value="${effects.animationSpeed}" aria-label="Animation speed" aria-valuemin="0.5" aria-valuemax="2" aria-valuenow="${effects.animationSpeed}" aria-valuetext="${effects.animationSpeed} times speed" data-command-template="settings set animation-speed" data-setting-type="animation-speed"/></div><div class="setting-group"><label><input type="checkbox" ${effects.soundEffects ? 'checked' : ''} data-command-template="settings set sound-effects" data-setting-type="sound-effects"/>Sound Effects (future feature)</label></div>`;
 }
-

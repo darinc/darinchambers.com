@@ -1,43 +1,43 @@
 import './styles/index.css';
-import { Terminal } from './components/Terminal';
-import { Navigation } from './components/Navigation';
-import { Header } from './components/Header';
-import { FileSystemService } from './utils/fs/FileSystemService';
-import { FileSystemInitializer } from './utils/fs/FileSystemInitializer';
-import type { IFileSystem } from './utils/fs/IFileSystem';
-import { AliasManager } from './utils/AliasManager';
-import { CommandDispatcher } from './utils/CommandDispatcher';
-import { CommandExecutor } from './utils/CommandExecutor';
-import type { Command } from './commands/Command';
-import { PATHS, COMMAND_SIGNALS } from './constants';
-import type { NavItem } from './components/Navigation';
-import { createLsCommand } from './commands/fs/ls';
-import { createCdCommand } from './commands/fs/cd';
-import { createPwdCommand } from './commands/fs/pwd';
-import { createCatCommand } from './commands/fs/cat';
-import { createTreeCommand } from './commands/fs/tree';
-import { createHistoryCommand } from './commands/core/history';
 import { createAliasCommand } from './commands/core/alias';
-import { createUnaliasCommand } from './commands/core/unalias';
-import { createWhoamiCommand } from './commands/core/whoami';
 import { createRenderCommand } from './commands/core/render';
 import { createEnvCommand } from './commands/core/env';
 import { createExportCommand } from './commands/core/export';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
-import { ddateCommand } from './commands/novelty/ddate';
-import { figletCommand } from './commands/novelty/figlet';
+import { createHistoryCommand } from './commands/core/history';
+import { createUnaliasCommand } from './commands/core/unalias';
+import { createWhoamiCommand } from './commands/core/whoami';
+import { createCatCommand } from './commands/fs/cat';
+import { createCdCommand } from './commands/fs/cd';
+import { createLsCommand } from './commands/fs/ls';
+import { createPwdCommand } from './commands/fs/pwd';
+import { createTreeCommand } from './commands/fs/tree';
 import { createAboutCommand } from './commands/local/about';
-import { createPortfolioCommand } from './commands/local/portfolio';
 import { createBlogCommand } from './commands/local/blog';
 import { createContactCommand } from './commands/local/contact';
+import { createPortfolioCommand } from './commands/local/portfolio';
+import { createSettingsCommand } from './commands/local/settings';
 import { createSkillsCommand } from './commands/local/skills';
+import { ddateCommand } from './commands/novelty/ddate';
+import { figletCommand } from './commands/novelty/figlet';
+import { Header } from './components/Header';
+import { Navigation } from './components/Navigation';
+import { Terminal } from './components/Terminal';
+import { PATHS, COMMAND_SIGNALS } from './constants';
+import { AliasManager } from './utils/AliasManager';
+import { CommandDispatcher } from './utils/CommandDispatcher';
+import { CommandExecutor } from './utils/CommandExecutor';
+import { EnvVarManager } from './utils/EnvVarManager';
+import { FileSystemInitializer } from './utils/fs/FileSystemInitializer';
+import { FileSystemService } from './utils/fs/FileSystemService';
 import { MarkdownService } from './utils/MarkdownService';
+import { Router } from './utils/Router';
 import { SettingsManager } from './utils/SettingsManager';
 import { ThemeManager } from './utils/ThemeManager';
-import { EnvVarManager } from './utils/EnvVarManager';
-import { createSettingsCommand } from './commands/local/settings';
-import { Router } from './utils/Router';
+import type { Command } from './commands/Command';
+import type { NavItem } from './components/Navigation';
+import type { IFileSystem } from './utils/fs/IFileSystem';
 
 // Initialize header
 const headerElement = document.getElementById('terminal-header');
@@ -126,10 +126,10 @@ const helpCommand: Command = {
     } catch (error) {
       return {
         output: error instanceof Error ? error.message : String(error),
-        error: true
+        error: true,
       };
     }
-  }
+  },
 };
 
 const clearCommand: Command = {
@@ -139,7 +139,7 @@ const clearCommand: Command = {
     // This will be handled by Terminal.clear() method or TerminalOutput.clear()
     // We return a special marker that the terminal should intercept
     return { output: COMMAND_SIGNALS.CLEAR_SCREEN };
-  }
+  },
 };
 
 // Create file system commands
@@ -204,7 +204,7 @@ terminal.registerCommands([
   skillsCommand,
   settingsCommand,
   ddateCommand,
-  figletCommand
+  figletCommand,
 ]);
 
 // Set up navigation items
@@ -215,7 +215,7 @@ const navItems: NavItem[] = [
   { label: 'contact', command: 'contact' },
   { label: 'skills', command: 'skills' },
   { label: 'settings', command: 'settings' },
-  { label: 'help', command: 'help' }
+  { label: 'help', command: 'help' },
 ];
 
 // Display welcome message
@@ -235,13 +235,13 @@ terminal.setRouter(router);
 navigation = new Navigation(navLinksElement, (command: string) => {
   // Determine the path for this command
   const commandToPath: Record<string, string> = {
-    'about': '/about',
-    'portfolio': '/portfolio',
-    'blog': '/blog',
-    'contact': '/contact',
-    'skills': '/skills',
-    'settings': '/settings',
-    'help': '/help'
+    about: '/about',
+    portfolio: '/portfolio',
+    blog: '/blog',
+    contact: '/contact',
+    skills: '/skills',
+    settings: '/settings',
+    help: '/help',
   };
 
   const path = commandToPath[command];

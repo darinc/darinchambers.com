@@ -1,20 +1,19 @@
 // Import blog markdown files
-import aiProductionLessons from '../../content/blog/2024-09-15-ai-production-lessons.md?raw';
-import distributedSystemsReliability from '../../content/blog/2024-07-22-distributed-systems-reliability.md?raw';
+import aboutMd from '../../content/about.md?raw';
 import developerExperience from '../../content/blog/2024-05-10-developer-experience.md?raw';
+import distributedSystemsReliability from '../../content/blog/2024-07-22-distributed-systems-reliability.md?raw';
+import aiProductionLessons from '../../content/blog/2024-09-15-ai-production-lessons.md?raw';
 
 // Import portfolio markdown files
+import contactMd from '../../content/contact.md?raw';
+import helpMd from '../../content/help.md?raw';
 import aiMlSystems from '../../content/portfolio/ai-ml-systems.md?raw';
-import distributedPlatform from '../../content/portfolio/distributed-platform.md?raw';
 import developerTools from '../../content/portfolio/developer-tools.md?raw';
+import distributedPlatform from '../../content/portfolio/distributed-platform.md?raw';
 import enterpriseArchitecture from '../../content/portfolio/enterprise-architecture.md?raw';
 
 // Import content markdown files
-import aboutMd from '../../content/about.md?raw';
-import contactMd from '../../content/contact.md?raw';
 import skillsMd from '../../content/skills.md?raw';
-import helpMd from '../../content/help.md?raw';
-
 import type { FileSystemNode } from './types';
 
 export class FileSystemInitializer {
@@ -28,7 +27,7 @@ export class FileSystemInitializer {
       owner: 'darin',
       size: 4096,
       modifiedTime: new Date(),
-      isHidden
+      isHidden,
     };
   }
 
@@ -42,7 +41,7 @@ export class FileSystemInitializer {
       owner: 'darin',
       size: content.length,
       modifiedTime: new Date(),
-      isHidden
+      isHidden,
     };
   }
 
@@ -60,64 +59,103 @@ export class FileSystemInitializer {
     // /home/guest directory
     const guest = this.createDirectoryNode('guest');
     home.children!.set('guest', guest);
-    guest.children!.set('README.txt', this.createFileNode('README.txt',
-      `Welcome to darinchambers.com!
+    guest.children!.set(
+      'README.txt',
+      this.createFileNode(
+        'README.txt',
+        `Welcome to darinchambers.com!
 
 This is a terminal-inspired personal website showcasing expertise in AI and software engineering.
 
 Type 'help' to see available commands.
 Type 'cd /home/darin' to explore more.
-`));
+`
+      )
+    );
 
     // /home/darin directory with easter eggs
     const darin = this.createDirectoryNode('darin');
     home.children!.set('darin', darin);
-    darin.children!.set('.secret', this.createFileNode('.secret',
-      `You found a secret! 🎉
+    darin.children!.set(
+      '.secret',
+      this.createFileNode(
+        '.secret',
+        `You found a secret! 🎉
 
 "The best way to predict the future is to invent it." - Alan Kay
 
 Keep exploring...
-`));
-    darin.children!.set('about.txt', this.createFileNode('about.txt',
-      `Darin Chambers
+`
+      )
+    );
+    darin.children!.set(
+      'about.txt',
+      this.createFileNode(
+        'about.txt',
+        `Darin Chambers
 Technologist, Inventor
 
 30 years of experience building innovative solutions.
 Specializing in AI, machine learning, and software architecture.
 
 Building What's Next on Rock-Solid Foundations.
-`));
-    darin.children!.set('projects.txt', this.createFileNode('projects.txt',
-      `Notable Projects:
+`
+      )
+    );
+    darin.children!.set(
+      'projects.txt',
+      this.createFileNode(
+        'projects.txt',
+        `Notable Projects:
 - AI/ML systems
 - Distributed architectures
 - Developer tools
 - More to come...
 
 Type 'portfolio' for detailed information.
-`));
-    darin.children!.set('contact.txt', this.createFileNode('contact.txt',
-      `Get in touch with me!
+`
+      )
+    );
+    darin.children!.set(
+      'contact.txt',
+      this.createFileNode(
+        'contact.txt',
+        `Get in touch with me!
 
 Type 'contact' to see all contact information.
-`));
-    darin.children!.set('blog.txt', this.createFileNode('blog.txt',
-      `Recent thoughts and articles on software engineering,
+`
+      )
+    );
+    darin.children!.set(
+      'blog.txt',
+      this.createFileNode(
+        'blog.txt',
+        `Recent thoughts and articles on software engineering,
 AI/ML, distributed systems, and more.
 
 Type 'blog' to read posts.
-`));
+`
+      )
+    );
 
     // /home/darin/blog directory with markdown blog posts
     const blog = this.createDirectoryNode('blog');
     darin.children!.set('blog', blog);
-    blog.children!.set('2024-09-15-ai-production-lessons.md',
-      this.createFileNode('2024-09-15-ai-production-lessons.md', aiProductionLessons));
-    blog.children!.set('2024-07-22-distributed-systems-reliability.md',
-      this.createFileNode('2024-07-22-distributed-systems-reliability.md', distributedSystemsReliability));
-    blog.children!.set('2024-05-10-developer-experience.md',
-      this.createFileNode('2024-05-10-developer-experience.md', developerExperience));
+    blog.children!.set(
+      '2024-09-15-ai-production-lessons.md',
+      this.createFileNode('2024-09-15-ai-production-lessons.md', aiProductionLessons)
+    );
+    blog.children!.set(
+      '2024-07-22-distributed-systems-reliability.md',
+      this.createFileNode(
+        '2024-07-22-distributed-systems-reliability.md',
+        distributedSystemsReliability
+      )
+    );
+    blog.children!.set(
+      '2024-05-10-developer-experience.md',
+      this.createFileNode('2024-05-10-developer-experience.md', developerExperience)
+    );
 
     // /home/darin/content directory with markdown content files
     const content = this.createDirectoryNode('content');
@@ -130,10 +168,22 @@ Type 'blog' to read posts.
     // /home/darin/portfolio directory with markdown portfolio files
     const portfolio = this.createDirectoryNode('portfolio');
     darin.children!.set('portfolio', portfolio);
-    portfolio.children!.set('ai-ml-systems.md', this.createFileNode('ai-ml-systems.md', aiMlSystems));
-    portfolio.children!.set('distributed-platform.md', this.createFileNode('distributed-platform.md', distributedPlatform));
-    portfolio.children!.set('developer-tools.md', this.createFileNode('developer-tools.md', developerTools));
-    portfolio.children!.set('enterprise-architecture.md', this.createFileNode('enterprise-architecture.md', enterpriseArchitecture));
+    portfolio.children!.set(
+      'ai-ml-systems.md',
+      this.createFileNode('ai-ml-systems.md', aiMlSystems)
+    );
+    portfolio.children!.set(
+      'distributed-platform.md',
+      this.createFileNode('distributed-platform.md', distributedPlatform)
+    );
+    portfolio.children!.set(
+      'developer-tools.md',
+      this.createFileNode('developer-tools.md', developerTools)
+    );
+    portfolio.children!.set(
+      'enterprise-architecture.md',
+      this.createFileNode('enterprise-architecture.md', enterpriseArchitecture)
+    );
 
     // /usr directory
     const usr = this.createDirectoryNode('usr');
@@ -164,11 +214,17 @@ Type 'blog' to read posts.
     const localBin = this.createDirectoryNode('bin');
     local.children!.set('bin', localBin);
     localBin.children!.set('about', this.createFileNode('about', '[Custom command: about]'));
-    localBin.children!.set('portfolio', this.createFileNode('portfolio', '[Custom command: portfolio]'));
+    localBin.children!.set(
+      'portfolio',
+      this.createFileNode('portfolio', '[Custom command: portfolio]')
+    );
     localBin.children!.set('blog', this.createFileNode('blog', '[Custom command: blog]'));
     localBin.children!.set('contact', this.createFileNode('contact', '[Custom command: contact]'));
     localBin.children!.set('skills', this.createFileNode('skills', '[Custom command: skills]'));
-    localBin.children!.set('settings', this.createFileNode('settings', '[Custom command: settings]'));
+    localBin.children!.set(
+      'settings',
+      this.createFileNode('settings', '[Custom command: settings]')
+    );
 
     return root;
   }

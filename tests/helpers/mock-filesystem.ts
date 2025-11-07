@@ -15,46 +15,67 @@ export function createMockFileSystem(): FileSystemService {
     name: '',
     type: 'directory',
     children: new Map([
-      ['home', {
-        name: 'home',
-        type: 'directory',
-        children: new Map([
-          ['darin', {
-            name: 'darin',
-            type: 'directory',
-            children: new Map([
-              ['test.txt', {
-                name: 'test.txt',
-                type: 'file',
-                content: 'Test content'
-              }],
-              ['documents', {
-                name: 'documents',
+      [
+        'home',
+        {
+          name: 'home',
+          type: 'directory',
+          children: new Map([
+            [
+              'darin',
+              {
+                name: 'darin',
                 type: 'directory',
                 children: new Map([
-                  ['readme.md', {
-                    name: 'readme.md',
-                    type: 'file',
-                    content: '# README\n\nTest readme file'
-                  }]
-                ])
-              }]
-            ])
-          }]
-        ])
-      }],
-      ['etc', {
-        name: 'etc',
-        type: 'directory',
-        children: new Map([
-          ['config', {
-            name: 'config',
-            type: 'file',
-            content: 'config=value'
-          }]
-        ])
-      }]
-    ])
+                  [
+                    'test.txt',
+                    {
+                      name: 'test.txt',
+                      type: 'file',
+                      content: 'Test content',
+                    },
+                  ],
+                  [
+                    'documents',
+                    {
+                      name: 'documents',
+                      type: 'directory',
+                      children: new Map([
+                        [
+                          'readme.md',
+                          {
+                            name: 'readme.md',
+                            type: 'file',
+                            content: '# README\n\nTest readme file',
+                          },
+                        ],
+                      ]),
+                    },
+                  ],
+                ]),
+              },
+            ],
+          ]),
+        },
+      ],
+      [
+        'etc',
+        {
+          name: 'etc',
+          type: 'directory',
+          children: new Map([
+            [
+              'config',
+              {
+                name: 'config',
+                type: 'file',
+                content: 'config=value',
+              },
+            ],
+          ]),
+        },
+      ],
+    ]),
   };
 
   return new FileSystemService(mockRoot);
@@ -68,18 +89,24 @@ export function createMinimalFileSystem(): FileSystemService {
     name: '',
     type: 'directory',
     children: new Map([
-      ['home', {
-        name: 'home',
-        type: 'directory',
-        children: new Map([
-          ['darin', {
-            name: 'darin',
-            type: 'directory',
-            children: new Map()
-          }]
-        ])
-      }]
-    ])
+      [
+        'home',
+        {
+          name: 'home',
+          type: 'directory',
+          children: new Map([
+            [
+              'darin',
+              {
+                name: 'darin',
+                type: 'directory',
+                children: new Map(),
+              },
+            ],
+          ]),
+        },
+      ],
+    ]),
   };
 
   return new FileSystemService(mockRoot);
@@ -93,22 +120,30 @@ export function createBlogFileSystem(): FileSystemService {
     name: '',
     type: 'directory',
     children: new Map([
-      ['home', {
-        name: 'home',
-        type: 'directory',
-        children: new Map([
-          ['darin', {
-            name: 'darin',
-            type: 'directory',
-            children: new Map([
-              ['blog', {
-                name: 'blog',
+      [
+        'home',
+        {
+          name: 'home',
+          type: 'directory',
+          children: new Map([
+            [
+              'darin',
+              {
+                name: 'darin',
                 type: 'directory',
                 children: new Map([
-                  ['test-post.md', {
-                    name: 'test-post.md',
-                    type: 'file',
-                    content: `---
+                  [
+                    'blog',
+                    {
+                      name: 'blog',
+                      type: 'directory',
+                      children: new Map([
+                        [
+                          'test-post.md',
+                          {
+                            name: 'test-post.md',
+                            type: 'file',
+                            content: `---
 title: Test Post
 date: 2024-01-01
 summary: A test blog post
@@ -117,15 +152,19 @@ tags: test, blog
 
 # Test Post
 
-This is test content.`
-                  }]
-                ])
-              }]
-            ])
-          }]
-        ])
-      }]
-    ])
+This is test content.`,
+                          },
+                        ],
+                      ]),
+                    },
+                  ],
+                ]),
+              },
+            ],
+          ]),
+        },
+      ],
+    ]),
   };
 
   return new FileSystemService(mockRoot);
@@ -139,22 +178,30 @@ export function createPortfolioFileSystem(): FileSystemService {
     name: '',
     type: 'directory',
     children: new Map([
-      ['home', {
-        name: 'home',
-        type: 'directory',
-        children: new Map([
-          ['darin', {
-            name: 'darin',
-            type: 'directory',
-            children: new Map([
-              ['portfolio', {
-                name: 'portfolio',
+      [
+        'home',
+        {
+          name: 'home',
+          type: 'directory',
+          children: new Map([
+            [
+              'darin',
+              {
+                name: 'darin',
                 type: 'directory',
                 children: new Map([
-                  ['test-project.md', {
-                    name: 'test-project.md',
-                    type: 'file',
-                    content: `---
+                  [
+                    'portfolio',
+                    {
+                      name: 'portfolio',
+                      type: 'directory',
+                      children: new Map([
+                        [
+                          'test-project.md',
+                          {
+                            name: 'test-project.md',
+                            type: 'file',
+                            content: `---
 id: test-project
 title: Test Project
 year: 2024
@@ -164,15 +211,19 @@ impact: Test impact
 
 # Test Project
 
-Project description.`
-                  }]
-                ])
-              }]
-            ])
-          }]
-        ])
-      }]
-    ])
+Project description.`,
+                          },
+                        ],
+                      ]),
+                    },
+                  ],
+                ]),
+              },
+            ],
+          ]),
+        },
+      ],
+    ]),
   };
 
   return new FileSystemService(mockRoot);
@@ -185,7 +236,7 @@ export function createEmptyFileSystem(): FileSystemService {
   const mockRoot: FileNode = {
     name: '',
     type: 'directory',
-    children: new Map()
+    children: new Map(),
   };
 
   return new FileSystemService(mockRoot);

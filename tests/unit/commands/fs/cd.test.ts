@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createCdCommand } from '../../../../src/commands/fs/cd';
-import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 import type { EnvVarManager } from '../../../../src/utils/EnvVarManager';
+import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 describe('cd command', () => {
   describe('Basic Navigation', () => {
@@ -9,7 +9,7 @@ describe('cd command', () => {
       const mockFs = {
         changeDirectory: vi.fn(),
         getCurrentPath: vi.fn().mockReturnValue('/home/user'),
-        getShortPath: vi.fn().mockReturnValue('~')
+        getShortPath: vi.fn().mockReturnValue('~'),
       } as unknown as IFileSystem;
       const onPathChange = vi.fn();
 
@@ -25,7 +25,7 @@ describe('cd command', () => {
       const mockFs = {
         changeDirectory: vi.fn(),
         getCurrentPath: vi.fn().mockReturnValue('/home/user'),
-        getShortPath: vi.fn().mockReturnValue('~')
+        getShortPath: vi.fn().mockReturnValue('~'),
       } as unknown as IFileSystem;
       const onPathChange = vi.fn();
 
@@ -42,7 +42,7 @@ describe('cd command', () => {
           throw new Error('cd: /nonexistent: No such file or directory');
         }),
         getCurrentPath: vi.fn(),
-        getShortPath: vi.fn()
+        getShortPath: vi.fn(),
       } as unknown as IFileSystem;
       const onPathChange = vi.fn();
 
@@ -69,11 +69,11 @@ describe('cd command', () => {
       const mockFs = {
         changeDirectory: vi.fn(),
         getCurrentPath: vi.fn().mockReturnValue('/home/user/documents'),
-        getShortPath: vi.fn().mockReturnValue('~/documents')
+        getShortPath: vi.fn().mockReturnValue('~/documents'),
       } as unknown as IFileSystem;
       const mockEnvManager = {
         getVariable: vi.fn().mockReturnValue('/home/user'),
-        setVariable: vi.fn()
+        setVariable: vi.fn(),
       } as unknown as EnvVarManager;
       const onPathChange = vi.fn();
 
@@ -87,11 +87,11 @@ describe('cd command', () => {
       const mockFs = {
         changeDirectory: vi.fn(),
         getCurrentPath: vi.fn().mockReturnValue('/new/path'),
-        getShortPath: vi.fn().mockReturnValue('~/new/path')
+        getShortPath: vi.fn().mockReturnValue('~/new/path'),
       } as unknown as IFileSystem;
       const mockEnvManager = {
         getVariable: vi.fn().mockReturnValue('/old/path'),
-        setVariable: vi.fn()
+        setVariable: vi.fn(),
       } as unknown as EnvVarManager;
       const onPathChange = vi.fn();
 
@@ -105,7 +105,7 @@ describe('cd command', () => {
       const mockFs = {
         changeDirectory: vi.fn(),
         getCurrentPath: vi.fn().mockReturnValue('/previous/dir'),
-        getShortPath: vi.fn().mockReturnValue('~/previous/dir')
+        getShortPath: vi.fn().mockReturnValue('~/previous/dir'),
       } as unknown as IFileSystem;
       const mockEnvManager = {
         getVariable: vi.fn((name) => {
@@ -113,7 +113,7 @@ describe('cd command', () => {
           if (name === 'PWD') return '/current/dir';
           return undefined;
         }),
-        setVariable: vi.fn()
+        setVariable: vi.fn(),
       } as unknown as EnvVarManager;
       const onPathChange = vi.fn();
 
@@ -128,11 +128,11 @@ describe('cd command', () => {
       const mockFs = {
         changeDirectory: vi.fn(),
         getCurrentPath: vi.fn(),
-        getShortPath: vi.fn()
+        getShortPath: vi.fn(),
       } as unknown as IFileSystem;
       const mockEnvManager = {
         getVariable: vi.fn().mockReturnValue(undefined),
-        setVariable: vi.fn()
+        setVariable: vi.fn(),
       } as unknown as EnvVarManager;
       const onPathChange = vi.fn();
 
@@ -147,7 +147,7 @@ describe('cd command', () => {
       const mockFs = {
         changeDirectory: vi.fn(),
         getCurrentPath: vi.fn().mockReturnValue('/home/user'),
-        getShortPath: vi.fn().mockReturnValue('~')
+        getShortPath: vi.fn().mockReturnValue('~'),
       } as unknown as IFileSystem;
       const onPathChange = vi.fn();
 
@@ -164,7 +164,7 @@ describe('cd command', () => {
       const mockFs = {
         changeDirectory: vi.fn(),
         getCurrentPath: vi.fn().mockReturnValue('/home/user/documents'),
-        getShortPath: vi.fn().mockReturnValue('~/documents')
+        getShortPath: vi.fn().mockReturnValue('~/documents'),
       } as unknown as IFileSystem;
       const onPathChange = vi.fn();
 
@@ -180,7 +180,7 @@ describe('cd command', () => {
           throw 'string error';
         }),
         getCurrentPath: vi.fn(),
-        getShortPath: vi.fn()
+        getShortPath: vi.fn(),
       } as unknown as IFileSystem;
       const onPathChange = vi.fn();
 

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-11-06
+
+### Added
+- ESLint with TypeScript support for code quality enforcement
+- Prettier for automatic code formatting
+- Husky pre-commit hooks with lint-staged for automated checks
+- GitHub Actions CI/CD workflows for testing, building, and deployment
+
+### Changed
+- Formatted entire codebase with Prettier
+- Created separate tsconfig.build.json for production builds
+
+### Fixed
+- TypeScript focus() errors in Terminal component
+
 ## [0.1.4] - 2025-11-06
 
 ### Changed

@@ -5,8 +5,8 @@
  * Allows users to define shortcuts (e.g., alias ll='ls -la') and list all active aliases.
  * Aliases are persisted to the virtual filesystem.
  */
-import type { Command } from '../Command';
 import type { AliasManager } from '../../utils/AliasManager';
+import type { Command } from '../Command';
 
 export function createAliasCommand(aliasManager: AliasManager): Command {
   return {
@@ -30,12 +30,12 @@ export function createAliasCommand(aliasManager: AliasManager): Command {
       // Parse alias definition: alias name=command
       // Note: CommandParser already strips quotes, so we receive "boo=echo boo" not "boo='echo boo'"
       const input = args.join(' ');
-      const match = input.match(/^(\S+)=(.+)$/);
+      const match = /^(\S+)=(.+)$/.exec(input);
 
       if (!match) {
         return {
           output: `Usage: alias name='command'\n       alias (to list all aliases)`,
-          error: true
+          error: true,
         };
       }
 
@@ -47,9 +47,9 @@ export function createAliasCommand(aliasManager: AliasManager): Command {
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

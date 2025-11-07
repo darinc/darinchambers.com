@@ -4,7 +4,7 @@
  * Displays the current date and time in the system's default format.
  * Provides a quick way to check the current timestamp.
  */
-import type { Command} from '../Command';
+import type { Command } from '../Command';
 
 export const dateCommand: Command = {
   name: 'date',
@@ -13,5 +13,5 @@ export const dateCommand: Command = {
     const now = new Date();
     const dateString = now.toString();
     return { output: dateString };
-  }
+  },
 };

@@ -5,7 +5,7 @@ import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 describe('pwd command', () => {
   it('should return current working directory', () => {
     const mockFs = {
-      getCurrentPath: vi.fn().mockReturnValue('/home/user')
+      getCurrentPath: vi.fn().mockReturnValue('/home/user'),
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
@@ -17,7 +17,7 @@ describe('pwd command', () => {
 
   it('should have correct name and description', () => {
     const mockFs = {
-      getCurrentPath: vi.fn().mockReturnValue('/')
+      getCurrentPath: vi.fn().mockReturnValue('/'),
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
@@ -28,7 +28,7 @@ describe('pwd command', () => {
 
   it('should ignore arguments', () => {
     const mockFs = {
-      getCurrentPath: vi.fn().mockReturnValue('/home/user/documents')
+      getCurrentPath: vi.fn().mockReturnValue('/home/user/documents'),
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
@@ -39,7 +39,7 @@ describe('pwd command', () => {
 
   it('should ignore stdin', () => {
     const mockFs = {
-      getCurrentPath: vi.fn().mockReturnValue('/etc')
+      getCurrentPath: vi.fn().mockReturnValue('/etc'),
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
@@ -50,7 +50,7 @@ describe('pwd command', () => {
 
   it('should work with root directory', () => {
     const mockFs = {
-      getCurrentPath: vi.fn().mockReturnValue('/')
+      getCurrentPath: vi.fn().mockReturnValue('/'),
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
@@ -61,7 +61,7 @@ describe('pwd command', () => {
 
   it('should work with deep nested paths', () => {
     const mockFs = {
-      getCurrentPath: vi.fn().mockReturnValue('/home/user/documents/projects/my-app/src')
+      getCurrentPath: vi.fn().mockReturnValue('/home/user/documents/projects/my-app/src'),
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);

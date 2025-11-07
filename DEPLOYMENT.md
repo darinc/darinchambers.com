@@ -45,13 +45,13 @@ Git Push → GitHub → Cloudflare Pages → Build → Deploy → CDN
 
 2. **Configure Build Settings**
 
-   | Setting | Value |
-   |---------|-------|
-   | Production branch | `main` |
-   | Build command | `npm run build` |
-   | Build output directory | `dist` |
-   | Root directory | `/` (project root) |
-   | Node.js version | `20` |
+   | Setting                | Value              |
+   | ---------------------- | ------------------ |
+   | Production branch      | `main`             |
+   | Build command          | `npm run build`    |
+   | Build output directory | `dist`             |
+   | Root directory         | `/` (project root) |
+   | Node.js version        | `20`               |
 
 3. **Complete Setup**
    - Click "Save and Deploy"
@@ -105,6 +105,7 @@ npm run build
 ```
 
 This runs:
+
 1. **TypeScript compilation**: `tsc` (type checking)
 2. **Vite build**: Bundle and minify
 3. **Output**: `dist/` directory
@@ -133,19 +134,20 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false        // Disable sourcemaps for production
+    sourcemap: false, // Disable sourcemaps for production
     // Uses Vite 7 default: baseline-widely-available
     // Targets: Chrome 107+, Firefox 104+, Safari 16+
   },
   server: {
-    port: 5173
-  }
+    port: 5173,
+  },
 });
 ```
 
 #### Browser Support
 
 Vite 7 uses the `baseline-widely-available` target strategy, which supports:
+
 - **Chrome 107+** (October 2022)
 - **Firefox 104+** (August 2022)
 - **Safari 16+** (September 2022)
@@ -230,10 +232,10 @@ VITE_ANALYTICS_ID=UA-XXXXX-X
 
    Add the following DNS records in your domain registrar or Cloudflare DNS:
 
-   | Type | Name | Content | Proxy Status |
-   |------|------|---------|--------------|
-   | CNAME | @ | `darinchambers-terminal.pages.dev` | Proxied |
-   | CNAME | www | `darinchambers-terminal.pages.dev` | Proxied |
+   | Type  | Name | Content                            | Proxy Status |
+   | ----- | ---- | ---------------------------------- | ------------ |
+   | CNAME | @    | `darinchambers-terminal.pages.dev` | Proxied      |
+   | CNAME | www  | `darinchambers-terminal.pages.dev` | Proxied      |
 
 3. **SSL/TLS Configuration**
    - Cloudflare automatically provisions SSL certificates
@@ -332,6 +334,7 @@ If a deployment causes issues:
    - Confirm rollback
 
 2. **Via Git Revert**
+
    ```bash
    # Revert last commit
    git revert HEAD
@@ -415,20 +418,22 @@ getTTFB(sendToAnalytics);
 Consider adding error tracking:
 
 **Option 1: Sentry**
+
 ```bash
 npm install @sentry/browser
 ```
 
 ```typescript
-import * as Sentry from "@sentry/browser";
+import * as Sentry from '@sentry/browser';
 
 Sentry.init({
-  dsn: "your-dsn-here",
-  environment: import.meta.env.MODE
+  dsn: 'your-dsn-here',
+  environment: import.meta.env.MODE,
 });
 ```
 
 **Option 2: Custom Error Logging**
+
 ```typescript
 window.addEventListener('error', (event) => {
   // Log error to service
@@ -449,6 +454,7 @@ Error: TS2304: Cannot find name 'X'
 ```
 
 **Solution**:
+
 ```bash
 # Check types locally
 npx tsc --noEmit
@@ -464,6 +470,7 @@ Error: Cannot find module 'X'
 ```
 
 **Solution**:
+
 ```bash
 # Verify package.json
 cat package.json
@@ -477,6 +484,7 @@ npm install
 #### Issue: Build Timeout
 
 **Solution**:
+
 - Optimize build (reduce bundle size)
 - Check for infinite loops in build scripts
 - Contact Cloudflare support to increase timeout
@@ -490,6 +498,7 @@ npm install
 **Cause**: SPA routing not configured
 
 **Solution**: Verify `public/_redirects` exists:
+
 ```
 /* /index.html 200
 ```
@@ -501,6 +510,7 @@ npm install
 **Cause**: JavaScript errors or CSP blocking scripts
 
 **Solution**:
+
 1. Check browser console for errors
 2. Verify `_headers` file CSP configuration
 3. Test locally: `npm run build && npm run preview`
@@ -512,6 +522,7 @@ npm install
 **Cause**: Incorrect asset paths
 
 **Solution**:
+
 - Verify Vite base path is `/`
 - Check `vite.config.ts` base setting
 - Ensure assets are in `dist/assets/`
@@ -523,6 +534,7 @@ npm install
 **Symptoms**: Long time to first paint
 
 **Solutions**:
+
 - Enable sourcemaps temporarily to debug
 - Check bundle size: `npm run build` (should be ~121KB)
 - Use Lighthouse to identify bottlenecks
@@ -533,6 +545,7 @@ npm install
 **Symptoms**: Laggy navigation
 
 **Solutions**:
+
 - Profile with Chrome DevTools
 - Check for memory leaks
 - Optimize markdown rendering
@@ -545,6 +558,7 @@ npm install
 **Symptom**: Console warnings about blocked content
 
 **Solution**:
+
 1. Review CSP in `public/_headers`
 2. Ensure no inline scripts
 3. Check DOMPurify is sanitizing properly
@@ -563,6 +577,7 @@ Use this for each production deployment:
 ## Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] All tests passing
 - [ ] Build succeeds locally
 - [ ] Preview deployment tested
@@ -574,6 +589,7 @@ Use this for each production deployment:
 - [ ] Version bumped
 
 ### Deployment
+
 - [ ] PR merged to main
 - [ ] Build succeeded on Cloudflare
 - [ ] Production URL accessible
@@ -581,6 +597,7 @@ Use this for each production deployment:
 - [ ] Assets loading correctly
 
 ### Post-Deployment
+
 - [ ] Smoke test key features
 - [ ] Check analytics for errors
 - [ ] Monitor first 15 minutes
@@ -588,6 +605,7 @@ Use this for each production deployment:
 - [ ] Tag release in Git
 
 ### Rollback Plan
+
 - [ ] Previous deployment identified
 - [ ] Rollback steps documented
 - [ ] Team notified if issues

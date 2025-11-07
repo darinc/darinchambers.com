@@ -33,27 +33,29 @@ Location: `src/commands/Command.ts`
 
 ```typescript
 interface Command {
-  name: string;           // Command name (e.g., 'ls', 'cat', 'about')
-  description: string;    // Short description shown in help
-  aliases?: string[];     // Optional aliases (e.g., ['ll', 'la'])
+  name: string; // Command name (e.g., 'ls', 'cat', 'about')
+  description: string; // Short description shown in help
+  aliases?: string[]; // Optional aliases (e.g., ['ll', 'la'])
   execute: (args: string[], stdin?: string) => CommandResult | Promise<CommandResult>;
 }
 
 interface CommandResult {
-  output: string;         // Command output text
-  error?: boolean;        // True if command failed
-  html?: boolean;         // True if output is HTML to render
-  raw?: boolean;          // True if output is for piping (don't display)
+  output: string; // Command output text
+  error?: boolean; // True if command failed
+  html?: boolean; // True if output is HTML to render
+  raw?: boolean; // True if output is for piping (don't display)
 }
 ```
 
 ### Command Execution Context
 
 Commands receive:
+
 - **args**: Array of string arguments (parsed from command line)
 - **stdin**: Optional string input from pipe (e.g., `cat file | command`)
 
 Commands return:
+
 - **output**: String to display (text or HTML)
 - **error**: Boolean flag indicating failure
 - **html**: Boolean flag indicating HTML rendering needed
@@ -69,7 +71,7 @@ export const echoCommand: Command = {
   execute: (args: string[], stdin?: string) => {
     const output = args.join(' ');
     return { output };
-  }
+  },
 };
 ```
 
@@ -84,7 +86,7 @@ export function createLsCommand(fs: IFileSystem): Command {
     aliases: ['dir'],
     execute: (args: string[], _stdin?: string) => {
       const flags = parseFlags(args); // Extract -a, -l flags
-      const path = args.find(arg => !arg.startsWith('-')) || '.';
+      const path = args.find((arg) => !arg.startsWith('-')) || '.';
 
       const entries = fs.listDirectory(path);
 
@@ -97,7 +99,7 @@ export function createLsCommand(fs: IFileSystem): Command {
       }
 
       return { output: entries.join('\n') };
-    }
+    },
   };
 }
 ```
@@ -119,10 +121,10 @@ export const fetchCommand: Command = {
     } catch (error) {
       return {
         output: `Error: ${error.message}`,
-        error: true
+        error: true,
       };
     }
-  }
+  },
 };
 ```
 
@@ -138,10 +140,10 @@ export const grepCommand: Command = {
     const input = stdin || '';
 
     const lines = input.split('\n');
-    const matches = lines.filter(line => line.includes(pattern));
+    const matches = lines.filter((line) => line.includes(pattern));
 
     return { output: matches.join('\n') };
-  }
+  },
 };
 
 // Usage: cat file.txt | grep "search term"
@@ -160,9 +162,9 @@ export const htmlCommand: Command = {
 
     return {
       output: html,
-      html: true  // Tells terminal to render as HTML
+      html: true, // Tells terminal to render as HTML
     };
-  }
+  },
 };
 ```
 
@@ -172,7 +174,9 @@ Location: `src/main.ts`
 
 ```typescript
 // Create command instances
-const myCommand: Command = { /* ... */ };
+const myCommand: Command = {
+  /* ... */
+};
 
 // Register with terminal
 terminal.registerCommands([
@@ -218,8 +222,8 @@ interface IFileSystem {
 interface FileNode {
   name: string;
   type: 'file' | 'directory';
-  content?: string;                    // For files
-  children?: Map<string, FileNode>;    // For directories
+  content?: string; // For files
+  children?: Map<string, FileNode>; // For directories
 }
 ```
 
@@ -257,7 +261,7 @@ function listBlogPosts(fs: IFileSystem): string[] {
   const entries = fs.listDirectory(blogPath);
 
   // Filter for markdown files
-  return entries.filter(entry => entry.endsWith('.md'));
+  return entries.filter((entry) => entry.endsWith('.md'));
 }
 ```
 
@@ -376,16 +380,16 @@ interface SettingsConfig {
 }
 
 interface ThemeConfig {
-  preset: ThemePreset;      // 'green' | 'amber' | 'white' | 'cyan' | 'paper'
-  foreground: string;       // Hex color
-  background: string;       // Hex color
-  dim: string;              // Hex color
-  accent: string;           // Hex color
+  preset: ThemePreset; // 'green' | 'amber' | 'white' | 'cyan' | 'paper'
+  foreground: string; // Hex color
+  background: string; // Hex color
+  dim: string; // Hex color
+  accent: string; // Hex color
 }
 
 interface FontConfig {
-  family: string;           // 'monospace' | 'courier' | 'consolas'
-  size: number;             // 8-24 (pixels)
+  family: string; // 'monospace' | 'courier' | 'consolas'
+  size: number; // 8-24 (pixels)
 }
 
 interface EffectsConfig {
@@ -396,7 +400,7 @@ interface EffectsConfig {
 
 interface PromptConfig {
   style: 'full' | 'short' | 'minimal';
-  animationSpeed: number;   // 0.5-2.0
+  animationSpeed: number; // 0.5-2.0
 }
 ```
 
@@ -417,7 +421,7 @@ settingsManager.setFontSize(16);
 const scanLines = settingsManager.getScanLines();
 settingsManager.setSetting('effects', {
   ...settingsManager.getSetting('effects'),
-  scanLines: !scanLines
+  scanLines: !scanLines,
 });
 
 // Reset to defaults
@@ -468,17 +472,18 @@ class EnvVarManager {
   expandVariables(input: string): string;
 
   // Built-in variables
-  getHome(): string;        // $HOME
-  getPwd(): string;         // $PWD
+  getHome(): string; // $HOME
+  getPwd(): string; // $PWD
   setPwd(path: string): void;
-  getOldPwd(): string;      // $OLDPWD
+  getOldPwd(): string; // $OLDPWD
   setOldPwd(path: string): void;
-  getUser(): string;        // $USER
-  getHostname(): string;    // $HOSTNAME
+  getUser(): string; // $USER
+  getHostname(): string; // $HOSTNAME
 }
 ```
 
 **Usage**:
+
 ```typescript
 // Get variable
 const home = envVarManager.getVariable('HOME');
@@ -515,6 +520,7 @@ class AliasManager {
 ```
 
 **Usage**:
+
 ```typescript
 // Create alias
 aliasManager.setAlias('ll', 'ls -la');
@@ -549,6 +555,7 @@ class CommandParser {
 ```
 
 **Usage**:
+
 ```typescript
 const parsed = CommandParser.parse('ls -la ~/blog');
 // Result:
@@ -570,6 +577,7 @@ class PipelineParser {
 ```
 
 **Usage**:
+
 ```typescript
 const commands = PipelineParser.parse('cat file.md | render');
 // Result: ['cat file.md', 'render']
@@ -583,9 +591,12 @@ Location: `src/utils/MarkdownService.ts`
 class MarkdownService {
   static render(markdown: string): string;
 
-  static parse(content: string, options?: {
-    extractFrontmatter?: boolean
-  }): ParsedContent;
+  static parse(
+    content: string,
+    options?: {
+      extractFrontmatter?: boolean;
+    }
+  ): ParsedContent;
 }
 
 interface ParsedContent {
@@ -595,13 +606,14 @@ interface ParsedContent {
 ```
 
 **Usage**:
+
 ```typescript
 // Render markdown to HTML
 const html = MarkdownService.render('# Hello\nWorld');
 
 // Parse with frontmatter
 const parsed = MarkdownService.parse(fileContent, {
-  extractFrontmatter: true
+  extractFrontmatter: true,
 });
 // Result: { content: '...', frontmatter: { title: '...', date: '...' } }
 ```
@@ -627,7 +639,7 @@ export const myCommand: Command = {
     // Your logic here
     const output = `Executed with args: ${args.join(', ')}`;
     return { output };
-  }
+  },
 };
 ```
 
@@ -641,7 +653,7 @@ import { myCommand } from './commands/[category]/mycommand';
 // Add to registration
 terminal.registerCommands([
   // ... existing commands
-  myCommand
+  myCommand,
 ]);
 ```
 
@@ -668,7 +680,9 @@ Add to `src/content/help.md`:
 
 ```markdown
 ### `mycommand`
+
 Description of my command
+
 - Usage: `mycommand [args]`
 - Example: `mycommand foo bar`
 ```
@@ -695,10 +709,10 @@ export function createResumeCommand(fs: IFileSystem): Command {
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }
 ```
@@ -710,14 +724,14 @@ Edit `src/main.ts`:
 ```typescript
 const navItems: NavItem[] = [
   { label: 'about', command: 'about' },
-  { label: 'resume', command: 'resume' },  // Add this
+  { label: 'resume', command: 'resume' }, // Add this
   // ... other items
 ];
 
 // Add to router mapping
 const commandToPath: Record<string, string> = {
-  'about': '/about',
-  'resume': '/resume',  // Add this
+  about: '/about',
+  resume: '/resume', // Add this
   // ...
 };
 ```
@@ -733,17 +747,11 @@ export const THEME_PRESETS = {
     foreground: '#ff6600',
     background: '#000000',
     dim: '#666666',
-    accent: '#ff9944'
-  }
+    accent: '#ff9944',
+  },
 };
 
-export type ThemePreset =
-  | 'green'
-  | 'amber'
-  | 'white'
-  | 'cyan'
-  | 'paper'
-  | 'custom';  // Add this
+export type ThemePreset = 'green' | 'amber' | 'white' | 'cyan' | 'paper' | 'custom'; // Add this
 ```
 
 ### Adding Custom Markdown Handler
@@ -754,7 +762,7 @@ import type { LineHandler } from '../MarkdownParser';
 
 export class MyHandler implements LineHandler {
   canHandle(line: string): boolean {
-    return line.startsWith('>>>');  // Custom syntax
+    return line.startsWith('>>>'); // Custom syntax
   }
 
   handle(line: string, context: ParseContext): string {
@@ -769,7 +777,7 @@ Register in `src/utils/markdown/MarkdownParser.ts`:
 ```typescript
 this.handlers = [
   new CodeBlockHandler(),
-  new MyHandler(),  // Add this
+  new MyHandler(), // Add this
   // ... other handlers
 ];
 ```
@@ -811,23 +819,24 @@ this.handlers = [
 
 ## API Reference Summary
 
-| API | Purpose | Location |
-|-----|---------|----------|
-| Command | Define terminal commands | `src/commands/Command.ts` |
-| IFileSystem | Virtual file operations | `src/utils/fs/IFileSystem.ts` |
-| SettingsManager | User preferences | `src/utils/SettingsManager.ts` |
-| ThemeManager | Theme application | `src/utils/ThemeManager.ts` |
-| EnvVarManager | Environment variables | `src/utils/EnvVarManager.ts` |
-| AliasManager | Command aliases | `src/utils/AliasManager.ts` |
-| CommandParser | Parse command input | `src/utils/CommandParser.ts` |
-| PipelineParser | Parse pipes | `src/utils/PipelineParser.ts` |
-| MarkdownService | Render markdown | `src/utils/MarkdownService.ts` |
+| API             | Purpose                  | Location                       |
+| --------------- | ------------------------ | ------------------------------ |
+| Command         | Define terminal commands | `src/commands/Command.ts`      |
+| IFileSystem     | Virtual file operations  | `src/utils/fs/IFileSystem.ts`  |
+| SettingsManager | User preferences         | `src/utils/SettingsManager.ts` |
+| ThemeManager    | Theme application        | `src/utils/ThemeManager.ts`    |
+| EnvVarManager   | Environment variables    | `src/utils/EnvVarManager.ts`   |
+| AliasManager    | Command aliases          | `src/utils/AliasManager.ts`    |
+| CommandParser   | Parse command input      | `src/utils/CommandParser.ts`   |
+| PipelineParser  | Parse pipes              | `src/utils/PipelineParser.ts`  |
+| MarkdownService | Render markdown          | `src/utils/MarkdownService.ts` |
 
 ---
 
 ## Examples Repository
 
 For more examples, see:
+
 - **Simple commands**: `src/commands/core/echo.ts`, `src/commands/core/date.ts`
 - **Filesystem commands**: `src/commands/fs/ls.ts`, `src/commands/fs/cat.ts`
 - **Content commands**: `src/commands/local/about.ts`, `src/commands/local/blog.ts`

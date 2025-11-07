@@ -442,18 +442,22 @@ git commit -m "test(commands): add tests for cd command edge cases"
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 Describe testing performed
 
 ## Checklist
+
 - [ ] Tests pass
 - [ ] Code follows style guide
 - [ ] Documentation updated
@@ -515,6 +519,7 @@ dc.com/
 See [API.md](API.md#adding-a-new-command) for detailed instructions.
 
 **Summary**:
+
 1. Create command file in appropriate category
 2. Implement Command interface
 3. Register in `src/main.ts`
@@ -562,6 +567,7 @@ See [API.md](API.md#adding-a-new-command) for detailed instructions.
 ### Common Issues
 
 **Build failing**:
+
 ```bash
 # Clean install
 rm -rf node_modules package-lock.json
@@ -569,6 +575,7 @@ npm install
 ```
 
 **Tests failing**:
+
 ```bash
 # Update snapshots
 npm run test:run -- -u
@@ -578,6 +585,7 @@ npm run test:run -- path/to/test.test.ts
 ```
 
 **Type errors**:
+
 ```bash
 # Check types
 npx tsc --noEmit
@@ -588,6 +596,7 @@ npx tsc --noEmit
 ## Recognition
 
 Contributors will be:
+
 - Listed in CHANGELOG.md for their contributions
 - Credited in release notes
 - Acknowledged in the project
@@ -599,6 +608,7 @@ Thank you for contributing! 🎉
 ## Questions?
 
 If you have questions not covered here:
+
 1. Check existing documentation
 2. Search closed issues
 3. Open a new discussion

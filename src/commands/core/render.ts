@@ -5,9 +5,9 @@
  * into formatted HTML output, supporting headers, code blocks, lists, and inline
  * formatting. Can read from files or stdin for use in pipelines.
  */
-import type { Command } from '../Command';
-import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { MarkdownService } from '../../utils/MarkdownService';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createRenderCommand(fs: IFileSystem): Command {
   return {
@@ -29,7 +29,7 @@ export function createRenderCommand(fs: IFileSystem): Command {
           if (!fs.exists(filePath)) {
             return {
               output: `render: ${filePath}: No such file or directory`,
-              error: true
+              error: true,
             };
           }
 
@@ -37,7 +37,7 @@ export function createRenderCommand(fs: IFileSystem): Command {
           if (!fs.isFile(filePath)) {
             return {
               output: `render: ${filePath}: Is a directory`,
-              error: true
+              error: true,
             };
           }
 
@@ -46,15 +46,16 @@ export function createRenderCommand(fs: IFileSystem): Command {
         } catch (error) {
           return {
             output: error instanceof Error ? error.message : String(error),
-            error: true
+            error: true,
           };
         }
       }
       // No input provided
       else {
         return {
-          output: 'Usage: render <file>\nOr: <command> | render\nRenders markdown with formatting. Auto-detects and formats YAML frontmatter.\nExample: render ~/blog/2024-09-15-ai-production-lessons.md\nExample: cat ~/blog/post.md | render',
-          error: true
+          output:
+            'Usage: render <file>\nOr: <command> | render\nRenders markdown with formatting. Auto-detects and formats YAML frontmatter.\nExample: render ~/blog/2024-09-15-ai-production-lessons.md\nExample: cat ~/blog/post.md | render',
+          error: true,
         };
       }
 
@@ -66,8 +67,8 @@ export function createRenderCommand(fs: IFileSystem): Command {
 
       return {
         output: html,
-        html: true
+        html: true,
       };
-    }
+    },
   };
 }

@@ -9,11 +9,11 @@ describe('export command', () => {
         getAllVariables: vi.fn().mockReturnValue(
           new Map([
             ['VAR1', 'value1'],
-            ['VAR2', 'value2']
+            ['VAR2', 'value2'],
           ])
         ),
         setVariable: vi.fn(),
-        getVariable: vi.fn()
+        getVariable: vi.fn(),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -27,7 +27,7 @@ describe('export command', () => {
       const mockManager = {
         getAllVariables: vi.fn().mockReturnValue(new Map()),
         setVariable: vi.fn(),
-        getVariable: vi.fn()
+        getVariable: vi.fn(),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -40,7 +40,7 @@ describe('export command', () => {
       const mockManager = {
         getAllVariables: vi.fn(),
         setVariable: vi.fn(),
-        getVariable: vi.fn().mockReturnValue('test value')
+        getVariable: vi.fn().mockReturnValue('test value'),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -53,7 +53,7 @@ describe('export command', () => {
       const mockManager = {
         getAllVariables: vi.fn(),
         setVariable: vi.fn(),
-        getVariable: vi.fn().mockReturnValue(undefined)
+        getVariable: vi.fn().mockReturnValue(undefined),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -68,7 +68,7 @@ describe('export command', () => {
       const mockManager = {
         getAllVariables: vi.fn(),
         setVariable: vi.fn(),
-        getVariable: vi.fn()
+        getVariable: vi.fn(),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -82,7 +82,7 @@ describe('export command', () => {
       const mockManager = {
         getAllVariables: vi.fn(),
         setVariable: vi.fn(),
-        getVariable: vi.fn()
+        getVariable: vi.fn(),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -95,7 +95,7 @@ describe('export command', () => {
       const mockManager = {
         getAllVariables: vi.fn(),
         setVariable: vi.fn(),
-        getVariable: vi.fn()
+        getVariable: vi.fn(),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -108,7 +108,7 @@ describe('export command', () => {
       const mockManager = {
         getAllVariables: vi.fn(),
         setVariable: vi.fn(),
-        getVariable: vi.fn()
+        getVariable: vi.fn(),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -126,7 +126,7 @@ describe('export command', () => {
         setVariable: vi.fn().mockImplementation(() => {
           throw new Error('Invalid variable name');
         }),
-        getVariable: vi.fn()
+        getVariable: vi.fn(),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
@@ -142,7 +142,7 @@ describe('export command', () => {
           throw 'error string';
         }),
         setVariable: vi.fn(),
-        getVariable: vi.fn()
+        getVariable: vi.fn(),
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);

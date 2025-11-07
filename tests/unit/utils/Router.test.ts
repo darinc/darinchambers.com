@@ -19,7 +19,7 @@ describe('Router', () => {
       pathname: '/',
       href: 'http://localhost/',
       search: '',
-      hash: ''
+      hash: '',
     } as Location;
 
     // Mock window.history
@@ -31,12 +31,12 @@ describe('Router', () => {
       go: vi.fn(),
       length: 1,
       scrollRestoration: 'auto',
-      state: null
+      state: null,
     } as unknown as History;
 
     // Create mock terminal
     mockTerminal = {
-      executeCommand: vi.fn()
+      executeCommand: vi.fn(),
     } as unknown as Terminal;
 
     // Create router (will set up listeners)

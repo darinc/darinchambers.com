@@ -1,8 +1,6 @@
 import { escapeHtml } from './htmlEscape';
 
-export interface FrontmatterData {
-  [key: string]: string | string[];
-}
+export type FrontmatterData = Record<string, string | string[]>;
 
 export interface ParsedMarkdown {
   frontmatter: FrontmatterData | null;
@@ -30,7 +28,7 @@ export class FrontmatterParser {
 
     return {
       frontmatter: this.parseFrontmatterLines(frontmatterLines),
-      content: contentLines.join('\n')
+      content: contentLines.join('\n'),
     };
   }
 
@@ -51,15 +49,15 @@ export class FrontmatterParser {
       if (colonIndex === -1) continue;
 
       const key = line.substring(0, colonIndex).trim();
-      let value = line.substring(colonIndex + 1).trim();
+      const value = line.substring(colonIndex + 1).trim();
 
       // Handle arrays: [item1, item2]
       if (value.startsWith('[') && value.endsWith(']')) {
         const arrayContent = value.substring(1, value.length - 1);
         frontmatter[key] = arrayContent
           .split(',')
-          .map(item => item.trim().replace(/^["']|["']$/g, ''))
-          .filter(item => item.length > 0);
+          .map((item) => item.trim().replace(/^["']|["']$/g, ''))
+          .filter((item) => item.length > 0);
       } else {
         // Remove quotes
         frontmatter[key] = value.replace(/^["']|["']$/g, '');

@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { CommandExecutor } from '../../../src/utils/CommandExecutor';
-import type { CommandDispatcher } from '../../../src/utils/CommandDispatcher';
-import type { AliasManager } from '../../../src/utils/AliasManager';
 import type { CommandResult } from '../../../src/commands/Command';
+import type { AliasManager } from '../../../src/utils/AliasManager';
+import type { CommandDispatcher } from '../../../src/utils/CommandDispatcher';
 
 // Mock implementations for dependencies
 class MockCommandDispatcher {
@@ -167,7 +167,9 @@ describe('CommandExecutor', () => {
 
       const result = await executor.execute('echo "hello | world" | uppercase');
 
-      expect(mockDispatcher.dispatchPipeline).toHaveBeenCalledWith('echo "hello | world" | uppercase');
+      expect(mockDispatcher.dispatchPipeline).toHaveBeenCalledWith(
+        'echo "hello | world" | uppercase'
+      );
       expect(result).toBe(expectedResult);
     });
 
@@ -191,7 +193,9 @@ describe('CommandExecutor', () => {
       const result = await executor.execute('readpost');
 
       expect(mockAliasManager.resolve).toHaveBeenCalledWith('readpost');
-      expect(mockDispatcher.dispatchPipeline).toHaveBeenCalledWith('cat /home/darin/blog/post.md | render');
+      expect(mockDispatcher.dispatchPipeline).toHaveBeenCalledWith(
+        'cat /home/darin/blog/post.md | render'
+      );
       expect(result.html).toBe(true);
     });
 
@@ -212,7 +216,7 @@ describe('CommandExecutor', () => {
         output: 'test output',
         error: false,
         html: true,
-        raw: false
+        raw: false,
       };
       mockDispatcher.dispatch.mockResolvedValue(originalResult);
 
@@ -230,7 +234,7 @@ describe('CommandExecutor', () => {
         output: 'pipeline result',
         error: true,
         html: false,
-        raw: true
+        raw: true,
       };
       mockDispatcher.dispatchPipeline.mockResolvedValue(originalResult);
 

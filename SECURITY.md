@@ -13,10 +13,10 @@
 
 ## Supported Versions
 
-| Version | Supported | Status |
-|---------|-----------|--------|
-| 0.0.x (current) | ✅ Yes | Active development |
-| < 0.0.50 | ❌ No | Legacy versions |
+| Version         | Supported | Status             |
+| --------------- | --------- | ------------------ |
+| 0.0.x (current) | ✅ Yes    | Active development |
+| < 0.0.50        | ❌ No     | Legacy versions    |
 
 **Note**: Once version 1.0.0 is released, security patches will only be provided for the latest minor version.
 
@@ -29,6 +29,7 @@ This application implements multiple layers of security protection:
 ### 1. XSS (Cross-Site Scripting) Protection
 
 #### Layer 1: HTML Escaping
+
 **Location**: `src/utils/htmlEscape.ts`
 
 All user-generated content is HTML-escaped before processing:
@@ -45,6 +46,7 @@ function escapeHtml(unsafe: string): string {
 ```
 
 #### Layer 2: DOMPurify Sanitization
+
 **Library**: `dompurify@3.3.0`
 **Location**: `src/utils/sanitizeHtml.ts`
 
@@ -56,12 +58,13 @@ import DOMPurify from 'dompurify';
 function sanitizeHtml(dirty: string): string {
   return DOMPurify.sanitize(dirty, {
     ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'code', 'pre', 'a', 'ul', 'ol', 'li', 'strong', 'em'],
-    ALLOWED_ATTR: ['href', 'class', 'id']
+    ALLOWED_ATTR: ['href', 'class', 'id'],
   });
 }
 ```
 
 #### Layer 3: Content Security Policy (CSP)
+
 **Location**: `index.html` + `public/_headers`
 
 Strict CSP prevents execution of inline scripts:
@@ -81,12 +84,14 @@ Content-Security-Policy:
 ```
 
 **Protection Against**:
+
 - Inline script execution
 - eval() usage
 - Unsafe dynamic code execution
 - Loading scripts from external domains
 
 #### Layer 4: Event Delegation
+
 **Implementation**: No inline event handlers
 
 All events use data attributes and delegation:
@@ -126,6 +131,7 @@ if (!/^[A-Z_][A-Z0-9_]*$/i.test(name)) {
 ```
 
 **Data Stored**:
+
 - User settings (themes, fonts, preferences)
 - Environment variables
 - No sensitive data (passwords, tokens, PII)
@@ -171,12 +177,12 @@ Instead, report security vulnerabilities privately:
 
 ### What to Expect
 
-| Timeline | Action |
-|----------|--------|
-| 24 hours | Acknowledgment of report |
-| 48 hours | Initial assessment |
-| 7 days | Detailed response and timeline |
-| 30 days | Fix implemented and deployed |
+| Timeline | Action                         |
+| -------- | ------------------------------ |
+| 24 hours | Acknowledgment of report       |
+| 48 hours | Initial assessment             |
+| 7 days   | Detailed response and timeline |
+| 30 days  | Fix implemented and deployed   |
 
 ### Responsible Disclosure
 
@@ -243,13 +249,13 @@ npm audit
 
 ### Production Dependencies
 
-| Package | Version | Security Notes |
-|---------|---------|----------------|
-| marked | 16.4.1 | ✅ No known vulnerabilities |
-| figlet | 1.9.3 | ✅ No known vulnerabilities |
-| dompurify | 3.3.0 | ✅ Security library (XSS protection) |
-| @types/marked | 5.0.2 | ✅ Type definitions only |
-| @types/dompurify | 3.0.5 | ✅ Type definitions only |
+| Package          | Version | Security Notes                       |
+| ---------------- | ------- | ------------------------------------ |
+| marked           | 16.4.1  | ✅ No known vulnerabilities          |
+| figlet           | 1.9.3   | ✅ No known vulnerabilities          |
+| dompurify        | 3.3.0   | ✅ Security library (XSS protection) |
+| @types/marked    | 5.0.2   | ✅ Type definitions only             |
+| @types/dompurify | 3.0.5   | ✅ Type definitions only             |
 
 ### Security Update Policy
 
@@ -275,6 +281,7 @@ Consider enabling:
 **Risk**: localStorage data can be accessed by user
 
 **Mitigation**:
+
 - No sensitive data stored
 - Only user preferences and content
 - All data validated on read
@@ -288,6 +295,7 @@ Consider enabling:
 **Reason**: Required for CSS custom properties (--terminal-fg, etc.)
 
 **Mitigation**:
+
 - No user-controlled CSS
 - All styles are hardcoded
 - Inline event handlers still blocked
@@ -299,6 +307,7 @@ Consider enabling:
 **Risk**: User can read all virtual files
 
 **Mitigation**:
+
 - All content is public (portfolio/blog)
 - No sensitive files in virtual filesystem
 - No real file system access
@@ -310,6 +319,7 @@ Consider enabling:
 **Risk**: Command history stored in memory (session only)
 
 **Mitigation**:
+
 - Cleared on page refresh
 - Not persisted to storage
 - No sensitive commands executed
@@ -333,6 +343,7 @@ tests/security/
 ### Test Scenarios
 
 **XSS Protection Tests**:
+
 - Script tag injection
 - Event handler injection
 - JavaScript URL injection
@@ -341,6 +352,7 @@ tests/security/
 - mXSS attacks
 
 **CSP Compliance Tests**:
+
 - Inline script blocking
 - External script blocking
 - eval() blocking
@@ -363,26 +375,31 @@ npm run test:coverage -- tests/security/
 In case of a security incident:
 
 ### 1. Detection
+
 - User reports
 - Automated monitoring alerts
 - Security audit findings
 
 ### 2. Assessment
+
 - Determine severity (Critical/High/Medium/Low)
 - Identify affected versions
 - Assess potential impact
 
 ### 3. Containment
+
 - Take down affected features (if critical)
 - Disable vulnerable endpoints
 - Deploy temporary mitigations
 
 ### 4. Resolution
+
 - Develop and test fix
 - Deploy patch to production
 - Verify fix effectiveness
 
 ### 5. Communication
+
 - Notify affected users (if applicable)
 - Update CHANGELOG.md
 - Public disclosure (after fix)
@@ -412,6 +429,7 @@ In case of a security incident:
 We would like to thank the security researchers and contributors who have helped improve the security of this project.
 
 **Hall of Fame**:
+
 - [Future security reporters will be listed here]
 
 ---

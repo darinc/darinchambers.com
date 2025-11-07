@@ -4,8 +4,8 @@
  * Removes command aliases created with the alias command. Accepts one or more alias
  * names to remove, allowing users to clean up their custom command shortcuts.
  */
-import type { Command } from '../Command';
 import type { AliasManager } from '../../utils/AliasManager';
+import type { Command } from '../Command';
 
 export function createUnaliasCommand(aliasManager: AliasManager): Command {
   return {
@@ -15,7 +15,7 @@ export function createUnaliasCommand(aliasManager: AliasManager): Command {
       if (args.length === 0) {
         return {
           output: 'Usage: unalias name',
-          error: true
+          error: true,
         };
       }
 
@@ -27,9 +27,9 @@ export function createUnaliasCommand(aliasManager: AliasManager): Command {
       } else {
         return {
           output: `unalias: ${name}: not found`,
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

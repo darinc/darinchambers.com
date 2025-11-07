@@ -1,6 +1,6 @@
 #terminal-output {
   flex: 1;
-  line-height: 1.0;
+  line-height: 1;
   font-size: var(--terminal-font-size, 14px);
   font-family: var(--terminal-font-family, 'Courier New', monospace);
   white-space: pre;
@@ -30,7 +30,7 @@
   font-size: var(--terminal-font-size, 14px);
   font-family: var(--terminal-font-family, 'Courier New', monospace);
   margin-top: 0;
-  line-height: 1.0;
+  line-height: 1;
 }
 
 #terminal-prompt {
@@ -58,10 +58,12 @@
 
 /* Cursor blink animation */
 @keyframes blink {
-  0%, 49% {
+  0%,
+  49% {
     opacity: 1;
   }
-  50%, 100% {
+  50%,
+  100% {
     opacity: 0;
   }
 }

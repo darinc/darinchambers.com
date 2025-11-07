@@ -5,8 +5,8 @@
  * files and supports reading from stdin for use in command pipelines. Outputs raw file
  * content without interpretation or formatting.
  */
-import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createCatCommand(fs: IFileSystem): Command {
   return {
@@ -16,21 +16,21 @@ export function createCatCommand(fs: IFileSystem): Command {
       if (args.length === 0) {
         return {
           output: 'cat: missing file operand',
-          error: true
+          error: true,
         };
       }
 
       try {
         const content = fs.readFile(args[0]);
         return {
-          output: content
+          output: content,
         };
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

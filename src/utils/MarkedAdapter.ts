@@ -21,7 +21,7 @@ export class MarkedAdapter {
    * @param renderFrontmatter - Whether to parse and render YAML frontmatter
    * @returns HTML string wrapped in markdown-output div
    */
-  static render(markdown: string, renderFrontmatter: boolean = false): string {
+  static render(markdown: string, renderFrontmatter = false): string {
     let content = markdown;
     let frontmatterHtml = '';
 

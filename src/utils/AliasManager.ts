@@ -1,8 +1,8 @@
-import type { IFileSystem } from './fs/IFileSystem';
 import { PATHS } from '../constants';
+import type { IFileSystem } from './fs/IFileSystem';
 
 export class AliasManager {
-  private aliases: Map<string, string> = new Map();
+  private aliases = new Map<string, string>();
   private fileSystem: IFileSystem;
   private aliasFilePath: string = PATHS.CONFIG_ALIASES;
 
@@ -13,12 +13,15 @@ export class AliasManager {
 
   private loadAliases(): void {
     try {
-      if (this.fileSystem.exists(this.aliasFilePath) && this.fileSystem.isFile(this.aliasFilePath)) {
+      if (
+        this.fileSystem.exists(this.aliasFilePath) &&
+        this.fileSystem.isFile(this.aliasFilePath)
+      ) {
         const content = this.fileSystem.readFile(this.aliasFilePath);
-        const lines = content.split('\n').filter(line => line.trim());
+        const lines = content.split('\n').filter((line) => line.trim());
 
-        lines.forEach(line => {
-          const match = line.match(/^alias\s+(\S+)='(.+)'$/);
+        lines.forEach((line) => {
+          const match = /^alias\s+(\S+)='(.+)'$/.exec(line);
           if (match) {
             this.aliases.set(match[1], match[2]);
           }
@@ -30,8 +33,9 @@ export class AliasManager {
   }
 
   private saveAliases(): void {
-    const lines = Array.from(this.aliases.entries())
-      .map(([name, command]) => `alias ${name}='${command}'`);
+    const lines = Array.from(this.aliases.entries()).map(
+      ([name, command]) => `alias ${name}='${command}'`
+    );
 
     const content = lines.join('\n') + (lines.length > 0 ? '\n' : '');
 
@@ -39,7 +43,9 @@ export class AliasManager {
       // Write to file system
       this.fileSystem.writeFile(this.aliasFilePath, content);
     } catch (error) {
-      throw new Error(`Failed to save aliases: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Failed to save aliases: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
@@ -72,7 +78,7 @@ export class AliasManager {
 
   resolve(input: string): string {
     // Parse the command name from input
-    const commandMatch = input.match(/^(\S+)/);
+    const commandMatch = /^(\S+)/.exec(input);
     if (!commandMatch) return input;
 
     const commandName = commandMatch[1];

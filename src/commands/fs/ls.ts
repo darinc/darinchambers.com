@@ -5,14 +5,11 @@
  * -l for long format with permissions and sizes, -a to show hidden files, -h for
  * human-readable sizes, and -r for reverse sorting. Output is color-coded by file type.
  */
-import type { Command } from '../Command';
+import { CommandArgs } from '../../utils/CommandArgs';
+import { formatLongListing, calculateTotalBlocks } from '../../utils/ls-formatters';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { FileSystemNode } from '../../utils/fs/types';
-import { CommandArgs } from '../../utils/CommandArgs';
-import {
-  formatLongListing,
-  calculateTotalBlocks
-} from '../../utils/ls-formatters';
+import type { Command } from '../Command';
 
 export function createLsCommand(fs: IFileSystem): Command {
   return {
@@ -33,7 +30,7 @@ export function createLsCommand(fs: IFileSystem): Command {
         if (!dirNode) {
           return {
             output: `ls: cannot access '${path}': No such file or directory`,
-            error: true
+            error: true,
           };
         }
 
@@ -55,7 +52,7 @@ export function createLsCommand(fs: IFileSystem): Command {
 
         // Filter hidden files unless -a flag is set
         if (!showAll) {
-          nodes = nodes.filter(node => !node.isHidden);
+          nodes = nodes.filter((node) => !node.isHidden);
         }
 
         if (nodes.length === 0) {
@@ -70,20 +67,20 @@ export function createLsCommand(fs: IFileSystem): Command {
           const total = calculateTotalBlocks(nodes);
           const lines = [
             `total ${total}`,
-            ...nodes.map(node => formatLongListing(node, humanReadable))
+            ...nodes.map((node) => formatLongListing(node, humanReadable)),
           ];
           return { output: lines.join('\n') };
         } else {
           // Simple format: space-separated names
-          const names = nodes.map(node => node.name);
+          const names = nodes.map((node) => node.name);
           return { output: names.join('  ') };
         }
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

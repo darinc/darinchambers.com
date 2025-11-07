@@ -5,8 +5,8 @@
  * Displays the absolute path from the filesystem root, helping users
  * navigate and understand their current location.
  */
-import type { Command } from '../Command';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createPwdCommand(fs: IFileSystem): Command {
   return {
@@ -14,6 +14,6 @@ export function createPwdCommand(fs: IFileSystem): Command {
     description: 'Print working directory',
     execute: (_args: string[], _stdin?: string) => {
       return { output: fs.getCurrentPath() };
-    }
+    },
   };
 }

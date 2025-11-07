@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { sanitizeHtml } from '../../src/utils/sanitizeHtml';
 import { TerminalOutput } from '../../src/components/TerminalOutput';
 import { InlineRenderer } from '../../src/utils/markdown/InlineRenderer';
+import { sanitizeHtml } from '../../src/utils/sanitizeHtml';
 
 describe('XSS Protection Security Tests', () => {
   describe('sanitizeHtml utility', () => {
@@ -197,9 +197,10 @@ describe('XSS Protection Security Tests', () => {
       // Color pickers can only return valid color values
       // But test that even if malicious value somehow got in, it wouldn't execute
       const div = document.createElement('div');
-      div.innerHTML = '<input type="color" data-command-template="settings set color --terminal-bg" value="#000000">';
+      div.innerHTML =
+        '<input type="color" data-command-template="settings set color --terminal-bg" value="#000000">';
 
-      const input = div.querySelector('input') as HTMLInputElement;
+      const input = div.querySelector('input')!;
       expect(input).toBeTruthy();
 
       // Simulate malicious value

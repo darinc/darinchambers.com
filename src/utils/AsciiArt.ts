@@ -20,6 +20,6 @@ export class AsciiArt {
    * Get the tagline text
    */
   static getTagline(): string {
-    return 'Technologist, Inventor | Building What\'s Next on Rock-Solid Foundations';
+    return "Technologist, Inventor | Building What's Next on Rock-Solid Foundations";
   }
 }

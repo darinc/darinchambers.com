@@ -23,7 +23,7 @@ describe('Navigation', () => {
       const items: NavItem[] = [
         { label: 'About', command: 'about' },
         { label: 'Blog', command: 'blog' },
-        { label: 'Portfolio', command: 'portfolio' }
+        { label: 'Portfolio', command: 'portfolio' },
       ];
 
       navigation.setItems(items);
@@ -38,7 +38,7 @@ describe('Navigation', () => {
     it('should set data-command attributes', () => {
       const items: NavItem[] = [
         { label: 'About', command: 'about' },
-        { label: 'Blog', command: 'blog list' }
+        { label: 'Blog', command: 'blog list' },
       ];
 
       navigation.setItems(items);
@@ -52,7 +52,7 @@ describe('Navigation', () => {
       const items1: NavItem[] = [{ label: 'Item1', command: 'cmd1' }];
       const items2: NavItem[] = [
         { label: 'Item2', command: 'cmd2' },
-        { label: 'Item3', command: 'cmd3' }
+        { label: 'Item3', command: 'cmd3' },
       ];
 
       navigation.setItems(items1);
@@ -75,7 +75,7 @@ describe('Navigation', () => {
 
       navigation.setItems(items);
 
-      const link = navLinksElement.querySelector('.nav-link') as HTMLElement;
+      const link = navLinksElement.querySelector('.nav-link')!;
       link.click();
 
       expect(onCommandClickMock).toHaveBeenCalledWith('about');
@@ -84,7 +84,7 @@ describe('Navigation', () => {
     it('should call callback with correct command for each item', () => {
       const items: NavItem[] = [
         { label: 'About', command: 'about' },
-        { label: 'Blog', command: 'blog' }
+        { label: 'Blog', command: 'blog' },
       ];
 
       navigation.setItems(items);
@@ -138,7 +138,7 @@ describe('Navigation', () => {
     it('should attach click event to new item', () => {
       navigation.addItem({ label: 'Test', command: 'test' });
 
-      const link = navLinksElement.querySelector('.nav-link') as HTMLElement;
+      const link = navLinksElement.querySelector('.nav-link')!;
       link.click();
 
       expect(onCommandClickMock).toHaveBeenCalledWith('test');
@@ -150,7 +150,7 @@ describe('Navigation', () => {
       navigation.setItems([
         { label: 'Item1', command: 'cmd1' },
         { label: 'Item2', command: 'cmd2' },
-        { label: 'Item3', command: 'cmd3' }
+        { label: 'Item3', command: 'cmd3' },
       ]);
 
       navigation.clear();
@@ -182,7 +182,7 @@ describe('Navigation', () => {
     it('should trigger callback exactly once per click', () => {
       navigation.setItems([{ label: 'Test', command: 'test' }]);
 
-      const link = navLinksElement.querySelector('.nav-link') as HTMLElement;
+      const link = navLinksElement.querySelector('.nav-link')!;
       link.click();
       link.click();
 
@@ -190,11 +190,9 @@ describe('Navigation', () => {
     });
 
     it('should pass correct command to callback', () => {
-      navigation.setItems([
-        { label: 'Command with args', command: 'echo "hello world"' }
-      ]);
+      navigation.setItems([{ label: 'Command with args', command: 'echo "hello world"' }]);
 
-      const link = navLinksElement.querySelector('.nav-link') as HTMLElement;
+      const link = navLinksElement.querySelector('.nav-link')!;
       link.click();
 
       expect(onCommandClickMock).toHaveBeenCalledWith('echo "hello world"');
@@ -203,9 +201,7 @@ describe('Navigation', () => {
 
   describe('Edge Cases', () => {
     it('should handle labels with special characters', () => {
-      navigation.setItems([
-        { label: 'Label & Special <> "Chars"', command: 'test' }
-      ]);
+      navigation.setItems([{ label: 'Label & Special <> "Chars"', command: 'test' }]);
 
       const link = navLinksElement.querySelector('.nav-link');
       expect(link?.textContent).toBe('Label & Special <> "Chars"');
@@ -223,7 +219,7 @@ describe('Navigation', () => {
       const longCommand = 'echo ' + 'a'.repeat(1000);
       navigation.setItems([{ label: 'Test', command: longCommand }]);
 
-      const link = navLinksElement.querySelector('.nav-link') as HTMLElement;
+      const link = navLinksElement.querySelector('.nav-link')!;
       link.click();
 
       expect(onCommandClickMock).toHaveBeenCalledWith(longCommand);
@@ -239,7 +235,7 @@ describe('Navigation', () => {
     it('should handle empty command', () => {
       navigation.setItems([{ label: 'Test', command: '' }]);
 
-      const link = navLinksElement.querySelector('.nav-link') as HTMLElement;
+      const link = navLinksElement.querySelector('.nav-link')!;
       link.click();
 
       expect(onCommandClickMock).toHaveBeenCalledWith('');

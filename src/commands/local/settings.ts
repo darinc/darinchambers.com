@@ -5,14 +5,14 @@
  * Supports theme switching, font configuration, effects toggling, and settings display.
  */
 
-import type { Command, CommandResult } from '../Command';
+import { generateSettingsUI } from '../../components/SettingsUI';
+import { CommandArgs } from '../../utils/CommandArgs';
+import { MarkdownService } from '../../utils/MarkdownService';
+import type { ThemePresetName, FontFamily, ColorScheme } from '../../types/settings';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { SettingsManager } from '../../utils/SettingsManager';
 import type { ThemeManager } from '../../utils/ThemeManager';
-import type { ThemePresetName, FontFamily, ColorScheme } from '../../types/settings';
-import { CommandArgs } from '../../utils/CommandArgs';
-import { MarkdownService } from '../../utils/MarkdownService';
-import { generateSettingsUI } from '../../components/SettingsUI';
+import type { Command, CommandResult } from '../Command';
 
 /**
  * Creates the settings command with full CLI interface.
@@ -38,7 +38,7 @@ export function createSettingsCommand(
       if (args.length === 0) {
         return {
           output: generateSettingsUI(settingsManager, themeManager),
-          html: true
+          html: true,
         };
       }
 
@@ -57,20 +57,17 @@ export function createSettingsCommand(
         default:
           return {
             output: `Unknown subcommand: ${subcommand}. Use 'help' for usage.`,
-            error: true
+            error: true,
           };
       }
-    }
+    },
   };
 }
 
 /**
  * Displays current settings in a formatted view.
  */
-function handleList(
-  settingsManager: SettingsManager,
-  themeManager: ThemeManager
-): CommandResult {
+function handleList(settingsManager: SettingsManager, themeManager: ThemeManager): CommandResult {
   const markdown = formatSettingsAsMarkdown(settingsManager, themeManager);
   const html = MarkdownService.render(markdown);
   return { output: html, html: true };
@@ -90,7 +87,7 @@ function handleSet(
   if (!setting) {
     return {
       output: 'Usage: settings set <setting> <value>',
-      error: true
+      error: true,
     };
   }
 
@@ -98,7 +95,7 @@ function handleSet(
   if (setting !== 'color' && !value) {
     return {
       output: 'Usage: settings set <setting> <value>',
-      error: true
+      error: true,
     };
   }
 
@@ -109,7 +106,7 @@ function handleSet(
         if (!validThemes.includes(value as ThemePresetName)) {
           return {
             output: `Invalid theme: ${value}. Available: ${validThemes.join(', ')}`,
-            error: true
+            error: true,
           };
         }
         themeManager.applyTheme(value as ThemePresetName);
@@ -120,7 +117,15 @@ function handleSet(
       case 'color': {
         // Color variables are parsed as flags by CommandArgs (they start with --)
         // So we need to get the first flag that looks like a CSS variable
-        const cssVars = ['terminal-bg', 'terminal-fg', 'terminal-accent', 'terminal-dim', 'terminal-error', 'terminal-cursor', 'terminal-bg-secondary'];
+        const cssVars = [
+          'terminal-bg',
+          'terminal-fg',
+          'terminal-accent',
+          'terminal-dim',
+          'terminal-error',
+          'terminal-cursor',
+          'terminal-bg-secondary',
+        ];
 
         let colorVar: string | undefined;
         let colorValue: string | undefined;
@@ -136,13 +141,14 @@ function handleSet(
 
         if (!colorVar || !colorValue) {
           return {
-            output: 'Usage: settings set color <variable> <value>\nExample: settings set color --terminal-accent #ff0000',
-            error: true
+            output:
+              'Usage: settings set color <variable> <value>\nExample: settings set color --terminal-accent #ff0000',
+            error: true,
           };
         }
 
         const colors: Partial<ColorScheme> = {
-          [colorVar]: colorValue
+          [colorVar]: colorValue,
         };
         themeManager.applyCustomColors(colors);
         broadcastSettingsChange();
@@ -155,7 +161,7 @@ function handleSet(
         if (isNaN(size)) {
           return {
             output: 'Font size must be a number (8-24)',
-            error: true
+            error: true,
           };
         }
         settingsManager.setFontSize(size);
@@ -170,7 +176,7 @@ function handleSet(
         if (!validFamilies.includes(value as FontFamily)) {
           return {
             output: `Invalid font family: ${value}. Available: ${validFamilies.join(', ')}`,
-            error: true
+            error: true,
           };
         }
         settingsManager.setFontFamily(value as FontFamily);
@@ -184,7 +190,7 @@ function handleSet(
         if (value !== 'on' && value !== 'off') {
           return {
             output: 'Scan lines must be "on" or "off"',
-            error: true
+            error: true,
           };
         }
         const enabled = value === 'on';
@@ -199,7 +205,7 @@ function handleSet(
         if (value !== 'on' && value !== 'off') {
           return {
             output: 'Glow must be "on" or "off"',
-            error: true
+            error: true,
           };
         }
         const enabled = value === 'on';
@@ -214,7 +220,7 @@ function handleSet(
         if (value !== 'on' && value !== 'off') {
           return {
             output: 'Border must be "on" or "off"',
-            error: true
+            error: true,
           };
         }
         const enabled = value === 'on';
@@ -230,7 +236,7 @@ function handleSet(
         if (isNaN(speed)) {
           return {
             output: 'Animation speed must be a number (0.5-2.0)',
-            error: true
+            error: true,
           };
         }
         settingsManager.setAnimationSpeed(speed);
@@ -244,7 +250,7 @@ function handleSet(
         if (value !== 'on' && value !== 'off') {
           return {
             output: 'Sound effects must be "on" or "off"',
-            error: true
+            error: true,
           };
         }
         const enabled = value === 'on';
@@ -263,13 +269,13 @@ function handleSet(
       default:
         return {
           output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, border, animation-speed, sound-effects, prompt`,
-          error: true
+          error: true,
         };
     }
   } catch (error) {
     return {
       output: error instanceof Error ? error.message : String(error),
-      error: true
+      error: true,
     };
   }
 }
@@ -277,10 +283,7 @@ function handleSet(
 /**
  * Resets all settings to defaults.
  */
-function handleReset(
-  settingsManager: SettingsManager,
-  themeManager: ThemeManager
-): CommandResult {
+function handleReset(settingsManager: SettingsManager, themeManager: ThemeManager): CommandResult {
   settingsManager.reset();
   themeManager.applyCurrentTheme();
   applyFontSettings(settingsManager);
@@ -303,9 +306,10 @@ function formatSettingsAsMarkdown(
   const settings = settingsManager.loadSettings();
   const presets = themeManager.getPresets();
 
-  const themeName = settings.theme.preset === 'custom'
-    ? 'Custom'
-    : presets.find(p => p.name === settings.theme.preset)?.displayName || settings.theme.preset;
+  const themeName =
+    settings.theme.preset === 'custom'
+      ? 'Custom'
+      : presets.find((p) => p.name === settings.theme.preset)?.displayName || settings.theme.preset;
 
   return `# Terminal Settings
 
@@ -330,7 +334,7 @@ function formatSettingsAsMarkdown(
 
 ## Available Themes
 
-${presets.map(p => `- **${p.name}**: ${p.displayName}`).join('\n')}
+${presets.map((p) => `- **${p.name}**: ${p.displayName}`).join('\n')}
 
 ## Usage Examples
 

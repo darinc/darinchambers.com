@@ -11,16 +11,14 @@
  * - Custom variables set via export command or settings
  */
 
-import type { IFileSystem } from './fs/IFileSystem';
 import { PATHS, STORAGE_KEYS } from '../constants';
+import type { IFileSystem } from './fs/IFileSystem';
 
-export interface EnvironmentVariables {
-  [key: string]: string;
-}
+export type EnvironmentVariables = Record<string, string>;
 
 export class EnvVarManager {
-  private platformVars: Map<string, string> = new Map();
-  private userVars: Map<string, string> = new Map();
+  private platformVars = new Map<string, string>();
+  private userVars = new Map<string, string>();
   private fileSystem: IFileSystem;
 
   constructor(fileSystem: IFileSystem, username: string, hostname: string) {

@@ -8,7 +8,7 @@ vi.mock('../../../../src/utils/ls-formatters', () => ({
   formatLongListing: vi.fn((node: FileSystemNode) => {
     return `-rw-r--r-- 1 user user 1024 Jan 1 12:00 ${node.name}`;
   }),
-  calculateTotalBlocks: vi.fn(() => 8)
+  calculateTotalBlocks: vi.fn(() => 8),
 }));
 
 describe('ls command', () => {
@@ -19,12 +19,12 @@ describe('ls command', () => {
         type: 'directory',
         children: new Map([
           ['file1.txt', { name: 'file1.txt', type: 'file' }],
-          ['file2.txt', { name: 'file2.txt', type: 'file' }]
-        ])
+          ['file2.txt', { name: 'file2.txt', type: 'file' }],
+        ]),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -38,13 +38,11 @@ describe('ls command', () => {
       const mockNode: FileSystemNode = {
         name: '.',
         type: 'directory',
-        children: new Map([
-          ['test.txt', { name: 'test.txt', type: 'file' }]
-        ])
+        children: new Map([['test.txt', { name: 'test.txt', type: 'file' }]]),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -57,11 +55,11 @@ describe('ls command', () => {
       const mockNode: FileSystemNode = {
         name: 'dir',
         type: 'directory',
-        children: new Map()
+        children: new Map(),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -73,11 +71,11 @@ describe('ls command', () => {
     it('should show single file when path is a file', () => {
       const mockNode: FileSystemNode = {
         name: 'file.txt',
-        type: 'file'
+        type: 'file',
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -93,12 +91,12 @@ describe('ls command', () => {
         children: new Map([
           ['zebra.txt', { name: 'zebra.txt', type: 'file' }],
           ['alpha.txt', { name: 'alpha.txt', type: 'file' }],
-          ['middle.txt', { name: 'middle.txt', type: 'file' }]
-        ])
+          ['middle.txt', { name: 'middle.txt', type: 'file' }],
+        ]),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -114,11 +112,11 @@ describe('ls command', () => {
       const mockNode: FileSystemNode = {
         name: 'emptydir',
         type: 'directory',
-        children: new Map()
+        children: new Map(),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -129,7 +127,7 @@ describe('ls command', () => {
 
     it('should error on non-existent path', () => {
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(null)
+        getNode: vi.fn().mockReturnValue(null),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -147,12 +145,12 @@ describe('ls command', () => {
         type: 'directory',
         children: new Map([
           ['visible.txt', { name: 'visible.txt', type: 'file', isHidden: false }],
-          ['.hidden', { name: '.hidden', type: 'file', isHidden: true }]
-        ])
+          ['.hidden', { name: '.hidden', type: 'file', isHidden: true }],
+        ]),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -168,12 +166,12 @@ describe('ls command', () => {
         type: 'directory',
         children: new Map([
           ['visible.txt', { name: 'visible.txt', type: 'file', isHidden: false }],
-          ['.hidden', { name: '.hidden', type: 'file', isHidden: true }]
-        ])
+          ['.hidden', { name: '.hidden', type: 'file', isHidden: true }],
+        ]),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -189,13 +187,11 @@ describe('ls command', () => {
       const mockNode: FileSystemNode = {
         name: 'dir',
         type: 'directory',
-        children: new Map([
-          ['file.txt', { name: 'file.txt', type: 'file' }]
-        ])
+        children: new Map([['file.txt', { name: 'file.txt', type: 'file' }]]),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -208,11 +204,11 @@ describe('ls command', () => {
     it('should show long format for single file with -l', () => {
       const mockNode: FileSystemNode = {
         name: 'file.txt',
-        type: 'file'
+        type: 'file',
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -230,12 +226,12 @@ describe('ls command', () => {
         type: 'directory',
         children: new Map([
           ['visible.txt', { name: 'visible.txt', type: 'file', isHidden: false }],
-          ['.hidden', { name: '.hidden', type: 'file', isHidden: true }]
-        ])
+          ['.hidden', { name: '.hidden', type: 'file', isHidden: true }],
+        ]),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -250,13 +246,11 @@ describe('ls command', () => {
       const mockNode: FileSystemNode = {
         name: 'dir',
         type: 'directory',
-        children: new Map([
-          ['file.txt', { name: 'file.txt', type: 'file' }]
-        ])
+        children: new Map([['file.txt', { name: 'file.txt', type: 'file' }]]),
       };
 
       const mockFs = {
-        getNode: vi.fn().mockReturnValue(mockNode)
+        getNode: vi.fn().mockReturnValue(mockNode),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -272,7 +266,7 @@ describe('ls command', () => {
       const mockFs = {
         getNode: vi.fn().mockImplementation(() => {
           throw new Error('Filesystem error');
-        })
+        }),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
@@ -286,7 +280,7 @@ describe('ls command', () => {
       const mockFs = {
         getNode: vi.fn().mockImplementation(() => {
           throw 'string error';
-        })
+        }),
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);

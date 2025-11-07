@@ -5,9 +5,9 @@
  * and relative paths, tilde (~) expansion for home directory, and special '-' argument
  * to return to the previous directory. Updates PWD and OLDPWD environment variables.
  */
-import type { Command } from '../Command';
-import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { EnvVarManager } from '../../utils/EnvVarManager';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createCdCommand(
   fs: IFileSystem,
@@ -27,7 +27,7 @@ export function createCdCommand(
           if (!oldPwd) {
             return {
               output: 'cd: OLDPWD not set',
-              error: true
+              error: true,
             };
           }
           targetPath = oldPwd;
@@ -54,9 +54,9 @@ export function createCdCommand(
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

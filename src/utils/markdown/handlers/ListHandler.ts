@@ -1,6 +1,6 @@
+import { InlineRenderer } from '../InlineRenderer';
 import type { LineHandler } from '../LineHandler';
 import type { ParseContext } from '../ParseContext';
-import { InlineRenderer } from '../InlineRenderer';
 
 export class ListHandler implements LineHandler {
   canHandle(line: string, context: ParseContext): boolean {
@@ -10,10 +10,10 @@ export class ListHandler implements LineHandler {
     const trimmed = line.trim();
 
     // Check for unordered list markers
-    if (trimmed.match(/^[-*]\s+/)) return true;
+    if (/^[-*]\s+/.exec(trimmed)) return true;
 
     // Check for ordered list markers
-    if (trimmed.match(/^\d+\.\s+/)) return true;
+    if (/^\d+\.\s+/.exec(trimmed)) return true;
 
     // If we're in a list state, check if line continues it
     if (context.getState() === 'list') {
@@ -34,13 +34,13 @@ export class ListHandler implements LineHandler {
     }
 
     // Unordered list item
-    const ulMatch = trimmed.match(/^[-*]\s+(.+)$/);
+    const ulMatch = /^[-*]\s+(.+)$/.exec(trimmed);
     if (ulMatch) {
       return this.handleListItem(context, 'ul', ulMatch[1]);
     }
 
     // Ordered list item
-    const olMatch = trimmed.match(/^\d+\.\s+(.+)$/);
+    const olMatch = /^\d+\.\s+(.+)$/.exec(trimmed);
     if (olMatch) {
       return this.handleListItem(context, 'ol', olMatch[1]);
     }
@@ -48,11 +48,7 @@ export class ListHandler implements LineHandler {
     return false;
   }
 
-  private handleListItem(
-    context: ParseContext,
-    type: 'ul' | 'ol',
-    content: string
-  ): boolean {
+  private handleListItem(context: ParseContext, type: 'ul' | 'ol', content: string): boolean {
     const currentListType = context.getListType();
 
     // If switching list types, flush the current list
@@ -73,9 +69,6 @@ export class ListHandler implements LineHandler {
   }
 
   private isListItem(line: string): boolean {
-    return !!(
-      line.match(/^[-*]\s+/) ||
-      line.match(/^\d+\.\s+/)
-    );
+    return !!((/^[-*]\s+/.exec(line)) || (/^\d+\.\s+/.exec(line)));
   }
 }

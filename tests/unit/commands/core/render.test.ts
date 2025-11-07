@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createRenderCommand } from '../../../../src/commands/core/render';
-import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 import * as MarkdownServiceModule from '../../../../src/utils/MarkdownService';
+import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 // Mock MarkdownService
 vi.mock('../../../../src/utils/MarkdownService', () => ({
   MarkdownService: {
     render: vi.fn((content: string, _hasFrontmatter: boolean) => {
       return `<p>${content}</p>`;
-    })
-  }
+    }),
+  },
 }));
 
 beforeEach(() => {
@@ -22,7 +22,7 @@ describe('render command', () => {
       const mockFs = {
         exists: vi.fn().mockReturnValue(true),
         isFile: vi.fn().mockReturnValue(true),
-        readFile: vi.fn().mockReturnValue('# Test\n\nContent')
+        readFile: vi.fn().mockReturnValue('# Test\n\nContent'),
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
@@ -37,7 +37,7 @@ describe('render command', () => {
       const mockFs = {
         exists: vi.fn().mockReturnValue(true),
         isFile: vi.fn().mockReturnValue(true),
-        readFile: vi.fn().mockReturnValue('---\ntitle: Test\n---\n\nContent')
+        readFile: vi.fn().mockReturnValue('---\ntitle: Test\n---\n\nContent'),
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
@@ -53,7 +53,7 @@ describe('render command', () => {
       const mockFs = {
         exists: vi.fn().mockReturnValue(true),
         isFile: vi.fn().mockReturnValue(true),
-        readFile: vi.fn().mockReturnValue('# Just content')
+        readFile: vi.fn().mockReturnValue('# Just content'),
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
@@ -69,7 +69,7 @@ describe('render command', () => {
       const mockFs = {
         exists: vi.fn().mockReturnValue(false),
         isFile: vi.fn(),
-        readFile: vi.fn()
+        readFile: vi.fn(),
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
@@ -83,7 +83,7 @@ describe('render command', () => {
       const mockFs = {
         exists: vi.fn().mockReturnValue(true),
         isFile: vi.fn().mockReturnValue(false),
-        readFile: vi.fn()
+        readFile: vi.fn(),
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
@@ -99,7 +99,7 @@ describe('render command', () => {
         isFile: vi.fn().mockReturnValue(true),
         readFile: vi.fn().mockImplementation(() => {
           throw new Error('Read error');
-        })
+        }),
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);

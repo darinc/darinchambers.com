@@ -39,8 +39,8 @@ export class ThemeManager {
           '--terminal-dim': '#20c20e',
           '--terminal-error': '#ff3333',
           '--terminal-cursor': '#39ff14',
-          '--terminal-bg-secondary': '#0d1117'
-        }
+          '--terminal-bg-secondary': '#0d1117',
+        },
       },
       {
         name: 'yellow',
@@ -52,8 +52,8 @@ export class ThemeManager {
           '--terminal-dim': '#cc8800',
           '--terminal-error': '#ff3333',
           '--terminal-cursor': '#ffb000',
-          '--terminal-bg-secondary': '#0f0b08'
-        }
+          '--terminal-bg-secondary': '#0f0b08',
+        },
       },
       {
         name: 'white',
@@ -65,8 +65,8 @@ export class ThemeManager {
           '--terminal-dim': '#999999',
           '--terminal-error': '#ff5555',
           '--terminal-cursor': '#ffffff',
-          '--terminal-bg-secondary': '#242424'
-        }
+          '--terminal-bg-secondary': '#242424',
+        },
       },
       {
         name: 'light-blue',
@@ -78,8 +78,8 @@ export class ThemeManager {
           '--terminal-dim': '#0088aa',
           '--terminal-error': '#ff3333',
           '--terminal-cursor': '#00d4ff',
-          '--terminal-bg-secondary': '#0d1825'
-        }
+          '--terminal-bg-secondary': '#0d1825',
+        },
       },
       {
         name: 'paper',
@@ -91,12 +91,12 @@ export class ThemeManager {
           '--terminal-dim': '#666666',
           '--terminal-error': '#cc0000',
           '--terminal-cursor': '#1a1a1a',
-          '--terminal-bg-secondary': '#f0f0f0'
-        }
-      }
+          '--terminal-bg-secondary': '#f0f0f0',
+        },
+      },
     ];
 
-    presets.forEach(preset => {
+    presets.forEach((preset) => {
       this.presets.set(preset.name as ThemePresetName, preset);
     });
   }
@@ -157,7 +157,7 @@ export class ThemeManager {
       if (!this.validateColor(value)) {
         throw new Error(
           `Invalid color value for ${variable}: ${value}. ` +
-          `Expected hex format (e.g., #ff0000 or #f00)`
+            `Expected hex format (e.g., #ff0000 or #f00)`
         );
       }
     });
@@ -177,7 +177,7 @@ export class ThemeManager {
       dim: mergedColors['--terminal-dim'],
       error: mergedColors['--terminal-error'],
       cursor: mergedColors['--terminal-cursor'],
-      backgroundSecondary: mergedColors['--terminal-bg-secondary']
+      backgroundSecondary: mergedColors['--terminal-bg-secondary'],
     };
 
     // Persist to settings (automatically sets preset to 'custom')
@@ -201,7 +201,7 @@ export class ThemeManager {
         '--terminal-dim': customColors.dim,
         '--terminal-error': customColors.error,
         '--terminal-cursor': customColors.cursor,
-        '--terminal-bg-secondary': customColors.backgroundSecondary
+        '--terminal-bg-secondary': customColors.backgroundSecondary,
       };
       this.updateCSSVariables(colorScheme);
     } else if (preset !== 'custom') {
@@ -229,7 +229,7 @@ export class ThemeManager {
     if (typeof document === 'undefined') {
       // Return green preset as fallback in non-browser environments
       const greenPreset = this.presets.get('green');
-      return greenPreset ? greenPreset.colors : {} as ColorScheme;
+      return greenPreset ? greenPreset.colors : ({} as ColorScheme);
     }
 
     const root = document.documentElement;
@@ -242,7 +242,8 @@ export class ThemeManager {
       '--terminal-dim': computedStyle.getPropertyValue('--terminal-dim').trim() || '#20c20e',
       '--terminal-error': computedStyle.getPropertyValue('--terminal-error').trim() || '#ff3333',
       '--terminal-cursor': computedStyle.getPropertyValue('--terminal-cursor').trim() || '#39ff14',
-      '--terminal-bg-secondary': computedStyle.getPropertyValue('--terminal-bg-secondary').trim() || '#0d1117'
+      '--terminal-bg-secondary':
+        computedStyle.getPropertyValue('--terminal-bg-secondary').trim() || '#0d1117',
     };
   }
 
@@ -293,7 +294,8 @@ export class ThemeManager {
       '--terminal-dim': custom['--terminal-dim'] || base['--terminal-dim'],
       '--terminal-error': custom['--terminal-error'] || base['--terminal-error'],
       '--terminal-cursor': custom['--terminal-cursor'] || base['--terminal-cursor'],
-      '--terminal-bg-secondary': custom['--terminal-bg-secondary'] || base['--terminal-bg-secondary']
+      '--terminal-bg-secondary':
+        custom['--terminal-bg-secondary'] || base['--terminal-bg-secondary'],
     };
   }
 }

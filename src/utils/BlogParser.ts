@@ -22,7 +22,7 @@ function isBlogFrontmatter(data: unknown): data is BlogFrontmatter {
     typeof obj.date === 'string' &&
     typeof obj.summary === 'string' &&
     Array.isArray(obj.tags) &&
-    obj.tags.every(tag => typeof tag === 'string')
+    obj.tags.every((tag) => typeof tag === 'string')
   );
 }
 
@@ -68,7 +68,7 @@ export class BlogParser {
       if (colonIndex === -1) continue;
 
       const key = line.substring(0, colonIndex).trim();
-      let value = line.substring(colonIndex + 1).trim();
+      const value = line.substring(colonIndex + 1).trim();
 
       // Handle array values like tags: [tag1, tag2]
       if (value.startsWith('[') && value.endsWith(']')) {
@@ -76,8 +76,8 @@ export class BlogParser {
         const arrayContent = value.substring(1, value.length - 1);
         frontmatter[key] = arrayContent
           .split(',')
-          .map(item => item.trim().replace(/^["']|["']$/g, ''))
-          .filter(item => item.length > 0);
+          .map((item) => item.trim().replace(/^["']|["']$/g, ''))
+          .filter((item) => item.length > 0);
       } else {
         // Remove quotes if present
         frontmatter[key] = value.replace(/^["']|["']$/g, '');
@@ -92,14 +92,12 @@ export class BlogParser {
       if (!frontmatter.summary) missing.push('summary');
       if (!Array.isArray(frontmatter.tags)) missing.push('tags');
 
-      throw new Error(
-        `Invalid blog frontmatter: missing or invalid fields: ${missing.join(', ')}`
-      );
+      throw new Error(`Invalid blog frontmatter: missing or invalid fields: ${missing.join(', ')}`);
     }
 
     return {
       frontmatter,
-      markdown: markdownLines.join('\n').trim()
+      markdown: markdownLines.join('\n').trim(),
     };
   }
 
@@ -112,9 +110,7 @@ export class BlogParser {
 
     // Extract ID from filename (remove date prefix and .md extension)
     // e.g., "2024-09-15-ai-production-lessons.md" -> "ai-production-lessons"
-    const id = filename
-      .replace(/^\d{4}-\d{2}-\d{2}-/, '')
-      .replace(/\.md$/, '');
+    const id = filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
 
     return {
       id,
@@ -122,7 +118,7 @@ export class BlogParser {
       date: frontmatter.date,
       summary: frontmatter.summary,
       content: markdown,
-      tags: frontmatter.tags
+      tags: frontmatter.tags,
     };
   }
 
@@ -130,8 +126,6 @@ export class BlogParser {
    * Get blog post ID from filename
    */
   static getIdFromFilename(filename: string): string {
-    return filename
-      .replace(/^\d{4}-\d{2}-\d{2}-/, '')
-      .replace(/\.md$/, '');
+    return filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
   }
 }

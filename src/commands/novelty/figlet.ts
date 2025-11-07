@@ -1,10 +1,10 @@
-import type { Command } from '../Command';
-import { CommandArgs } from '../../utils/CommandArgs';
 import figlet from 'figlet';
-import standardFont from 'figlet/importable-fonts/Standard.js';
-import slantFont from 'figlet/importable-fonts/Slant.js';
 import bannerFont from 'figlet/importable-fonts/Banner.js';
+import slantFont from 'figlet/importable-fonts/Slant.js';
 import smallFont from 'figlet/importable-fonts/Small.js';
+import standardFont from 'figlet/importable-fonts/Standard.js';
+import { CommandArgs } from '../../utils/CommandArgs';
+import type { Command } from '../Command';
 
 // Parse and load fonts
 figlet.parseFont('Standard', standardFont);
@@ -48,7 +48,7 @@ Available fonts:
   standard   - Default font (recommended)
   slant      - Slanted/italicized style
   banner     - Large banner style
-  small      - Compact font`
+  small      - Compact font`,
       };
     }
 
@@ -62,13 +62,13 @@ Available fonts:
     } else {
       return {
         output: `figlet: missing text argument\nTry 'figlet --help' for more information.`,
-        error: true
+        error: true,
       };
     }
 
     // Get font (default: Standard)
     const fontFlag = cmdArgs.getFlag('f');
-    const fontName = (typeof fontFlag === 'string' ? fontFlag : 'Standard');
+    const fontName = typeof fontFlag === 'string' ? fontFlag : 'Standard';
 
     // Normalize font name (capitalize first letter)
     const font = fontName.charAt(0).toUpperCase() + fontName.slice(1).toLowerCase();
@@ -85,28 +85,32 @@ Available fonts:
       // Generate ASCII art using textSync (works in browser)
       const output = figlet.textSync(text, {
         font: font as figlet.Fonts,
-        horizontalLayout
+        horizontalLayout,
       });
 
       return { output };
     } catch (error) {
       // Handle font not found or other errors
       if (error instanceof Error) {
-        if (error.message.includes('font') || error.message.includes('Font') || error.message.includes('FIGlet')) {
+        if (
+          error.message.includes('font') ||
+          error.message.includes('Font') ||
+          error.message.includes('FIGlet')
+        ) {
           return {
             output: `figlet: font '${font}' not found or invalid\nAvailable fonts: standard, slant, banner, small`,
-            error: true
+            error: true,
           };
         }
         return {
           output: `figlet: ${error.message}`,
-          error: true
+          error: true,
         };
       }
       return {
         output: `figlet: unknown error occurred`,
-        error: true
+        error: true,
       };
     }
-  }
+  },
 };

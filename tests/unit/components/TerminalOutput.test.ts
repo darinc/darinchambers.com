@@ -4,7 +4,7 @@ import { setupOutputDOM, cleanupDOM, getElement } from '../../helpers/dom-setup'
 
 // Mock the sanitizeHtml module
 vi.mock('../../../src/utils/sanitizeHtml', () => ({
-  sanitizeHtml: vi.fn((html: string) => html) // Pass through for testing
+  sanitizeHtml: vi.fn((html: string) => html), // Pass through for testing
 }));
 
 describe('TerminalOutput', () => {

@@ -23,7 +23,7 @@ This is the project description.`;
         title: 'Test Project',
         year: '2024',
         technologies: ['TypeScript', 'React'],
-        impact: 'Improved productivity by 50%'
+        impact: 'Improved productivity by 50%',
       });
       expect(result.markdown).toBe('# Project Description\n\nThis is the project description.');
     });
@@ -44,7 +44,7 @@ Description`;
         id: 'test-project',
         title: 'Test Project',
         year: '2024',
-        technologies: ['TypeScript']
+        technologies: ['TypeScript'],
       });
     });
 
@@ -217,9 +217,7 @@ id: test
 
 Content`;
 
-      expect(() => PortfolioParser.parseFrontmatter(content)).toThrow(
-        /missing or invalid fields/
-      );
+      expect(() => PortfolioParser.parseFrontmatter(content)).toThrow(/missing or invalid fields/);
     });
 
     it('should handle multiline content after frontmatter', () => {
@@ -302,7 +300,7 @@ Developed machine learning systems.`;
         description: '# AI/ML Systems\n\nDeveloped machine learning systems.',
         technologies: ['Python', 'TensorFlow', 'AWS'],
         impact: 'Reduced processing time by 40%',
-        year: '2024'
+        year: '2024',
       });
     });
 

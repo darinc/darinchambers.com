@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { FrontmatterParser, FrontmatterData } from '../../../../src/utils/markdown/FrontmatterParser';
+import {
+  FrontmatterParser
+} from '../../../../src/utils/markdown/FrontmatterParser';
+import type {
+  FrontmatterData} from '../../../../src/utils/markdown/FrontmatterParser';
 
 describe('FrontmatterParser', () => {
   describe('parse() - Valid Frontmatter', () => {
@@ -424,7 +428,7 @@ Content`;
       const frontmatter: FrontmatterData = {
         title: 'Title',
         date: '2024-01-15',
-        summary: 'Summary'
+        summary: 'Summary',
       };
 
       const result = FrontmatterParser.renderFrontmatter(frontmatter);
@@ -448,7 +452,7 @@ Content`;
     it('should combine date and tags in fm-meta with bullet separator', () => {
       const frontmatter: FrontmatterData = {
         date: '2024-01-15',
-        tags: ['tag1', 'tag2']
+        tags: ['tag1', 'tag2'],
       };
 
       const result = FrontmatterParser.renderFrontmatter(frontmatter);
@@ -463,7 +467,7 @@ Content`;
         title: 'Full Example',
         date: '2024-01-15',
         tags: ['TypeScript', 'Testing'],
-        summary: 'A complete frontmatter example'
+        summary: 'A complete frontmatter example',
       };
 
       const result = FrontmatterParser.renderFrontmatter(frontmatter);
@@ -481,7 +485,7 @@ Content`;
     it('should escape all special characters', () => {
       const frontmatter: FrontmatterData = {
         title: '& < > " \'',
-        summary: '& < > " \''
+        summary: '& < > " \'',
       };
 
       const result = FrontmatterParser.renderFrontmatter(frontmatter);
@@ -495,7 +499,7 @@ Content`;
         title: '<h1>Title</h1>',
         date: '<script>alert()</script>',
         tags: ['<tag1>', '<tag2>'],
-        summary: '<p>Summary</p>'
+        summary: '<p>Summary</p>',
       };
 
       const result = FrontmatterParser.renderFrontmatter(frontmatter);

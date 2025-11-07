@@ -1,6 +1,6 @@
+import { InlineRenderer } from '../InlineRenderer';
 import type { LineHandler } from '../LineHandler';
 import type { ParseContext } from '../ParseContext';
-import { InlineRenderer } from '../InlineRenderer';
 
 export class ParagraphHandler implements LineHandler {
   canHandle(line: string, context: ParseContext): boolean {

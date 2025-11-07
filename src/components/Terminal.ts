@@ -1,15 +1,15 @@
+import { COMMAND_SIGNALS } from '../constants';
+import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
+import { sanitizeHtml } from '../utils/sanitizeHtml';
+import { generateSettingsUI } from './SettingsUI';
 import { TerminalInput } from './TerminalInput';
 import { TerminalOutput } from './TerminalOutput';
-import { CommandDispatcher } from '../utils/CommandDispatcher';
-import { CommandExecutor } from '../utils/CommandExecutor';
 import type { Command, CommandResult } from '../commands/Command';
-import { COMMAND_SIGNALS } from '../constants';
+import type { CommandDispatcher } from '../utils/CommandDispatcher';
+import type { CommandExecutor } from '../utils/CommandExecutor';
+import type { EnvVarManager } from '../utils/EnvVarManager';
 import type { SettingsManager } from '../utils/SettingsManager';
 import type { ThemeManager } from '../utils/ThemeManager';
-import type { EnvVarManager } from '../utils/EnvVarManager';
-import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
-import { generateSettingsUI } from './SettingsUI';
-import { sanitizeHtml } from '../utils/sanitizeHtml';
 
 // Forward declaration to avoid circular dependency
 interface IRouter {
@@ -19,9 +19,9 @@ interface IRouter {
 export class Terminal {
   private input: TerminalInput;
   private output: TerminalOutput;
-  private username: string = 'darin';
-  private hostname: string = 'darinchambers.com';
-  private currentPath: string = '~';
+  private username = 'darin';
+  private hostname = 'darinchambers.com';
+  private currentPath = '~';
   private promptFormatter: PromptFormatter;
   private router?: IRouter;
 
@@ -34,7 +34,7 @@ export class Terminal {
   ) {
     const outputElement = document.getElementById('terminal-output');
     const inputElement = document.getElementById('terminal-input') as HTMLInputElement;
-    const promptElement = document.getElementById('terminal-prompt') as HTMLElement;
+    const promptElement = document.getElementById('terminal-prompt')!;
 
     if (!outputElement || !inputElement || !promptElement) {
       throw new Error('Required terminal elements not found');
@@ -91,7 +91,7 @@ export class Terminal {
       // Handle buttons with data-command attribute
       // Exclude navigation buttons (they have their own click handlers that should run first)
       if (target.closest('[data-command]') && !target.closest('.nav-link')) {
-        const button = target.closest('[data-command]') as HTMLElement;
+        const button = target.closest('[data-command]')!;
         const command = button.getAttribute('data-command');
         if (command) {
           this.executeCommand(command, false);
@@ -178,21 +178,26 @@ export class Terminal {
     }
 
     // Store currently focused element to restore focus after refresh
-    const wasInPanel = Array.from(panels).some(panel => panel.contains(document.activeElement));
+    const wasInPanel = Array.from(panels).some((panel) => panel.contains(document.activeElement));
 
     // Generate fresh HTML with current settings
     const freshHTML = generateSettingsUI(this.settingsManager, this.themeManager);
 
     // Update each panel's content (sanitize to prevent XSS)
-    panels.forEach(panel => {
-      const cleanHTML = freshHTML.replace('<aside class="settings-panel" role="complementary" aria-label="Terminal settings" data-settings-panel="true">', '').replace(/<\/aside>$/, '');
+    panels.forEach((panel) => {
+      const cleanHTML = freshHTML
+        .replace(
+          '<aside class="settings-panel" role="complementary" aria-label="Terminal settings" data-settings-panel="true">',
+          ''
+        )
+        .replace(/<\/aside>$/, '');
       panel.innerHTML = sanitizeHtml(cleanHTML);
     });
 
     // If focus was in the panel before refresh, move it to first focusable element
     if (wasInPanel && panels.length > 0) {
       const firstPanel = panels[0];
-      const firstFocusable = firstPanel.querySelector('button, input, select') as HTMLElement;
+      const firstFocusable = firstPanel.querySelector<HTMLElement>('button, input, select');
       if (firstFocusable) {
         firstFocusable.focus();
       }
@@ -208,7 +213,7 @@ export class Terminal {
     setTimeout(() => {
       const settingsPanel = document.querySelector('[data-settings-panel]');
       if (settingsPanel) {
-        const firstFocusable = settingsPanel.querySelector('button, input, select') as HTMLElement;
+        const firstFocusable = settingsPanel.querySelector<HTMLElement>('button, input, select');
         if (firstFocusable) {
           firstFocusable.focus();
         }
@@ -281,7 +286,7 @@ export class Terminal {
       pwd: this.envVarManager?.getVariable('PWD') || this.currentPath,
       shortPwd: this.currentPath,
       lastDir: PromptFormatter.getLastDir(this.currentPath),
-      isRoot: this.username === 'root'
+      isRoot: this.username === 'root',
     };
 
     // Get prompt format from settings or use default
@@ -301,7 +306,7 @@ export class Terminal {
   }
 
   registerCommands(commands: Command[]): void {
-    commands.forEach(cmd => this.registerCommand(cmd));
+    commands.forEach((cmd) => this.registerCommand(cmd));
   }
 
   writeWelcome(message: string): void {
@@ -347,7 +352,7 @@ export class Terminal {
    * @param command - The command string to execute
    * @param clearFirst - Whether to clear the terminal before execution
    */
-  async executeCommand(command: string, clearFirst: boolean = false): Promise<void> {
+  async executeCommand(command: string, clearFirst = false): Promise<void> {
     // Clear terminal first if requested (e.g., from navigation clicks)
     if (clearFirst) {
       this.output.clear();

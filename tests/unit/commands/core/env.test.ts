@@ -9,9 +9,9 @@ describe('env command', () => {
         new Map([
           ['PATH', '/usr/bin'],
           ['HOME', '/home/user'],
-          ['USER', 'testuser']
+          ['USER', 'testuser'],
         ])
-      )
+      ),
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
@@ -28,9 +28,9 @@ describe('env command', () => {
         new Map([
           ['ZEBRA', 'last'],
           ['ALPHA', 'first'],
-          ['MIDDLE', 'mid']
+          ['MIDDLE', 'mid'],
         ])
-      )
+      ),
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
@@ -44,7 +44,7 @@ describe('env command', () => {
 
   it('should return empty string when no variables', () => {
     const mockManager = {
-      getAllVariables: vi.fn().mockReturnValue(new Map())
+      getAllVariables: vi.fn().mockReturnValue(new Map()),
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
@@ -55,7 +55,7 @@ describe('env command', () => {
 
   it('should have correct name and description', () => {
     const mockManager = {
-      getAllVariables: vi.fn().mockReturnValue(new Map())
+      getAllVariables: vi.fn().mockReturnValue(new Map()),
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
@@ -66,9 +66,7 @@ describe('env command', () => {
 
   it('should ignore arguments', () => {
     const mockManager = {
-      getAllVariables: vi.fn().mockReturnValue(
-        new Map([['TEST', 'value']])
-      )
+      getAllVariables: vi.fn().mockReturnValue(new Map([['TEST', 'value']])),
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
@@ -79,9 +77,7 @@ describe('env command', () => {
 
   it('should ignore stdin', () => {
     const mockManager = {
-      getAllVariables: vi.fn().mockReturnValue(
-        new Map([['VAR', 'value']])
-      )
+      getAllVariables: vi.fn().mockReturnValue(new Map([['VAR', 'value']])),
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
@@ -94,7 +90,7 @@ describe('env command', () => {
     const mockManager = {
       getAllVariables: vi.fn().mockImplementation(() => {
         throw new Error('Manager error');
-      })
+      }),
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
@@ -108,7 +104,7 @@ describe('env command', () => {
     const mockManager = {
       getAllVariables: vi.fn().mockImplementation(() => {
         throw 'string error';
-      })
+      }),
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);

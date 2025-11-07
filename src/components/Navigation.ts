@@ -8,10 +8,7 @@ export class Navigation {
   private onCommandClick: (command: string) => void;
   private activeCommand: string | null = null;
 
-  constructor(
-    navLinksElement: HTMLElement,
-    onCommandClick: (command: string) => void
-  ) {
+  constructor(navLinksElement: HTMLElement, onCommandClick: (command: string) => void) {
     this.navLinksElement = navLinksElement;
     this.onCommandClick = onCommandClick;
   }
@@ -19,7 +16,7 @@ export class Navigation {
   setItems(items: NavItem[]): void {
     this.navLinksElement.innerHTML = '';
 
-    items.forEach(item => {
+    items.forEach((item) => {
       const link = document.createElement('button');
       link.className = 'nav-link';
       link.type = 'button';
@@ -59,7 +56,7 @@ export class Navigation {
 
     // Remove aria-current from all buttons
     const buttons = this.navLinksElement.querySelectorAll('button[data-command]');
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       button.removeAttribute('aria-current');
     });
 

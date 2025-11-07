@@ -77,7 +77,9 @@ describe('InlineRenderer', () => {
 
     it('should handle multiple bold sections', () => {
       const result = InlineRenderer.render('**one** and **two** and **three**');
-      expect(result).toBe('<strong>one</strong> and <strong>two</strong> and <strong>three</strong>');
+      expect(result).toBe(
+        '<strong>one</strong> and <strong>two</strong> and <strong>three</strong>'
+      );
     });
 
     it('should handle bold at start and end', () => {
@@ -111,13 +113,17 @@ describe('InlineRenderer', () => {
   describe('Order of Operations', () => {
     it('should apply in correct order: escape → links → code → bold → italic', () => {
       const result = InlineRenderer.render('**bold** *italic* `code` [link](url)');
-      expect(result).toBe('<strong>bold</strong> <em>italic</em> <code>code</code> <a href="url">link</a>');
+      expect(result).toBe(
+        '<strong>bold</strong> <em>italic</em> <code>code</code> <a href="url">link</a>'
+      );
     });
 
     it('should not format inside code spans', () => {
       const result = InlineRenderer.render('Code `**bold**` and `*italic*`');
       // Note: Current implementation processes formatting AFTER code wrapping
-      expect(result).toBe('Code <code><strong>bold</strong></code> and <code><em>italic</em></code>');
+      expect(result).toBe(
+        'Code <code><strong>bold</strong></code> and <code><em>italic</em></code>'
+      );
     });
 
     it('should handle bold and italic together', () => {

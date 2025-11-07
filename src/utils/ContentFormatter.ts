@@ -1,5 +1,5 @@
-import type { Project } from '../types/portfolio';
 import type { BlogPost } from '../types/blog';
+import type { Project } from '../types/portfolio';
 
 /**
  * ContentFormatter - Utility for generating markdown from structured data
@@ -11,18 +11,20 @@ export class ContentFormatter {
    * Format a portfolio list as markdown
    */
   static formatPortfolioList(projects: Project[]): string {
-    const items = projects.map((project, index) => {
-      const tech = project.technologies.join(', ');
-      const impact = project.impact ? `\n   **Impact:** ${project.impact}` : '';
+    const items = projects
+      .map((project, index) => {
+        const tech = project.technologies.join(', ');
+        const impact = project.impact ? `\n   **Impact:** ${project.impact}` : '';
 
-      return `### ${index + 1}. ${project.title} (${project.year})
+        return `### ${index + 1}. ${project.title} (${project.year})
 
 ${project.description}
 
 **Technologies:** ${tech}${impact}
 
 [View Details →](#) Type: \`portfolio ${project.id}\``;
-    }).join('\n\n---\n\n');
+      })
+      .join('\n\n---\n\n');
 
     return `# Portfolio
 
@@ -59,10 +61,11 @@ ${tech}${impact}
   static formatBlogList(posts: BlogPost[], filterTag?: string): string {
     const header = filterTag ? `# Blog Posts - Tag: ${filterTag}` : '# Blog Posts';
 
-    const items = posts.map((post, index) => {
-      const tags = post.tags.map((t: string) => `\`${t}\``).join(' ');
+    const items = posts
+      .map((post, index) => {
+        const tags = post.tags.map((t: string) => `\`${t}\``).join(' ');
 
-      return `### ${index + 1}. ${post.title}
+        return `### ${index + 1}. ${post.title}
 
 **Date:** ${post.date}
 
@@ -71,7 +74,8 @@ ${post.summary}
 **Tags:** ${tags}
 
 [Read Post →](#) Type: \`blog ${post.id}\``;
-    }).join('\n\n---\n\n');
+      })
+      .join('\n\n---\n\n');
 
     const footer = filterTag
       ? '\n\n---\n\n[← Back to All Posts](#) Type: `blog`'

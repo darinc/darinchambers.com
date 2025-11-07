@@ -23,7 +23,7 @@ function isPortfolioFrontmatter(data: unknown): data is PortfolioFrontmatter {
     typeof obj.title === 'string' &&
     typeof obj.year === 'string' &&
     Array.isArray(obj.technologies) &&
-    obj.technologies.every(tech => typeof tech === 'string') &&
+    obj.technologies.every((tech) => typeof tech === 'string') &&
     (obj.impact === undefined || typeof obj.impact === 'string')
   );
 }
@@ -38,7 +38,10 @@ export class PortfolioParser {
    * ---
    * Content here...
    */
-  static parseFrontmatter(content: string): { frontmatter: PortfolioFrontmatter; markdown: string } {
+  static parseFrontmatter(content: string): {
+    frontmatter: PortfolioFrontmatter;
+    markdown: string;
+  } {
     const lines = content.split('\n');
 
     // Check if content starts with frontmatter delimiter
@@ -70,7 +73,7 @@ export class PortfolioParser {
       if (colonIndex === -1) continue;
 
       const key = line.substring(0, colonIndex).trim();
-      let value = line.substring(colonIndex + 1).trim();
+      const value = line.substring(colonIndex + 1).trim();
 
       // Handle array values like technologies: ["tech1", "tech2"]
       if (value.startsWith('[') && value.endsWith(']')) {
@@ -78,8 +81,8 @@ export class PortfolioParser {
         const arrayContent = value.substring(1, value.length - 1);
         frontmatter[key] = arrayContent
           .split(',')
-          .map(item => item.trim().replace(/^["']|["']$/g, ''))
-          .filter(item => item.length > 0);
+          .map((item) => item.trim().replace(/^["']|["']$/g, ''))
+          .filter((item) => item.length > 0);
       } else {
         // Remove quotes if present
         frontmatter[key] = value.replace(/^["']|["']$/g, '');
@@ -101,7 +104,7 @@ export class PortfolioParser {
 
     return {
       frontmatter,
-      markdown: markdownLines.join('\n').trim()
+      markdown: markdownLines.join('\n').trim(),
     };
   }
 
@@ -122,7 +125,7 @@ export class PortfolioParser {
       description: markdown,
       technologies: frontmatter.technologies,
       impact: frontmatter.impact,
-      year: frontmatter.year
+      year: frontmatter.year,
     };
   }
 

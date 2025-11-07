@@ -7,11 +7,11 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { createSettingsCommand } from '../../../../src/commands/local/settings';
+import { FileSystemService } from '../../../../src/utils/fs/FileSystemService';
 import { SettingsManager } from '../../../../src/utils/SettingsManager';
 import { ThemeManager } from '../../../../src/utils/ThemeManager';
-import { FileSystemService } from '../../../../src/utils/fs/FileSystemService';
-import type { FileSystemNode } from '../../../../src/utils/fs/types';
 import type { Command } from '../../../../src/commands/Command';
+import type { FileSystemNode } from '../../../../src/utils/fs/types';
 
 describe('Settings Command', () => {
   let fs: FileSystemService;
@@ -28,18 +28,24 @@ describe('Settings Command', () => {
       name: '',
       type: 'directory',
       children: new Map([
-        ['home', {
-          name: 'home',
-          type: 'directory',
-          children: new Map([
-            ['darin', {
-              name: 'darin',
-              type: 'directory',
-              children: new Map()
-            }]
-          ])
-        }]
-      ])
+        [
+          'home',
+          {
+            name: 'home',
+            type: 'directory',
+            children: new Map([
+              [
+                'darin',
+                {
+                  name: 'darin',
+                  type: 'directory',
+                  children: new Map(),
+                },
+              ],
+            ]),
+          },
+        ],
+      ]),
     };
     fs = new FileSystemService(mockRoot);
 
@@ -54,16 +60,16 @@ describe('Settings Command', () => {
     global.document = {
       documentElement: {
         style: {
-          setProperty: vi.fn()
-        }
+          setProperty: vi.fn(),
+        },
       },
       body: {
         classList: {
           add: vi.fn(),
-          remove: vi.fn()
-        }
+          remove: vi.fn(),
+        },
       },
-      dispatchEvent: vi.fn()
+      dispatchEvent: vi.fn(),
     } as any;
 
     // Mock getComputedStyle for SettingsUI
@@ -79,11 +85,13 @@ describe('Settings Command', () => {
             '--terminal-accent': '#39ff14',
             '--terminal-dim': '#20c20e',
             '--terminal-error': '#ff3333',
-            '--terminal-cursor': '#39ff14'
+            '--terminal-cursor': '#39ff14',
           };
           return defaults[prop] || '';
         },
-        trim: function() { return ''; }
+        trim: function () {
+          return '';
+        },
       } as CSSStyleDeclaration;
     }) as any;
   });
@@ -696,7 +704,7 @@ describe('Settings Command', () => {
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Unknown subcommand: invalid');
-      expect(result.output).toContain('Use \'help\' for usage');
+      expect(result.output).toContain("Use 'help' for usage");
     });
 
     it('should show error for typo in list', () => {

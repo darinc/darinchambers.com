@@ -2,8 +2,8 @@ export class TerminalInput {
   private inputElement: HTMLInputElement;
   private promptElement: HTMLElement;
   private history: string[] = [];
-  private historyIndex: number = -1;
-  private currentInput: string = '';
+  private historyIndex = -1;
+  private currentInput = '';
   private availableCommands: string[] = [];
 
   constructor(inputElement: HTMLInputElement, promptElement: HTMLElement) {
@@ -60,9 +60,7 @@ export class TerminalInput {
     const input = this.inputElement.value.trim();
     if (!input) return;
 
-    const matches = this.availableCommands.filter(cmd =>
-      cmd.startsWith(input.toLowerCase())
-    );
+    const matches = this.availableCommands.filter((cmd) => cmd.startsWith(input.toLowerCase()));
 
     if (matches.length === 1) {
       this.inputElement.value = matches[0];
@@ -81,7 +79,7 @@ export class TerminalInput {
 
     let prefix = strings[0];
     for (let i = 1; i < strings.length; i++) {
-      while (strings[i].indexOf(prefix) !== 0) {
+      while (!strings[i].startsWith(prefix)) {
         prefix = prefix.substring(0, prefix.length - 1);
         if (prefix === '') return '';
       }

@@ -6,11 +6,7 @@ describe('tree command', () => {
   describe('Basic Tree Display', () => {
     it('should display directory tree', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue([
-          '.',
-          '├── file1.txt',
-          '└── dir1'
-        ])
+        getTree: vi.fn().mockReturnValue(['.', '├── file1.txt', '└── dir1']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -23,7 +19,7 @@ describe('tree command', () => {
 
     it('should use current directory by default', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue(['.'])
+        getTree: vi.fn().mockReturnValue(['.']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -34,7 +30,7 @@ describe('tree command', () => {
 
     it('should accept specific directory path', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue(['testdir'])
+        getTree: vi.fn().mockReturnValue(['testdir']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -45,7 +41,7 @@ describe('tree command', () => {
 
     it('should use default depth of 4', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue(['.'])
+        getTree: vi.fn().mockReturnValue(['.']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -58,7 +54,7 @@ describe('tree command', () => {
   describe('Depth Limiting (-L flag)', () => {
     it('should respect -L flag for custom depth', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue(['.'])
+        getTree: vi.fn().mockReturnValue(['.']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -69,7 +65,7 @@ describe('tree command', () => {
 
     it('should handle -L flag with different values', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue(['.'])
+        getTree: vi.fn().mockReturnValue(['.']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -83,7 +79,7 @@ describe('tree command', () => {
 
     it('should handle -L flag with path', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue(['testdir'])
+        getTree: vi.fn().mockReturnValue(['testdir']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -94,7 +90,7 @@ describe('tree command', () => {
 
     it('should error when -L has no value', () => {
       const mockFs = {
-        getTree: vi.fn()
+        getTree: vi.fn(),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -106,7 +102,7 @@ describe('tree command', () => {
 
     it('should error on invalid depth value', () => {
       const mockFs = {
-        getTree: vi.fn()
+        getTree: vi.fn(),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -118,7 +114,7 @@ describe('tree command', () => {
 
     it('should error on negative depth', () => {
       const mockFs = {
-        getTree: vi.fn()
+        getTree: vi.fn(),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -132,7 +128,7 @@ describe('tree command', () => {
 
     it('should error on zero depth', () => {
       const mockFs = {
-        getTree: vi.fn()
+        getTree: vi.fn(),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -146,11 +142,7 @@ describe('tree command', () => {
   describe('Output Format', () => {
     it('should join tree lines with newlines', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue([
-          'root',
-          '├── file1',
-          '└── file2'
-        ])
+        getTree: vi.fn().mockReturnValue(['root', '├── file1', '└── file2']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -161,7 +153,7 @@ describe('tree command', () => {
 
     it('should handle single line output', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue(['.'])
+        getTree: vi.fn().mockReturnValue(['.']),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -172,7 +164,7 @@ describe('tree command', () => {
 
     it('should handle empty tree', () => {
       const mockFs = {
-        getTree: vi.fn().mockReturnValue([])
+        getTree: vi.fn().mockReturnValue([]),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -187,7 +179,7 @@ describe('tree command', () => {
       const mockFs = {
         getTree: vi.fn().mockImplementation(() => {
           throw new Error('tree: /path: No such file or directory');
-        })
+        }),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
@@ -201,7 +193,7 @@ describe('tree command', () => {
       const mockFs = {
         getTree: vi.fn().mockImplementation(() => {
           throw 'string error';
-        })
+        }),
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);

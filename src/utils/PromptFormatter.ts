@@ -26,9 +26,9 @@ import type { EnvVarManager } from './EnvVarManager';
 export interface PromptContext {
   user: string;
   hostname: string;
-  pwd: string;        // Full path: /home/darin/blog/posts
-  shortPwd: string;   // With ~ expansion: ~/blog/posts
-  lastDir: string;    // Last directory only: posts
+  pwd: string; // Full path: /home/darin/blog/posts
+  shortPwd: string; // With ~ expansion: ~/blog/posts
+  lastDir: string; // Last directory only: posts
   isRoot: boolean;
   historyNumber?: number;
   commandNumber?: number;
@@ -77,8 +77,8 @@ export class PromptFormatter {
     result = result.replace(/\\H/g, context.hostname);
 
     // Path variations
-    result = result.replace(/\\w/g, context.shortPwd);  // Full path with ~
-    result = result.replace(/\\W/g, context.lastDir);   // Last dir only
+    result = result.replace(/\\w/g, context.shortPwd); // Full path with ~
+    result = result.replace(/\\W/g, context.lastDir); // Last dir only
 
     // Prompt character
     result = result.replace(/\\\$/g, context.isRoot ? '#' : '$');
@@ -134,7 +134,20 @@ export class PromptFormatter {
   private getDate(): string {
     const date = new Date();
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     const day = days[date.getDay()];
     const month = months[date.getMonth()];
@@ -209,7 +222,7 @@ export class PromptFormatter {
     }
 
     // Split path and filter out empty parts
-    const parts = path.split('/').filter(p => p && p !== '~');
+    const parts = path.split('/').filter((p) => p && p !== '~');
 
     // Return last part or ~ if empty (shouldn't happen with above checks)
     return parts.length > 0 ? parts[parts.length - 1] : '~';

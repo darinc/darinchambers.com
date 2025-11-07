@@ -264,7 +264,9 @@ describe('CommandDispatcher', () => {
     });
 
     it('should pass correct parsed arguments to each command in pipeline', async () => {
-      const result = await dispatcher.dispatchPipeline('echo start | args foo "bar baz" test | echo');
+      const result = await dispatcher.dispatchPipeline(
+        'echo start | args foo "bar baz" test | echo'
+      );
       const parsed = JSON.parse(result.output);
       expect(parsed.args).toEqual(['foo', 'bar baz', 'test']);
     });

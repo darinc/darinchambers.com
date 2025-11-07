@@ -11,24 +11,30 @@ The Markdown Rendering System has been successfully refactored from a monolithic
 ### Core System Files
 
 #### `/Users/darin/code/dc/dc.com/src/utils/MarkdownRenderer.ts` (29 lines)
+
 **Purpose:** Facade/entry point for markdown rendering
 **Complexity:** Very Low (1-2)
 **Key Methods:**
+
 - `static render(markdown: string, renderFrontmatter: boolean): string` - Main entry point
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/MarkdownParser.ts` (56 lines)
+
 **Purpose:** Orchestrates line-by-line parsing using handler chain
 **Complexity:** Low (3-4)
 **Key Methods:**
+
 - `constructor()` - Initializes handler chain in priority order
 - `parse(content: string): string` - Main parsing loop
 - `private processLine(line: string, context: ParseContext): void` - Delegates to handlers
 - `private flushRemainingState(context: ParseContext): void` - Cleanup after parsing
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/ParseContext.ts` (69 lines)
+
 **Purpose:** Manages parsing state and HTML accumulation
 **Complexity:** Low (2-3)
 **Key Methods:**
+
 - `addHtml(html: string): void`
 - `getHtml(): string`
 - `setState(state: 'normal' | 'code_block' | 'list'): void`
@@ -42,16 +48,20 @@ The Markdown Rendering System has been successfully refactored from a monolithic
 - `private escapeHtml(text: string): string`
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/InlineRenderer.ts` (34 lines)
+
 **Purpose:** Renders inline markdown (bold, italic, code, links)
 **Complexity:** Low (2-3)
 **Key Methods:**
+
 - `static render(text: string): string` - Processes inline markdown with regex
 - `private static escapeHtml(text: string): string` - HTML entity escaping
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/FrontmatterParser.ts` (114 lines)
+
 **Purpose:** Extracts and renders YAML frontmatter
 **Complexity:** Medium (5-6)
 **Key Methods:**
+
 - `static parse(markdown: string): ParsedMarkdown` - Extract frontmatter from content
 - `private static findFrontmatterEnd(lines: string[]): number` - Locate closing delimiter
 - `private static parseFrontmatterLines(lines: string[]): FrontmatterData` - Parse YAML-like syntax
@@ -59,57 +69,71 @@ The Markdown Rendering System has been successfully refactored from a monolithic
 - `private static escapeHtml(text: string): string` - HTML entity escaping
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/LineHandler.ts` (14 lines)
+
 **Purpose:** Interface defining handler contract
 **Complexity:** N/A (Interface)
 **Key Methods:**
+
 - `canHandle(line: string, context: ParseContext): boolean`
 - `handle(line: string, context: ParseContext): boolean`
 
 ### Handler Files
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/handlers/CodeBlockHandler.ts` (35 lines)
+
 **Purpose:** Handles fenced code blocks (```)
 **Complexity:** Low (3-4)
 **Key Methods:**
+
 - `canHandle(line: string, context: ParseContext): boolean` - Detects ``` or code_block state
 - `handle(line: string, context: ParseContext): boolean` - Manages code block state transitions
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/handlers/HeaderHandler.ts` (27 lines)
+
 **Purpose:** Handles headers (# to ######)
 **Complexity:** Low (2-3)
 **Key Methods:**
+
 - `canHandle(line: string, context: ParseContext): boolean` - Detects # prefix
 - `handle(line: string, context: ParseContext): boolean` - Extracts level and content, renders with inline formatting
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/handlers/ListHandler.ts` (81 lines)
+
 **Purpose:** Handles ordered and unordered lists
 **Complexity:** Medium (6-7)
 **Key Methods:**
+
 - `canHandle(line: string, context: ParseContext): boolean` - Detects list markers
 - `handle(line: string, context: ParseContext): boolean` - Processes list items
 - `private handleListItem(context: ParseContext, type: 'ul' | 'ol', content: string): boolean` - Manages list state
 - `private isListItem(line: string): boolean` - Helper to identify list lines
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/handlers/ParagraphHandler.ts` (16 lines)
+
 **Purpose:** Fallback handler for regular text
 **Complexity:** Very Low (1-2)
 **Key Methods:**
+
 - `canHandle(line: string, context: ParseContext): boolean` - Accepts non-empty lines in normal state
 - `handle(line: string, context: ParseContext): boolean` - Wraps in <p> tags with inline rendering
 
 #### `/Users/darin/code/dc/dc.com/src/utils/markdown/handlers/EmptyLineHandler.ts` (25 lines)
+
 **Purpose:** Handles empty lines and list termination
 **Complexity:** Low (2-3)
 **Key Methods:**
+
 - `canHandle(line: string, context: ParseContext): boolean` - Detects empty lines (outside code blocks)
 - `handle(line: string, context: ParseContext): boolean` - Flushes lists, adds <br> in normal state
 
 ### Integration Point
 
 #### `/Users/darin/code/dc/dc.com/src/commands/core/render.ts` (67 lines)
+
 **Purpose:** Command implementation for markdown rendering
 **Complexity:** Medium (5-6)
 **Key Methods:**
+
 - `createRenderCommand(fs: IFileSystem): Command` - Factory function that returns command object
 - Command's `execute(args: string[], stdin?: string)` - Handles file reading, stdin piping, frontmatter detection
 
@@ -118,7 +142,9 @@ The Markdown Rendering System has been successfully refactored from a monolithic
 ## 2. IMPLEMENTATION ANALYSIS
 
 ### Architecture Pattern
+
 **Chain of Responsibility + State Pattern**
+
 - **MarkdownRenderer** - Facade providing simple API
 - **MarkdownParser** - Orchestrator managing handler chain
 - **ParseContext** - State holder (State pattern)
@@ -126,12 +152,14 @@ The Markdown Rendering System has been successfully refactored from a monolithic
 - **Handlers** - Specialized processors (CodeBlock, Header, List, Paragraph, EmptyLine)
 
 ### Dependencies & Injection
+
 - **Handler Order Matters**: CodeBlockHandler → HeaderHandler → ListHandler → EmptyLineHandler → ParagraphHandler
 - **No Dependency Injection Currently**: Handlers are instantiated directly in MarkdownParser constructor
 - **Stateless Handlers**: All handlers are stateless; state lives in ParseContext
 - **InlineRenderer**: Used by HeaderHandler, ListHandler, and ParagraphHandler (static utility)
 
 ### Key Design Decisions
+
 1. **Handler Priority**: Earlier handlers in chain have priority
 2. **State Management**: Centralized in ParseContext, not scattered across handlers
 3. **HTML Escaping**: Duplicated in 3 places (ParseContext, InlineRenderer, FrontmatterParser) - potential DRY violation
@@ -142,7 +170,9 @@ The Markdown Rendering System has been successfully refactored from a monolithic
 ## 3. EXISTING TEST PATTERNS
 
 ### Test Framework: Vitest
+
 **Config:** `/Users/darin/code/dc/dc.com/vitest.config.ts`
+
 - Environment: jsdom
 - Coverage: v8 provider, 80% threshold
 - Globals enabled
@@ -151,6 +181,7 @@ The Markdown Rendering System has been successfully refactored from a monolithic
 ### Test Structure Patterns (from existing tests)
 
 #### Pattern 1: Simple Unit Tests (CommandParser.test.ts)
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { TargetClass } from '../../../src/path/to/module';
@@ -170,6 +201,7 @@ describe('TargetClass', () => {
 ```
 
 #### Pattern 2: Stateful Tests with beforeEach (FileSystemService.test.ts)
+
 ```typescript
 import { describe, it, expect, beforeEach } from 'vitest';
 
@@ -187,6 +219,7 @@ describe('StatefulClass', () => {
 ```
 
 #### Pattern 3: Mock Dependencies (CommandExecutor.test.ts)
+
 ```typescript
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
@@ -207,6 +240,7 @@ describe('ClassWithDeps', () => {
 ```
 
 ### Common Assertions
+
 - `expect(result).toBe(expected)` - Exact equality
 - `expect(result).toEqual(expected)` - Deep equality
 - `expect(() => fn()).toThrow('message')` - Error throwing
@@ -221,17 +255,21 @@ describe('ClassWithDeps', () => {
 ### Sample Markdown Content
 
 #### Basic Elements
+
 ```markdown
 # Header 1
+
 ## Header 2
+
 ### Header 3
 
-Regular paragraph with **bold** and *italic* text.
+Regular paragraph with **bold** and _italic_ text.
 
 Another paragraph with `inline code` and [links](https://example.com).
 ```
 
 #### Lists
+
 ```markdown
 - Unordered item 1
 - Unordered item 2
@@ -243,28 +281,36 @@ Another paragraph with `inline code` and [links](https://example.com).
 ```
 
 #### Code Blocks
+
 ```markdown
+
 ```
+
 function hello() {
-  return "world";
+return "world";
 }
+
 ```
+
 ```
 
 #### Frontmatter (from actual blog posts)
+
 ```markdown
 ---
-title: "Lessons from Building AI Systems at Scale"
-date: "2024-09-15"
-tags: ["AI/ML", "Production", "Engineering"]
-summary: "Key insights from deploying machine learning models..."
+title: 'Lessons from Building AI Systems at Scale'
+date: '2024-09-15'
+tags: ['AI/ML', 'Production', 'Engineering']
+summary: 'Key insights from deploying machine learning models...'
 ---
 
 Content here...
 ```
 
 #### Complex Mixed Content
+
 Available in:
+
 - `/Users/darin/code/dc/dc.com/src/blog/2024-09-15-ai-production-lessons.md`
 - `/Users/darin/code/dc/dc.com/src/blog/2024-07-22-distributed-systems-reliability.md`
 - `/Users/darin/code/dc/dc.com/src/blog/2024-05-10-developer-experience.md`
@@ -282,7 +328,7 @@ Available in:
    - Unclosed code blocks
    - Headers without space after #
    - Unmatched list transitions (ul → ol → ul)
-   - Nested formatting (***bold and italic***)
+   - Nested formatting (**_bold and italic_**)
 
 3. **HTML Escaping**
    - `<script>alert('xss')</script>`
@@ -314,6 +360,7 @@ Available in:
 ## 5. COMPREHENSIVE TEST PLAN
 
 ### 5.1 ParseContext Tests
+
 **File:** `tests/unit/parsers/markdown/ParseContext.test.ts`
 
 **Test Scenarios:**
@@ -361,6 +408,7 @@ Available in:
 ---
 
 ### 5.2 InlineRenderer Tests
+
 **File:** `tests/unit/parsers/markdown/InlineRenderer.test.ts`
 
 **Test Scenarios:**
@@ -378,11 +426,11 @@ Available in:
 
 3. **Bold**
    - Should render **text** as <strong>
-   - Should render __text__ as <strong>
+   - Should render **text** as <strong>
    - Should handle both syntaxes in one line
 
 4. **Italic**
-   - Should render *text* as <em>
+   - Should render _text_ as <em>
    - Should render _text_ as <em>
    - Should handle both syntaxes in one line
 
@@ -409,6 +457,7 @@ Available in:
 ---
 
 ### 5.3 FrontmatterParser Tests
+
 **File:** `tests/unit/parsers/markdown/FrontmatterParser.test.ts`
 
 **Test Scenarios:**
@@ -480,6 +529,7 @@ Available in:
 ### 5.4 Handler Tests
 
 #### 5.4.1 CodeBlockHandler Tests
+
 **File:** `tests/unit/parsers/markdown/handlers/CodeBlockHandler.test.ts`
 
 **Test Scenarios:**
@@ -518,6 +568,7 @@ Available in:
 ---
 
 #### 5.4.2 HeaderHandler Tests
+
 **File:** `tests/unit/parsers/markdown/handlers/HeaderHandler.test.ts`
 
 **Test Scenarios:**
@@ -553,20 +604,21 @@ Available in:
 ---
 
 #### 5.4.3 ListHandler Tests
+
 **File:** `tests/unit/parsers/markdown/handlers/ListHandler.test.ts`
 
 **Test Scenarios:**
 
 1. **canHandle()**
    - Should return true for - prefix
-   - Should return true for * prefix
+   - Should return true for \* prefix
    - Should return true for digit. prefix (e.g., 1. )
    - Should return false when in code_block state
    - Should return true for continuing list items when in list state
    - Should return false for non-list lines
 
 2. **handle() - Unordered Lists**
-   - Should detect - and * markers
+   - Should detect - and \* markers
    - Should set state to list
    - Should set listType to 'ul'
    - Should accumulate items via context.addListItem()
@@ -603,6 +655,7 @@ Available in:
 ---
 
 #### 5.4.4 ParagraphHandler Tests
+
 **File:** `tests/unit/parsers/markdown/handlers/ParagraphHandler.test.ts`
 
 **Test Scenarios:**
@@ -630,6 +683,7 @@ Available in:
 ---
 
 #### 5.4.5 EmptyLineHandler Tests
+
 **File:** `tests/unit/parsers/markdown/handlers/EmptyLineHandler.test.ts`
 
 **Test Scenarios:**
@@ -660,6 +714,7 @@ Available in:
 ---
 
 ### 5.5 MarkdownParser Tests
+
 **File:** `tests/unit/parsers/markdown/MarkdownParser.test.ts`
 
 **Test Scenarios:**
@@ -707,6 +762,7 @@ Available in:
 ---
 
 ### 5.6 MarkdownRenderer Tests
+
 **File:** `tests/unit/parsers/markdown/MarkdownRenderer.test.ts`
 
 **Test Scenarios:**
@@ -738,6 +794,7 @@ Available in:
 ---
 
 ### 5.7 Render Command Tests
+
 **File:** `tests/unit/commands/core/render.test.ts`
 
 **Test Scenarios:**
@@ -773,6 +830,7 @@ Available in:
 ## 6. TESTING STRATEGY & BEST PRACTICES
 
 ### Test Organization
+
 ```
 tests/
   unit/
@@ -813,7 +871,8 @@ tests/
 ### Test Data Management
 
 Create fixture files:
-```typescript
+
+````typescript
 // tests/fixtures/markdown-samples.ts
 export const MARKDOWN_SAMPLES = {
   simpleHeader: '# Hello World',
@@ -838,9 +897,9 @@ tags: ["a", "b"]
 Content here`,
 
   htmlInjection: '<script>alert("xss")</script>',
-  specialChars: '& < > " \' are escaped'
+  specialChars: '& < > " \' are escaped',
 };
-```
+````
 
 ### Coverage Goals
 
@@ -871,6 +930,7 @@ Content here`,
 ## 7. POTENTIAL CHALLENGES & GOTCHAS
 
 ### 1. HTML Escaping Duplication
+
 **Issue:** `escapeHtml()` is duplicated in 3 files (ParseContext, InlineRenderer, FrontmatterParser)
 
 **Impact on Testing:** Each implementation should be tested independently, or extract to shared utility
@@ -880,9 +940,11 @@ Content here`,
 ---
 
 ### 2. Regex Edge Cases in InlineRenderer
+
 **Challenge:** Overlapping or nested formatting patterns
 
 **Examples:**
+
 - `**bold *both** italic*` - Where does bold end?
 - `***text***` - Triple asterisks
 - `[link **with bold**](url)` - Formatting inside links
@@ -892,14 +954,17 @@ Content here`,
 ---
 
 ### 3. State Transitions in Handlers
+
 **Challenge:** Handlers modify shared state (ParseContext), order matters
 
 **Testing Strategy:**
+
 - Test handlers individually with controlled context
 - Test MarkdownParser with sequences that exercise all transitions
 - Create state transition diagram for documentation
 
 **Known Transitions:**
+
 - normal → code_block (on ```)
 - code_block → normal (on closing ```)
 - normal → list (on list marker)
@@ -909,6 +974,7 @@ Content here`,
 ---
 
 ### 4. Unclosed Blocks
+
 **Challenge:** What happens if code block or list isn't closed?
 
 **Current Behavior:** MarkdownParser calls `flushRemainingState()` which closes open lists and code blocks
@@ -918,25 +984,34 @@ Content here`,
 ---
 
 ### 5. Handler Priority Testing
+
 **Challenge:** Ensuring handlers are called in correct order
 
 **Example:**
+
 ```markdown
+
 ```
+
 # This should be code, not a header
+
 ```
+
 ```
 
 **Testing Strategy:**
+
 - Mock handlers to verify call order
 - Test specific ambiguous cases (header-like line in code block)
 
 ---
 
 ### 6. Performance with Large Documents
+
 **Challenge:** Line-by-line parsing may be slow for very large files
 
 **Testing Strategy:**
+
 - Create performance benchmark tests
 - Test with documents of varying sizes (100, 1000, 10000 lines)
 - Set reasonable timeout thresholds
@@ -944,9 +1019,11 @@ Content here`,
 ---
 
 ### 7. Unicode and Special Characters
+
 **Challenge:** Handling international characters, emoji, etc.
 
 **Testing Strategy:**
+
 - Test with unicode content
 - Test with emoji in headers, lists, code
 - Ensure HTML escaping doesn't break unicode
@@ -954,9 +1031,11 @@ Content here`,
 ---
 
 ### 8. Inline Markdown in Different Contexts
+
 **Challenge:** InlineRenderer is called by multiple handlers (Header, List, Paragraph)
 
 **Testing Strategy:**
+
 - Test inline rendering in isolation
 - Test inline rendering in each handler context
 - Ensure consistent behavior across all uses
@@ -966,6 +1045,7 @@ Content here`,
 ## 8. RECOMMENDED TEST DATA FIXTURES
 
 ### Create Fixture File Structure
+
 ```
 tests/
   fixtures/
@@ -987,6 +1067,7 @@ tests/
 ```
 
 ### Fixture Loading Utility
+
 ```typescript
 // tests/utils/loadFixture.ts
 import { readFileSync } from 'fs';
@@ -1036,20 +1117,20 @@ export function loadExpectedHtml(name: string): string {
 
 ### Estimated Effort
 
-| Test File | Complexity | Test Count | Effort (hrs) |
-|-----------|-----------|------------|--------------|
-| ParseContext.test.ts | Low | 20-25 | 2 |
-| InlineRenderer.test.ts | Medium | 25-30 | 3 |
-| FrontmatterParser.test.ts | Medium | 30-35 | 3 |
-| CodeBlockHandler.test.ts | Low | 12-15 | 1.5 |
-| HeaderHandler.test.ts | Low | 12-15 | 1.5 |
-| ListHandler.test.ts | Medium | 20-25 | 2.5 |
-| ParagraphHandler.test.ts | Low | 8-10 | 1 |
-| EmptyLineHandler.test.ts | Low | 8-10 | 1 |
-| MarkdownParser.test.ts | Medium | 20-25 | 3 |
-| MarkdownRenderer.test.ts | Low | 12-15 | 1.5 |
-| render.test.ts | Medium | 15-20 | 2 |
-| **TOTAL** | | **182-225** | **22 hrs** |
+| Test File                 | Complexity | Test Count  | Effort (hrs) |
+| ------------------------- | ---------- | ----------- | ------------ |
+| ParseContext.test.ts      | Low        | 20-25       | 2            |
+| InlineRenderer.test.ts    | Medium     | 25-30       | 3            |
+| FrontmatterParser.test.ts | Medium     | 30-35       | 3            |
+| CodeBlockHandler.test.ts  | Low        | 12-15       | 1.5          |
+| HeaderHandler.test.ts     | Low        | 12-15       | 1.5          |
+| ListHandler.test.ts       | Medium     | 20-25       | 2.5          |
+| ParagraphHandler.test.ts  | Low        | 8-10        | 1            |
+| EmptyLineHandler.test.ts  | Low        | 8-10        | 1            |
+| MarkdownParser.test.ts    | Medium     | 20-25       | 3            |
+| MarkdownRenderer.test.ts  | Low        | 12-15       | 1.5          |
+| render.test.ts            | Medium     | 15-20       | 2            |
+| **TOTAL**                 |            | **182-225** | **22 hrs**   |
 
 ### Key Success Metrics
 

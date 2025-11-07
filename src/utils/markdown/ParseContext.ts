@@ -52,9 +52,7 @@ export class ParseContext {
 
   flushCodeBlock(): void {
     if (this.codeBlockLines.length > 0) {
-      const escaped = this.codeBlockLines
-        .map(line => escapeHtml(line))
-        .join('\n');
+      const escaped = this.codeBlockLines.map((line) => escapeHtml(line)).join('\n');
       this.addHtml(`<pre><code>${escaped}</code></pre>`);
       this.codeBlockLines = [];
     }

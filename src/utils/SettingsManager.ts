@@ -9,9 +9,9 @@
  * and provides type-safe accessors for all settings.
  */
 
+import { PATHS, STORAGE_KEYS, DEFAULT_SETTINGS } from '../constants';
 import type { IFileSystem } from './fs/IFileSystem';
 import type { SettingsConfig, ThemePresetName, CustomColors, FontFamily } from '../types/settings';
-import { PATHS, STORAGE_KEYS, DEFAULT_SETTINGS } from '../constants';
 
 export class SettingsManager {
   private settings: SettingsConfig;
@@ -70,7 +70,9 @@ export class SettingsManager {
       localStorage.setItem(this.storageKey, json);
     } catch (error) {
       console.error('SettingsManager: Failed to save settings to localStorage:', error);
-      throw new Error(`Failed to save settings: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Failed to save settings: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
@@ -367,7 +369,14 @@ export class SettingsManager {
    * Validates a theme preset name.
    */
   private validateThemePreset(preset: string): preset is ThemePresetName {
-    const validPresets: ThemePresetName[] = ['green', 'yellow', 'white', 'light-blue', 'paper', 'custom'];
+    const validPresets: ThemePresetName[] = [
+      'green',
+      'yellow',
+      'white',
+      'light-blue',
+      'paper',
+      'custom',
+    ];
     return validPresets.includes(preset as ThemePresetName);
   }
 

@@ -5,10 +5,10 @@
  * with email, social media, GitHub, LinkedIn, and other professional contact methods.
  * Provides visitors with multiple ways to get in touch.
  */
-import type { Command } from '../Command';
-import type { IFileSystem } from '../../utils/fs/IFileSystem';
-import { MarkdownService } from '../../utils/MarkdownService';
 import { PATHS } from '../../constants';
+import { MarkdownService } from '../../utils/MarkdownService';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createContactCommand(fs: IFileSystem): Command {
   return {
@@ -22,9 +22,9 @@ export function createContactCommand(fs: IFileSystem): Command {
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

@@ -12,27 +12,36 @@ describe('FileSystemService', () => {
       name: '',
       type: 'directory',
       children: new Map([
-        ['home', {
-          name: 'home',
-          type: 'directory',
-          children: new Map([
-            ['darin', {
-              name: 'darin',
-              type: 'directory',
-              children: new Map([
-                ['test.txt', { name: 'test.txt', type: 'file', content: 'hello' }],
-                ['docs', {
-                  name: 'docs',
+        [
+          'home',
+          {
+            name: 'home',
+            type: 'directory',
+            children: new Map([
+              [
+                'darin',
+                {
+                  name: 'darin',
                   type: 'directory',
                   children: new Map([
-                    ['readme.md', { name: 'readme.md', type: 'file', content: '# README' }]
-                  ])
-                }]
-              ])
-            }]
-          ])
-        }]
-      ])
+                    ['test.txt', { name: 'test.txt', type: 'file', content: 'hello' }],
+                    [
+                      'docs',
+                      {
+                        name: 'docs',
+                        type: 'directory',
+                        children: new Map([
+                          ['readme.md', { name: 'readme.md', type: 'file', content: '# README' }],
+                        ]),
+                      },
+                    ],
+                  ]),
+                },
+              ],
+            ]),
+          },
+        ],
+      ]),
     };
     fs = new FileSystemService(mockRoot);
   });
@@ -184,8 +193,9 @@ describe('FileSystemService', () => {
     });
 
     it('should throw error for non-existent directory', () => {
-      expect(() => fs.writeFile('~/nonexistent/file.txt', 'content'))
-        .toThrow('Directory does not exist');
+      expect(() => fs.writeFile('~/nonexistent/file.txt', 'content')).toThrow(
+        'Directory does not exist'
+      );
     });
   });
 
@@ -193,8 +203,8 @@ describe('FileSystemService', () => {
     it('should return tree structure', () => {
       const tree = fs.getTree('.');
       expect(tree[0]).toBe('/home/darin');
-      expect(tree.some(line => line.includes('docs'))).toBe(true);
-      expect(tree.some(line => line.includes('test.txt'))).toBe(true);
+      expect(tree.some((line) => line.includes('docs'))).toBe(true);
+      expect(tree.some((line) => line.includes('test.txt'))).toBe(true);
     });
 
     it('should throw error for non-existent path', () => {

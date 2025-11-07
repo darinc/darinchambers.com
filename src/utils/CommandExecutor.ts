@@ -1,7 +1,7 @@
-import type { CommandDispatcher } from './CommandDispatcher';
-import type { AliasManager } from './AliasManager';
-import type { EnvVarManager } from './EnvVarManager';
 import { PipelineParser } from './PipelineParser';
+import type { AliasManager } from './AliasManager';
+import type { CommandDispatcher } from './CommandDispatcher';
+import type { EnvVarManager } from './EnvVarManager';
 import type { CommandResult } from '../commands/Command';
 
 /**

@@ -16,36 +16,36 @@ export const PATHS = {
   CONTENT_SKILLS: '/home/darin/content/skills.md',
   CONFIG_ALIASES: '/home/guest/.alias',
   CONFIG_SETTINGS: '/home/darin/.settings',
-  CONFIG_ENV: '/home/darin/.env'
+  CONFIG_ENV: '/home/darin/.env',
 } as const;
 
 export const COMMAND_SIGNALS = {
   CLEAR_SCREEN: '__CLEAR__',
-  NO_OUTPUT: '__NO_OUTPUT__'
+  NO_OUTPUT: '__NO_OUTPUT__',
 } as const;
 
 export const STORAGE_KEYS = {
   SETTINGS: 'terminal-settings',
-  ENVIRONMENT: 'terminal-env-vars'
+  ENVIRONMENT: 'terminal-env-vars',
 } as const;
 
 export const DEFAULT_SETTINGS: SettingsConfig = {
   theme: {
     preset: 'yellow',
-    customColors: undefined
+    customColors: undefined,
   },
   font: {
     size: 14,
-    family: 'Courier New'
+    family: 'Courier New',
   },
   effects: {
     scanLines: false,
     glow: false,
     border: true,
     animationSpeed: 1.0,
-    soundEffects: false
+    soundEffects: false,
   },
   prompt: {
-    format: '\\W \\$ '
-  }
+    format: '\\W \\$ ',
+  },
 } as const;

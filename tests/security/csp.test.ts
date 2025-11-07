@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { describe, it, expect } from 'vitest';
 
 describe('Content Security Policy Tests', () => {
   describe('CSP Configuration in index.html', () => {
@@ -108,7 +108,7 @@ describe('Content Security Policy Tests', () => {
 
       if (matches) {
         // Filter out the valid module script
-        const invalidScripts = matches.filter(script => !script.includes('type="module"'));
+        const invalidScripts = matches.filter((script) => !script.includes('type="module"'));
         expect(invalidScripts.length).toBe(0);
       }
     });
@@ -190,7 +190,7 @@ describe('Content Security Policy Tests', () => {
         'Permissions-Policy',
       ];
 
-      securityHeaders.forEach(header => {
+      securityHeaders.forEach((header) => {
         expect(headersContent).toContain(header);
       });
     });

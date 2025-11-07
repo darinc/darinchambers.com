@@ -1,17 +1,17 @@
-import type { Command, CommandResult } from '../commands/Command';
 import { CommandParser, type ParsedCommand } from './CommandParser';
-import { PipelineParser } from './PipelineParser';
 import { AppError, CommandNotFoundError } from './errors';
+import { PipelineParser } from './PipelineParser';
+import type { Command, CommandResult } from '../commands/Command';
 
 export class CommandDispatcher {
-  private commands: Map<string, Command> = new Map();
+  private commands = new Map<string, Command>();
 
   registerCommand(command: Command): void {
     this.commands.set(command.name.toLowerCase(), command);
 
     // Register aliases
     if (command.aliases) {
-      command.aliases.forEach(alias => {
+      command.aliases.forEach((alias) => {
         this.commands.set(alias.toLowerCase(), command);
       });
     }
@@ -30,7 +30,7 @@ export class CommandDispatcher {
       const err = new CommandNotFoundError(parsed.command);
       return {
         output: `${err.message}\nType 'help' for available commands.`,
-        error: true
+        error: true,
       };
     }
 
@@ -71,7 +71,7 @@ export class CommandDispatcher {
       if (!command) {
         return {
           output: `Command not found: ${parsed.command}\nType 'help' for available commands.`,
-          error: true
+          error: true,
         };
       }
 

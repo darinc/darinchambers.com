@@ -1,6 +1,6 @@
+import { InlineRenderer } from '../InlineRenderer';
 import type { LineHandler } from '../LineHandler';
 import type { ParseContext } from '../ParseContext';
-import { InlineRenderer } from '../InlineRenderer';
 
 export class HeaderHandler implements LineHandler {
   canHandle(line: string, context: ParseContext): boolean {
@@ -11,7 +11,7 @@ export class HeaderHandler implements LineHandler {
 
   handle(line: string, context: ParseContext): boolean {
     const trimmed = line.trim();
-    const match = trimmed.match(/^(#{1,6})\s+(.+)$/);
+    const match = /^(#{1,6})\s+(.+)$/.exec(trimmed);
 
     if (!match) return false;
 

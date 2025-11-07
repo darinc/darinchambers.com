@@ -28,7 +28,7 @@ export class MarkdownService {
    * @param renderFrontmatter - Whether to parse and render YAML frontmatter (default: false)
    * @returns HTML string wrapped in markdown-output div
    */
-  static render(markdown: string, renderFrontmatter: boolean = false): string {
+  static render(markdown: string, renderFrontmatter = false): string {
     if (config.features.useMarkedRenderer) {
       // Use marked library for rendering
       return MarkedAdapter.render(markdown, renderFrontmatter);

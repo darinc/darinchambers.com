@@ -5,10 +5,10 @@
  * file with organized categories of programming languages, frameworks, tools, and
  * methodologies. Showcases technical depth and breadth across various domains.
  */
-import type { Command } from '../Command';
-import type { IFileSystem } from '../../utils/fs/IFileSystem';
-import { MarkdownService } from '../../utils/MarkdownService';
 import { PATHS } from '../../constants';
+import { MarkdownService } from '../../utils/MarkdownService';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createSkillsCommand(fs: IFileSystem): Command {
   return {
@@ -22,9 +22,9 @@ export function createSkillsCommand(fs: IFileSystem): Command {
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

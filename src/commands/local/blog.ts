@@ -5,14 +5,14 @@
  * with dates and tags when listing, or renders full post content with markdown formatting
  * when a specific post is requested. Supports --tag flag for filtering posts by category.
  */
-import type { Command } from '../Command';
-import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import { PATHS } from '../../constants';
 import { BlogParser } from '../../utils/BlogParser';
-import type { BlogPost } from '../../types/blog';
+import { CommandArgs } from '../../utils/CommandArgs';
 import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownService } from '../../utils/MarkdownService';
-import { PATHS } from '../../constants';
-import { CommandArgs } from '../../utils/CommandArgs';
+import type { BlogPost } from '../../types/blog';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createBlogCommand(fs: IFileSystem): Command {
   return {
@@ -24,7 +24,10 @@ export function createBlogCommand(fs: IFileSystem): Command {
       try {
         // Get all blog files from the filesystem
         const files = fs.list(blogDir);
-        const blogFiles = files.filter(f => f.endsWith('.md')).sort().reverse(); // Newest first
+        const blogFiles = files
+          .filter((f) => f.endsWith('.md'))
+          .sort()
+          .reverse(); // Newest first
 
         // Parse command arguments
         const cmdArgs = new CommandArgs(args);
@@ -41,12 +44,12 @@ export function createBlogCommand(fs: IFileSystem): Command {
 
         // Show specific blog post
         if (postId) {
-          const post = posts.find(p => p.id === postId);
+          const post = posts.find((p) => p.id === postId);
 
           if (!post) {
             return {
               output: `Blog post '${postId}' not found.\nUse 'blog' to list all posts.`,
-              error: true
+              error: true,
             };
           }
 
@@ -58,14 +61,14 @@ export function createBlogCommand(fs: IFileSystem): Command {
         // Filter by tag if requested
         let filteredPosts = posts;
         if (filterTag) {
-          filteredPosts = posts.filter(p =>
-            p.tags.some(t => t.toLowerCase() === filterTag.toLowerCase())
+          filteredPosts = posts.filter((p) =>
+            p.tags.some((t) => t.toLowerCase() === filterTag.toLowerCase())
           );
 
           if (filteredPosts.length === 0) {
             return {
               output: `No blog posts found with tag '${filterTag}'.\nUse 'blog' to see all posts.`,
-              error: false
+              error: false,
             };
           }
         }
@@ -77,9 +80,9 @@ export function createBlogCommand(fs: IFileSystem): Command {
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

@@ -5,7 +5,7 @@ import type { TerminalInput } from '../../../../src/components/TerminalInput';
 describe('history command', () => {
   it('should display command history with line numbers', () => {
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue(['ls', 'cd /home', 'pwd'])
+      getHistory: vi.fn().mockReturnValue(['ls', 'cd /home', 'pwd']),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
@@ -17,7 +17,7 @@ describe('history command', () => {
 
   it('should handle empty history', () => {
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue([])
+      getHistory: vi.fn().mockReturnValue([]),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
@@ -28,20 +28,20 @@ describe('history command', () => {
 
   it('should pad line numbers correctly', () => {
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue(['cmd1'])
+      getHistory: vi.fn().mockReturnValue(['cmd1']),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
     const result = command.execute([]);
 
     // Line number should be padded to 5 characters
-    expect(result.output).toMatch(/^\s{4}1  cmd1$/);
+    expect(result.output).toMatch(/^\s{4}1 {2}cmd1$/);
   });
 
   it('should handle many commands', () => {
     const commands = Array.from({ length: 100 }, (_, i) => `command${i + 1}`);
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue(commands)
+      getHistory: vi.fn().mockReturnValue(commands),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
@@ -55,7 +55,7 @@ describe('history command', () => {
 
   it('should have correct name and description', () => {
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue([])
+      getHistory: vi.fn().mockReturnValue([]),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
@@ -66,7 +66,7 @@ describe('history command', () => {
 
   it('should ignore arguments', () => {
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue(['test'])
+      getHistory: vi.fn().mockReturnValue(['test']),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
@@ -77,7 +77,7 @@ describe('history command', () => {
 
   it('should ignore stdin', () => {
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue(['cmd'])
+      getHistory: vi.fn().mockReturnValue(['cmd']),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
@@ -88,7 +88,7 @@ describe('history command', () => {
 
   it('should handle commands with special characters', () => {
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue(['echo "hello world"', 'ls -la | grep test'])
+      getHistory: vi.fn().mockReturnValue(['echo "hello world"', 'ls -la | grep test']),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
@@ -101,7 +101,7 @@ describe('history command', () => {
   it('should handle very long commands', () => {
     const longCommand = 'echo ' + 'a'.repeat(1000);
     const mockInput = {
-      getHistory: vi.fn().mockReturnValue([longCommand])
+      getHistory: vi.fn().mockReturnValue([longCommand]),
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);

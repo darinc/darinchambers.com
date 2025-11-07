@@ -5,9 +5,9 @@
  * Supports the -L flag to limit directory depth and shows file counts at the bottom.
  * Provides an intuitive way to visualize the filesystem hierarchy.
  */
-import type { Command } from '../Command';
-import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import { CommandArgs } from '../../utils/CommandArgs';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createTreeCommand(fs: IFileSystem): Command {
   return {
@@ -26,14 +26,14 @@ export function createTreeCommand(fs: IFileSystem): Command {
           if (typeof depthFlag === 'boolean') {
             return {
               output: 'tree: -L flag requires a depth value',
-              error: true
+              error: true,
             };
           }
           const depth = parseInt(depthFlag, 10);
           if (isNaN(depth) || depth < 1) {
             return {
               output: 'tree: invalid level, must be a positive integer',
-              error: true
+              error: true,
             };
           }
           maxDepth = depth;
@@ -44,9 +44,9 @@ export function createTreeCommand(fs: IFileSystem): Command {
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

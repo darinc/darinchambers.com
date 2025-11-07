@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { MarkdownService } from '../../../src/utils/MarkdownService';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { config } from '../../../src/config';
+import { MarkdownService } from '../../../src/utils/MarkdownService';
 
 describe('MarkdownService', () => {
   // Store original config value

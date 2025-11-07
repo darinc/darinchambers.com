@@ -5,11 +5,11 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { ThemeManager } from '../../../src/utils/ThemeManager';
-import { SettingsManager } from '../../../src/utils/SettingsManager';
 import { FileSystemService } from '../../../src/utils/fs/FileSystemService';
-import type { FileSystemNode } from '../../../src/utils/fs/types';
+import { SettingsManager } from '../../../src/utils/SettingsManager';
+import { ThemeManager } from '../../../src/utils/ThemeManager';
 import type { ColorScheme } from '../../../src/types/settings';
+import type { FileSystemNode } from '../../../src/utils/fs/types';
 
 describe('ThemeManager', () => {
   let fs: FileSystemService;
@@ -25,18 +25,24 @@ describe('ThemeManager', () => {
       name: '',
       type: 'directory',
       children: new Map([
-        ['home', {
-          name: 'home',
-          type: 'directory',
-          children: new Map([
-            ['darin', {
-              name: 'darin',
-              type: 'directory',
-              children: new Map()
-            }]
-          ])
-        }]
-      ])
+        [
+          'home',
+          {
+            name: 'home',
+            type: 'directory',
+            children: new Map([
+              [
+                'darin',
+                {
+                  name: 'darin',
+                  type: 'directory',
+                  children: new Map(),
+                },
+              ],
+            ]),
+          },
+        ],
+      ]),
     };
     fs = new FileSystemService(mockRoot);
 
@@ -88,7 +94,7 @@ describe('ThemeManager', () => {
     it('should return all presets', () => {
       const presets = themeManager.getPresets();
 
-      const names = presets.map(p => p.name);
+      const names = presets.map((p) => p.name);
       expect(names).toContain('green');
       expect(names).toContain('yellow');
       expect(names).toContain('white');
@@ -103,7 +109,7 @@ describe('ThemeManager', () => {
     it('should have correct color structure for each preset', () => {
       const presets = themeManager.getPresets();
 
-      presets.forEach(preset => {
+      presets.forEach((preset) => {
         expect(preset.colors).toHaveProperty('--terminal-bg');
         expect(preset.colors).toHaveProperty('--terminal-fg');
         expect(preset.colors).toHaveProperty('--terminal-accent');
@@ -117,8 +123,8 @@ describe('ThemeManager', () => {
       const presets = themeManager.getPresets();
       const hexPattern = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
-      presets.forEach(preset => {
-        Object.values(preset.colors).forEach(color => {
+      presets.forEach((preset) => {
+        Object.values(preset.colors).forEach((color) => {
           expect(hexPattern.test(color)).toBe(true);
         });
       });
@@ -189,7 +195,7 @@ describe('ThemeManager', () => {
   describe('Custom Colors', () => {
     it('should apply custom colors', () => {
       const customColors: Partial<ColorScheme> = {
-        '--terminal-accent': '#ff0000'
+        '--terminal-accent': '#ff0000',
       };
 
       themeManager.applyCustomColors(customColors);
@@ -202,7 +208,7 @@ describe('ThemeManager', () => {
     it('should merge custom colors with existing colors', () => {
       const customColors: Partial<ColorScheme> = {
         '--terminal-accent': '#ff0000',
-        '--terminal-cursor': '#00ff00'
+        '--terminal-cursor': '#00ff00',
       };
 
       themeManager.applyCustomColors(customColors);
@@ -219,7 +225,7 @@ describe('ThemeManager', () => {
 
     it('should validate custom color format', () => {
       const invalidColors: Partial<ColorScheme> = {
-        '--terminal-accent': 'red' // Invalid: named color
+        '--terminal-accent': 'red', // Invalid: named color
       };
 
       expect(() => {
@@ -229,7 +235,7 @@ describe('ThemeManager', () => {
 
     it('should accept 6-digit hex colors', () => {
       const colors: Partial<ColorScheme> = {
-        '--terminal-accent': '#ff0000'
+        '--terminal-accent': '#ff0000',
       };
 
       expect(() => {
@@ -239,7 +245,7 @@ describe('ThemeManager', () => {
 
     it('should accept 3-digit hex colors', () => {
       const colors: Partial<ColorScheme> = {
-        '--terminal-accent': '#f00'
+        '--terminal-accent': '#f00',
       };
 
       expect(() => {
@@ -249,7 +255,7 @@ describe('ThemeManager', () => {
 
     it('should reject colors without # prefix', () => {
       const colors: Partial<ColorScheme> = {
-        '--terminal-accent': 'ff0000'
+        '--terminal-accent': 'ff0000',
       };
 
       expect(() => {
@@ -258,18 +264,12 @@ describe('ThemeManager', () => {
     });
 
     it('should reject invalid hex formats', () => {
-      const invalidFormats = [
-        'rgb(255, 0, 0)',
-        '#gg0000',
-        '#12345',
-        '#1234567',
-        'transparent'
-      ];
+      const invalidFormats = ['rgb(255, 0, 0)', '#gg0000', '#12345', '#1234567', 'transparent'];
 
-      invalidFormats.forEach(color => {
+      invalidFormats.forEach((color) => {
         expect(() => {
           themeManager.applyCustomColors({
-            '--terminal-accent': color
+            '--terminal-accent': color,
           });
         }).toThrow();
       });
@@ -277,7 +277,7 @@ describe('ThemeManager', () => {
 
     it('should persist custom colors to localStorage', () => {
       themeManager.applyCustomColors({
-        '--terminal-accent': '#ff0000'
+        '--terminal-accent': '#ff0000',
       });
 
       const stored = localStorage.getItem('terminal-settings');
@@ -309,7 +309,7 @@ describe('ThemeManager', () => {
         accent: '#ff0000',
         dim: '#888888',
         error: '#ff0000',
-        cursor: '#ffffff'
+        cursor: '#ffffff',
       };
 
       settingsManager.setCustomColors(customColors);
@@ -333,9 +333,7 @@ describe('ThemeManager', () => {
       const newThemeManager = new ThemeManager(settingsManager);
       newThemeManager.applyCurrentTheme();
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Unknown preset "invalid"')
-      );
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Unknown preset "invalid"'));
 
       consoleSpy.mockRestore();
     });
@@ -344,7 +342,7 @@ describe('ThemeManager', () => {
   describe('Color Validation', () => {
     it('should validate 6-digit hex colors', () => {
       const colors: Partial<ColorScheme> = {
-        '--terminal-bg': '#0a0e14'
+        '--terminal-bg': '#0a0e14',
       };
 
       expect(() => {
@@ -354,7 +352,7 @@ describe('ThemeManager', () => {
 
     it('should validate 3-digit hex colors', () => {
       const colors: Partial<ColorScheme> = {
-        '--terminal-bg': '#000'
+        '--terminal-bg': '#000',
       };
 
       expect(() => {
@@ -364,7 +362,7 @@ describe('ThemeManager', () => {
 
     it('should accept lowercase hex', () => {
       const colors: Partial<ColorScheme> = {
-        '--terminal-bg': '#abc123'
+        '--terminal-bg': '#abc123',
       };
 
       expect(() => {
@@ -374,7 +372,7 @@ describe('ThemeManager', () => {
 
     it('should accept uppercase hex', () => {
       const colors: Partial<ColorScheme> = {
-        '--terminal-bg': '#ABC123'
+        '--terminal-bg': '#ABC123',
       };
 
       expect(() => {
@@ -384,7 +382,7 @@ describe('ThemeManager', () => {
 
     it('should accept mixed case hex', () => {
       const colors: Partial<ColorScheme> = {
-        '--terminal-bg': '#AbC123'
+        '--terminal-bg': '#AbC123',
       };
 
       expect(() => {
@@ -408,7 +406,7 @@ describe('ThemeManager', () => {
     it('should return all color values as strings', () => {
       const colors = themeManager.getCurrentColors();
 
-      Object.values(colors).forEach(color => {
+      Object.values(colors).forEach((color) => {
         expect(typeof color).toBe('string');
       });
     });
@@ -424,7 +422,7 @@ describe('ThemeManager', () => {
 
     it('should save custom colors to settings', () => {
       themeManager.applyCustomColors({
-        '--terminal-accent': '#ff0000'
+        '--terminal-accent': '#ff0000',
       });
 
       const settings = settingsManager.loadSettings();

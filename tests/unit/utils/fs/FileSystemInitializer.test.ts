@@ -17,11 +17,11 @@ describe('FileSystemInitializer', () => {
 
   it('should load the ai-production-lessons blog post', () => {
     const root = FileSystemInitializer.createDefaultStructure();
-    const post = root.children!
-      .get('home')!.children!
-      .get('darin')!.children!
-      .get('blog')!.children!
-      .get('2024-09-15-ai-production-lessons.md');
+    const post = root
+      .children!.get('home')!
+      .children!.get('darin')!
+      .children!.get('blog')!
+      .children!.get('2024-09-15-ai-production-lessons.md');
 
     expect(post).toBeDefined();
     expect(post!.type).toBe('file');
@@ -30,10 +30,7 @@ describe('FileSystemInitializer', () => {
 
   it('should load all content markdown files', () => {
     const root = FileSystemInitializer.createDefaultStructure();
-    const contentDir = root.children!
-      .get('home')!.children!
-      .get('darin')!.children!
-      .get('content');
+    const contentDir = root.children!.get('home')!.children!.get('darin')!.children!.get('content');
 
     expect(contentDir).toBeDefined();
     expect(contentDir!.children!.has('about.md')).toBe(true);
@@ -44,9 +41,7 @@ describe('FileSystemInitializer', () => {
 
   it('should create guest user directory with README', () => {
     const root = FileSystemInitializer.createDefaultStructure();
-    const guestDir = root.children!
-      .get('home')!.children!
-      .get('guest');
+    const guestDir = root.children!.get('home')!.children!.get('guest');
 
     expect(guestDir).toBeDefined();
     expect(guestDir!.children!.has('README.txt')).toBe(true);
@@ -57,9 +52,7 @@ describe('FileSystemInitializer', () => {
 
   it('should create darin user directory with easter eggs', () => {
     const root = FileSystemInitializer.createDefaultStructure();
-    const darinDir = root.children!
-      .get('home')!.children!
-      .get('darin');
+    const darinDir = root.children!.get('home')!.children!.get('darin');
 
     expect(darinDir).toBeDefined();
     expect(darinDir!.children!.has('.secret')).toBe(true);

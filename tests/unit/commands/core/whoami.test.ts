@@ -5,7 +5,7 @@ import type { Terminal } from '../../../../src/components/Terminal';
 describe('whoami command', () => {
   it('should return username from terminal', () => {
     const mockTerminal = {
-      getUsername: vi.fn().mockReturnValue('testuser')
+      getUsername: vi.fn().mockReturnValue('testuser'),
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
@@ -17,7 +17,7 @@ describe('whoami command', () => {
 
   it('should have correct name and description', () => {
     const mockTerminal = {
-      getUsername: vi.fn().mockReturnValue('user')
+      getUsername: vi.fn().mockReturnValue('user'),
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
@@ -28,7 +28,7 @@ describe('whoami command', () => {
 
   it('should ignore arguments', () => {
     const mockTerminal = {
-      getUsername: vi.fn().mockReturnValue('darin')
+      getUsername: vi.fn().mockReturnValue('darin'),
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
@@ -39,7 +39,7 @@ describe('whoami command', () => {
 
   it('should ignore stdin', () => {
     const mockTerminal = {
-      getUsername: vi.fn().mockReturnValue('alice')
+      getUsername: vi.fn().mockReturnValue('alice'),
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
@@ -51,7 +51,7 @@ describe('whoami command', () => {
 
   it('should work with different usernames', () => {
     const mockTerminal = {
-      getUsername: vi.fn().mockReturnValue('root')
+      getUsername: vi.fn().mockReturnValue('root'),
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);

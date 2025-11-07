@@ -12,7 +12,7 @@ export class CommandParser {
       return {
         command: '',
         args: [],
-        raw: input
+        raw: input,
       };
     }
 
@@ -24,7 +24,7 @@ export class CommandParser {
     return {
       command,
       args,
-      raw: input
+      raw: input,
     };
   }
 
@@ -34,8 +34,7 @@ export class CommandParser {
     let inQuotes = false;
     let quoteChar = '';
 
-    for (let i = 0; i < input.length; i++) {
-      const char = input[i];
+    for (const char of input) {
 
       if ((char === '"' || char === "'") && !inQuotes) {
         inQuotes = true;

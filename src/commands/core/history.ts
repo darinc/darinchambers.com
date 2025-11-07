@@ -5,8 +5,8 @@
  * executed commands with line numbers, allowing users to review their command usage.
  * Supports clearing history with the -c flag.
  */
-import type { Command } from '../Command';
 import type { TerminalInput } from '../../components/TerminalInput';
+import type { Command } from '../Command';
 
 export function createHistoryCommand(input: TerminalInput): Command {
   return {
@@ -25,6 +25,6 @@ export function createHistoryCommand(input: TerminalInput): Command {
       });
 
       return { output: lines.join('\n') };
-    }
+    },
   };
 }

@@ -5,9 +5,9 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { SettingsManager } from '../../../src/utils/SettingsManager';
+import { PATHS, STORAGE_KEYS } from '../../../src/constants';
 import { FileSystemService } from '../../../src/utils/fs/FileSystemService';
-import { DEFAULT_SETTINGS, PATHS, STORAGE_KEYS } from '../../../src/constants';
+import { SettingsManager } from '../../../src/utils/SettingsManager';
 import type { SettingsConfig } from '../../../src/types/settings';
 import type { FileSystemNode } from '../../../src/utils/fs/types';
 
@@ -24,18 +24,24 @@ describe('SettingsManager', () => {
       name: '',
       type: 'directory',
       children: new Map([
-        ['home', {
-          name: 'home',
-          type: 'directory',
-          children: new Map([
-            ['darin', {
-              name: 'darin',
-              type: 'directory',
-              children: new Map()
-            }]
-          ])
-        }]
-      ])
+        [
+          'home',
+          {
+            name: 'home',
+            type: 'directory',
+            children: new Map([
+              [
+                'darin',
+                {
+                  name: 'darin',
+                  type: 'directory',
+                  children: new Map(),
+                },
+              ],
+            ]),
+          },
+        ],
+      ]),
     };
     fs = new FileSystemService(mockRoot);
 
@@ -65,8 +71,14 @@ describe('SettingsManager', () => {
       const customSettings: SettingsConfig = {
         theme: { preset: 'yellow', customColors: undefined },
         font: { size: 16, family: 'Monaco' },
-        effects: { scanLines: false, glow: false, border: true, animationSpeed: 1.5, soundEffects: true },
-        prompt: { format: '\\u@\\h:\\W\\$ ' }
+        effects: {
+          scanLines: false,
+          glow: false,
+          border: true,
+          animationSpeed: 1.5,
+          soundEffects: true,
+        },
+        prompt: { format: '\\u@\\h:\\W\\$ ' },
       };
 
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(customSettings));
@@ -150,7 +162,7 @@ describe('SettingsManager', () => {
         accent: '#ff0000',
         dim: '#888888',
         error: '#ff0000',
-        cursor: '#ffffff'
+        cursor: '#ffffff',
       };
 
       settingsManager.setCustomColors(colors);
@@ -322,7 +334,7 @@ describe('SettingsManager', () => {
     it('should set setting by key', () => {
       settingsManager.setSetting('theme', {
         preset: 'yellow',
-        customColors: undefined
+        customColors: undefined,
       });
 
       expect(settingsManager.getThemePreset()).toBe('yellow');
@@ -331,7 +343,7 @@ describe('SettingsManager', () => {
     it('should persist changes made via setSetting', () => {
       settingsManager.setSetting('font', {
         size: 20,
-        family: 'Monaco'
+        family: 'Monaco',
       });
 
       const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
@@ -396,7 +408,13 @@ describe('SettingsManager', () => {
       const newSettings: SettingsConfig = {
         theme: { preset: 'white', customColors: undefined },
         font: { size: 18, family: 'Monaco' },
-        effects: { scanLines: false, glow: true, border: false, animationSpeed: 1.2, soundEffects: true }
+        effects: {
+          scanLines: false,
+          glow: true,
+          border: false,
+          animationSpeed: 1.2,
+          soundEffects: true,
+        },
       };
 
       settingsManager.saveSettings(newSettings);
@@ -409,7 +427,13 @@ describe('SettingsManager', () => {
       const newSettings: SettingsConfig = {
         theme: { preset: 'light-blue', customColors: undefined },
         font: { size: 12, family: 'Consolas' },
-        effects: { scanLines: true, glow: false, border: true, animationSpeed: 0.8, soundEffects: false }
+        effects: {
+          scanLines: true,
+          glow: false,
+          border: true,
+          animationSpeed: 0.8,
+          soundEffects: false,
+        },
       };
 
       settingsManager.saveSettings(newSettings);

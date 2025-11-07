@@ -120,6 +120,7 @@ interface Command {
 ```
 
 **Benefits**:
+
 - Easy to add new commands without modifying existing code
 - Commands are independently testable
 - Supports both sync and async execution
@@ -145,6 +146,7 @@ constructor(
 ```
 
 **Benefits**:
+
 - Easy to mock dependencies in tests
 - Clear dependency graph
 - Flexible component composition
@@ -161,11 +163,12 @@ this.handlers = [
   new HeaderHandler(),
   new ListHandler(),
   new EmptyLineHandler(),
-  new ParagraphHandler() // Fallback
+  new ParagraphHandler(), // Fallback
 ];
 ```
 
 **Benefits**:
+
 - Each handler focuses on one markdown element type
 - Easy to add new markdown features
 - Clear fallback behavior
@@ -232,12 +235,14 @@ document.addEventListener('settings-changed', () => {
 #### 1. Terminal (`src/components/Terminal.ts`)
 
 **Responsibilities**:
+
 - Orchestrates command execution
 - Manages terminal state (prompt, current path)
 - Coordinates TerminalInput and TerminalOutput
 - Handles settings UI
 
 **Key Methods**:
+
 ```typescript
 executeCommand(command: string, addToHistory: boolean): Promise<void>
 setCurrentPath(path: string): void
@@ -250,12 +255,14 @@ focus(): void
 #### 2. TerminalInput (`src/components/TerminalInput.ts`)
 
 **Responsibilities**:
+
 - Handle keyboard input
 - Command history navigation (Up/Down arrows)
 - Tab completion
 - Submit commands
 
 **Key Features**:
+
 - Autofocus management
 - History persistence
 - Event emission for command submission
@@ -263,12 +270,14 @@ focus(): void
 #### 3. TerminalOutput (`src/components/TerminalOutput.ts`)
 
 **Responsibilities**:
+
 - Render command output
 - Sanitize HTML for XSS protection
 - Handle different output types (text, HTML, errors)
 - Maintain output history
 
 **Key Methods**:
+
 ```typescript
 append(output: string, html: boolean, error: boolean): void
 clear(): void
@@ -277,12 +286,14 @@ clear(): void
 #### 4. Navigation (`src/components/Navigation.ts`)
 
 **Responsibilities**:
+
 - Render navigation buttons
 - Handle click events
 - Update aria-current for accessibility
 - Integrate with Router for URL sync
 
 **Key Features**:
+
 - Semantic HTML (`<button>` elements)
 - ARIA attributes
 - Keyboard accessible
@@ -290,10 +301,12 @@ clear(): void
 #### 5. Header (`src/components/Header.ts`)
 
 **Responsibilities**:
+
 - Display ASCII art header
 - Show terminal prompt/tagline
 
 **Key Features**:
+
 - Responsive design (different ASCII fonts for mobile)
 - Semantic HTML
 
@@ -419,27 +432,29 @@ Navigation.setActiveItem() (update aria-current)
 
 ### State Storage Locations
 
-| State Type | Primary Storage | Secondary Storage | Purpose |
-|------------|----------------|-------------------|---------|
-| Settings | localStorage | Virtual filesystem | Persistence + visibility |
-| Environment | localStorage | Virtual filesystem | Persistence + visibility |
-| Aliases | Virtual filesystem | None | Command shortcuts |
-| Command History | TerminalInput (memory) | None | Session-only |
-| Current Path | Terminal (memory) | EnvVarManager ($PWD) | Navigation state |
-| Router State | Browser History API | None | URL state |
-| Theme | CSS Variables | SettingsManager | Visual state |
+| State Type      | Primary Storage        | Secondary Storage    | Purpose                  |
+| --------------- | ---------------------- | -------------------- | ------------------------ |
+| Settings        | localStorage           | Virtual filesystem   | Persistence + visibility |
+| Environment     | localStorage           | Virtual filesystem   | Persistence + visibility |
+| Aliases         | Virtual filesystem     | None                 | Command shortcuts        |
+| Command History | TerminalInput (memory) | None                 | Session-only             |
+| Current Path    | Terminal (memory)      | EnvVarManager ($PWD) | Navigation state         |
+| Router State    | Browser History API    | None                 | URL state                |
+| Theme           | CSS Variables          | SettingsManager      | Visual state             |
 
 ### State Managers
 
 #### SettingsManager (`src/utils/SettingsManager.ts`)
 
 **Responsibilities**:
+
 - Load/save settings from localStorage
 - Sync settings to virtual filesystem (`~/.terminalrc`)
 - Validate settings structure
 - Emit change events
 
 **Storage Format**:
+
 ```json
 {
   "theme": {
@@ -466,12 +481,14 @@ Navigation.setActiveItem() (update aria-current)
 #### EnvVarManager (`src/utils/EnvVarManager.ts`)
 
 **Responsibilities**:
+
 - Manage environment variables ($HOME, $PWD, $USER, etc.)
 - Expand variables in commands (`echo $HOME` → `/home/darin`)
 - Persist to localStorage and filesystem (`~/.env`)
 - Validate variable names
 
 **Built-in Variables**:
+
 - `$HOME` - User home directory
 - `$PWD` - Current working directory
 - `$OLDPWD` - Previous directory (for `cd -`)
@@ -481,6 +498,7 @@ Navigation.setActiveItem() (update aria-current)
 #### AliasManager (`src/utils/AliasManager.ts`)
 
 **Responsibilities**:
+
 - Create command aliases (`alias ll='ls -la'`)
 - Resolve aliases during execution
 - Persist to filesystem (`~/.bash_aliases`)
@@ -489,6 +507,7 @@ Navigation.setActiveItem() (update aria-current)
 #### ThemeManager (`src/utils/ThemeManager.ts`)
 
 **Responsibilities**:
+
 - Apply theme colors via CSS variables
 - Provide theme presets (green, amber, white, cyan, paper)
 - Ensure WCAG contrast compliance
@@ -508,7 +527,7 @@ The virtual file system uses a **hierarchical tree structure** with Map-based st
 interface FileNode {
   name: string;
   type: 'file' | 'directory';
-  content?: string;        // File content (for files)
+  content?: string; // File content (for files)
   children?: Map<string, FileNode>; // Child nodes (for directories)
 }
 ```
@@ -547,6 +566,7 @@ interface FileNode {
 5. Return canonical path
 
 **Example**:
+
 ```
 Current: /home/darin/blog
 Input:   ../portfolio/./project1.md
@@ -575,6 +595,7 @@ static async loadBlogPost(filename: string): Promise<string> {
 ```
 
 **Benefits**:
+
 - Faster initial load time
 - Reduced bundle size
 - Only load content when accessed
@@ -592,12 +613,14 @@ Raw Input → Parsing → Alias Resolution → Variable Expansion → Dispatch �
 ### 1. Parsing (`src/utils/CommandParser.ts`)
 
 **Responsibilities**:
+
 - Split command line into command + arguments
 - Handle quoted strings (`cat "file name.txt"`)
 - Parse flags (`ls -la`)
 - Extract options
 
 **Example**:
+
 ```
 Input:  ls -la ~/portfolio
 Output: {
@@ -610,11 +633,13 @@ Output: {
 ### 2. Pipeline Parsing (`src/utils/PipelineParser.ts`)
 
 **Responsibilities**:
+
 - Split commands by pipe operator (`|`)
 - Execute commands sequentially
 - Pass stdout of previous command as stdin to next
 
 **Example**:
+
 ```
 Input:  cat file.md | render
 Stage 1: cat file.md → "# Title\nContent"
@@ -624,11 +649,13 @@ Stage 2: render (stdin: "# Title\nContent") → HTML output
 ### 3. Alias Resolution (`src/utils/AliasManager.ts`)
 
 **Responsibilities**:
+
 - Replace alias with full command
 - Prevent infinite recursion
 - Preserve arguments
 
 **Example**:
+
 ```
 Alias:  ll='ls -la'
 Input:  ll ~/blog
@@ -638,11 +665,13 @@ Output: ls -la ~/blog
 ### 4. Variable Expansion (`src/utils/EnvVarManager.ts`)
 
 **Responsibilities**:
+
 - Replace $VAR with value
 - Handle undefined variables (empty string)
 - Support ${VAR} syntax
 
 **Example**:
+
 ```
 Input:  cd $HOME/portfolio
 Expand: cd /home/darin/portfolio
@@ -659,18 +688,20 @@ Expand: cd /home/darin/portfolio
 
 ### Custom Events
 
-| Event Name | Trigger | Listeners | Purpose |
-|------------|---------|-----------|---------|
+| Event Name         | Trigger                      | Listeners              | Purpose                   |
+| ------------------ | ---------------------------- | ---------------------- | ------------------------- |
 | `settings-changed` | SettingsManager.setSetting() | Terminal, ThemeManager | React to settings updates |
-| `terminal-command` | Navigation button click | Terminal | Execute command from UI |
+| `terminal-command` | Navigation button click      | Terminal               | Execute command from UI   |
 
 ### Event Flow
 
 ```typescript
 // Emit event
-document.dispatchEvent(new CustomEvent('settings-changed', {
-  detail: { setting: 'theme', value: 'amber' }
-}));
+document.dispatchEvent(
+  new CustomEvent('settings-changed', {
+    detail: { setting: 'theme', value: 'amber' },
+  })
+);
 
 // Listen for event
 document.addEventListener('settings-changed', () => {
@@ -718,7 +749,7 @@ import DOMPurify from 'dompurify';
 export function sanitizeHtml(dirty: string): string {
   return DOMPurify.sanitize(dirty, {
     ALLOWED_TAGS: ['p', 'h1', 'h2', 'code', 'pre', 'a', 'ul', 'ol', 'li'],
-    ALLOWED_ATTR: ['href', 'class']
+    ALLOWED_ATTR: ['href', 'class'],
   });
 }
 ```
@@ -730,12 +761,15 @@ export function sanitizeHtml(dirty: string): string {
 **Location**: `index.html` + `public/_headers`
 
 ```html
-<meta http-equiv="Content-Security-Policy" content="
+<meta
+  http-equiv="Content-Security-Policy"
+  content="
   default-src 'self';
   script-src 'self';
   style-src 'self' 'unsafe-inline';
   img-src 'self' data:;
-">
+"
+/>
 ```
 
 **Protection**: Browser blocks inline scripts even if sanitization fails
@@ -809,12 +843,14 @@ export function sanitizeHtml(dirty: string): string {
 ## Future Architecture Improvements
 
 ### Short Term
+
 1. Add command factory pattern for dynamic loading
 2. Extract settings UI to separate component
 3. Add integration tests for pipelines
 4. Implement output pagination
 
 ### Long Term
+
 1. Consider reactive state management (signals/observables)
 2. Implement plugin system for commands
 3. Add service worker for offline support
@@ -827,6 +863,7 @@ export function sanitizeHtml(dirty: string): string {
 This architecture prioritizes **simplicity**, **testability**, and **maintainability** while providing a rich terminal experience. The clean separation of concerns and use of established design patterns makes the codebase easy to understand and extend.
 
 **Key Strengths**:
+
 - Clear dependency graph
 - Well-defined interfaces
 - Comprehensive type safety
@@ -834,6 +871,7 @@ This architecture prioritizes **simplicity**, **testability**, and **maintainabi
 - Flexible state management
 
 For implementation details, see:
+
 - [API.md](API.md) - How to extend the system
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines
 - [AUDIT.md](AUDIT.md) - Detailed code analysis

@@ -51,8 +51,8 @@ export const echoCommand: Command = {
     }
 
     return {
-      output
+      output,
       // Don't set raw flag - echo should always display its output
     };
-  }
+  },
 };

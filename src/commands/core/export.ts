@@ -1,5 +1,5 @@
-import type { Command } from '../Command';
 import type { EnvVarManager } from '../../utils/EnvVarManager';
+import type { Command } from '../Command';
 
 /**
  * Creates the export command to set environment variables.
@@ -27,14 +27,10 @@ export function createExportCommand(envVarManager: EnvVarManager): Command {
           }
 
           // Sort variables alphabetically
-          const sorted = Array.from(allVars.entries()).sort((a, b) =>
-            a[0].localeCompare(b[0])
-          );
+          const sorted = Array.from(allVars.entries()).sort((a, b) => a[0].localeCompare(b[0]));
 
           // Format as NAME=value
-          const output = sorted
-            .map(([name, value]) => `${name}=${value}`)
-            .join('\n');
+          const output = sorted.map(([name, value]) => `${name}=${value}`).join('\n');
 
           return { output };
         }
@@ -44,7 +40,7 @@ export function createExportCommand(envVarManager: EnvVarManager): Command {
 
         for (const arg of args) {
           // Check if it's an assignment (VAR=value)
-          const assignmentMatch = arg.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+          const assignmentMatch = /^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/.exec(arg);
 
           if (assignmentMatch) {
             // Set variable
@@ -65,9 +61,9 @@ export function createExportCommand(envVarManager: EnvVarManager): Command {
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

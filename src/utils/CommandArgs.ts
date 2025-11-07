@@ -3,7 +3,7 @@
  * Handles both flags (--flag, --key value) and positional arguments.
  */
 export class CommandArgs {
-  private flags: Map<string, string | boolean> = new Map();
+  private flags = new Map<string, string | boolean>();
   private positionals: string[] = [];
 
   // Single-letter flags that expect string values (not boolean)
@@ -44,8 +44,11 @@ export class CommandArgs {
         // 1. The flag is in VALUE_FLAGS (expects string values), OR
         // 2. It looks like a number (for numeric flags like -L 3)
         // Otherwise, treat the flag as boolean
-        if (nextArg !== undefined && !nextArg.startsWith('-') &&
-            (CommandArgs.VALUE_FLAGS.has(flagName) || /^\d+$/.test(nextArg))) {
+        if (
+          nextArg !== undefined &&
+          !nextArg.startsWith('-') &&
+          (CommandArgs.VALUE_FLAGS.has(flagName) || /^\d+$/.test(nextArg))
+        ) {
           this.flags.set(flagName, nextArg); // e.g., -f slant, -L 3
           i++; // Skip the value in next iteration
         } else {

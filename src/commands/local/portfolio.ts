@@ -6,13 +6,13 @@
  * descriptions, achievements, and technical implementations when a specific project
  * is requested. Demonstrates practical application of skills across various domains.
  */
-import type { Command } from '../Command';
-import type { IFileSystem } from '../../utils/fs/IFileSystem';
-import type { Project } from '../../types/portfolio';
+import { PATHS } from '../../constants';
 import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownService } from '../../utils/MarkdownService';
 import { PortfolioParser } from '../../utils/PortfolioParser';
-import { PATHS } from '../../constants';
+import type { Project } from '../../types/portfolio';
+import type { IFileSystem } from '../../utils/fs/IFileSystem';
+import type { Command } from '../Command';
 
 export function createPortfolioCommand(fs: IFileSystem): Command {
   return {
@@ -24,7 +24,7 @@ export function createPortfolioCommand(fs: IFileSystem): Command {
       try {
         // Get all portfolio files from the filesystem
         const files = fs.list(portfolioDir);
-        const portfolioFiles = files.filter(f => f.endsWith('.md'));
+        const portfolioFiles = files.filter((f) => f.endsWith('.md'));
 
         // Parse all portfolio projects
         const projects: Project[] = [];
@@ -43,12 +43,12 @@ export function createPortfolioCommand(fs: IFileSystem): Command {
         if (args.length > 0) {
           // Show specific project
           const projectId = args[0];
-          const project = projects.find(p => p.id === projectId);
+          const project = projects.find((p) => p.id === projectId);
 
           if (!project) {
             return {
               output: `Project '${projectId}' not found.\nUse 'portfolio' to list all projects.`,
-              error: true
+              error: true,
             };
           }
 
@@ -64,9 +64,9 @@ export function createPortfolioCommand(fs: IFileSystem): Command {
       } catch (error) {
         return {
           output: `Error loading portfolio: ${error}`,
-          error: true
+          error: true,
         };
       }
-    }
+    },
   };
 }

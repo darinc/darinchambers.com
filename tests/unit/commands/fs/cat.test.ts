@@ -5,7 +5,7 @@ import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 describe('cat command', () => {
   it('should display file contents', () => {
     const mockFs = {
-      readFile: vi.fn().mockReturnValue('File contents here')
+      readFile: vi.fn().mockReturnValue('File contents here'),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -17,7 +17,7 @@ describe('cat command', () => {
 
   it('should handle multiline files', () => {
     const mockFs = {
-      readFile: vi.fn().mockReturnValue('Line 1\nLine 2\nLine 3')
+      readFile: vi.fn().mockReturnValue('Line 1\nLine 2\nLine 3'),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -28,7 +28,7 @@ describe('cat command', () => {
 
   it('should error when no file operand', () => {
     const mockFs = {
-      readFile: vi.fn()
+      readFile: vi.fn(),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -43,7 +43,7 @@ describe('cat command', () => {
     const mockFs = {
       readFile: vi.fn().mockImplementation(() => {
         throw new Error('cat: test.txt: No such file or directory');
-      })
+      }),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -57,7 +57,7 @@ describe('cat command', () => {
     const mockFs = {
       readFile: vi.fn().mockImplementation(() => {
         throw new Error('cat: mydir: Is a directory');
-      })
+      }),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -69,7 +69,7 @@ describe('cat command', () => {
 
   it('should have correct name and description', () => {
     const mockFs = {
-      readFile: vi.fn()
+      readFile: vi.fn(),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -80,7 +80,7 @@ describe('cat command', () => {
 
   it('should handle empty files', () => {
     const mockFs = {
-      readFile: vi.fn().mockReturnValue('')
+      readFile: vi.fn().mockReturnValue(''),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -91,7 +91,7 @@ describe('cat command', () => {
 
   it('should handle files with special characters', () => {
     const mockFs = {
-      readFile: vi.fn().mockReturnValue('Special chars: <>&"\'\n\t')
+      readFile: vi.fn().mockReturnValue('Special chars: <>&"\'\n\t'),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -103,7 +103,7 @@ describe('cat command', () => {
   it('should handle very large files', () => {
     const largeContent = 'a'.repeat(100000);
     const mockFs = {
-      readFile: vi.fn().mockReturnValue(largeContent)
+      readFile: vi.fn().mockReturnValue(largeContent),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -114,7 +114,7 @@ describe('cat command', () => {
 
   it('should only read first argument', () => {
     const mockFs = {
-      readFile: vi.fn().mockReturnValue('Content')
+      readFile: vi.fn().mockReturnValue('Content'),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
@@ -128,7 +128,7 @@ describe('cat command', () => {
     const mockFs = {
       readFile: vi.fn().mockImplementation(() => {
         throw 'string error';
-      })
+      }),
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);

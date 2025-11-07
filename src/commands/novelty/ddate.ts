@@ -1,11 +1,11 @@
-import type { Command } from '../Command';
 import { CommandArgs } from '../../utils/CommandArgs';
 import {
   toDiscordian,
   formatDiscordian,
   parseDate,
-  parseDateNumeric
+  parseDateNumeric,
 } from '../../utils/discordian';
+import type { Command } from '../Command';
 
 /**
  * ddate command - Display date in Discordian calendar format
@@ -40,7 +40,7 @@ Examples:
   ddate 12 21 2025         Show specific date (month day year)
 
 Options:
-  --help                   Display this help message`
+  --help                   Display this help message`,
       };
     }
 
@@ -58,7 +58,7 @@ Options:
       if (!parsed) {
         return {
           output: `ddate: invalid date '${dateStr}'`,
-          error: true
+          error: true,
         };
       }
 
@@ -73,7 +73,7 @@ Options:
       if (isNaN(day) || isNaN(month) || isNaN(year)) {
         return {
           output: 'ddate: invalid numeric date arguments',
-          error: true
+          error: true,
         };
       }
 
@@ -81,16 +81,15 @@ Options:
       if (!parsed) {
         return {
           output: `ddate: invalid date ${month}/${day}/${year}`,
-          error: true
+          error: true,
         };
       }
 
       targetDate = parsed;
-    }
-    else {
+    } else {
       return {
-        output: 'ddate: invalid arguments\nTry \'ddate --help\' for more information.',
-        error: true
+        output: "ddate: invalid arguments\nTry 'ddate --help' for more information.",
+        error: true,
       };
     }
 
@@ -99,5 +98,5 @@ Options:
     const formatted = formatDiscordian(ddate);
 
     return { output: formatted };
-  }
+  },
 };

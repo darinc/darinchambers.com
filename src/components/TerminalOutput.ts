@@ -68,7 +68,10 @@ export class TerminalOutput {
           if (associatedElement) {
             const existingDescribedBy = associatedElement.getAttribute('aria-describedby');
             if (existingDescribedBy) {
-              associatedElement.setAttribute('aria-describedby', `${existingDescribedBy} ${errorId}`);
+              associatedElement.setAttribute(
+                'aria-describedby',
+                `${existingDescribedBy} ${errorId}`
+              );
             } else {
               associatedElement.setAttribute('aria-describedby', errorId);
             }
@@ -115,7 +118,7 @@ export class TerminalOutput {
   clear(): void {
     // Clear all content except the input line
     const children = Array.from(this.outputElement.children);
-    children.forEach(child => {
+    children.forEach((child) => {
       if (child.id !== 'terminal-input-line') {
         child.remove();
       }

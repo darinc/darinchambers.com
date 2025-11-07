@@ -13,6 +13,6 @@ export const config = {
      *
      * Toggle this flag to switch between renderers. Both implementations maintain the same API.
      */
-    useMarkedRenderer: true
-  }
+    useMarkedRenderer: true,
+  },
 } as const;

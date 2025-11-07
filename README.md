@@ -44,6 +44,7 @@ Visit `http://localhost:5173` to see the terminal in action.
 ## 📖 Available Commands
 
 ### Core Commands
+
 - `help` - Display help information
 - `clear` - Clear the terminal screen
 - `history` - View command history
@@ -54,6 +55,7 @@ Visit `http://localhost:5173` to see the terminal in action.
 - `env` / `export` - Manage environment variables
 
 ### Content Commands
+
 - `about` - Learn about my background and expertise
 - `portfolio [project-id]` - View projects and accomplishments
 - `blog [post-id]` - Read blog posts (supports `--tag` filtering)
@@ -61,6 +63,7 @@ Visit `http://localhost:5173` to see the terminal in action.
 - `skills` - View technical skills by category
 
 ### File System Commands
+
 - `ls [-a] [-l] [path]` - List directory contents
 - `cd <path>` - Change directory
 - `pwd` - Print working directory
@@ -69,10 +72,12 @@ Visit `http://localhost:5173` to see the terminal in action.
 - `render <file>` - Render markdown files with formatting
 
 ### Novelty Commands
+
 - `ddate` - Display Discordian calendar date
 - `figlet [-f font] [-c] "text"` - Create ASCII art banners
 
 ### Advanced Features
+
 - **Command Piping**: `cat file.md | render`
 - **Command History**: Use Up/Down arrows to navigate
 - **Tab Completion**: Auto-complete commands with Tab
@@ -227,6 +232,7 @@ See [API.md](API.md) for detailed API documentation.
 See [TODO.md](TODO.md) for the current development backlog.
 
 ### Planned Features
+
 - 80% test coverage target
 - Enhanced command pipeline features
 - Command output pagination

@@ -9,11 +9,11 @@ describe('alias command', () => {
         getAllAliases: vi.fn().mockReturnValue(
           new Map([
             ['ll', 'ls -lah'],
-            ['gs', 'git status']
+            ['gs', 'git status'],
           ])
         ),
         setAlias: vi.fn(),
-        removeAlias: vi.fn()
+        removeAlias: vi.fn(),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -27,7 +27,7 @@ describe('alias command', () => {
       const mockManager = {
         getAllAliases: vi.fn().mockReturnValue(new Map()),
         setAlias: vi.fn(),
-        removeAlias: vi.fn()
+        removeAlias: vi.fn(),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -42,11 +42,11 @@ describe('alias command', () => {
           new Map([
             ['zz', 'last'],
             ['aa', 'first'],
-            ['mm', 'middle']
+            ['mm', 'middle'],
           ])
         ),
         setAlias: vi.fn(),
-        removeAlias: vi.fn()
+        removeAlias: vi.fn(),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -64,7 +64,7 @@ describe('alias command', () => {
       const mockManager = {
         getAllAliases: vi.fn(),
         setAlias: vi.fn(),
-        removeAlias: vi.fn()
+        removeAlias: vi.fn(),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -78,7 +78,7 @@ describe('alias command', () => {
       const mockManager = {
         getAllAliases: vi.fn(),
         setAlias: vi.fn(),
-        removeAlias: vi.fn()
+        removeAlias: vi.fn(),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -92,7 +92,7 @@ describe('alias command', () => {
       const mockManager = {
         getAllAliases: vi.fn(),
         setAlias: vi.fn(),
-        removeAlias: vi.fn()
+        removeAlias: vi.fn(),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -108,7 +108,7 @@ describe('alias command', () => {
         setAlias: vi.fn().mockImplementation(() => {
           throw new Error('Invalid alias name');
         }),
-        removeAlias: vi.fn()
+        removeAlias: vi.fn(),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);

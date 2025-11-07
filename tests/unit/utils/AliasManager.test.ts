@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { PATHS } from '../../../src/constants';
 import { AliasManager } from '../../../src/utils/AliasManager';
 import type { IFileSystem } from '../../../src/utils/fs/IFileSystem';
-import { PATHS } from '../../../src/constants';
 
 describe('AliasManager', () => {
   let mockFileSystem: IFileSystem;
@@ -19,7 +19,7 @@ describe('AliasManager', () => {
       getCurrentDirectory: vi.fn().mockReturnValue('/home/darin'),
       setCurrentDirectory: vi.fn(),
       getNode: vi.fn(),
-      createDirectory: vi.fn()
+      createDirectory: vi.fn(),
     };
   });
 
@@ -33,9 +33,9 @@ describe('AliasManager', () => {
 
     it('should load aliases from filesystem on initialization', () => {
       mockFileSystem.exists = vi.fn().mockReturnValue(true);
-      mockFileSystem.readFile = vi.fn().mockReturnValue(
-        `alias ll='ls -lah'\nalias gs='git status'\n`
-      );
+      mockFileSystem.readFile = vi
+        .fn()
+        .mockReturnValue(`alias ll='ls -lah'\nalias gs='git status'\n`);
 
       aliasManager = new AliasManager(mockFileSystem);
 
@@ -45,9 +45,9 @@ describe('AliasManager', () => {
 
     it('should handle corrupted alias file gracefully', () => {
       mockFileSystem.exists = vi.fn().mockReturnValue(true);
-      mockFileSystem.readFile = vi.fn().mockReturnValue(
-        `invalid line\nalias ll='ls -lah'\nmore invalid`
-      );
+      mockFileSystem.readFile = vi
+        .fn()
+        .mockReturnValue(`invalid line\nalias ll='ls -lah'\nmore invalid`);
 
       aliasManager = new AliasManager(mockFileSystem);
 
@@ -58,9 +58,9 @@ describe('AliasManager', () => {
 
     it('should ignore empty lines in alias file', () => {
       mockFileSystem.exists = vi.fn().mockReturnValue(true);
-      mockFileSystem.readFile = vi.fn().mockReturnValue(
-        `\nalias ll='ls -lah'\n\n\nalias gs='git status'\n\n`
-      );
+      mockFileSystem.readFile = vi
+        .fn()
+        .mockReturnValue(`\nalias ll='ls -lah'\n\n\nalias gs='git status'\n\n`);
 
       aliasManager = new AliasManager(mockFileSystem);
 
@@ -112,9 +112,7 @@ describe('AliasManager', () => {
     });
 
     it('should reject alias names starting with numbers', () => {
-      expect(() => aliasManager.setAlias('1test', 'echo')).toThrow(
-        'Invalid alias name: 1test'
-      );
+      expect(() => aliasManager.setAlias('1test', 'echo')).toThrow('Invalid alias name: 1test');
     });
 
     it('should reject alias names with spaces', () => {
@@ -150,9 +148,7 @@ describe('AliasManager', () => {
         throw new Error('Write error');
       });
 
-      expect(() => aliasManager.setAlias('test', 'echo')).toThrow(
-        'Failed to save aliases'
-      );
+      expect(() => aliasManager.setAlias('test', 'echo')).toThrow('Failed to save aliases');
     });
   });
 
@@ -314,9 +310,9 @@ describe('AliasManager', () => {
 
     it('should parse aliases in correct format', () => {
       mockFileSystem.exists = vi.fn().mockReturnValue(true);
-      mockFileSystem.readFile = vi.fn().mockReturnValue(
-        `alias ll='ls -lah'\nalias gs='git status'\n`
-      );
+      mockFileSystem.readFile = vi
+        .fn()
+        .mockReturnValue(`alias ll='ls -lah'\nalias gs='git status'\n`);
 
       aliasManager = new AliasManager(mockFileSystem);
 

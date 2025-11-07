@@ -21,7 +21,7 @@ This is the post content.`;
         title: 'Test Post',
         date: '2024-01-01',
         summary: 'A test post',
-        tags: ['typescript', 'testing']
+        tags: ['typescript', 'testing'],
       });
       expect(result.markdown).toBe('# Content\n\nThis is the post content.');
     });
@@ -153,9 +153,7 @@ tags: []
 
 Content`;
 
-      expect(() => BlogParser.parseFrontmatter(content)).toThrow(
-        /missing or invalid fields.*date/
-      );
+      expect(() => BlogParser.parseFrontmatter(content)).toThrow(/missing or invalid fields.*date/);
     });
 
     it('should throw error if summary is missing', () => {
@@ -181,9 +179,7 @@ summary: Test
 
 Content`;
 
-      expect(() => BlogParser.parseFrontmatter(content)).toThrow(
-        /missing or invalid fields.*tags/
-      );
+      expect(() => BlogParser.parseFrontmatter(content)).toThrow(/missing or invalid fields.*tags/);
     });
 
     it('should throw error for multiple missing fields', () => {
@@ -193,9 +189,7 @@ title: Test
 
 Content`;
 
-      expect(() => BlogParser.parseFrontmatter(content)).toThrow(
-        /missing or invalid fields/
-      );
+      expect(() => BlogParser.parseFrontmatter(content)).toThrow(/missing or invalid fields/);
     });
 
     it('should handle multiline content after frontmatter', () => {
@@ -276,7 +270,7 @@ This is the content.`;
         date: '2024-01-15',
         summary: 'A test blog post',
         content: '# Test Post\n\nThis is the content.',
-        tags: ['typescript', 'testing']
+        tags: ['typescript', 'testing'],
       });
     });
 

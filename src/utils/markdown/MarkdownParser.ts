@@ -1,10 +1,10 @@
-import type { LineHandler } from './LineHandler';
-import { ParseContext } from './ParseContext';
 import { CodeBlockHandler } from './handlers/CodeBlockHandler';
+import { EmptyLineHandler } from './handlers/EmptyLineHandler';
 import { HeaderHandler } from './handlers/HeaderHandler';
 import { ListHandler } from './handlers/ListHandler';
-import { EmptyLineHandler } from './handlers/EmptyLineHandler';
 import { ParagraphHandler } from './handlers/ParagraphHandler';
+import { ParseContext } from './ParseContext';
+import type { LineHandler } from './LineHandler';
 
 export class MarkdownParser {
   private handlers: LineHandler[];
@@ -16,7 +16,7 @@ export class MarkdownParser {
       new HeaderHandler(),
       new ListHandler(),
       new EmptyLineHandler(),
-      new ParagraphHandler() // Fallback handler
+      new ParagraphHandler(), // Fallback handler
     ];
   }
 
