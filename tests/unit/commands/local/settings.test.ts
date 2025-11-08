@@ -80,12 +80,12 @@ describe('Settings Command', () => {
         getPropertyValue: (prop: string) => {
           // Return default color values for CSS variables
           const defaults: Record<string, string> = {
-            '--terminal-bg': '#0a0e14',
-            '--terminal-fg': '#39ff14',
-            '--terminal-accent': '#39ff14',
+            '--terminal-bg': '#0a0e16',
+            '--terminal-fg': '#39ff16',
+            '--terminal-accent': '#39ff16',
             '--terminal-dim': '#20c20e',
             '--terminal-error': '#ff3333',
-            '--terminal-cursor': '#39ff14',
+            '--terminal-cursor': '#39ff16',
           };
           return defaults[prop] || '';
         },
@@ -211,12 +211,12 @@ describe('Settings Command', () => {
       expect(settingsManager.getThemePreset()).toBe('green');
     });
 
-    it('should successfully change to yellow theme', () => {
-      const result = settingsCommand.execute(['set', 'theme', 'yellow']);
+    it('should successfully change to dc theme', () => {
+      const result = settingsCommand.execute(['set', 'theme', 'dc']);
 
       expect(result.error).toBeUndefined();
-      expect(result.output).toContain('Theme changed to: yellow');
-      expect(settingsManager.getThemePreset()).toBe('yellow');
+      expect(result.output).toContain('Theme changed to: dc');
+      expect(settingsManager.getThemePreset()).toBe('dc');
     });
 
     it('should successfully change to white theme', () => {
@@ -248,11 +248,11 @@ describe('Settings Command', () => {
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Invalid theme: invalid');
-      expect(result.output).toContain('green, yellow, white, light-blue, paper');
+      expect(result.output).toContain('green, yellow, white, light-blue, paper, dc');
     });
 
     it('should broadcast settings change event', () => {
-      settingsCommand.execute(['set', 'theme', 'yellow']);
+      settingsCommand.execute(['set', 'theme', 'dc']);
 
       expect(document.dispatchEvent).toHaveBeenCalled();
     });
@@ -651,7 +651,7 @@ describe('Settings Command', () => {
   describe('settings reset', () => {
     it('should reset all settings to defaults', () => {
       // Change some settings
-      settingsManager.setThemePreset('yellow');
+      settingsManager.setThemePreset('dc');
       settingsManager.setFontSize(20);
       settingsManager.setScanLines(true);
       settingsManager.setGlow(true);
@@ -663,8 +663,8 @@ describe('Settings Command', () => {
       expect(result.output).toContain('Settings reset to defaults');
 
       // Verify all settings are back to defaults
-      expect(settingsManager.getThemePreset()).toBe('yellow');
-      expect(settingsManager.getFontSize()).toBe(14);
+      expect(settingsManager.getThemePreset()).toBe('dc');
+      expect(settingsManager.getFontSize()).toBe(16);
       expect(settingsManager.getFontFamily()).toBe('Courier New');
       expect(settingsManager.getScanLines()).toBe(false);
       expect(settingsManager.getGlow()).toBe(false);
@@ -678,7 +678,7 @@ describe('Settings Command', () => {
       settingsCommand.execute(['reset']);
 
       // ThemeManager should apply the default theme
-      expect(settingsManager.getThemePreset()).toBe('yellow');
+      expect(settingsManager.getThemePreset()).toBe('dc');
     });
 
     it('should apply default font settings to DOM', () => {
@@ -687,7 +687,7 @@ describe('Settings Command', () => {
 
       expect(document.documentElement.style.setProperty).toHaveBeenCalledWith(
         '--terminal-font-size',
-        '14px'
+        '16px'
       );
     });
 

@@ -54,6 +54,12 @@ export class Terminal {
   private setupClickHandler(outputElement: HTMLElement): void {
     // Click anywhere in terminal output to focus input
     outputElement.addEventListener('click', () => {
+      // Don't focus if user has selected text (they may be trying to copy)
+      const selection = window.getSelection();
+      if (selection && selection.toString().length > 0) {
+        return; // User has selected text, don't steal focus
+      }
+
       this.input.focus();
     });
   }

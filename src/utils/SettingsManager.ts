@@ -375,6 +375,7 @@ export class SettingsManager {
       'white',
       'light-blue',
       'paper',
+      'dc',
       'custom',
     ];
     return validPresets.includes(preset as ThemePresetName);

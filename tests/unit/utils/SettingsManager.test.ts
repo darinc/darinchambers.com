@@ -57,8 +57,8 @@ describe('SettingsManager', () => {
     it('should initialize with default settings when localStorage is empty', () => {
       const settings = settingsManager.loadSettings();
 
-      expect(settings.theme.preset).toBe('yellow');
-      expect(settings.font.size).toBe(14);
+      expect(settings.theme.preset).toBe('dc');
+      expect(settings.font.size).toBe(16);
       expect(settings.font.family).toBe('Courier New');
       expect(settings.effects.scanLines).toBe(false);
       expect(settings.effects.glow).toBe(false);
@@ -69,7 +69,7 @@ describe('SettingsManager', () => {
 
     it('should load settings from localStorage when available', () => {
       const customSettings: SettingsConfig = {
-        theme: { preset: 'yellow', customColors: undefined },
+        theme: { preset: 'dc', customColors: undefined },
         font: { size: 16, family: 'Monaco' },
         effects: {
           scanLines: false,
@@ -86,7 +86,7 @@ describe('SettingsManager', () => {
       const newManager = new SettingsManager(fs);
       const settings = newManager.loadSettings();
 
-      expect(settings.theme.preset).toBe('yellow');
+      expect(settings.theme.preset).toBe('dc');
       expect(settings.font.size).toBe(16);
       expect(settings.font.family).toBe('Monaco');
       expect(settings.effects.scanLines).toBe(false);
@@ -103,7 +103,7 @@ describe('SettingsManager', () => {
       const newManager = new SettingsManager(fs);
       const settings = newManager.loadSettings();
 
-      expect(settings.theme.preset).toBe('yellow'); // Falls back to defaults
+      expect(settings.theme.preset).toBe('dc'); // Falls back to defaults
       expect(consoleSpy).toHaveBeenCalled();
 
       consoleSpy.mockRestore();
@@ -116,18 +116,18 @@ describe('SettingsManager', () => {
       const content = fs.readFile(PATHS.CONFIG_SETTINGS);
       const parsed = JSON.parse(content);
 
-      expect(parsed.theme.preset).toBe('yellow');
+      expect(parsed.theme.preset).toBe('dc');
     });
   });
 
   describe('Theme Settings', () => {
     it('should get current theme preset', () => {
-      expect(settingsManager.getThemePreset()).toBe('yellow');
+      expect(settingsManager.getThemePreset()).toBe('dc');
     });
 
     it('should set theme preset', () => {
-      settingsManager.setThemePreset('yellow');
-      expect(settingsManager.getThemePreset()).toBe('yellow');
+      settingsManager.setThemePreset('dc');
+      expect(settingsManager.getThemePreset()).toBe('dc');
     });
 
     it('should persist theme changes to localStorage', () => {
@@ -174,7 +174,7 @@ describe('SettingsManager', () => {
 
   describe('Font Settings', () => {
     it('should get current font size', () => {
-      expect(settingsManager.getFontSize()).toBe(14);
+      expect(settingsManager.getFontSize()).toBe(16);
     });
 
     it('should set valid font size', () => {
@@ -320,10 +320,10 @@ describe('SettingsManager', () => {
   describe('Generic Getters/Setters', () => {
     it('should get setting by key', () => {
       const themeSettings = settingsManager.getSetting('theme');
-      expect(themeSettings.preset).toBe('yellow');
+      expect(themeSettings.preset).toBe('dc');
 
       const fontSettings = settingsManager.getSetting('font');
-      expect(fontSettings.size).toBe(14);
+      expect(fontSettings.size).toBe(16);
 
       const effectsSettings = settingsManager.getSetting('effects');
       expect(effectsSettings.scanLines).toBe(false);
@@ -333,11 +333,11 @@ describe('SettingsManager', () => {
 
     it('should set setting by key', () => {
       settingsManager.setSetting('theme', {
-        preset: 'yellow',
+        preset: 'dc',
         customColors: undefined,
       });
 
-      expect(settingsManager.getThemePreset()).toBe('yellow');
+      expect(settingsManager.getThemePreset()).toBe('dc');
     });
 
     it('should persist changes made via setSetting', () => {
@@ -357,7 +357,7 @@ describe('SettingsManager', () => {
   describe('Reset', () => {
     it('should reset all settings to defaults', () => {
       // Make some changes
-      settingsManager.setThemePreset('yellow');
+      settingsManager.setThemePreset('dc');
       settingsManager.setFontSize(20);
       settingsManager.setScanLines(true);
       settingsManager.setGlow(true);
@@ -367,31 +367,31 @@ describe('SettingsManager', () => {
       settingsManager.reset();
 
       // Verify defaults restored
-      expect(settingsManager.getThemePreset()).toBe('yellow');
-      expect(settingsManager.getFontSize()).toBe(14);
+      expect(settingsManager.getThemePreset()).toBe('dc');
+      expect(settingsManager.getFontSize()).toBe(16);
       expect(settingsManager.getScanLines()).toBe(false);
       expect(settingsManager.getGlow()).toBe(false);
       expect(settingsManager.getBorder()).toBe(true);
     });
 
     it('should clear and rewrite localStorage on reset', () => {
-      settingsManager.setThemePreset('yellow');
+      settingsManager.setThemePreset('dc');
       settingsManager.reset();
 
       const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
       const parsed = JSON.parse(stored!);
 
-      expect(parsed.theme.preset).toBe('yellow');
+      expect(parsed.theme.preset).toBe('dc');
     });
 
     it('should sync reset to filesystem', () => {
-      settingsManager.setThemePreset('yellow');
+      settingsManager.setThemePreset('dc');
       settingsManager.reset();
 
       const content = fs.readFile(PATHS.CONFIG_SETTINGS);
       const parsed = JSON.parse(content);
 
-      expect(parsed.theme.preset).toBe('yellow');
+      expect(parsed.theme.preset).toBe('dc');
     });
   });
 
@@ -486,7 +486,7 @@ describe('SettingsManager', () => {
 
       // Should not throw, just log error
       expect(() => {
-        errorManager.setThemePreset('yellow');
+        errorManager.setThemePreset('dc');
       }).not.toThrow();
 
       expect(consoleSpy).toHaveBeenCalled();

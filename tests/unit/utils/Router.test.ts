@@ -93,12 +93,6 @@ describe('Router', () => {
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('contact', false);
     });
 
-    it('should parse /skills route', () => {
-      window.location.pathname = '/skills';
-      router.handleInitialRoute();
-      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('skills', false);
-    });
-
     it('should parse /settings route', () => {
       window.location.pathname = '/settings';
       router.handleInitialRoute();
@@ -183,10 +177,6 @@ describe('Router', () => {
 
     it('should return /contact for "contact" command', () => {
       expect(router.getPathForCommand('contact')).toBe('/contact');
-    });
-
-    it('should return /skills for "skills" command', () => {
-      expect(router.getPathForCommand('skills')).toBe('/skills');
     });
 
     it('should return /settings for "settings" command', () => {

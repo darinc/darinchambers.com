@@ -1,17 +1,16 @@
 // Import content markdown files
 import aboutMd from '../../content/about.md?raw';
 // Import blog markdown files
-import developerExperience from '../../content/blog/2024-05-10-developer-experience.md?raw';
-import distributedSystemsReliability from '../../content/blog/2024-07-22-distributed-systems-reliability.md?raw';
-import aiProductionLessons from '../../content/blog/2024-09-15-ai-production-lessons.md?raw';
+import buildingSite from '../../content/blog/2025-11-07-building-this-site-ai-assisted-development.md?raw';
+import vibeCodeGraph from '../../content/blog/2025-11-07-vibe-coding-graph-library-one-week.md?raw';
+import trickRocks from '../../content/blog/2025-11-07-we-trick-rocks-into-thinking.md?raw';
 import contactMd from '../../content/contact.md?raw';
 import helpMd from '../../content/help.md?raw';
 // Import portfolio markdown files
-import aiMlSystems from '../../content/portfolio/ai-ml-systems.md?raw';
-import developerTools from '../../content/portfolio/developer-tools.md?raw';
-import distributedPlatform from '../../content/portfolio/distributed-platform.md?raw';
-import enterpriseArchitecture from '../../content/portfolio/enterprise-architecture.md?raw';
-import skillsMd from '../../content/skills.md?raw';
+import creatingRevenueStreams from '../../content/portfolio/creating-revenue-streams.md?raw';
+import developerProductivity from '../../content/portfolio/developer-productivity.md?raw';
+import inventingHardwareSoftware from '../../content/portfolio/inventing-hardware-software.md?raw';
+import scalingHypergrowth from '../../content/portfolio/scaling-hypergrowth.md?raw';
 import type { FileSystemNode } from './types';
 
 export class FileSystemInitializer {
@@ -140,19 +139,16 @@ Type 'blog' to read posts.
     const blog = this.createDirectoryNode('blog');
     darin.children!.set('blog', blog);
     blog.children!.set(
-      '2024-09-15-ai-production-lessons.md',
-      this.createFileNode('2024-09-15-ai-production-lessons.md', aiProductionLessons)
+      '2025-11-07-we-trick-rocks-into-thinking.md',
+      this.createFileNode('2025-11-07-we-trick-rocks-into-thinking.md', trickRocks)
     );
     blog.children!.set(
-      '2024-07-22-distributed-systems-reliability.md',
-      this.createFileNode(
-        '2024-07-22-distributed-systems-reliability.md',
-        distributedSystemsReliability
-      )
+      '2025-11-07-vibe-coding-graph-library-one-week.md',
+      this.createFileNode('2025-11-07-vibe-coding-graph-library-one-week.md', vibeCodeGraph)
     );
     blog.children!.set(
-      '2024-05-10-developer-experience.md',
-      this.createFileNode('2024-05-10-developer-experience.md', developerExperience)
+      '2025-11-07-building-this-site-ai-assisted-development.md',
+      this.createFileNode('2025-11-07-building-this-site-ai-assisted-development.md', buildingSite)
     );
 
     // /home/darin/content directory with markdown content files
@@ -160,27 +156,26 @@ Type 'blog' to read posts.
     darin.children!.set('content', content);
     content.children!.set('about.md', this.createFileNode('about.md', aboutMd));
     content.children!.set('contact.md', this.createFileNode('contact.md', contactMd));
-    content.children!.set('skills.md', this.createFileNode('skills.md', skillsMd));
     content.children!.set('help.md', this.createFileNode('help.md', helpMd));
 
     // /home/darin/portfolio directory with markdown portfolio files
     const portfolio = this.createDirectoryNode('portfolio');
     darin.children!.set('portfolio', portfolio);
     portfolio.children!.set(
-      'ai-ml-systems.md',
-      this.createFileNode('ai-ml-systems.md', aiMlSystems)
+      'inventing-hardware-software.md',
+      this.createFileNode('inventing-hardware-software.md', inventingHardwareSoftware)
     );
     portfolio.children!.set(
-      'distributed-platform.md',
-      this.createFileNode('distributed-platform.md', distributedPlatform)
+      'creating-revenue-streams.md',
+      this.createFileNode('creating-revenue-streams.md', creatingRevenueStreams)
     );
     portfolio.children!.set(
-      'developer-tools.md',
-      this.createFileNode('developer-tools.md', developerTools)
+      'developer-productivity.md',
+      this.createFileNode('developer-productivity.md', developerProductivity)
     );
     portfolio.children!.set(
-      'enterprise-architecture.md',
-      this.createFileNode('enterprise-architecture.md', enterpriseArchitecture)
+      'scaling-hypergrowth.md',
+      this.createFileNode('scaling-hypergrowth.md', scalingHypergrowth)
     );
 
     // /usr directory
@@ -218,7 +213,6 @@ Type 'blog' to read posts.
     );
     localBin.children!.set('blog', this.createFileNode('blog', '[Custom command: blog]'));
     localBin.children!.set('contact', this.createFileNode('contact', '[Custom command: contact]'));
-    localBin.children!.set('skills', this.createFileNode('skills', '[Custom command: skills]'));
     localBin.children!.set(
       'settings',
       this.createFileNode('settings', '[Custom command: settings]')

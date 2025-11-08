@@ -124,7 +124,14 @@ function handleSet(
   try {
     switch (setting) {
       case 'theme': {
-        const validThemes: ThemePresetName[] = ['green', 'yellow', 'white', 'light-blue', 'paper'];
+        const validThemes: ThemePresetName[] = [
+          'green',
+          'yellow',
+          'white',
+          'light-blue',
+          'paper',
+          'dc',
+        ];
         if (!validThemes.includes(value as ThemePresetName)) {
           return {
             output: `Invalid theme: ${value}. Available: ${validThemes.join(', ')}`,

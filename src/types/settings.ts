@@ -68,7 +68,14 @@ export interface SettingsConfig {
 /**
  * Available theme preset names.
  */
-export type ThemePresetName = 'green' | 'yellow' | 'white' | 'light-blue' | 'paper' | 'custom';
+export type ThemePresetName =
+  | 'green'
+  | 'yellow'
+  | 'white'
+  | 'light-blue'
+  | 'paper'
+  | 'dc'
+  | 'custom';
 
 /**
  * Available monospace font families.

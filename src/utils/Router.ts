@@ -59,11 +59,6 @@ export class Router {
         pattern: /^\/contact\/?$/,
         commandBuilder: () => 'contact',
       },
-      // Skills route: /skills
-      {
-        pattern: /^\/skills\/?$/,
-        commandBuilder: () => 'skills',
-      },
       // Settings route: /settings
       {
         pattern: /^\/settings\/?$/,
@@ -183,7 +178,6 @@ export class Router {
       about: '/about',
       portfolio: '/portfolio',
       contact: '/contact',
-      skills: '/skills',
       settings: '/settings',
       help: '/help',
     };

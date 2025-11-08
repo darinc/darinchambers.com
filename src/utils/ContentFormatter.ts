@@ -64,8 +64,10 @@ ${tech}${impact}
     const items = posts
       .map((post, index) => {
         const tags = post.tags.map((t: string) => `\`${t}\``).join(' ');
+        // Reverse numbering: newest post (index 0) gets highest number
+        const postNumber = posts.length - index;
 
-        return `### ${index + 1}. ${post.title}
+        return `### ${postNumber}. ${post.title}
 
 **Date:** ${post.date}
 

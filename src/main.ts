@@ -18,7 +18,6 @@ import { createBlogCommand } from './commands/local/blog';
 import { createContactCommand } from './commands/local/contact';
 import { createPortfolioCommand } from './commands/local/portfolio';
 import { createSettingsCommand } from './commands/local/settings';
-import { createSkillsCommand } from './commands/local/skills';
 import { ddateCommand } from './commands/novelty/ddate';
 import { figletCommand } from './commands/novelty/figlet';
 import { Header } from './components/Header';
@@ -190,7 +189,6 @@ const whoamiCommand = createWhoamiCommand(terminal);
 // Create content commands
 const aboutCommand = createAboutCommand(fileSystem);
 const contactCommand = createContactCommand(fileSystem);
-const skillsCommand = createSkillsCommand(fileSystem);
 const portfolioCommand = createPortfolioCommand(fileSystem);
 const blogCommand = createBlogCommand(fileSystem);
 
@@ -225,7 +223,6 @@ terminal.registerCommands([
   portfolioCommand,
   blogCommand,
   contactCommand,
-  skillsCommand,
   settingsCommand,
   ddateCommand,
   figletCommand,
@@ -237,7 +234,6 @@ const navItems: NavItem[] = [
   { label: 'portfolio', command: 'portfolio' },
   { label: 'blog', command: 'blog' },
   { label: 'contact', command: 'contact' },
-  { label: 'skills', command: 'skills' },
   { label: 'settings', command: 'settings' },
   { label: 'help', command: 'help' },
 ];

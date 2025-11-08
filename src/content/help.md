@@ -1,6 +1,6 @@
 # Terminal Help
 
-Welcome to my interactive terminal! This is a Unix-like command-line interface where you can explore my work, read my blog, and discover my skills.
+Welcome to my interactive terminal! This is a Unix-like command-line interface where you can explore my work and read my blog.
 
 ## Getting Help
 
@@ -17,7 +17,6 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`about`** - Learn about my background and expertise
 - **`portfolio`** - View my projects and accomplishments
 - **`blog`** - Read my blog posts and articles
-- **`skills`** - See my technical skills by category
 - **`contact`** - Get in touch with me
 
 ### File System

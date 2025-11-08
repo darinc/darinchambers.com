@@ -13,7 +13,6 @@ export const PATHS = {
   CONTENT_HELP: '/home/darin/content/help.md',
   CONTENT_ABOUT: '/home/darin/content/about.md',
   CONTENT_CONTACT: '/home/darin/content/contact.md',
-  CONTENT_SKILLS: '/home/darin/content/skills.md',
   CONFIG_ALIASES: '/home/guest/.alias',
   CONFIG_SETTINGS: '/home/darin/.settings',
   CONFIG_ENV: '/home/darin/.env',
@@ -31,11 +30,11 @@ export const STORAGE_KEYS = {
 
 export const DEFAULT_SETTINGS: SettingsConfig = {
   theme: {
-    preset: 'yellow',
+    preset: 'dc',
     customColors: undefined,
   },
   font: {
-    size: 14,
+    size: 16,
     family: 'Courier New',
   },
   effects: {

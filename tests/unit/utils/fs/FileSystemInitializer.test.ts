@@ -15,17 +15,17 @@ describe('FileSystemInitializer', () => {
     expect(root.children!.has('usr')).toBe(true);
   });
 
-  it('should load the ai-production-lessons blog post', () => {
+  it('should load the we-trick-rocks-into-thinking blog post', () => {
     const root = FileSystemInitializer.createDefaultStructure();
     const post = root
       .children!.get('home')!
       .children!.get('darin')!
       .children!.get('blog')!
-      .children!.get('2024-09-15-ai-production-lessons.md');
+      .children!.get('2025-11-07-we-trick-rocks-into-thinking.md');
 
     expect(post).toBeDefined();
     expect(post!.type).toBe('file');
-    expect(post!.content).toContain('Building AI systems that work in production');
+    expect(post!.content).toContain('We Trick Rocks Into Thinking');
   });
 
   it('should load all content markdown files', () => {
@@ -35,7 +35,6 @@ describe('FileSystemInitializer', () => {
     expect(contentDir).toBeDefined();
     expect(contentDir!.children!.has('about.md')).toBe(true);
     expect(contentDir!.children!.has('contact.md')).toBe(true);
-    expect(contentDir!.children!.has('skills.md')).toBe(true);
     expect(contentDir!.children!.has('help.md')).toBe(true);
   });
 

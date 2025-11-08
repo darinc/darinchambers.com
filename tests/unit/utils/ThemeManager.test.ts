@@ -58,7 +58,7 @@ describe('ThemeManager', () => {
   describe('Initialization', () => {
     it('should initialize with preset themes', () => {
       const presets = themeManager.getPresets();
-      expect(presets).toHaveLength(5);
+      expect(presets).toHaveLength(6);
     });
 
     it('should have green preset', () => {
@@ -68,11 +68,11 @@ describe('ThemeManager', () => {
       expect(green?.displayName).toBe('Green');
     });
 
-    it('should have yellow preset', () => {
-      const yellow = themeManager.getPreset('yellow');
-      expect(yellow).not.toBeNull();
-      expect(yellow?.name).toBe('yellow');
-      expect(yellow?.displayName).toBe('Amber');
+    it('should have dc preset', () => {
+      const dc = themeManager.getPreset('dc');
+      expect(dc).not.toBeNull();
+      expect(dc?.name).toBe('dc');
+      expect(dc?.displayName).toBe('DC');
     });
 
     it('should have white preset', () => {
@@ -96,7 +96,7 @@ describe('ThemeManager', () => {
 
       const names = presets.map((p) => p.name);
       expect(names).toContain('green');
-      expect(names).toContain('yellow');
+      expect(names).toContain('dc');
       expect(names).toContain('white');
       expect(names).toContain('light-blue');
     });
@@ -139,11 +139,11 @@ describe('ThemeManager', () => {
       expect(settings.theme.preset).toBe('green');
     });
 
-    it('should apply yellow theme', () => {
-      themeManager.applyTheme('yellow');
+    it('should apply dc theme', () => {
+      themeManager.applyTheme('dc');
 
       const settings = settingsManager.loadSettings();
-      expect(settings.theme.preset).toBe('yellow');
+      expect(settings.theme.preset).toBe('dc');
     });
 
     it('should apply white theme', () => {
@@ -173,13 +173,13 @@ describe('ThemeManager', () => {
     });
 
     it('should persist theme selection to localStorage', () => {
-      themeManager.applyTheme('yellow');
+      themeManager.applyTheme('dc');
 
       const stored = localStorage.getItem('terminal-settings');
       expect(stored).toBeTruthy();
 
       const parsed = JSON.parse(stored!);
-      expect(parsed.theme.preset).toBe('yellow');
+      expect(parsed.theme.preset).toBe('dc');
     });
 
     it('should persist theme selection to filesystem', () => {
@@ -291,7 +291,7 @@ describe('ThemeManager', () => {
   describe('Current Theme Loading', () => {
     it('should load preset theme from settings', () => {
       // Set a theme
-      settingsManager.setThemePreset('yellow');
+      settingsManager.setThemePreset('dc');
 
       // Create new theme manager to test loading
       const newThemeManager = new ThemeManager(settingsManager);
@@ -299,7 +299,7 @@ describe('ThemeManager', () => {
 
       // Verify it loaded the saved theme
       const settings = settingsManager.loadSettings();
-      expect(settings.theme.preset).toBe('yellow');
+      expect(settings.theme.preset).toBe('dc');
     });
 
     it('should load custom theme from settings', () => {
@@ -414,10 +414,10 @@ describe('ThemeManager', () => {
 
   describe('Integration with SettingsManager', () => {
     it('should save applied theme to settings', () => {
-      themeManager.applyTheme('yellow');
+      themeManager.applyTheme('dc');
 
       const settings = settingsManager.loadSettings();
-      expect(settings.theme.preset).toBe('yellow');
+      expect(settings.theme.preset).toBe('dc');
     });
 
     it('should save custom colors to settings', () => {

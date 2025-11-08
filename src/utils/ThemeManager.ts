@@ -94,6 +94,19 @@ export class ThemeManager {
           '--terminal-bg-secondary': '#f0f0f0',
         },
       },
+      {
+        name: 'dc',
+        displayName: 'DC',
+        colors: {
+          '--terminal-bg': '#1a1410',
+          '--terminal-fg': '#53d5fd',
+          '--terminal-accent': '#ff9300',
+          '--terminal-dim': '#ff6a00',
+          '--terminal-error': '#ff40ff',
+          '--terminal-cursor': '#96d35f',
+          '--terminal-bg-secondary': '#0f0b08',
+        },
+      },
     ];
 
     presets.forEach((preset) => {

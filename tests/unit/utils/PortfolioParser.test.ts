@@ -279,25 +279,26 @@ Content`;
 
   describe('parseProject', () => {
     it('should parse a complete project', () => {
-      const filename = 'ai-ml-systems.md';
+      const filename = 'inventing-hardware-software.md';
       const content = `---
-id: ai-ml-systems
-title: AI/ML Systems
+id: inventing-hardware-software
+title: Inventing Hardware + Software Solutions
 year: 2024
 technologies: [Python, TensorFlow, AWS]
 impact: Reduced processing time by 40%
 ---
 
-# AI/ML Systems
+# Inventing Hardware + Software Solutions
 
 Developed machine learning systems.`;
 
       const result = PortfolioParser.parseProject(filename, content);
 
       expect(result).toEqual({
-        id: 'ai-ml-systems',
-        title: 'AI/ML Systems',
-        description: '# AI/ML Systems\n\nDeveloped machine learning systems.',
+        id: 'inventing-hardware-software',
+        title: 'Inventing Hardware + Software Solutions',
+        description:
+          '# Inventing Hardware + Software Solutions\n\nDeveloped machine learning systems.',
         technologies: ['Python', 'TensorFlow', 'AWS'],
         impact: 'Reduced processing time by 40%',
         year: '2024',
@@ -371,7 +372,9 @@ Content`;
 
   describe('getIdFromFilename', () => {
     it('should extract ID from filename', () => {
-      expect(PortfolioParser.getIdFromFilename('ai-ml-systems.md')).toBe('ai-ml-systems');
+      expect(PortfolioParser.getIdFromFilename('inventing-hardware-software.md')).toBe(
+        'inventing-hardware-software'
+      );
     });
 
     it('should remove .md extension', () => {
