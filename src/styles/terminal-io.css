@@ -76,3 +76,52 @@
 .terminal-glow {
   text-shadow: 0 0 5px var(--terminal-accent);
 }
+
+/* Matrix digital rain animations */
+.matrix-rain {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--terminal-font-family);
+  font-size: var(--terminal-font-size);
+  line-height: 1.5;
+  user-select: none;
+}
+
+.matrix-column {
+  position: absolute;
+  top: 0;
+  white-space: pre;
+  letter-spacing: 0;
+  font-variant-ligatures: none;
+  font-feature-settings: normal;
+  will-change: transform;
+}
+
+.matrix-char {
+  display: block;
+}
+
+.matrix-char-bright {
+  text-shadow: 0 0 8px currentColor;
+  animation: matrix-glow 0.1s infinite;
+}
+
+@keyframes matrix-fall {
+  0% {
+    transform: translateY(var(--matrix-start));
+  }
+  100% {
+    transform: translateY(var(--matrix-end));
+  }
+}
+
+@keyframes matrix-glow {
+  0%,
+  100% {
+    filter: brightness(1.2);
+  }
+  50% {
+    filter: brightness(1.5);
+  }
+}

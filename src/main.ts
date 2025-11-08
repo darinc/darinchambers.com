@@ -20,6 +20,7 @@ import { createPortfolioCommand } from './commands/local/portfolio';
 import { createSettingsCommand } from './commands/local/settings';
 import { ddateCommand } from './commands/novelty/ddate';
 import { figletCommand } from './commands/novelty/figlet';
+import { createMatrixCommand } from './commands/novelty/matrix';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { Terminal } from './components/Terminal';
@@ -202,6 +203,9 @@ const settingsCommand = createSettingsCommand(fileSystem, settingsManager, theme
 const envCommand = createEnvCommand(envVarManager);
 const exportCommand = createExportCommand(envVarManager);
 
+// Create novelty commands
+const matrixCommand = createMatrixCommand(themeManager);
+
 terminal.registerCommands([
   helpCommand,
   clearCommand,
@@ -226,6 +230,7 @@ terminal.registerCommands([
   settingsCommand,
   ddateCommand,
   figletCommand,
+  matrixCommand,
 ]);
 
 // Set up navigation items
