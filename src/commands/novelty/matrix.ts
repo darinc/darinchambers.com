@@ -7,7 +7,9 @@ import type { Command } from '../Command';
  *
  * Renders the iconic "digital rain" effect from The Matrix in the terminal.
  * The animation auto-detects terminal dimensions and uses the current theme colors.
- * Characters continuously fall and animate using CSS until the user scrolls or clears.
+ * Characters continuously fall using CSS animation while dynamically changing via JavaScript.
+ * Leading bright characters change rapidly (30-60fps) while trail characters change less frequently.
+ * Animation stops when the user scrolls or runs another command.
  */
 
 // Matrix character set: mix of ASCII, numbers, and Japanese Katakana
@@ -162,12 +164,12 @@ Note: Animation continues until you scroll, type, or run 'clear'`,
 
           const char = getRandomChar();
           chars.push(
-            `<span class="matrix-char${isBright ? ' matrix-char-bright' : ''}" style="color: ${isBright ? accentColor : dimColor}; opacity: ${opacity};">${char}</span>`
+            `<span class="matrix-char${isBright ? ' matrix-char-bright' : ''}" data-char-index="${j}" style="color: ${isBright ? accentColor : dimColor}; opacity: ${opacity};">${char}</span>`
           );
         }
 
         columnsHtml.push(`
-  <div class="matrix-column" style="
+  <div class="matrix-column" data-column-index="${i}" data-trail-length="${trailLength}" style="
     left: ${leftPos}em;
     animation: matrix-fall ${duration}s linear ${delay}s infinite;
     --matrix-start: ${startY}em;
@@ -176,7 +178,7 @@ Note: Animation continues until you scroll, type, or run 'clear'`,
       }
 
       const html = `
-<div class="matrix-rain" style="height: ${visibleHeight}em; background-color: ${bgColor};">
+<div class="matrix-rain" data-matrix-chars="${MATRIX_CHARS}" style="height: ${visibleHeight}em; background-color: ${bgColor};">
 ${columnsHtml.join('')}
 </div>
 `;

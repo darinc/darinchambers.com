@@ -1,4 +1,5 @@
 import './styles/index.css';
+import { initMatrixRainObserver } from './animations/matrixRain';
 import { createAliasCommand } from './commands/core/alias';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
@@ -293,5 +294,8 @@ const initialCommand = router.getCurrentCommand();
 if (initialCommand) {
   navigation.setActiveItem(initialCommand);
 }
+
+// Initialize matrix rain animation observer
+initMatrixRainObserver();
 
 terminal.focus();
