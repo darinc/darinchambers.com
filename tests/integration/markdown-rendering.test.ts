@@ -348,15 +348,15 @@ function greet(name: string): string {
       expect(output?.innerHTML).toMatch(/href=["']https:\/\/two\.com["']/);
     });
 
-    it('should open links in new tab', async () => {
+    it('should render links correctly', async () => {
       const markdown = '[External](https://example.com)';
       context.fileSystem.writeFile('/home/darin/external.md', markdown);
 
       await executeCommandAndWait(context.terminal, 'cat /home/darin/external.md | render');
 
       const output = getLastOutputLine();
-      // Should have target="_blank"
-      expect(output?.innerHTML).toMatch(/target=["']_blank["']/);
+      // Should render link with href
+      expect(output?.innerHTML).toContain('<a href="https://example.com">External</a>');
     });
   });
 

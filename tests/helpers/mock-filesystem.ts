@@ -124,6 +124,54 @@ Project description.`,
                     },
                   ],
                   [
+                    'content',
+                    {
+                      name: 'content',
+                      type: 'directory',
+                      children: new Map([
+                        [
+                          'about.md',
+                          {
+                            name: 'about.md',
+                            type: 'file',
+                            content: `# About Me
+
+I'm a software engineer with expertise in web development.
+
+## Skills
+
+- JavaScript/TypeScript
+- React
+- Node.js`,
+                          },
+                        ],
+                        [
+                          'contact.md',
+                          {
+                            name: 'contact.md',
+                            type: 'file',
+                            content: `# Contact
+
+Feel free to reach out!
+
+- Email: test@example.com
+- GitHub: github.com/test`,
+                          },
+                        ],
+                        [
+                          'help.md',
+                          {
+                            name: 'help.md',
+                            type: 'file',
+                            content: `# Help
+
+Available commands and usage information.`,
+                          },
+                        ],
+                      ]),
+                    },
+                  ],
+                  [
                     '.config',
                     {
                       name: '.config',
@@ -162,6 +210,31 @@ Project description.`,
                             type: 'file',
                             isHidden: true,
                             content: 'USER=darin\nHOME=/home/darin\nPWD=/home/darin\n',
+                          },
+                        ],
+                        [
+                          '.settings',
+                          {
+                            name: '.settings',
+                            type: 'file',
+                            isHidden: true,
+                            content: JSON.stringify(
+                              {
+                                theme: { preset: 'dc' },
+                                font: { size: 16, family: 'Fira Code' },
+                                effects: {
+                                  scanLines: false,
+                                  glow: false,
+                                  border: true,
+                                  animationSpeed: 1.0,
+                                  soundEffects: false,
+                                  autoScrollBehavior: true,
+                                },
+                                prompt: { format: '\\W \\$ ' },
+                              },
+                              null,
+                              2
+                            ),
                           },
                         ],
                       ]),

@@ -3,6 +3,7 @@ import { createAliasCommand } from '../../src/commands/core/alias';
 import { dateCommand } from '../../src/commands/core/date';
 import { echoCommand } from '../../src/commands/core/echo';
 import { createEnvCommand } from '../../src/commands/core/env';
+import { createExportCommand } from '../../src/commands/core/export';
 import { createHistoryCommand } from '../../src/commands/core/history';
 import { createRenderCommand } from '../../src/commands/core/render';
 import { createWhoamiCommand } from '../../src/commands/core/whoami';
@@ -17,7 +18,7 @@ import { createContactCommand } from '../../src/commands/local/contact';
 import { createPortfolioCommand } from '../../src/commands/local/portfolio';
 import { createSettingsCommand } from '../../src/commands/local/settings';
 import { Terminal } from '../../src/components/Terminal';
-import { TerminalInput } from '../../src/components/TerminalInput';
+import type { TerminalInput } from '../../src/components/TerminalInput';
 import { TerminalOutput } from '../../src/components/TerminalOutput';
 import { AliasManager } from '../../src/utils/AliasManager';
 import { CommandDispatcher } from '../../src/utils/CommandDispatcher';
@@ -81,13 +82,11 @@ export function setupCompleteTerminal(): IntegrationTestContext {
 
   terminal.setFileSystem(fileSystem);
 
-  // Get the input and output instances from the DOM
-  const inputElement = getElement<HTMLInputElement>('terminal-input');
-  const outputElement = getElement<HTMLDivElement>('terminal-output');
-  const promptElement = getElement<HTMLSpanElement>('terminal-prompt');
+  // Get the input and output instances from Terminal (not creating new ones)
+  const terminalInput = terminal.getInput();
 
-  // Create instances for direct access in tests (Terminal creates its own internally)
-  const terminalInput = new TerminalInput(inputElement, promptElement);
+  // Get output element from DOM
+  const outputElement = getElement<HTMLDivElement>('terminal-output');
   const terminalOutput = new TerminalOutput(outputElement);
 
   // Create context to pass to registerAllCommands
@@ -125,6 +124,7 @@ function registerAllCommands(context: IntegrationTestContext): void {
   terminal.registerCommand(createHistoryCommand(terminalInput));
   terminal.registerCommand(createAliasCommand(aliasManager));
   terminal.registerCommand(createEnvCommand(envVarManager));
+  terminal.registerCommand(createExportCommand(envVarManager));
   terminal.registerCommand(createRenderCommand(terminalOutput));
 
   // Help command (defined inline like in main.ts)
@@ -151,7 +151,9 @@ function registerAllCommands(context: IntegrationTestContext): void {
 
   // Filesystem commands (created with factory functions)
   terminal.registerCommand(createLsCommand(fileSystem));
-  terminal.registerCommand(createCdCommand(fileSystem, envVarManager));
+  terminal.registerCommand(
+    createCdCommand(fileSystem, (path: string) => terminal.setCurrentPath(path), envVarManager)
+  );
   terminal.registerCommand(createPwdCommand(fileSystem));
   terminal.registerCommand(createCatCommand(fileSystem));
   terminal.registerCommand(createTreeCommand(fileSystem));

@@ -204,7 +204,7 @@ export const expectedOutputPatterns = {
   },
   errorOutput: {
     notFound: /not found|No such file or directory/i,
-    invalidCommand: /Command not found|Unknown command/i,
+    invalidCommand: /Command not found|Type 'help' for available commands/i,
   },
 };
 

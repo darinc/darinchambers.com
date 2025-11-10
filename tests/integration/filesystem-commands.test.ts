@@ -424,7 +424,7 @@ describe('Filesystem Commands Integration', () => {
 
       await executeCommandAndWait(context.terminal, 'cd ..');
       await executeCommandAndWait(context.terminal, 'echo $PWD');
-      expect(getLastOutputLine()?.textContent).toMatch(/^\/home\/darin\s/);
+      expect(getLastOutputLine()?.textContent).toBe('/home/darin');
     });
 
     it('should use $PWD in other commands', async () => {
