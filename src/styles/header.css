@@ -57,6 +57,21 @@
   font-weight: bold;
 }
 
+.header-clickable {
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    transform 0.1s ease;
+}
+
+.header-clickable:hover {
+  opacity: 0.8;
+}
+
+.header-clickable:active {
+  transform: scale(0.98);
+}
+
 .header-tagline {
   color: var(--terminal-dim);
   font-size: 16px;

@@ -7,6 +7,7 @@ export class Header {
   constructor(headerElement: HTMLElement) {
     this.headerElement = headerElement;
     this.render();
+    this.setupClickHandler();
   }
 
   private render(): void {
@@ -17,9 +18,26 @@ export class Header {
     this.headerElement.innerHTML = sanitizeHtml(`
       <div class="header-prompt">$ whoami | figlet | lolcat</div>
       <div class="header-ascii">
-        <pre class="header-ascii-text">${asciiText}</pre>
+        <pre class="header-ascii-text header-clickable">${asciiText}</pre>
       </div>
       <p class="header-tagline">${tagline}</p>
     `);
+  }
+
+  private setupClickHandler(): void {
+    // Handle click on ASCII art to clear terminal
+    this.headerElement.addEventListener('click', (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      // Check if clicked on the ASCII art text
+      if (target.classList.contains('header-clickable') || target.closest('.header-clickable')) {
+        // Dispatch terminal-command event to trigger clear
+        const clearEvent = new CustomEvent('terminal-command', {
+          detail: 'clear',
+          bubbles: true,
+        });
+        document.dispatchEvent(clearEvent);
+      }
+    });
   }
 }
