@@ -105,6 +105,12 @@ describe('Router', () => {
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('help', false);
     });
 
+    it('should parse /matrix route', () => {
+      window.location.pathname = '/matrix';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('matrix', false);
+    });
+
     it('should redirect unknown routes to home', () => {
       window.location.pathname = '/unknown-route';
 
@@ -187,10 +193,16 @@ describe('Router', () => {
       expect(router.getPathForCommand('help')).toBe('/help');
     });
 
+    it('should return /matrix for "matrix" command', () => {
+      expect(router.getPathForCommand('matrix')).toBe('/matrix');
+    });
+
     it('should return null for unmapped commands', () => {
       expect(router.getPathForCommand('ls')).toBeNull();
       expect(router.getPathForCommand('echo')).toBeNull();
       expect(router.getPathForCommand('pwd')).toBeNull();
+      expect(router.getPathForCommand('figlet')).toBeNull();
+      expect(router.getPathForCommand('ddate')).toBeNull();
     });
 
     it('should ignore blog commands with --tag flag', () => {

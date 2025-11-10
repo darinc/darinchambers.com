@@ -69,6 +69,11 @@ export class Router {
         pattern: /^\/help\/?$/,
         commandBuilder: () => 'help',
       },
+      // Matrix route: /matrix
+      {
+        pattern: /^\/matrix\/?$/,
+        commandBuilder: () => 'matrix',
+      },
       // Home route: /
       {
         pattern: /^\/$/,
@@ -180,6 +185,7 @@ export class Router {
       contact: '/contact',
       settings: '/settings',
       help: '/help',
+      matrix: '/matrix',
     };
 
     return commandMap[trimmed] || null;
