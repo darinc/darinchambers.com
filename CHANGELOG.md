@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2025-11-10
+
+### Added
+- Smart scroll behavior for long content with auto-detect feature flag
+- Autoscroll setting to toggle between smart mode and classic scroll-to-bottom
+- Commands with explicit scrollBehavior control (blog, portfolio, about, tree)
+
+### Changed
+- Long content now scrolls to command line instead of bottom for natural reading flow
+- Short content continues using classic scroll-to-bottom behavior
+
 ## [0.7.0] - 2025-11-10
 
 ### Added

@@ -102,7 +102,7 @@ ${tagList}
 **Usage:** Type \`portfolio --tags <tag>\` to filter projects`;
 
             const html = MarkdownService.render(markdown);
-            return { output: html, html: true };
+            return { output: html, html: true, scrollBehavior: 'top' };
           }
         }
 
@@ -119,7 +119,7 @@ ${tagList}
 
           const markdown = ContentFormatter.formatPortfolioDetail(project);
           const html = MarkdownService.render(markdown);
-          return { output: html, html: true };
+          return { output: html, html: true, scrollBehavior: 'top' };
         }
 
         // Filter by tags if requested
@@ -147,7 +147,7 @@ ${tagList}
         const filterLabel = filterTags.length > 0 ? filterTags.join(', ') : undefined;
         const markdown = ContentFormatter.formatPortfolioList(filteredProjects, filterLabel);
         const html = MarkdownService.render(markdown);
-        return { output: html, html: true };
+        return { output: html, html: true, scrollBehavior: 'top' };
       } catch (error: unknown) {
         return {
           output: `Error loading portfolio: ${String(error)}`,

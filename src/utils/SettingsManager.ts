@@ -334,6 +334,25 @@ export class SettingsManager {
   }
 
   /**
+   * Gets the auto-scroll behavior enabled state.
+   */
+  getAutoScrollBehavior(): boolean {
+    return this.settings.effects.autoScrollBehavior;
+  }
+
+  /**
+   * Sets the auto-scroll behavior enabled state.
+   * When enabled, long content (>50 lines) scrolls to command line instead of bottom.
+   *
+   * @param enabled Whether auto-scroll behavior should be enabled
+   */
+  setAutoScrollBehavior(enabled: boolean): void {
+    this.settings.effects.autoScrollBehavior = enabled;
+    this.saveToLocalStorage();
+    this.syncToFileSystem();
+  }
+
+  /**
    * Gets the current prompt format string.
    */
   getPromptFormat(): string {

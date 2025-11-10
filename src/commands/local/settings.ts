@@ -296,6 +296,22 @@ function handleSet(
         return { output: `Sound effects: ${value}` };
       }
 
+      case 'autoscroll': {
+        if (!value) return { output: 'Autoscroll value required (on/off)', error: true };
+        if (value !== 'on' && value !== 'off') {
+          return {
+            output: 'Autoscroll must be "on" or "off"',
+            error: true,
+          };
+        }
+        const enabled = value === 'on';
+        settingsManager.setAutoScrollBehavior(enabled);
+        broadcastSettingsChange();
+        return {
+          output: `Autoscroll: ${value} - ${enabled ? 'Long content (>50 lines) scrolls to command line' : 'All content scrolls to bottom'}`,
+        };
+      }
+
       case 'prompt': {
         if (!value) return { output: 'Prompt format value required', error: true };
         settingsManager.setPromptFormat(value);
@@ -305,7 +321,7 @@ function handleSet(
 
       default:
         return {
-          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, border, animation-speed, sound-effects, prompt`,
+          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, border, animation-speed, sound-effects, autoscroll, prompt`,
           error: true,
         };
     }
@@ -369,6 +385,7 @@ function formatSettingsAsMarkdown(
 - **Border:** ${settings.effects.border ? 'Enabled' : 'Disabled'}
 - **Animation Speed:** ${settings.effects.animationSpeed}x
 - **Sound Effects:** ${settings.effects.soundEffects ? 'Enabled' : 'Disabled'}
+- **Autoscroll:** ${settings.effects.autoScrollBehavior ? 'Enabled (smart)' : 'Disabled (classic)'}
 
 ## Available Themes
 
@@ -385,6 +402,8 @@ settings set scan-lines off         # Disable scan lines
 settings set glow off               # Disable glow effect
 settings set border on              # Enable page border
 settings set animation-speed 1.5    # Speed up animations
+settings set autoscroll on          # Smart scroll for long content
+settings set autoscroll off         # Classic scroll to bottom
 settings reset                      # Reset all to defaults
 \`\`\`
 

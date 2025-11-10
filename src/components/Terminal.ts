@@ -44,6 +44,11 @@ export class Terminal {
     this.input = new TerminalInput(inputElement, promptElement);
     this.promptFormatter = new PromptFormatter(envVarManager);
 
+    // Provide settings manager to output for scroll behavior
+    if (settingsManager) {
+      this.output.setSettingsManager(settingsManager);
+    }
+
     this.setupInputHandler();
     this.setupClickHandler(outputElement);
     this.setupSettingsUIHandler();
@@ -276,8 +281,8 @@ export class Terminal {
       if (result.error) {
         this.output.writeError(result.output);
       } else if (result.html) {
-        // Render HTML content
-        this.output.writeHTML(result.output);
+        // Render HTML content with scroll behavior
+        this.output.writeHTML(result.output, result.scrollBehavior);
 
         // Focus settings panel if it was just rendered
         this.focusSettingsPanelIfPresent();

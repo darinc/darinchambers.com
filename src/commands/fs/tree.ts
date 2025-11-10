@@ -60,7 +60,9 @@ Examples:
         }
 
         const lines = fs.getTree(path, maxDepth);
-        return { output: lines.join('\n') };
+        const output = lines.join('\n');
+        // Use scrollBehavior for deep trees (auto-detect will handle it)
+        return { output, scrollBehavior: 'top' };
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),

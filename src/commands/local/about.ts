@@ -33,7 +33,7 @@ Examples:
       try {
         const content = fs.readFile(PATHS.CONTENT_ABOUT);
         const html = MarkdownService.render(content);
-        return { output: html, html: true };
+        return { output: html, html: true, scrollBehavior: 'top' };
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),

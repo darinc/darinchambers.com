@@ -73,7 +73,7 @@ Examples:
 
           const markdown = ContentFormatter.formatBlogPost(post);
           const html = MarkdownService.render(markdown);
-          return { output: html, html: true };
+          return { output: html, html: true, scrollBehavior: 'top' };
         }
 
         // Filter by tag if requested
@@ -94,7 +94,7 @@ Examples:
         // List all blog posts (or filtered posts)
         const markdown = ContentFormatter.formatBlogList(filteredPosts, filterTag);
         const html = MarkdownService.render(markdown);
-        return { output: html, html: true };
+        return { output: html, html: true, scrollBehavior: 'top' };
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),

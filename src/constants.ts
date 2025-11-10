@@ -43,6 +43,7 @@ export const DEFAULT_SETTINGS: SettingsConfig = {
     border: true,
     animationSpeed: 1.0,
     soundEffects: false,
+    autoScrollBehavior: true,
   },
   prompt: {
     format: '\\W \\$ ',

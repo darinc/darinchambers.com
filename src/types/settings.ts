@@ -59,6 +59,7 @@ export interface SettingsConfig {
     border: boolean;
     animationSpeed: number; // 0.5-2.0x multiplier
     soundEffects: boolean;
+    autoScrollBehavior: boolean; // Auto-detect scroll behavior based on content length
   };
   prompt: {
     format: string; // Prompt format string (bash-style escapes supported)
