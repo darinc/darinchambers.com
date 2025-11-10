@@ -201,7 +201,15 @@ function handleSet(
 
       case 'font-family': {
         if (!value) return { output: 'Font family value required', error: true };
-        const validFamilies: FontFamily[] = ['Courier New', 'Consolas', 'Monaco', 'monospace'];
+        const validFamilies: FontFamily[] = [
+          'Fira Code',
+          'JetBrains Mono',
+          'Cascadia Code',
+          'Menlo',
+          'Monaco',
+          'Courier New',
+          'monospace',
+        ];
         if (!validFamilies.includes(value as FontFamily)) {
           return {
             output: `Invalid font family: ${value}. Available: ${validFamilies.join(', ')}`,

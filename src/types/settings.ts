@@ -80,4 +80,11 @@ export type ThemePresetName =
 /**
  * Available monospace font families.
  */
-export type FontFamily = 'Courier New' | 'Consolas' | 'Monaco' | 'monospace';
+export type FontFamily =
+  | 'Fira Code'
+  | 'JetBrains Mono'
+  | 'Cascadia Code'
+  | 'Menlo'
+  | 'Monaco'
+  | 'Courier New'
+  | 'monospace';

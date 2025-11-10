@@ -59,7 +59,7 @@ describe('SettingsManager', () => {
 
       expect(settings.theme.preset).toBe('dc');
       expect(settings.font.size).toBe(16);
-      expect(settings.font.family).toBe('Courier New');
+      expect(settings.font.family).toBe('Fira Code');
       expect(settings.effects.scanLines).toBe(false);
       expect(settings.effects.glow).toBe(false);
       expect(settings.effects.border).toBe(true);
@@ -205,7 +205,7 @@ describe('SettingsManager', () => {
     });
 
     it('should get current font family', () => {
-      expect(settingsManager.getFontFamily()).toBe('Courier New');
+      expect(settingsManager.getFontFamily()).toBe('Fira Code');
     });
 
     it('should set valid font family', () => {
@@ -221,13 +221,13 @@ describe('SettingsManager', () => {
 
     it('should persist font changes to localStorage', () => {
       settingsManager.setFontSize(18);
-      settingsManager.setFontFamily('Consolas');
+      settingsManager.setFontFamily('JetBrains Mono');
 
       const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
       const parsed = JSON.parse(stored!);
 
       expect(parsed.font.size).toBe(18);
-      expect(parsed.font.family).toBe('Consolas');
+      expect(parsed.font.family).toBe('JetBrains Mono');
     });
   });
 

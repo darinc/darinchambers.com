@@ -90,7 +90,15 @@ function generateColorPickers(colors?: CustomColors): string {
  * @returns HTML string for font controls
  */
 function generateFontControls(font: { size: number; family: string }): string {
-  const families = ['Courier New', 'Consolas', 'Monaco', 'monospace'];
+  const families = [
+    'Fira Code',
+    'JetBrains Mono',
+    'Cascadia Code',
+    'Menlo',
+    'Monaco',
+    'Courier New',
+    'monospace',
+  ];
   return `<div class="setting-group"><label>Font Size: <span id="font-size-value">${font.size}px</span></label><input type="range" min="8" max="24" step="1" value="${font.size}" aria-label="Font size" aria-valuemin="8" aria-valuemax="24" aria-valuenow="${font.size}" aria-valuetext="${font.size} pixels" data-command-template="settings set font-size" data-setting-type="font-size"/></div><div class="setting-group"><label>Font Family</label><select aria-label="Font family" data-command-template="settings set font-family" data-setting-type="font-family">${families.map((f) => `<option value="${f}" ${f === font.family ? 'selected' : ''}>${f}</option>`).join('')}</select></div>`;
 }
 

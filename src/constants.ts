@@ -35,7 +35,7 @@ export const DEFAULT_SETTINGS: SettingsConfig = {
   },
   font: {
     size: 16,
-    family: 'Courier New',
+    family: 'Fira Code',
   },
   effects: {
     scanLines: false,

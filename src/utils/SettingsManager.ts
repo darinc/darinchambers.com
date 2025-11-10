@@ -392,7 +392,15 @@ export class SettingsManager {
    * Validates a font family name.
    */
   private validateFontFamily(family: string): family is FontFamily {
-    const validFamilies: FontFamily[] = ['Courier New', 'Consolas', 'Monaco', 'monospace'];
+    const validFamilies: FontFamily[] = [
+      'Fira Code',
+      'JetBrains Mono',
+      'Cascadia Code',
+      'Menlo',
+      'Monaco',
+      'Courier New',
+      'monospace',
+    ];
     return validFamilies.includes(family as FontFamily);
   }
 

@@ -44,7 +44,9 @@
   background: var(--terminal-accent-10);
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'SF Mono', 'Consolas', 'Monaco', 'Liberation Mono', 'Courier New', monospace;
+  font-family:
+    'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Menlo', 'Monaco', 'Liberation Mono',
+    'Courier New', monospace;
   color: var(--terminal-accent);
 }
 
@@ -140,7 +142,9 @@
   border: 1px solid var(--terminal-accent);
   padding: 2px 8px;
   border-radius: 4px;
-  font-family: 'SF Mono', 'Consolas', 'Monaco', 'Liberation Mono', 'Courier New', monospace;
+  font-family:
+    'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Menlo', 'Monaco', 'Liberation Mono',
+    'Courier New', monospace;
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s ease;

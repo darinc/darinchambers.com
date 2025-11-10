@@ -344,11 +344,11 @@ describe('Settings Command', () => {
       expect(settingsManager.getFontFamily()).toBe('Courier New');
     });
 
-    it('should set Consolas font family', () => {
-      const result = settingsCommand.execute(['set', 'font-family', 'Consolas']);
+    it('should set JetBrains Mono font family', () => {
+      const result = settingsCommand.execute(['set', 'font-family', 'JetBrains Mono']);
 
       expect(result.error).toBeUndefined();
-      expect(settingsManager.getFontFamily()).toBe('Consolas');
+      expect(settingsManager.getFontFamily()).toBe('JetBrains Mono');
     });
 
     it('should set Monaco font family', () => {
@@ -379,7 +379,8 @@ describe('Settings Command', () => {
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Invalid font family: Arial');
-      expect(result.output).toContain('Courier New, Consolas, Monaco, monospace');
+      expect(result.output).toContain('Fira Code');
+      expect(result.output).toContain('monospace');
     });
 
     it('should reject missing font family value', () => {
@@ -665,7 +666,7 @@ describe('Settings Command', () => {
       // Verify all settings are back to defaults
       expect(settingsManager.getThemePreset()).toBe('dc');
       expect(settingsManager.getFontSize()).toBe(16);
-      expect(settingsManager.getFontFamily()).toBe('Courier New');
+      expect(settingsManager.getFontFamily()).toBe('Fira Code');
       expect(settingsManager.getScanLines()).toBe(false);
       expect(settingsManager.getGlow()).toBe(false);
       expect(settingsManager.getBorder()).toBe(true);
