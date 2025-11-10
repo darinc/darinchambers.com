@@ -1,24 +1,15 @@
 import { sanitizeHtml } from '../utils/sanitizeHtml';
-import type { SettingsManager } from '../utils/SettingsManager';
 
 export class TerminalOutput {
   private outputElement: HTMLElement;
   private inputLineElement: HTMLElement | null;
-  private settingsManager: SettingsManager | null = null;
 
   constructor(outputElement: HTMLElement) {
     this.outputElement = outputElement;
     this.inputLineElement = document.getElementById('terminal-input-line');
   }
 
-  /**
-   * Sets the settings manager for accessing auto-scroll behavior setting.
-   */
-  setSettingsManager(manager: SettingsManager): void {
-    this.settingsManager = manager;
-  }
-
-  writeLine(text: string, className?: string): void {
+  writeLine(text: string, className?: string, onComplete?: () => void): void {
     const line = document.createElement('div');
     line.className = 'output-line' + (className ? ` ${className}` : '');
     line.textContent = text;
@@ -30,19 +21,27 @@ export class TerminalOutput {
       this.outputElement.appendChild(line);
     }
 
-    this.scrollToBottom();
+    // Call callback synchronously after DOM insertion
+    if (onComplete) {
+      onComplete();
+    }
   }
 
-  write(text: string, className?: string): void {
+  write(text: string, className?: string, onComplete?: () => void): void {
     const lines = text.split('\n');
     lines.forEach((line, index) => {
       if (index < lines.length - 1 || line) {
         this.writeLine(line, className);
       }
     });
+
+    // Call callback synchronously after DOM insertion
+    if (onComplete) {
+      onComplete();
+    }
   }
 
-  writeHTML(html: string, scrollBehavior?: 'top' | 'bottom'): void {
+  writeHTML(html: string, onComplete?: () => void): void {
     const container = document.createElement('div');
     container.className = 'output-line';
     // Sanitize HTML to prevent XSS attacks
@@ -55,7 +54,10 @@ export class TerminalOutput {
       this.outputElement.appendChild(container);
     }
 
-    this.performScroll(html, scrollBehavior);
+    // Call callback synchronously after DOM insertion
+    if (onComplete) {
+      onComplete();
+    }
   }
 
   writeError(text: string, associatedElementId?: string): void {
@@ -96,10 +98,11 @@ export class TerminalOutput {
       }
     });
 
+    // Errors should always be visible at bottom
     this.scrollToBottom();
   }
 
-  writeCommand(prompt: string, command: string): void {
+  writeCommand(prompt: string, command: string, onComplete?: () => void): void {
     const line = document.createElement('div');
     line.className = 'output-line';
 
@@ -121,7 +124,10 @@ export class TerminalOutput {
       this.outputElement.appendChild(line);
     }
 
-    this.scrollToBottom();
+    // Call callback synchronously after DOM insertion
+    if (onComplete) {
+      onComplete();
+    }
   }
 
   clear(): void {
@@ -144,13 +150,19 @@ export class TerminalOutput {
   /**
    * Scrolls to the last command line instead of the bottom.
    * Creates a "normal page" experience where user scrolls down to read content.
+   * Uses browser-native scrollIntoView for reliable positioning.
    */
   private scrollToCommand(): void {
     const commandLines = this.outputElement.querySelectorAll('.output-line');
+    // Need at least 2 elements: command (length-2) and output (length-1)
+    // Note: input line is NOT included in .output-line query results
     if (commandLines.length >= 2) {
-      // Get second-to-last element (last is the input line)
-      const lastCommand = commandLines[commandLines.length - 2];
-      lastCommand.scrollIntoView({ behavior: 'auto', block: 'start' });
+      // Get second-to-last element (the command that triggered the output)
+      // Structure: [...older content, command, output]
+      const lastCommand = commandLines[commandLines.length - 2] as HTMLElement;
+
+      // Use browser-native scrollIntoView - more reliable than manual calculations
+      lastCommand.scrollIntoView({ behavior: 'instant', block: 'start' });
     } else {
       // Fallback to bottom if we can't find the command
       this.scrollToBottom();
@@ -158,37 +170,24 @@ export class TerminalOutput {
   }
 
   /**
-   * Determines and performs the appropriate scroll behavior.
+   * Public method to perform scroll behavior.
+   * Uses double requestAnimationFrame to ensure HTML content is fully laid out.
    *
-   * @param output The output content (for line counting)
-   * @param explicitBehavior Optional explicit scroll behavior from command
+   * @param explicitBehavior Scroll behavior ('top' scrolls to command, 'bottom' or undefined scrolls to bottom)
    */
-  private performScroll(output: string, explicitBehavior?: 'top' | 'bottom'): void {
-    // If explicit behavior is provided, use it
-    if (explicitBehavior === 'top') {
-      this.scrollToCommand();
-      return;
-    }
-    if (explicitBehavior === 'bottom') {
-      this.scrollToBottom();
-      return;
-    }
-
-    // Check auto-scroll feature flag
-    const autoScrollEnabled = this.settingsManager?.getAutoScrollBehavior() ?? true;
-
-    if (!autoScrollEnabled) {
-      // Feature disabled, use classic behavior
-      this.scrollToBottom();
-      return;
-    }
-
-    // Auto-detect based on line count
-    const lineCount = output.split('\n').length;
-    if (lineCount > 50) {
-      this.scrollToCommand();
-    } else {
-      this.scrollToBottom();
-    }
+  performScrollBehavior(explicitBehavior?: 'top' | 'bottom'): void {
+    // Use double RAF to ensure content is fully laid out before scrolling
+    // First RAF: browser schedules a paint
+    // Second RAF: paint has completed, layout is stable
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (explicitBehavior === 'top') {
+          this.scrollToCommand();
+        } else {
+          // Default to bottom for classic terminal behavior
+          this.scrollToBottom();
+        }
+      });
+    });
   }
 }

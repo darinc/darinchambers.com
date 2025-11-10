@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2025-11-10
+
+### Fixed
+- Scroll behavior now works correctly for long content by using double requestAnimationFrame
+- Replaced manual scroll calculations with browser-native scrollIntoView for reliability
+- Removed complex auto-detection logic in favor of explicit scrollBehavior flags
+
 ## [0.8.0] - 2025-11-10
 
 ### Added

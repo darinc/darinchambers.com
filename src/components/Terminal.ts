@@ -44,11 +44,6 @@ export class Terminal {
     this.input = new TerminalInput(inputElement, promptElement);
     this.promptFormatter = new PromptFormatter(envVarManager);
 
-    // Provide settings manager to output for scroll behavior
-    if (settingsManager) {
-      this.output.setSettingsManager(settingsManager);
-    }
-
     this.setupInputHandler();
     this.setupClickHandler(outputElement);
     this.setupSettingsUIHandler();
@@ -281,14 +276,18 @@ export class Terminal {
       if (result.error) {
         this.output.writeError(result.output);
       } else if (result.html) {
-        // Render HTML content with scroll behavior
-        this.output.writeHTML(result.output, result.scrollBehavior);
+        // Render HTML content with callback for scroll behavior
+        this.output.writeHTML(result.output, () => {
+          this.output.performScrollBehavior(result.scrollBehavior);
+        });
 
         // Focus settings panel if it was just rendered
         this.focusSettingsPanelIfPresent();
       } else {
-        // Regular text output
-        this.output.write(result.output);
+        // Regular text output with callback for scroll behavior
+        this.output.write(result.output, undefined, () => {
+          this.output.performScrollBehavior(result.scrollBehavior);
+        });
       }
     }
   }
@@ -325,7 +324,9 @@ export class Terminal {
   }
 
   writeWelcome(message: string): void {
-    this.output.write(message);
+    this.output.write(message, undefined, () => {
+      this.output.performScrollBehavior();
+    });
   }
 
   setUsername(username: string): void {
