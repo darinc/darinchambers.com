@@ -5,4 +5,5 @@ export interface Project {
   technologies: string[];
   impact?: string;
   year: string;
+  tags?: string[];
 }

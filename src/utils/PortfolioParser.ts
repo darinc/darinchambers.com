@@ -6,6 +6,7 @@ export interface PortfolioFrontmatter {
   technologies: string[];
   impact?: string;
   year: string;
+  tags?: string[];
 }
 
 /**
@@ -24,7 +25,9 @@ function isPortfolioFrontmatter(data: unknown): data is PortfolioFrontmatter {
     typeof obj.year === 'string' &&
     Array.isArray(obj.technologies) &&
     obj.technologies.every((tech) => typeof tech === 'string') &&
-    (obj.impact === undefined || typeof obj.impact === 'string')
+    (obj.impact === undefined || typeof obj.impact === 'string') &&
+    (obj.tags === undefined ||
+      (Array.isArray(obj.tags) && obj.tags.every((tag) => typeof tag === 'string')))
   );
 }
 
@@ -126,6 +129,7 @@ export class PortfolioParser {
       technologies: frontmatter.technologies,
       impact: frontmatter.impact,
       year: frontmatter.year,
+      tags: frontmatter.tags,
     };
   }
 

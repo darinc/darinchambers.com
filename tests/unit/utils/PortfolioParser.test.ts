@@ -28,6 +28,30 @@ This is the project description.`;
       expect(result.markdown).toBe('# Project Description\n\nThis is the project description.');
     });
 
+    it('should parse frontmatter with optional tags field', () => {
+      const content = `---
+id: test-project
+title: Test Project
+year: 2024
+technologies: [TypeScript, React]
+tags: [major, serious, open-source]
+---
+
+# Project Description
+
+This is the project description.`;
+
+      const result = PortfolioParser.parseFrontmatter(content);
+
+      expect(result.frontmatter).toEqual({
+        id: 'test-project',
+        title: 'Test Project',
+        year: '2024',
+        technologies: ['TypeScript', 'React'],
+        tags: ['major', 'serious', 'open-source'],
+      });
+    });
+
     it('should parse frontmatter without optional impact field', () => {
       const content = `---
 id: test-project
@@ -302,6 +326,35 @@ Developed machine learning systems.`;
         technologies: ['Python', 'TensorFlow', 'AWS'],
         impact: 'Reduced processing time by 40%',
         year: '2024',
+        tags: undefined,
+      });
+    });
+
+    it('should parse a project with tags', () => {
+      const filename = 'test-project.md';
+      const content = `---
+id: test-project
+title: Test Project
+year: 2024
+technologies: [TypeScript, React]
+tags: [major, serious, open-source]
+impact: Improved team productivity
+---
+
+# Test Project
+
+This is a test project.`;
+
+      const result = PortfolioParser.parseProject(filename, content);
+
+      expect(result).toEqual({
+        id: 'test-project',
+        title: 'Test Project',
+        description: '# Test Project\n\nThis is a test project.',
+        technologies: ['TypeScript', 'React'],
+        impact: 'Improved team productivity',
+        year: '2024',
+        tags: ['major', 'serious', 'open-source'],
       });
     });
 

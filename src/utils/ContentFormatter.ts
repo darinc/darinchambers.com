@@ -8,27 +8,43 @@ import type { Project } from '../types/portfolio';
 
 export class ContentFormatter {
   /**
+   * Format a tag as a clickable button
+   */
+  private static formatClickableTag(tag: string, command: 'portfolio' | 'blog'): string {
+    const cmd = command === 'portfolio' ? `portfolio --tags ${tag}` : `blog --tag ${tag}`;
+    return `<button data-command="${cmd}" class="tag-link">${tag}</button>`;
+  }
+  /**
    * Format a portfolio list as markdown
    */
-  static formatPortfolioList(projects: Project[]): string {
+  static formatPortfolioList(projects: Project[], filterTag?: string): string {
+    const header = filterTag ? `# Portfolio - Tag: ${filterTag}` : '# Portfolio';
+
     const items = projects
       .map((project, index) => {
         const tech = project.technologies.join(', ');
         const impact = project.impact ? `\n   **Impact:** ${project.impact}` : '';
+        const tags =
+          project.tags?.map((t: string) => this.formatClickableTag(t, 'portfolio')).join(' ') ?? '';
+        const tagsLine = tags ? `\n   **Tags:** ${tags}` : '';
 
         return `### ${index + 1}. ${project.title} (${project.year})
 
 ${project.description}
 
-**Technologies:** ${tech}${impact}
+**Technologies:** ${tech}${impact}${tagsLine}
 
-[View Details →](#) Type: \`portfolio ${project.id}\``;
+<a href="/portfolio/${project.id}" data-command="portfolio ${project.id}">View Details →</a>`;
       })
       .join('\n\n---\n\n');
 
-    return `# Portfolio
+    const footer = filterTag
+      ? '\n\n---\n\n<a href="/portfolio" data-command="portfolio">← Back to All Projects</a>'
+      : '\n\n---\n\n**Filter by tag:** Type `portfolio --tags <tag>` or `portfolio --tags` to list all tags';
 
-${items}`;
+    return `${header}
+
+${items}${footer}`;
   }
 
   /**
@@ -37,6 +53,8 @@ ${items}`;
   static formatPortfolioDetail(project: Project): string {
     const tech = project.technologies.join(', ');
     const impact = project.impact ? `\n\n## Impact\n\n${project.impact}` : '';
+    const tags = project.tags?.map((t) => this.formatClickableTag(t, 'portfolio')).join(' ') ?? '';
+    const tagsSection = tags ? `\n\n## Tags\n\n${tags}` : '';
 
     return `# ${project.title}
 
@@ -48,11 +66,11 @@ ${project.description}
 
 ## Technologies
 
-${tech}${impact}
+${tech}${impact}${tagsSection}
 
 ---
 
-[← Back to Portfolio](#) Type: \`portfolio\``;
+<a href="/portfolio" data-command="portfolio">← Back to Portfolio</a>`;
   }
 
   /**
@@ -63,7 +81,7 @@ ${tech}${impact}
 
     const items = posts
       .map((post, index) => {
-        const tags = post.tags.map((t: string) => `\`${t}\``).join(' ');
+        const tags = post.tags.map((t: string) => this.formatClickableTag(t, 'blog')).join(' ');
         // Reverse numbering: newest post (index 0) gets highest number
         const postNumber = posts.length - index;
 
@@ -75,12 +93,12 @@ ${post.summary}
 
 **Tags:** ${tags}
 
-[Read Post →](#) Type: \`blog ${post.id}\``;
+<a href="/blog/${post.id}" data-command="blog ${post.id}">Read Post →</a>`;
       })
       .join('\n\n---\n\n');
 
     const footer = filterTag
-      ? '\n\n---\n\n[← Back to All Posts](#) Type: `blog`'
+      ? '\n\n---\n\n<a href="/blog" data-command="blog">← Back to All Posts</a>'
       : '\n\n---\n\n**Filter by tag:** Type `blog --tag <tag>`';
 
     return `${header}
@@ -92,7 +110,7 @@ ${items}${footer}`;
    * Format a single blog post as markdown
    */
   static formatBlogPost(post: BlogPost): string {
-    const tags = post.tags.map((t) => `\`${t}\``).join(' ');
+    const tags = post.tags.map((t) => this.formatClickableTag(t, 'blog')).join(' ');
 
     return `# ${post.title}
 
@@ -106,6 +124,6 @@ ${post.content}
 
 **Tags:** ${tags}
 
-[← Back to Blog](#) Type: \`blog\``;
+<a href="/blog" data-command="blog">← Back to Blog</a>`;
   }
 }

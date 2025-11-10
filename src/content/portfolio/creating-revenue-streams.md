@@ -4,6 +4,7 @@ title: 'Creating New Product Categories & Revenue Streams'
 technologies: ['Java', 'Video Processing', 'Distributed Systems', 'Caching', 'Patents']
 impact: 'Created product that became 30% of company revenue. Built systems still powering traffic cameras nationwide today.'
 year: '2003-2011'
+tags: ['major', 'serious', 'patents', 'revenue-generation', 'video-streaming', 'innovation']
 ---
 
 ## TrafficLand Broadcast Product

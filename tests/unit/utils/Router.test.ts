@@ -87,6 +87,15 @@ describe('Router', () => {
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('portfolio', false);
     });
 
+    it('should parse /portfolio/:projectId route', () => {
+      window.location.pathname = '/portfolio/scaling-hypergrowth';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith(
+        'portfolio scaling-hypergrowth',
+        false
+      );
+    });
+
     it('should parse /contact route', () => {
       window.location.pathname = '/contact';
       router.handleInitialRoute();
@@ -181,6 +190,12 @@ describe('Router', () => {
       expect(router.getPathForCommand('portfolio')).toBe('/portfolio');
     });
 
+    it('should return /portfolio/:projectId for "portfolio projectId" command', () => {
+      expect(router.getPathForCommand('portfolio scaling-hypergrowth')).toBe(
+        '/portfolio/scaling-hypergrowth'
+      );
+    });
+
     it('should return /contact for "contact" command', () => {
       expect(router.getPathForCommand('contact')).toBe('/contact');
     });
@@ -207,6 +222,22 @@ describe('Router', () => {
 
     it('should ignore blog commands with --tag flag', () => {
       expect(router.getPathForCommand('blog --tag test')).toBeNull();
+    });
+
+    it('should return /portfolio?tags= for "portfolio --tags" command with single tag', () => {
+      expect(router.getPathForCommand('portfolio --tags major')).toBe('/portfolio?tags=major');
+    });
+
+    it('should return /portfolio?tags= for "portfolio --tags" command with multiple tags', () => {
+      expect(router.getPathForCommand('portfolio --tags major,patents')).toBe(
+        '/portfolio?tags=major%2Cpatents'
+      );
+    });
+
+    it('should URL encode tags with special characters', () => {
+      expect(router.getPathForCommand('portfolio --tags revenue-generation,video streaming')).toBe(
+        '/portfolio?tags=revenue-generation%2Cvideo%20streaming'
+      );
     });
 
     it('should handle whitespace in commands', () => {
@@ -273,6 +304,103 @@ describe('Router', () => {
 
       // Second parameter should be false (don't clear)
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('blog', false);
+    });
+  });
+
+  describe('Query Parameters', () => {
+    it('should parse /portfolio?tags=single with single tag', () => {
+      window.location.pathname = '/portfolio';
+      window.location.search = '?tags=major';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('portfolio --tags major', false);
+    });
+
+    it('should parse /portfolio?tags=multiple,tags with multiple tags', () => {
+      window.location.pathname = '/portfolio';
+      window.location.search = '?tags=major,patents';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith(
+        'portfolio --tags major,patents',
+        false
+      );
+    });
+
+    it('should parse /portfolio?tags=kubernetes,leadership with comma-separated tags', () => {
+      window.location.pathname = '/portfolio';
+      window.location.search = '?tags=kubernetes,leadership';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith(
+        'portfolio --tags kubernetes,leadership',
+        false
+      );
+    });
+
+    it('should handle URL-encoded tags', () => {
+      window.location.pathname = '/portfolio';
+      window.location.search = '?tags=revenue-generation%2Cvideo-streaming';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith(
+        'portfolio --tags revenue-generation,video-streaming',
+        false
+      );
+    });
+
+    it('should handle /portfolio without query params as regular portfolio command', () => {
+      window.location.pathname = '/portfolio';
+      window.location.search = '';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('portfolio', false);
+    });
+
+    it('should sync URL for portfolio --tags commands', () => {
+      window.location.pathname = '/';
+      window.location.search = '';
+      router.syncUrlToCommand('portfolio --tags major');
+
+      expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/portfolio?tags=major');
+    });
+
+    it('should sync URL for portfolio --tags commands with multiple tags', () => {
+      window.location.pathname = '/';
+      window.location.search = '';
+      router.syncUrlToCommand('portfolio --tags leadership,kubernetes');
+
+      expect(window.history.pushState).toHaveBeenCalledWith(
+        {},
+        '',
+        '/portfolio?tags=leadership%2Ckubernetes'
+      );
+    });
+
+    it('should get current command with query parameters', () => {
+      window.location.pathname = '/portfolio';
+      window.location.search = '?tags=major';
+
+      const command = router.getCurrentCommand();
+      expect(command).toBe('portfolio --tags major');
+    });
+
+    it('should navigate to tag-filtered portfolio URL', () => {
+      window.location.pathname = '/';
+
+      // Mock pushState to update location when called
+      (window.history.pushState as any).mockImplementation((state, title, path) => {
+        const url = new URL(path, 'http://localhost');
+        window.location.pathname = url.pathname;
+        window.location.search = url.search;
+      });
+
+      router.navigate('/portfolio?tags=major,serious');
+
+      expect(window.history.pushState).toHaveBeenCalledWith(
+        {},
+        '',
+        '/portfolio?tags=major,serious'
+      );
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith(
+        'portfolio --tags major,serious',
+        true
+      );
     });
   });
 

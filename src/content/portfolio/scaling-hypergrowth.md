@@ -4,6 +4,7 @@ title: 'Scaling Infrastructure Through Hypergrowth'
 technologies: ['Kubernetes', 'AWS', 'DevOps', 'Automation', 'SRE', 'Mentoring']
 impact: 'Supported infrastructure growth from 30 to 350+ engineers through IPO. Led 40% cost reduction while taking on major migration.'
 year: '2018-2022'
+tags: ['major', 'serious', 'infrastructure', 'leadership', 'scale', 'kubernetes']
 ---
 
 ## IPO Growth Journey

@@ -9,7 +9,7 @@ import type { Terminal } from '../components/Terminal';
 
 interface Route {
   pattern: RegExp;
-  commandBuilder: (matches: RegExpMatchArray) => string;
+  commandBuilder: (matches: RegExpMatchArray, queryParams?: URLSearchParams) => string;
 }
 
 export class Router {
@@ -49,10 +49,21 @@ export class Router {
         pattern: /^\/about\/?$/,
         commandBuilder: () => 'about',
       },
-      // Portfolio route: /portfolio
+      // Portfolio project route: /portfolio/:projectId
+      {
+        pattern: /^\/portfolio\/([a-zA-Z0-9-]+)$/,
+        commandBuilder: (matches) => `portfolio ${matches[1]}`,
+      },
+      // Portfolio list route: /portfolio (with optional tag filtering)
       {
         pattern: /^\/portfolio\/?$/,
-        commandBuilder: () => 'portfolio',
+        commandBuilder: (_matches, queryParams) => {
+          const tags = queryParams?.get('tags');
+          if (tags) {
+            return `portfolio --tags ${tags}`;
+          }
+          return 'portfolio';
+        },
       },
       // Contact route: /contact
       {
@@ -107,7 +118,8 @@ export class Router {
    */
   private handleRouteChange(clearTerminal: boolean): void {
     const pathname = window.location.pathname;
-    const command = this.parseRoute(pathname);
+    const queryParams = new URLSearchParams(window.location.search);
+    const command = this.parseRoute(pathname, queryParams);
 
     if (command) {
       // Prevent infinite loop - don't trigger navigate() from command execution
@@ -129,13 +141,14 @@ export class Router {
    * Parse a URL pathname and return the corresponding command.
    *
    * @param pathname URL pathname to parse
+   * @param queryParams Optional query parameters from the URL
    * @returns Command string or null if no match
    */
-  private parseRoute(pathname: string): string | null {
+  private parseRoute(pathname: string, queryParams?: URLSearchParams): string | null {
     for (const route of this.routes) {
       const matches = pathname.match(route.pattern);
       if (matches) {
-        return route.commandBuilder(matches);
+        return route.commandBuilder(matches, queryParams);
       }
     }
     return null;
@@ -175,6 +188,21 @@ export class Router {
     if (trimmed.startsWith('blog ') && !trimmed.includes('--tag')) {
       const postId = trimmed.substring(5).trim();
       return `/blog/${postId}`;
+    }
+
+    // Handle portfolio commands with tag filtering
+    if (trimmed.startsWith('portfolio --tags ')) {
+      const tagsValue = trimmed.substring('portfolio --tags '.length).trim();
+      if (tagsValue) {
+        return `/portfolio?tags=${encodeURIComponent(tagsValue)}`;
+      }
+      return '/portfolio';
+    }
+
+    // Handle portfolio project commands
+    if (trimmed.startsWith('portfolio ')) {
+      const projectId = trimmed.substring(10).trim();
+      return `/portfolio/${projectId}`;
     }
 
     // Handle simple command mappings
@@ -226,6 +254,7 @@ export class Router {
    * @returns Current command string or null if no match
    */
   getCurrentCommand(): string | null {
-    return this.parseRoute(window.location.pathname);
+    const queryParams = new URLSearchParams(window.location.search);
+    return this.parseRoute(window.location.pathname, queryParams);
   }
 }

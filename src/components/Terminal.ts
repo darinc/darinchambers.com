@@ -100,6 +100,10 @@ export class Terminal {
         const button = target.closest('[data-command]')!;
         const command = button.getAttribute('data-command');
         if (command) {
+          // Prevent default behavior for anchor tags
+          if (button.tagName === 'A') {
+            e.preventDefault();
+          }
           void this.executeCommand(command, false);
         }
       }

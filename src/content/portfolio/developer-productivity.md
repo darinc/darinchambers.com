@@ -4,6 +4,7 @@ title: 'Building Developer Productivity Platforms'
 technologies: ['Kubernetes', 'Docker', 'Jenkins', 'Helm', 'CICD', 'Automation']
 impact: 'Push Button Start: Working K8s deployment in <15 min. Improved release success from 50% to 95%.'
 year: '2018-2022'
+tags: ['major', 'serious', 'infrastructure', 'automation', 'kubernetes', 'devops']
 ---
 
 ## Push Button Start

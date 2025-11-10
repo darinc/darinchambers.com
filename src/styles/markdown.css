@@ -132,3 +132,33 @@
   margin: 8px 0;
   opacity: 0.3;
 }
+
+/* Clickable tag button styles */
+.markdown-output .tag-link {
+  background: var(--terminal-accent-10);
+  color: var(--terminal-accent);
+  border: 1px solid var(--terminal-accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', 'Liberation Mono', 'Courier New', monospace;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-block;
+  margin: 0 2px;
+}
+
+.markdown-output .tag-link:hover {
+  background: var(--terminal-accent-15);
+  box-shadow: 0 0 8px var(--terminal-accent);
+  transform: translateY(-1px);
+}
+
+.markdown-output .tag-link:active {
+  transform: translateY(0);
+}
+
+.markdown-output .tag-link:focus {
+  outline: 2px solid var(--terminal-accent);
+  outline-offset: 2px;
+}

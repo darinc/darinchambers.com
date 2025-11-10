@@ -4,6 +4,7 @@ title: 'Inventing Hardware + Software Solutions'
 technologies: ['Hardware Design', 'Computer Vision', 'Machine Learning', 'Mobile Apps', 'Patents']
 impact: 'Industry-first capability: 1.6M+ images captured, scaled to thousands of deployed units nationwide'
 year: '2018-2019'
+tags: ['major', 'serious', 'innovation', 'patents', 'computer-vision', 'hardware']
 ---
 
 ## Virtual Lift: Portable Undercarriage Imaging
