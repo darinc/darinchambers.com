@@ -16,6 +16,27 @@ interface MatrixAnimation {
 const activeAnimations = new Map<HTMLElement, MatrixAnimation>();
 
 /**
+ * Stop all active matrix animations
+ */
+export function stopAllMatrixAnimations(): void {
+  // Stop all tracked animations
+  activeAnimations.forEach((animation) => {
+    animation.stopAnimation();
+  });
+  activeAnimations.clear();
+
+  // Also pause CSS animations on ALL matrix elements in the DOM
+  // This catches any orphaned elements that might not be in activeAnimations
+  const allMatrixElements = document.querySelectorAll('.matrix-rain');
+  allMatrixElements.forEach((element) => {
+    const columns = element.querySelectorAll('.matrix-column');
+    columns.forEach((column) => {
+      (column as HTMLElement).style.animationPlayState = 'paused';
+    });
+  });
+}
+
+/**
  * Start animating a matrix rain element
  */
 export function startMatrixRainAnimation(rainElement: HTMLElement): void {
@@ -23,6 +44,20 @@ export function startMatrixRainAnimation(rainElement: HTMLElement): void {
   if (activeAnimations.has(rainElement)) {
     return;
   }
+
+  // Stop any previous matrix animations EXCEPT this one
+  // This ensures only one matrix animation runs at a time
+  activeAnimations.forEach((animation, element) => {
+    if (element !== rainElement) {
+      animation.stopAnimation();
+      // Pause CSS animations on the old element
+      const columns = element.querySelectorAll('.matrix-column');
+      columns.forEach((column) => {
+        (column as HTMLElement).style.animationPlayState = 'paused';
+      });
+      activeAnimations.delete(element);
+    }
+  });
 
   // Get the character set from data attribute
   const matrixChars = rainElement.dataset.matrixChars ?? '';
