@@ -132,7 +132,7 @@ const helpCommand: Command = {
       // Otherwise show the main help content
       const content = fileSystem.readFile(PATHS.CONTENT_HELP);
       const html = MarkdownService.render(content);
-      return { output: html, html: true };
+      return { output: html, html: true, scrollBehavior: 'top' };
     } catch (error) {
       return {
         output: error instanceof Error ? error.message : String(error),
