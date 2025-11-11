@@ -152,7 +152,7 @@ Line 3`;
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
       // Should show error about invalid command
-      expect(output?.textContent).toMatch(/not found|unknown command/i);
+      expect(output?.textContent).toMatch(/Command not found|Type 'help' for available commands/i);
     });
 
     it('should handle error in last stage of pipeline', async () => {
@@ -161,7 +161,7 @@ Line 3`;
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
       // Should show error about invalid command
-      expect(output?.textContent).toMatch(/not found|unknown command/i);
+      expect(output?.textContent).toMatch(/Command not found|Type 'help' for available commands/i);
     });
 
     it('should recover from pipeline error', async () => {

@@ -24,8 +24,8 @@ export const COMMAND_SIGNALS = {
 } as const;
 
 export const STORAGE_KEYS = {
-  SETTINGS: 'terminal-settings',
-  ENVIRONMENT: 'terminal-env-vars',
+  SETTINGS: 'terminal_settings',
+  ENVIRONMENT: 'terminal_env_vars',
 } as const;
 
 export const DEFAULT_SETTINGS: SettingsConfig = {

@@ -92,7 +92,7 @@ describe('Terminal Component Integration', () => {
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
-      expect(output?.textContent).toMatch(/not found|unknown command/i);
+      expect(output?.textContent).toMatch(/Command not found|Type 'help' for available commands/i);
     });
 
     it('should display file not found error', async () => {

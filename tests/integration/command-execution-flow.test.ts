@@ -394,9 +394,12 @@ describe('Command Execution Flow Integration', () => {
       await executeCommandAndWait(context.terminal, 'echo test2');
       await executeCommandAndWait(context.terminal, 'history');
 
-      const output = getLastOutputLine();
-      expect(output?.textContent).toContain('echo test1');
-      expect(output?.textContent).toContain('echo test2');
+      // History outputs multiple lines, need to check all output
+      const allOutput = getAllOutputLines()
+        .map((line) => line.textContent)
+        .join('\n');
+      expect(allOutput).toContain('echo test1');
+      expect(allOutput).toContain('echo test2');
     });
 
     it('should not add empty commands to history', async () => {
@@ -404,9 +407,12 @@ describe('Command Execution Flow Integration', () => {
       await executeCommandAndWait(context.terminal, '');
       await executeCommandAndWait(context.terminal, 'history');
 
-      const output = getLastOutputLine();
-      expect(output?.textContent).toContain('echo before');
-      expect(output?.textContent).not.toMatch(/^\s*$/m);
+      // History outputs multiple lines, need to check all output
+      const allOutput = getAllOutputLines()
+        .map((line) => line.textContent)
+        .join('\n');
+      expect(allOutput).toContain('echo before');
+      expect(allOutput).not.toMatch(/^\s*$/m);
     });
   });
 });

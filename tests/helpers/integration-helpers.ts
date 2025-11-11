@@ -163,7 +163,9 @@ function registerAllCommands(context: IntegrationTestContext): void {
   terminal.registerCommand(createBlogCommand(fileSystem));
   terminal.registerCommand(createPortfolioCommand(fileSystem));
   terminal.registerCommand(createContactCommand());
-  terminal.registerCommand(createSettingsCommand(context.settingsManager, context.themeManager));
+  terminal.registerCommand(
+    createSettingsCommand(fileSystem, context.settingsManager, context.themeManager)
+  );
 }
 
 /**
@@ -274,6 +276,11 @@ export function teardownIntegrationTest(): void {
  * Creates a mock localStorage for testing.
  */
 export function setupMockLocalStorage(): void {
+  // Only set up once per test run - don't recreate if already exists
+  if (window.localStorage && typeof window.localStorage.getItem === 'function') {
+    return;
+  }
+
   const localStorageMock = (() => {
     let store: Record<string, string> = {};
     return {
