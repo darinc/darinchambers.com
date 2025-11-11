@@ -10,14 +10,16 @@
  */
 export function setupTerminalDOM(): void {
   document.body.innerHTML = `
-    <div id="terminal-header"></div>
-    <nav id="terminal-nav">
-      <div class="nav-links"></div>
-    </nav>
-    <div id="terminal-output">
-      <div id="terminal-input-line">
-        <span id="terminal-prompt"></span>
-        <input id="terminal-input" type="text" autocomplete="off" />
+    <div id="terminal">
+      <div id="terminal-header"></div>
+      <nav id="terminal-nav">
+        <div class="nav-links"></div>
+      </nav>
+      <div id="terminal-output">
+        <div id="terminal-input-line">
+          <span id="terminal-prompt"></span>
+          <input id="terminal-input" type="text" autocomplete="off" />
+        </div>
       </div>
     </div>
   `;

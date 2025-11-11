@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { createAliasCommand } from '../../src/commands/core/alias';
 import { dateCommand } from '../../src/commands/core/date';
 import { echoCommand } from '../../src/commands/core/echo';
@@ -50,6 +51,12 @@ export interface IntegrationTestContext {
  * Mimics the initialization in main.ts with all dependencies wired up.
  */
 export function setupCompleteTerminal(): IntegrationTestContext {
+  // Mock scrollIntoView for jsdom compatibility
+  Element.prototype.scrollIntoView = vi.fn();
+
+  // Set up mock localStorage
+  setupMockLocalStorage();
+
   // Set up DOM
   setupTerminalDOM();
 
@@ -61,6 +68,9 @@ export function setupCompleteTerminal(): IntegrationTestContext {
   const themeManager = new ThemeManager(settingsManager);
   const aliasManager = new AliasManager(fileSystem);
   const envVarManager = new EnvVarManager(fileSystem, 'darin', 'darinchambers.com');
+
+  // Apply theme to ensure CSS variables are set
+  themeManager.applyCurrentTheme();
 
   // Initialize command system
   const dispatcher = new CommandDispatcher();

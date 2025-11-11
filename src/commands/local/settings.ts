@@ -76,6 +76,29 @@ Examples:
         case 'reset':
           return handleReset(settingsManager, themeManager);
 
+        // Shorthand: settings theme <value> is alias for settings set theme <value>
+        case 'theme':
+        case 'font-size':
+        case 'font-family':
+        case 'fontSize':
+        case 'fontFamily':
+        case 'scan-lines':
+        case 'scanLines':
+        case 'glow':
+        case 'border':
+        case 'animation-speed':
+        case 'animationSpeed':
+        case 'sound':
+        case 'auto-scroll':
+        case 'autoScroll':
+        case 'prompt':
+          // Convert shorthand to 'set' format: prepend 'set' to arguments
+          return handleSet(
+            new CommandArgs(['set', subcommand, ...args.slice(1)]),
+            settingsManager,
+            themeManager
+          );
+
         default:
           return {
             output: `Unknown subcommand: ${subcommand}.\nTry 'settings --help' for more information`,

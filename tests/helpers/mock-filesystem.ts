@@ -71,6 +71,59 @@ export function createMockFileSystem(): FileSystemService {
                     },
                   ],
                   [
+                    'blog',
+                    {
+                      name: 'blog',
+                      type: 'directory',
+                      children: new Map([
+                        [
+                          'test-post.md',
+                          {
+                            name: 'test-post.md',
+                            type: 'file',
+                            content: `---
+title: Test Post
+date: 2024-01-01
+summary: A test blog post
+tags: test, blog
+---
+
+# Test Post
+
+This is test content.`,
+                          },
+                        ],
+                      ]),
+                    },
+                  ],
+                  [
+                    'portfolio',
+                    {
+                      name: 'portfolio',
+                      type: 'directory',
+                      children: new Map([
+                        [
+                          'test-project.md',
+                          {
+                            name: 'test-project.md',
+                            type: 'file',
+                            content: `---
+id: test-project
+title: Test Project
+year: 2024
+technologies: TypeScript, React
+impact: Test impact
+---
+
+# Test Project
+
+Project description.`,
+                          },
+                        ],
+                      ]),
+                    },
+                  ],
+                  [
                     '.config',
                     {
                       name: '.config',

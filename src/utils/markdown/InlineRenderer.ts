@@ -9,7 +9,7 @@ export class InlineRenderer {
     let result = escapeHtml(text);
 
     // Links: [text](url)
-    result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
 
     // Inline code: `code`
     result = result.replace(/`([^`]+)`/g, '<code>$1</code>');

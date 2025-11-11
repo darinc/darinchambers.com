@@ -397,7 +397,8 @@ export class Terminal {
       this.displayResult(result);
     }
 
-    // Ensure input is focused after command execution
+    // Clear input and ensure it is focused after command execution
+    this.input.clear();
     this.input.focus();
   }
 }
