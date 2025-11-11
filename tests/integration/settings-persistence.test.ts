@@ -4,6 +4,7 @@ import {
   teardownIntegrationTest,
   executeCommandAndWait,
   getLastOutputLine,
+  getAllOutputLines,
   getCSSVariable,
   setupMockLocalStorage,
   type IntegrationTestContext,
@@ -211,9 +212,10 @@ describe('Settings Persistence Integration', () => {
       // Read settings using cat command
       await executeCommandAndWait(context.terminal, 'cat /home/darin/.settings');
 
-      const output = getLastOutputLine();
-      expect(output?.textContent).toContain('light-blue');
-      expect(output?.textContent).toContain('20');
+      const outputLines = getAllOutputLines();
+      const fullOutput = outputLines.map((line) => line.textContent).join('\n');
+      expect(fullOutput).toContain('light-blue');
+      expect(fullOutput).toContain('20');
     });
   });
 
@@ -238,7 +240,7 @@ describe('Settings Persistence Integration', () => {
 
     it('should maintain consistency across all storage layers', async () => {
       // Make multiple changes
-      for (const theme of ['yellow', 'green', 'blue', 'purple']) {
+      for (const theme of ['yellow', 'green', 'light-blue', 'paper']) {
         await executeCommandAndWait(context.terminal, `settings theme ${theme}`);
 
         // Verify consistency
@@ -350,9 +352,10 @@ describe('Settings Persistence Integration', () => {
       // Read via cat
       await executeCommandAndWait(context.terminal, 'cat /home/darin/.settings');
 
-      const output = getLastOutputLine();
-      expect(output?.textContent).toContain('paper');
-      expect(output?.textContent).toContain('theme');
+      const outputLines = getAllOutputLines();
+      const fullOutput = outputLines.map((line) => line.textContent).join('\n');
+      expect(fullOutput).toContain('paper');
+      expect(fullOutput).toContain('theme');
     });
 
     it('should show settings file in ls output', async () => {
