@@ -33,18 +33,18 @@ export class CommandExecutor {
       return { output: '' };
     }
 
-    // Expand environment variables first (before alias resolution)
-    const expandedCommand = this.envVarManager
-      ? this.envVarManager.expandVariables(trimmedValue)
-      : trimmedValue;
+    // Resolve any aliases first (before environment variable expansion)
+    const resolvedCommand = this.aliasManager.resolve(trimmedValue);
 
-    // Resolve any aliases
-    const resolvedCommand = this.aliasManager.resolve(expandedCommand);
+    // Expand environment variables after alias resolution
+    const expandedCommand = this.envVarManager
+      ? this.envVarManager.expandVariables(resolvedCommand)
+      : resolvedCommand;
 
     // Detect pipelines and dispatch to appropriate handler
-    const result = PipelineParser.hasPipe(resolvedCommand)
-      ? await this.dispatcher.dispatchPipeline(resolvedCommand)
-      : await this.dispatcher.dispatch(resolvedCommand);
+    const result = PipelineParser.hasPipe(expandedCommand)
+      ? await this.dispatcher.dispatchPipeline(expandedCommand)
+      : await this.dispatcher.dispatch(expandedCommand);
 
     return result;
   }

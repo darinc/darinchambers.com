@@ -33,9 +33,23 @@ export class CommandParser {
     let current = '';
     let inQuotes = false;
     let quoteChar = '';
+    let escaped = false;
 
     for (const char of input) {
+      // Handle escape character
+      if (char === '\\' && !escaped) {
+        escaped = true;
+        continue;
+      }
 
+      // If we have an escaped character, add it directly
+      if (escaped) {
+        current += char;
+        escaped = false;
+        continue;
+      }
+
+      // Handle quote characters
       if ((char === '"' || char === "'") && !inQuotes) {
         inQuotes = true;
         quoteChar = char;

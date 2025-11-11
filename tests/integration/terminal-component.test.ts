@@ -499,8 +499,8 @@ describe('Terminal Component Integration', () => {
     });
 
     it('should work with environment variable changes', async () => {
-      // Set env var
-      await executeCommandAndWait(context.terminal, 'env TESTVAR=testvalue');
+      // Set env var using export
+      await executeCommandAndWait(context.terminal, 'export TESTVAR=testvalue');
 
       // Use it
       await executeCommandAndWait(context.terminal, 'echo $TESTVAR');

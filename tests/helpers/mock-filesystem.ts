@@ -54,6 +54,14 @@ export function createMockFileSystem(): FileSystemService {
                     },
                   ],
                   [
+                    'readme.md',
+                    {
+                      name: 'readme.md',
+                      type: 'file',
+                      content: '# Welcome\n\nWelcome to the terminal!',
+                    },
+                  ],
+                  [
                     'documents',
                     {
                       name: 'documents',

@@ -161,6 +161,8 @@ function handleSet(
             error: true,
           };
         }
+        // Update settings and apply theme
+        settingsManager.setSetting('theme', { preset: value as ThemePresetName });
         themeManager.applyTheme(value as ThemePresetName);
         broadcastSettingsChange();
         return { output: `Theme changed to: ${value}` };

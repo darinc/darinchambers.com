@@ -168,6 +168,32 @@ export class FileSystemService implements IFileSystem {
     current.children!.set(fileName, fileNode);
   }
 
+  createDirectory(path: string): void {
+    const resolved = this.resolvePath(path);
+    const pathParts = resolved.split('/').filter((p) => p.length > 0);
+
+    // Navigate/create directory structure
+    let current = this.root;
+    for (const part of pathParts) {
+      if (!current.children?.has(part)) {
+        // Create new directory node
+        const dirNode: FileSystemNode = {
+          name: part,
+          type: 'directory',
+          children: new Map(),
+        };
+        current.children!.set(part, dirNode);
+        current = dirNode;
+      } else {
+        const existing = current.children.get(part)!;
+        if (existing.type !== 'directory') {
+          throw new FileSystemError(`mkdir: ${path}: File exists but is not a directory`);
+        }
+        current = existing;
+      }
+    }
+  }
+
   getTree(path = '.', maxDepth = 4): string[] {
     const node = this.getNode(path);
 

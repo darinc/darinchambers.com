@@ -106,10 +106,12 @@ Line 3`;
 
       await executeCommandAndWait(context.terminal, 'cat /home/darin/multiline.txt | cat');
 
-      const output = getLastOutputLine();
-      expect(output?.textContent).toContain('Line 1');
-      expect(output?.textContent).toContain('Line 2');
-      expect(output?.textContent).toContain('Line 3');
+      // Get all output lines and combine their text content
+      const allLines = getAllOutputLines();
+      const combinedText = allLines.map((line: HTMLElement) => line.textContent ?? '').join('\n');
+      expect(combinedText).toContain('Line 1');
+      expect(combinedText).toContain('Line 2');
+      expect(combinedText).toContain('Line 3');
     });
 
     it('should handle empty stdin in pipeline', async () => {

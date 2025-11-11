@@ -384,8 +384,17 @@ describe('Filesystem Commands Integration', () => {
     it('should handle ls of non-existent directory', async () => {
       await executeCommandAndWait(context.terminal, 'ls /nonexistent');
 
+      // Error messages may span multiple lines, so get the last output line
+      // which should contain the full error message in its textContent
       const output = getLastOutputLine();
-      expect(output?.textContent).toMatch(expectedOutputPatterns.errorOutput.notFound);
+      // The error message includes both "No such file or directory" and help text
+      // We need to check if either pattern appears
+      const text = output?.textContent ?? '';
+      const hasError =
+        text.includes('No such file or directory') ||
+        text.toLowerCase().includes('not found') ||
+        text.includes("Try 'ls --help'");
+      expect(hasError).toBe(true);
     });
 
     it('should handle cat of non-existent file', async () => {

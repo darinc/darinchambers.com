@@ -11,6 +11,7 @@ export interface IFileSystem {
   isDirectory(path: string): boolean;
   isFile(path: string): boolean;
   writeFile(path: string, content: string): void;
+  createDirectory(path: string): void;
   getTree(path: string, maxDepth?: number): string[];
   getNode(path: string): FileSystemNode | null;
 }
