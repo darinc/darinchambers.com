@@ -36,7 +36,7 @@ describe('Settings Persistence Integration', () => {
     it('should persist theme change to filesystem', async () => {
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
 
-      const fileContent = context.fileSystem.readFile('/home/darin/.config/settings.json');
+      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
       const settings = JSON.parse(fileContent);
       expect(settings.theme.preset).toBe('yellow');
     });
@@ -65,7 +65,7 @@ describe('Settings Persistence Integration', () => {
       expect(stored.theme.preset).toBe('green');
 
       // Check filesystem
-      const fileContent = context.fileSystem.readFile('/home/darin/.config/settings.json');
+      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
       const fileSettings = JSON.parse(fileContent);
       expect(fileSettings.theme.preset).toBe('green');
 
@@ -80,10 +80,10 @@ describe('Settings Persistence Integration', () => {
       let stored = JSON.parse(localStorage.getItem('terminal_settings')!);
       expect(stored.theme.preset).toBe('yellow');
 
-      // Change to blue
-      await executeCommandAndWait(context.terminal, 'settings theme blue');
+      // Change to light-blue
+      await executeCommandAndWait(context.terminal, 'settings theme light-blue');
       stored = JSON.parse(localStorage.getItem('terminal_settings')!);
-      expect(stored.theme.preset).toBe('blue');
+      expect(stored.theme.preset).toBe('light-blue');
 
       // Change to green
       await executeCommandAndWait(context.terminal, 'settings theme green');
@@ -94,22 +94,22 @@ describe('Settings Persistence Integration', () => {
 
   describe('Font Settings Persistence', () => {
     it('should persist fontSize change to localStorage', async () => {
-      await executeCommandAndWait(context.terminal, 'settings fontSize 18px');
+      await executeCommandAndWait(context.terminal, 'settings fontSize 18');
 
       const stored = JSON.parse(localStorage.getItem('terminal_settings')!);
-      expect(stored.fontSize).toBe('18px');
+      expect(stored.font.size).toBe(18);
     });
 
     it('should persist fontSize change to filesystem', async () => {
-      await executeCommandAndWait(context.terminal, 'settings fontSize 18px');
+      await executeCommandAndWait(context.terminal, 'settings fontSize 18');
 
-      const fileContent = context.fileSystem.readFile('/home/darin/.config/settings.json');
+      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
       const settings = JSON.parse(fileContent);
-      expect(settings.fontSize).toBe('18px');
+      expect(settings.font.size).toBe(18);
     });
 
     it('should apply fontSize to DOM', async () => {
-      await executeCommandAndWait(context.terminal, 'settings fontSize 20px');
+      await executeCommandAndWait(context.terminal, 'settings fontSize 20');
 
       await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -121,11 +121,11 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings fontFamily "Courier New"');
 
       const stored = JSON.parse(localStorage.getItem('terminal_settings')!);
-      expect(stored.fontFamily).toBe('Courier New');
+      expect(stored.font.family).toBe('Courier New');
 
-      const fileContent = context.fileSystem.readFile('/home/darin/.config/settings.json');
+      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
       const settings = JSON.parse(fileContent);
-      expect(settings.fontFamily).toBe('Courier New');
+      expect(settings.font.family).toBe('Courier New');
     });
 
     it('should apply fontFamily to DOM', async () => {
@@ -144,7 +144,7 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
 
       // Change font size
-      await executeCommandAndWait(context.terminal, 'settings fontSize 18px');
+      await executeCommandAndWait(context.terminal, 'settings fontSize 18');
 
       // Change font family
       await executeCommandAndWait(context.terminal, 'settings fontFamily monospace');
@@ -152,20 +152,20 @@ describe('Settings Persistence Integration', () => {
       // Verify all changes persisted
       const stored = JSON.parse(localStorage.getItem('terminal_settings')!);
       expect(stored.theme.preset).toBe('yellow');
-      expect(stored.fontSize).toBe('18px');
-      expect(stored.fontFamily).toBe('monospace');
+      expect(stored.font.size).toBe(18);
+      expect(stored.font.family).toBe('monospace');
 
-      const fileContent = context.fileSystem.readFile('/home/darin/.config/settings.json');
+      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
       const fileSettings = JSON.parse(fileContent);
       expect(fileSettings.theme.preset).toBe('yellow');
-      expect(fileSettings.fontSize).toBe('18px');
-      expect(fileSettings.fontFamily).toBe('monospace');
+      expect(fileSettings.font.size).toBe(18);
+      expect(fileSettings.font.family).toBe('monospace');
     });
 
     it('should preserve previous settings when changing one setting', async () => {
       // Set initial settings
-      await executeCommandAndWait(context.terminal, 'settings theme blue');
-      await executeCommandAndWait(context.terminal, 'settings fontSize 16px');
+      await executeCommandAndWait(context.terminal, 'settings theme light-blue');
+      await executeCommandAndWait(context.terminal, 'settings fontSize 16');
 
       // Change only theme
       await executeCommandAndWait(context.terminal, 'settings theme green');
@@ -173,42 +173,47 @@ describe('Settings Persistence Integration', () => {
       // Verify theme changed but fontSize preserved
       const stored = JSON.parse(localStorage.getItem('terminal_settings')!);
       expect(stored.theme.preset).toBe('green');
-      expect(stored.fontSize).toBe('16px');
+      expect(stored.font.size).toBe(16);
     });
   });
 
   describe('Settings Retrieval', () => {
     it('should display current settings', async () => {
       // Set some settings
-      await executeCommandAndWait(context.terminal, 'settings theme purple');
-      await executeCommandAndWait(context.terminal, 'settings fontSize 18px');
+      await executeCommandAndWait(context.terminal, 'settings theme paper');
+      await executeCommandAndWait(context.terminal, 'settings fontSize 18');
 
       // Get settings
       await executeCommandAndWait(context.terminal, 'settings');
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
-      expect(output?.textContent).toMatch(/purple|18px/);
+      expect(output?.textContent).toMatch(/paper|18/);
     });
 
     it('should show settings from filesystem', async () => {
       // Write settings directly to filesystem
       const settingsData = {
-        theme: { preset: 'blue' },
-        fontSize: '20px',
-        fontFamily: 'monospace',
+        theme: { preset: 'light-blue', customColors: undefined },
+        font: { size: 20, family: 'monospace' },
+        effects: {
+          scanLines: false,
+          glow: false,
+          border: true,
+          animationSpeed: 1.0,
+          soundEffects: false,
+          autoScrollBehavior: true,
+        },
+        prompt: { format: '\\W \\$ ' },
       };
-      context.fileSystem.writeFile(
-        '/home/darin/.config/settings.json',
-        JSON.stringify(settingsData, null, 2)
-      );
+      context.fileSystem.writeFile('/home/darin/.settings', JSON.stringify(settingsData, null, 2));
 
       // Read settings using cat command
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/.config/settings.json');
+      await executeCommandAndWait(context.terminal, 'cat /home/darin/.settings');
 
       const output = getLastOutputLine();
-      expect(output?.textContent).toContain('blue');
-      expect(output?.textContent).toContain('20px');
+      expect(output?.textContent).toContain('light-blue');
+      expect(output?.textContent).toContain('20');
     });
   });
 
@@ -226,7 +231,7 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
 
       // Verify filesystem has the setting
-      const fileContent = context.fileSystem.readFile('/home/darin/.config/settings.json');
+      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
       const fileSettings = JSON.parse(fileContent);
       expect(fileSettings.theme.preset).toBe('yellow');
     });
@@ -238,9 +243,7 @@ describe('Settings Persistence Integration', () => {
 
         // Verify consistency
         const localStorageData = JSON.parse(localStorage.getItem('terminal_settings')!);
-        const fileData = JSON.parse(
-          context.fileSystem.readFile('/home/darin/.config/settings.json')
-        );
+        const fileData = JSON.parse(context.fileSystem.readFile('/home/darin/.settings'));
 
         expect(localStorageData.theme.preset).toBe(theme);
         expect(fileData.theme.preset).toBe(theme);
@@ -271,7 +274,7 @@ describe('Settings Persistence Integration', () => {
 
     it('should update theme when settings change', async () => {
       // Set initial theme
-      await executeCommandAndWait(context.terminal, 'settings theme blue');
+      await executeCommandAndWait(context.terminal, 'settings theme light-blue');
       await new Promise((resolve) => setTimeout(resolve, 50));
       const blueBg = getCSSVariable('--terminal-bg');
 
@@ -325,7 +328,7 @@ describe('Settings Persistence Integration', () => {
 
     it('should preserve settings when invalid change attempted', async () => {
       // Set valid setting
-      await executeCommandAndWait(context.terminal, 'settings theme blue');
+      await executeCommandAndWait(context.terminal, 'settings theme light-blue');
 
       // Try invalid setting
       await executeCommandAndWait(context.terminal, 'settings theme invalidtheme');
@@ -342,13 +345,13 @@ describe('Settings Persistence Integration', () => {
   describe('Settings File Operations', () => {
     it('should allow reading settings file via cat', async () => {
       // Set settings
-      await executeCommandAndWait(context.terminal, 'settings theme purple');
+      await executeCommandAndWait(context.terminal, 'settings theme paper');
 
       // Read via cat
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/.config/settings.json');
+      await executeCommandAndWait(context.terminal, 'cat /home/darin/.settings');
 
       const output = getLastOutputLine();
-      expect(output?.textContent).toContain('purple');
+      expect(output?.textContent).toContain('paper');
       expect(output?.textContent).toContain('theme');
     });
 
@@ -365,7 +368,7 @@ describe('Settings Persistence Integration', () => {
 
     it('should maintain settings across directory changes', async () => {
       // Set settings
-      await executeCommandAndWait(context.terminal, 'settings theme blue');
+      await executeCommandAndWait(context.terminal, 'settings theme light-blue');
 
       // Change directory
       await executeCommandAndWait(context.terminal, 'cd /home/darin/documents');
@@ -393,8 +396,8 @@ describe('Settings Persistence Integration', () => {
 
     it('should maintain consistency after reset', async () => {
       // Change settings
-      await executeCommandAndWait(context.terminal, 'settings theme purple');
-      await executeCommandAndWait(context.terminal, 'settings fontSize 20px');
+      await executeCommandAndWait(context.terminal, 'settings theme paper');
+      await executeCommandAndWait(context.terminal, 'settings fontSize 20');
 
       // Reset theme
       await executeCommandAndWait(context.terminal, 'settings theme green');
@@ -402,12 +405,12 @@ describe('Settings Persistence Integration', () => {
       // Verify localStorage
       const localData = JSON.parse(localStorage.getItem('terminal_settings')!);
       expect(localData.theme.preset).toBe('green');
-      expect(localData.fontSize).toBe('20px'); // Should preserve fontSize
+      expect(localData.font.size).toBe(20); // Should preserve fontSize
 
       // Verify filesystem
-      const fileData = JSON.parse(context.fileSystem.readFile('/home/darin/.config/settings.json'));
+      const fileData = JSON.parse(context.fileSystem.readFile('/home/darin/.settings'));
       expect(fileData.theme.preset).toBe('green');
-      expect(fileData.fontSize).toBe('20px');
+      expect(fileData.font.size).toBe(20);
     });
   });
 
@@ -415,12 +418,12 @@ describe('Settings Persistence Integration', () => {
     it('should handle rapid settings changes', async () => {
       // Rapidly change settings
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
-      await executeCommandAndWait(context.terminal, 'settings theme blue');
+      await executeCommandAndWait(context.terminal, 'settings theme light-blue');
       await executeCommandAndWait(context.terminal, 'settings theme green');
 
       // Final state should be consistent
       const localData = JSON.parse(localStorage.getItem('terminal_settings')!);
-      const fileData = JSON.parse(context.fileSystem.readFile('/home/darin/.config/settings.json'));
+      const fileData = JSON.parse(context.fileSystem.readFile('/home/darin/.settings'));
 
       expect(localData.theme.preset).toBe(fileData.theme.preset);
       expect(localData.theme.preset).toBe('green');
@@ -431,21 +434,21 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'ls');
 
       // Change settings
-      await executeCommandAndWait(context.terminal, 'settings theme purple');
+      await executeCommandAndWait(context.terminal, 'settings theme paper');
 
       // Execute another command
       await executeCommandAndWait(context.terminal, 'pwd');
 
       // Settings should persist
       const stored = JSON.parse(localStorage.getItem('terminal_settings')!);
-      expect(stored.theme.preset).toBe('purple');
+      expect(stored.theme.preset).toBe('paper');
     });
   });
 
   describe('Edge Cases', () => {
     it('should handle empty settings file', async () => {
       // Create empty settings file
-      context.fileSystem.writeFile('/home/darin/.config/settings.json', '{}');
+      context.fileSystem.writeFile('/home/darin/.settings', '{}');
 
       // Try to change setting
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
@@ -457,10 +460,10 @@ describe('Settings Persistence Integration', () => {
 
     it('should handle corrupted settings file', async () => {
       // Write invalid JSON
-      context.fileSystem.writeFile('/home/darin/.config/settings.json', 'invalid json {');
+      context.fileSystem.writeFile('/home/darin/.settings', 'invalid json {');
 
       // Should handle gracefully
-      await executeCommandAndWait(context.terminal, 'settings theme blue');
+      await executeCommandAndWait(context.terminal, 'settings theme light-blue');
 
       // Should recover or use defaults
       const output = getLastOutputLine();
@@ -470,7 +473,7 @@ describe('Settings Persistence Integration', () => {
     it('should handle missing settings file', async () => {
       // Delete settings file if it exists
       try {
-        context.fileSystem.deleteFile('/home/darin/.config/settings.json');
+        context.fileSystem.deleteFile('/home/darin/.settings');
       } catch {
         // File might not exist
       }
@@ -479,7 +482,7 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings theme green');
 
       // Should create new settings file
-      const fileContent = context.fileSystem.readFile('/home/darin/.config/settings.json');
+      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
       expect(fileContent).toBeTruthy();
       expect(JSON.parse(fileContent).theme.preset).toBe('green');
     });

@@ -175,7 +175,7 @@ describe('ThemeManager', () => {
     it('should persist theme selection to localStorage', () => {
       themeManager.applyTheme('dc');
 
-      const stored = localStorage.getItem('terminal-settings');
+      const stored = localStorage.getItem('terminal_settings');
       expect(stored).toBeTruthy();
 
       const parsed = JSON.parse(stored!);
@@ -280,7 +280,7 @@ describe('ThemeManager', () => {
         '--terminal-accent': '#ff0000',
       });
 
-      const stored = localStorage.getItem('terminal-settings');
+      const stored = localStorage.getItem('terminal_settings');
       const parsed = JSON.parse(stored!);
 
       expect(parsed.theme.preset).toBe('custom');
@@ -434,7 +434,7 @@ describe('ThemeManager', () => {
       themeManager.applyTheme('white');
 
       // Check localStorage
-      const stored = localStorage.getItem('terminal-settings');
+      const stored = localStorage.getItem('terminal_settings');
       const parsedLS = JSON.parse(stored!);
       expect(parsedLS.theme.preset).toBe('white');
 

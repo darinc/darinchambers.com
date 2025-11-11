@@ -207,7 +207,8 @@ function handleSet(
         return { output: `Color ${colorVar} set to ${colorValue}` };
       }
 
-      case 'font-size': {
+      case 'font-size':
+      case 'fontSize': {
         if (!value) return { output: 'Font size value required', error: true };
         const size = parseInt(value, 10);
         if (isNaN(size)) {
@@ -222,7 +223,8 @@ function handleSet(
         return { output: `Font size set to: ${size}px` };
       }
 
-      case 'font-family': {
+      case 'font-family':
+      case 'fontFamily': {
         if (!value) return { output: 'Font family value required', error: true };
         const validFamilies: FontFamily[] = [
           'Fira Code',
@@ -245,7 +247,8 @@ function handleSet(
         return { output: `Font family set to: ${value}` };
       }
 
-      case 'scan-lines': {
+      case 'scan-lines':
+      case 'scanLines': {
         if (!value) return { output: 'Scan lines value required (on/off)', error: true };
         if (value !== 'on' && value !== 'off') {
           return {
@@ -290,7 +293,8 @@ function handleSet(
         return { output: `Border: ${value}` };
       }
 
-      case 'animation-speed': {
+      case 'animation-speed':
+      case 'animationSpeed': {
         if (!value) return { output: 'Animation speed value required', error: true };
         const speed = parseFloat(value);
         if (isNaN(speed)) {
@@ -305,7 +309,8 @@ function handleSet(
         return { output: `Animation speed set to: ${speed}x` };
       }
 
-      case 'sound-effects': {
+      case 'sound-effects':
+      case 'sound': {
         if (!value) return { output: 'Sound effects value required (on/off)', error: true };
         if (value !== 'on' && value !== 'off') {
           return {
@@ -319,7 +324,9 @@ function handleSet(
         return { output: `Sound effects: ${value}` };
       }
 
-      case 'autoscroll': {
+      case 'autoscroll':
+      case 'auto-scroll':
+      case 'autoScroll': {
         if (!value) return { output: 'Autoscroll value required (on/off)', error: true };
         if (value !== 'on' && value !== 'off') {
           return {
