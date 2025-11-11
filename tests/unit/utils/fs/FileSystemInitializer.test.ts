@@ -21,7 +21,7 @@ describe('FileSystemInitializer', () => {
       .children!.get('home')!
       .children!.get('darin')!
       .children!.get('blog')!
-      .children!.get('2025-11-07-we-trick-rocks-into-thinking.md');
+      .children!.get('2025-11-07-02-we-trick-rocks-into-thinking.md');
 
     expect(post).toBeDefined();
     expect(post!.type).toBe('file');

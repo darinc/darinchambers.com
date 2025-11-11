@@ -23,10 +23,10 @@ export class ContentFormatter {
     const items = projects
       .map((project, index) => {
         const tech = project.technologies.join(', ');
-        const impact = project.impact ? `\n   **Impact:** ${project.impact}` : '';
+        const impact = project.impact ? `\n\n**Impact:** ${project.impact}` : '';
         const tags =
           project.tags?.map((t: string) => this.formatClickableTag(t, 'portfolio')).join(' ') ?? '';
-        const tagsLine = tags ? `\n   **Tags:** ${tags}` : '';
+        const tagsLine = tags ? `\n\n**Tags:** ${tags}` : '';
 
         return `### <a href="/portfolio/${project.id}" data-command="portfolio ${project.id}">${index + 1}. ${project.title} (${project.year})</a>
 
@@ -51,23 +51,19 @@ ${items}${footer}`;
    */
   static formatPortfolioDetail(project: Project): string {
     const tech = project.technologies.join(', ');
-    const impact = project.impact ? `\n\n## Impact\n\n${project.impact}` : '';
+    const impact = project.impact ? `**Impact:** ${project.impact}\n\n` : '';
     const tags = project.tags?.map((t) => this.formatClickableTag(t, 'portfolio')).join(' ') ?? '';
-    const tagsSection = tags ? `\n\n## Tags\n\n${tags}` : '';
+    const tagsSection = tags ? `**Tags:** ${tags}\n\n` : '';
 
     return `# ${project.title}
 
 **Year:** ${project.year}
 
-## Overview
-
 ${project.description}
 
-## Technologies
+**Technologies:** ${tech}
 
-${tech}${impact}${tagsSection}
-
----
+${impact}${tagsSection}---
 
 <a href="/portfolio" data-command="portfolio">← Back to Portfolio</a>`;
   }
