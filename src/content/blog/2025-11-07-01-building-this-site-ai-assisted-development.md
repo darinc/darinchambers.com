@@ -1,7 +1,7 @@
 ---
 title: 'Building This Site: A Love Letter to AI-Assisted Development'
 date: '2025-11-07'
-tags: ['AI', 'Developer Experience', 'Web Development']
+tags: ['AI', 'Developer-Experience', 'Web-Development']
 summary: 'How I went from vision to a fully-tested, production-ready personal site using AI as a collaborative partner—and why this workflow fills me with joy.'
 ---
 

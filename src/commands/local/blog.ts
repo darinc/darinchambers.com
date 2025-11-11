@@ -32,10 +32,12 @@ Options:
   --tag <tag>          Filter posts by tag
 
 Examples:
-  blog                 # List all posts
-  blog 1               # Read post #1
-  blog --tag ai        # Filter by tag
-  blog post-id         # Read specific post by ID`,
+  blog                          # List all posts
+  blog 1                        # Read post #1
+  blog --tag AI                 # Filter by single-word tag
+  blog --tag Web-Development    # Filter by hyphenated tag
+  blog --tag "Web Development"  # Filter by quoted multi-word tag
+  blog post-id                  # Read specific post by ID`,
         };
       }
 

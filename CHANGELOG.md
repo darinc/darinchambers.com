@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.9] - 2025-11-11
+
+### Changed
+- Blog post filenames now use numeric prefixes for same-day ordering
+- Blog tags use hyphens for multi-word tags
+- DC theme colors updated for WCAG AA accessibility compliance
+- Green and White themes now have distinct accent colors
+- Improved spacing and indentation in blog list view
+
 ## [0.10.8] - 2025-11-11
 
 ### Changed

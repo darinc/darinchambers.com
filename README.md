@@ -204,6 +204,25 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 4. Add tests in `tests/unit/commands/`
 5. Update help documentation
 
+### Adding Blog Posts
+
+Blog posts are stored in `src/content/blog/` as markdown files with YAML frontmatter.
+
+**Naming Convention**: `YYYY-MM-DD-NN-slug.md`
+
+- `YYYY-MM-DD`: Publication date
+- `NN`: Two-digit sequence number (01, 02, 03, etc.) for posts on the same day
+- `slug`: URL-friendly post identifier
+
+**Example**: `2025-11-07-01-building-this-site.md`
+
+**Tag Naming**: Use hyphens for multi-word tags (e.g., `Web-Development`, `Developer-Experience`)
+
+- Allows filtering without quotes: `blog --tag Web-Development`
+- Quoted tags with spaces still work: `blog --tag "Web Development"`
+
+Posts are sorted by filename (newest first), so the sequence number determines the order for posts published on the same day.
+
 See [API.md](API.md) for detailed API documentation.
 
 ## 📝 Documentation

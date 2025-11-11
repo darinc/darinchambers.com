@@ -2,13 +2,14 @@
 .markdown-output {
   line-height: 1.4;
   margin: 4px 0;
+  margin-top: 12px;
   white-space: normal;
 }
 
 .markdown-output h1 {
   font-size: 24px;
   font-weight: bold;
-  margin: 8px 0 4px;
+  margin: 16px 0 4px;
   padding: 4px 8px;
   color: var(--terminal-accent);
   background-color: var(--terminal-accent-10);
@@ -91,6 +92,16 @@
 /* Extra spacing after paragraphs that contain tags (typically before next blog post) */
 .markdown-output p:has(.tag-link) {
   margin-bottom: 32px;
+}
+
+/* Blog list entry indentation - indent content under post titles */
+.markdown-output h3 ~ p {
+  margin-left: 24px;
+}
+
+/* Reset indentation after horizontal rules (between blog posts) */
+.markdown-output hr ~ p {
+  margin-left: 0;
 }
 
 .markdown-output br {

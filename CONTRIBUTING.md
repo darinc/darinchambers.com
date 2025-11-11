@@ -526,12 +526,70 @@ See [API.md](API.md#adding-a-new-command) for detailed instructions.
 4. Add tests in `tests/unit/commands/`
 5. Update `src/content/help.md`
 
-### Adding Content
+### Adding Blog Posts
 
-1. Create markdown file in `src/content/`
-2. Add frontmatter (YAML)
-3. Create command to display content
-4. Update file system initialization
+Blog posts are stored in `src/content/blog/` as markdown files with YAML frontmatter.
+
+**Naming Convention**: `YYYY-MM-DD-NN-slug.md`
+
+- `YYYY-MM-DD`: Publication date (ISO 8601 format)
+- `NN`: Two-digit sequence number (01, 02, 03, etc.)
+  - Used to order posts published on the same day
+  - Start at 01 for the first post of the day
+  - Increment for each additional post (02, 03, etc.)
+- `slug`: URL-friendly post identifier (lowercase, hyphens only)
+
+**Examples**:
+
+- `2025-11-07-01-building-this-site.md` (first post on Nov 7)
+- `2025-11-07-02-we-trick-rocks-into-thinking.md` (second post on Nov 7)
+- `2025-11-09-01-vibe-coding-graph-library.md` (first post on Nov 9)
+
+**Frontmatter Requirements**:
+
+```yaml
+---
+title: 'Post Title Here'
+date: '2025-11-07'
+tags: ['AI', 'Web-Development', 'Developer-Experience']
+summary: 'Brief description of the post (1-2 sentences)'
+---
+```
+
+**Tag Naming Convention**:
+
+- Use hyphens for multi-word tags: `Web-Development`, `Developer-Experience`
+- Single-word tags need no modification: `AI`, `TypeScript`, `Philosophy`
+- Hyphenated tags can be filtered without quotes: `blog --tag Web-Development`
+- Quoted tags with spaces still work: `blog --tag "Web Development"`
+
+Posts are sorted by filename in reverse order (newest first). The sequence number ensures correct ordering when multiple posts share the same date.
+
+### Adding Portfolio Projects
+
+Portfolio projects are stored in `src/content/portfolio/` as markdown files.
+
+**Naming Convention**: `slug.md` (no date prefix needed)
+
+**Frontmatter Requirements**:
+
+```yaml
+---
+id: project-slug
+title: 'Project Title'
+technologies: ['Tech1', 'Tech2', 'Tech3']
+impact: 'Brief impact statement'
+year: '2020-2023'
+tags: ['tag1', 'tag2']
+---
+```
+
+### Adding Other Content
+
+1. Create markdown file in appropriate `src/content/` subdirectory
+2. Add YAML frontmatter as needed
+3. Create or update command to display content
+4. Update file system initialization if needed
 
 ### Adding a Theme
 

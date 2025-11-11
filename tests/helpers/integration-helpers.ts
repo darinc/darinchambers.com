@@ -18,7 +18,6 @@ import { createContactCommand } from '../../src/commands/local/contact';
 import { createPortfolioCommand } from '../../src/commands/local/portfolio';
 import { createSettingsCommand } from '../../src/commands/local/settings';
 import { Terminal } from '../../src/components/Terminal';
-import type { TerminalInput } from '../../src/components/TerminalInput';
 import { TerminalOutput } from '../../src/components/TerminalOutput';
 import { AliasManager } from '../../src/utils/AliasManager';
 import { CommandDispatcher } from '../../src/utils/CommandDispatcher';
@@ -27,12 +26,13 @@ import { EnvVarManager } from '../../src/utils/EnvVarManager';
 import { SettingsManager } from '../../src/utils/SettingsManager';
 import { ThemeManager } from '../../src/utils/ThemeManager';
 import { setupTerminalDOM, cleanupDOM, getElement } from './dom-setup';
+import { createMockFileSystem } from './mock-filesystem';
+import type { Command } from '../../src/commands/Command';
+import type { TerminalInput } from '../../src/components/TerminalInput';
+import type { IFileSystem } from '../../src/utils/fs/IFileSystem';
 
 // Re-export getElement for use in tests
 export { getElement };
-import { createMockFileSystem } from './mock-filesystem';
-import type { Command } from '../../src/commands/Command';
-import type { IFileSystem } from '../../src/utils/fs/IFileSystem';
 
 export interface IntegrationTestContext {
   terminal: Terminal;

@@ -1,9 +1,9 @@
 // Import content markdown files
 import aboutMd from '../../content/about.md?raw';
 // Import blog markdown files
-import buildingSite from '../../content/blog/2025-11-07-building-this-site-ai-assisted-development.md?raw';
-import vibeCodeGraph from '../../content/blog/2025-11-07-vibe-coding-graph-library-one-week.md?raw';
-import trickRocks from '../../content/blog/2025-11-07-we-trick-rocks-into-thinking.md?raw';
+import buildingSite from '../../content/blog/2025-11-07-01-building-this-site-ai-assisted-development.md?raw';
+import trickRocks from '../../content/blog/2025-11-07-02-we-trick-rocks-into-thinking.md?raw';
+import vibeCodeGraph from '../../content/blog/2025-11-09-01-vibe-coding-graph-library-one-week.md?raw';
 import contactMd from '../../content/contact.md?raw';
 import helpMd from '../../content/help.md?raw';
 // Import portfolio markdown files
@@ -139,16 +139,19 @@ Type 'blog' to read posts.
     const blog = this.createDirectoryNode('blog');
     darin.children!.set('blog', blog);
     blog.children!.set(
-      '2025-11-07-we-trick-rocks-into-thinking.md',
-      this.createFileNode('2025-11-07-we-trick-rocks-into-thinking.md', trickRocks)
+      '2025-11-07-01-building-this-site-ai-assisted-development.md',
+      this.createFileNode(
+        '2025-11-07-01-building-this-site-ai-assisted-development.md',
+        buildingSite
+      )
     );
     blog.children!.set(
-      '2025-11-07-vibe-coding-graph-library-one-week.md',
-      this.createFileNode('2025-11-07-vibe-coding-graph-library-one-week.md', vibeCodeGraph)
+      '2025-11-07-02-we-trick-rocks-into-thinking.md',
+      this.createFileNode('2025-11-07-02-we-trick-rocks-into-thinking.md', trickRocks)
     );
     blog.children!.set(
-      '2025-11-07-building-this-site-ai-assisted-development.md',
-      this.createFileNode('2025-11-07-building-this-site-ai-assisted-development.md', buildingSite)
+      '2025-11-09-01-vibe-coding-graph-library-one-week.md',
+      this.createFileNode('2025-11-09-01-vibe-coding-graph-library-one-week.md', vibeCodeGraph)
     );
 
     // /home/darin/content directory with markdown content files

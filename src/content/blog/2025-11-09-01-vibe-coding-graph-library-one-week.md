@@ -1,7 +1,7 @@
 ---
 title: 'Vibe Coding a Graph Library in One Week'
-date: '2025-11-07'
-tags: ['Open Source', 'Visualization', 'TypeScript']
+date: '2025-11-09'
+tags: ['Open-Source', 'Visualization', 'TypeScript']
 summary: 'What happens when you spend a week building a zero-dependency SVG graph library just for the joy of it? You get SVG-Graph-Network—a love letter to the craft of software engineering.'
 ---
 
