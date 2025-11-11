@@ -5,10 +5,19 @@ export class AliasManager {
   private aliases = new Map<string, string>();
   private fileSystem: IFileSystem;
   private aliasFilePath: string = PATHS.CONFIG_ALIASES;
+  private defaultAliases = new Map<string, string>([['ll', 'ls -alh']]);
 
   constructor(fileSystem: IFileSystem) {
     this.fileSystem = fileSystem;
+    this.loadDefaultAliases();
     this.loadAliases();
+  }
+
+  private loadDefaultAliases(): void {
+    // Set up default aliases that are always available
+    this.defaultAliases.forEach((command, name) => {
+      this.aliases.set(name, command);
+    });
   }
 
   private loadAliases(): void {
@@ -23,12 +32,13 @@ export class AliasManager {
         lines.forEach((line) => {
           const match = /^alias\s+(\S+)='(.+)'$/.exec(line);
           if (match) {
+            // User-defined aliases override defaults
             this.aliases.set(match[1], match[2]);
           }
         });
       }
     } catch {
-      // If file doesn't exist or can't be read, start with empty aliases
+      // If file doesn't exist or can't be read, continue with default aliases
     }
   }
 
@@ -74,6 +84,10 @@ export class AliasManager {
 
   getAllAliases(): Map<string, string> {
     return new Map(this.aliases);
+  }
+
+  isDefaultAlias(name: string): boolean {
+    return this.defaultAliases.has(name);
   }
 
   resolve(input: string): string {

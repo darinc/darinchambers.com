@@ -107,6 +107,7 @@ const executor = new CommandExecutor(dispatcher, aliasManager, envVarManager);
 // Initialize terminal with dependencies
 const terminal = new Terminal(dispatcher, executor, settingsManager, themeManager, envVarManager);
 terminal.setCurrentPath(fileSystem.getShortPath());
+terminal.setFileSystem(fileSystem);
 
 // Initialize navigation (will be updated with router after router creation)
 const navLinksElement = document.getElementById('nav-links');

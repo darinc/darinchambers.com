@@ -8,6 +8,7 @@ import type { Command, CommandResult } from '../commands/Command';
 import type { CommandDispatcher } from '../utils/CommandDispatcher';
 import type { CommandExecutor } from '../utils/CommandExecutor';
 import type { EnvVarManager } from '../utils/EnvVarManager';
+import type { IFileSystem } from '../utils/fs/IFileSystem';
 import type { SettingsManager } from '../utils/SettingsManager';
 import type { ThemeManager } from '../utils/ThemeManager';
 
@@ -321,6 +322,16 @@ export class Terminal {
 
   registerCommands(commands: Command[]): void {
     commands.forEach((cmd) => this.registerCommand(cmd));
+  }
+
+  /**
+   * Set the file system for tab completion of file paths.
+   * Call this after Terminal is initialized.
+   *
+   * @param fileSystem - FileSystem instance
+   */
+  setFileSystem(fileSystem: IFileSystem): void {
+    this.input.setFileSystem(fileSystem);
   }
 
   writeWelcome(message: string): void {

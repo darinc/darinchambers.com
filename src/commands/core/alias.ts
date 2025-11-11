@@ -22,13 +22,14 @@ export function createAliasCommand(aliasManager: AliasManager): Command {
 
 Description:
   Create or display command aliases for shortening commands
+  Note: 'll' is aliased to 'ls -alh' by default
 
 Options:
   (no args)            List all defined aliases
 
 Examples:
   alias                # List all aliases
-  alias ll='ls -la'    # Create an alias
+  alias la='ls -a'     # Create an alias
   alias blog-ai='blog --tag ai'  # Alias with flags`,
         };
       }
@@ -42,7 +43,10 @@ Examples:
 
         const lines = Array.from(aliases.entries())
           .sort((a, b) => a[0].localeCompare(b[0]))
-          .map(([name, command]) => `alias ${name}='${command}'`);
+          .map(([name, command]) => {
+            const isDefault = aliasManager.isDefaultAlias(name);
+            return `alias ${name}='${command}'${isDefault ? ' (default)' : ''}`;
+          });
 
         return { output: lines.join('\n') };
       }

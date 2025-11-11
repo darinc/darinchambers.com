@@ -61,7 +61,7 @@ function generateColorPickers(colors?: CustomColors): string {
     { key: '--terminal-bg', label: 'Background', prop: 'background' as keyof CustomColors },
     {
       key: '--terminal-bg-secondary',
-      label: 'Background (Secondary)',
+      label: 'BG (Secondary)',
       prop: 'backgroundSecondary' as keyof CustomColors,
     },
     { key: '--terminal-fg', label: 'Foreground', prop: 'foreground' as keyof CustomColors },
