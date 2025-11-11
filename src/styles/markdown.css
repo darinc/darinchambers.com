@@ -88,6 +88,11 @@
   margin: 4px 0;
 }
 
+/* Extra spacing after paragraphs that contain tags (typically before next blog post) */
+.markdown-output p:has(.tag-link) {
+  margin-bottom: 32px;
+}
+
 .markdown-output br {
   display: none;
 }
@@ -132,6 +137,13 @@
   border: none;
   border-top: 1px solid var(--terminal-dim);
   margin: 8px 0;
+  opacity: 0.3;
+}
+
+.markdown-output hr {
+  border: none;
+  border-top: 1px solid var(--terminal-dim);
+  margin: 48px 0;
   opacity: 0.3;
 }
 

@@ -23,7 +23,7 @@ export function createBlogCommand(fs: IFileSystem): Command {
 
       if (cmdArgs.hasFlag('help')) {
         return {
-          output: `Usage: blog [options] [post-id]
+          output: `Usage: blog [options] [post-id|number]
 
 Description:
   List and read blog posts
@@ -33,8 +33,9 @@ Options:
 
 Examples:
   blog                 # List all posts
+  blog 1               # Read post #1
   blog --tag ai        # Filter by tag
-  blog post-id         # Read specific post`,
+  blog post-id         # Read specific post by ID`,
         };
       }
 
@@ -62,7 +63,18 @@ Examples:
 
         // Show specific blog post
         if (postId) {
-          const post = posts.find((p) => p.id === postId);
+          let post: BlogPost | undefined;
+
+          // Check if postId is a number (e.g., "1", "2", "3")
+          const postNumber = parseInt(postId, 10);
+          if (!isNaN(postNumber) && postNumber > 0 && postNumber <= posts.length) {
+            // Convert display number to array index (newest = highest number = index 0)
+            const arrayIndex = posts.length - postNumber;
+            post = posts[arrayIndex];
+          } else {
+            // Otherwise try to find by ID
+            post = posts.find((p) => p.id === postId);
+          }
 
           if (!post) {
             return {

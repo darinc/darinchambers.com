@@ -85,15 +85,14 @@ ${tech}${impact}${tagsSection}
         // Reverse numbering: newest post (index 0) gets highest number
         const postNumber = posts.length - index;
 
-        return `### ${postNumber}. ${post.title}
+        return `### <a href="/blog/${post.id}" data-command="blog ${post.id}">${postNumber}. ${post.title}</a>
 
 **Date:** ${post.date}
 
 ${post.summary}
 
 **Tags:** ${tags}
-
-<a href="/blog/${post.id}" data-command="blog ${post.id}">Read Post →</a>`;
+`;
       })
       .join('\n\n---\n\n');
 
