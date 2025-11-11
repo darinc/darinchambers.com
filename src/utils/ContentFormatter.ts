@@ -28,13 +28,12 @@ export class ContentFormatter {
           project.tags?.map((t: string) => this.formatClickableTag(t, 'portfolio')).join(' ') ?? '';
         const tagsLine = tags ? `\n   **Tags:** ${tags}` : '';
 
-        return `### ${index + 1}. ${project.title} (${project.year})
+        return `### <a href="/portfolio/${project.id}" data-command="portfolio ${project.id}">${index + 1}. ${project.title} (${project.year})</a>
 
 ${project.description}
 
 **Technologies:** ${tech}${impact}${tagsLine}
-
-<a href="/portfolio/${project.id}" data-command="portfolio ${project.id}">View Details →</a>`;
+`;
       })
       .join('\n\n---\n\n');
 

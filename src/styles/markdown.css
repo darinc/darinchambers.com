@@ -92,6 +92,7 @@
 /* Extra spacing after paragraphs that contain tags (typically before next blog post) */
 .markdown-output p:has(.tag-link) {
   margin-bottom: 32px;
+  margin-left: 0; /* Don't indent Tags: paragraphs */
 }
 
 /* Blog list entry indentation - indent content under post titles */
@@ -99,9 +100,31 @@
   margin-left: 24px;
 }
 
-/* Reset indentation after horizontal rules (between blog posts) */
-.markdown-output hr ~ p {
+/* Reset indentation after horizontal rules (between blog posts and sections) */
+.markdown-output hr ~ p,
+.markdown-output hr ~ ul {
   margin-left: 0;
+}
+
+/* Detail page indentation - indent content under h2 section headings */
+.markdown-output h2 ~ p,
+.markdown-output h2 ~ ul,
+.markdown-output h2 ~ ol,
+.markdown-output h2 ~ pre {
+  margin-left: 24px;
+}
+
+/* Reset indentation for new sections (next h2) */
+.markdown-output h2 ~ h2 {
+  margin-left: 0;
+}
+
+/* Keep content after nested h2 also indented */
+.markdown-output h2 ~ h2 ~ p,
+.markdown-output h2 ~ h2 ~ ul,
+.markdown-output h2 ~ h2 ~ ol,
+.markdown-output h2 ~ h2 ~ pre {
+  margin-left: 24px;
 }
 
 .markdown-output br {
