@@ -100,7 +100,28 @@ export class AliasManager {
 
     if (alias) {
       // Replace the command name with the alias expansion
-      return input.replace(/^(\S+)/, alias);
+      const resolved = input.replace(/^(\S+)/, alias);
+
+      // Recursively resolve nested aliases
+      // Prevent infinite loops by tracking resolution depth
+      return this.resolveRecursive(resolved, 10);
+    }
+
+    return input;
+  }
+
+  private resolveRecursive(input: string, maxDepth: number): string {
+    if (maxDepth <= 0) return input;
+
+    const commandMatch = /^(\S+)/.exec(input);
+    if (!commandMatch) return input;
+
+    const commandName = commandMatch[1];
+    const alias = this.aliases.get(commandName);
+
+    if (alias) {
+      const resolved = input.replace(/^(\S+)/, alias);
+      return this.resolveRecursive(resolved, maxDepth - 1);
     }
 
     return input;

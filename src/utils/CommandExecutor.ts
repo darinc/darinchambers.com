@@ -33,16 +33,28 @@ export class CommandExecutor {
       return { output: '' };
     }
 
-    // Resolve any aliases first (before environment variable expansion)
-    const resolvedCommand = this.aliasManager.resolve(trimmedValue);
+    // First, resolve aliases (which might introduce pipes)
+    let resolvedCommand: string;
+    if (PipelineParser.hasPipe(trimmedValue)) {
+      // For pipelines, resolve aliases for each stage
+      const stages = PipelineParser.parse(trimmedValue);
+      const resolvedStages = stages.map((stage) => this.aliasManager.resolve(stage.trim()));
+      resolvedCommand = resolvedStages.join(' | ');
+    } else {
+      // For single commands, resolve normally
+      resolvedCommand = this.aliasManager.resolve(trimmedValue);
+    }
 
     // Expand environment variables after alias resolution
     const expandedCommand = this.envVarManager
       ? this.envVarManager.expandVariables(resolvedCommand)
       : resolvedCommand;
 
-    // Detect pipelines and dispatch to appropriate handler
-    const result = PipelineParser.hasPipe(expandedCommand)
+    // Check if the EXPANDED command contains a pipe (after alias resolution)
+    const isPipeline = PipelineParser.hasPipe(expandedCommand);
+
+    // Dispatch to appropriate handler
+    const result = isPipeline
       ? await this.dispatcher.dispatchPipeline(expandedCommand)
       : await this.dispatcher.dispatch(expandedCommand);
 

@@ -5,6 +5,7 @@ import {
   teardownIntegrationTest,
   executeCommandAndWait,
   getLastOutputLine,
+  getAllOutputLines,
   setupMockLocalStorage,
   type IntegrationTestContext,
 } from '../helpers/integration-helpers';
