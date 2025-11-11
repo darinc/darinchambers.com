@@ -14,6 +14,7 @@ describe('alias command', () => {
         ),
         setAlias: vi.fn(),
         removeAlias: vi.fn(),
+        isDefaultAlias: vi.fn().mockReturnValue(false),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -28,6 +29,7 @@ describe('alias command', () => {
         getAllAliases: vi.fn().mockReturnValue(new Map()),
         setAlias: vi.fn(),
         removeAlias: vi.fn(),
+        isDefaultAlias: vi.fn().mockReturnValue(false),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -47,6 +49,7 @@ describe('alias command', () => {
         ),
         setAlias: vi.fn(),
         removeAlias: vi.fn(),
+        isDefaultAlias: vi.fn().mockReturnValue(false),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -65,6 +68,7 @@ describe('alias command', () => {
         getAllAliases: vi.fn(),
         setAlias: vi.fn(),
         removeAlias: vi.fn(),
+        isDefaultAlias: vi.fn().mockReturnValue(false),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -79,6 +83,7 @@ describe('alias command', () => {
         getAllAliases: vi.fn(),
         setAlias: vi.fn(),
         removeAlias: vi.fn(),
+        isDefaultAlias: vi.fn().mockReturnValue(false),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
@@ -93,6 +98,7 @@ describe('alias command', () => {
         getAllAliases: vi.fn(),
         setAlias: vi.fn(),
         removeAlias: vi.fn(),
+        isDefaultAlias: vi.fn().mockReturnValue(false),
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);

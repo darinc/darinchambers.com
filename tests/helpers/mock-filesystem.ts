@@ -22,6 +22,24 @@ export function createMockFileSystem(): FileSystemService {
           type: 'directory',
           children: new Map([
             [
+              'guest',
+              {
+                name: 'guest',
+                type: 'directory',
+                children: new Map([
+                  [
+                    '.alias',
+                    {
+                      name: '.alias',
+                      type: 'file',
+                      isHidden: true,
+                      content: '',
+                    },
+                  ],
+                ]),
+              },
+            ],
+            [
               'darin',
               {
                 name: 'darin',
@@ -47,6 +65,50 @@ export function createMockFileSystem(): FileSystemService {
                             name: 'readme.md',
                             type: 'file',
                             content: '# README\n\nTest readme file',
+                          },
+                        ],
+                      ]),
+                    },
+                  ],
+                  [
+                    '.config',
+                    {
+                      name: '.config',
+                      type: 'directory',
+                      isHidden: true,
+                      children: new Map([
+                        [
+                          'settings.json',
+                          {
+                            name: 'settings.json',
+                            type: 'file',
+                            content: JSON.stringify(
+                              {
+                                theme: { preset: 'green' },
+                                fontSize: '16px',
+                                fontFamily: 'monospace',
+                              },
+                              null,
+                              2
+                            ),
+                          },
+                        ],
+                        [
+                          '.alias',
+                          {
+                            name: '.alias',
+                            type: 'file',
+                            isHidden: true,
+                            content: "alias ll='ls -alh'\n",
+                          },
+                        ],
+                        [
+                          '.env',
+                          {
+                            name: '.env',
+                            type: 'file',
+                            isHidden: true,
+                            content: 'USER=darin\nHOME=/home/darin\nPWD=/home/darin\n',
                           },
                         ],
                       ]),

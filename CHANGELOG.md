@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.1] - 2025-11-10
+
+### Fixed
+- Alias manager unit tests to account for default alias
+- Router URL mocking in jsdom for navigation tests
+- Cat command now reads from stdin in pipelines
+
+### Added
+- Integration test helpers with complete terminal setup
+- Mock filesystem with /home/guest directory for alias storage
+
 ## [0.10.0] - 2025-11-10
 
 ### Added

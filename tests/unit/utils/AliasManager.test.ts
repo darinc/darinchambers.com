@@ -24,11 +24,13 @@ describe('AliasManager', () => {
   });
 
   describe('Initialization', () => {
-    it('should initialize with empty aliases when file does not exist', () => {
+    it('should initialize with default aliases when file does not exist', () => {
       mockFileSystem.exists = vi.fn().mockReturnValue(false);
       aliasManager = new AliasManager(mockFileSystem);
 
-      expect(aliasManager.getAllAliases().size).toBe(0);
+      // Should have default 'll' alias
+      expect(aliasManager.getAllAliases().size).toBe(1);
+      expect(aliasManager.getAlias('ll')).toBe('ls -alh');
     });
 
     it('should load aliases from filesystem on initialization', () => {
@@ -218,10 +220,12 @@ describe('AliasManager', () => {
       aliasManager = new AliasManager(mockFileSystem);
     });
 
-    it('should return empty map when no aliases defined', () => {
+    it('should return default aliases when no custom aliases defined', () => {
       const aliases = aliasManager.getAllAliases();
 
-      expect(aliases.size).toBe(0);
+      // Should have default 'll' alias
+      expect(aliases.size).toBe(1);
+      expect(aliases.get('ll')).toBe('ls -alh');
     });
 
     it('should return all defined aliases', () => {

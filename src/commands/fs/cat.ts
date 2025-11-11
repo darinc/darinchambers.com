@@ -13,7 +13,7 @@ export function createCatCommand(fs: IFileSystem): Command {
   return {
     name: 'cat',
     description: 'Display file contents',
-    execute: (args: string[], _stdin?: string) => {
+    execute: (args: string[], stdin?: string) => {
       const cmdArgs = new CommandArgs(args);
 
       if (cmdArgs.hasFlag('help')) {
@@ -26,11 +26,18 @@ Description:
 Examples:
   cat file.txt         # Display file
   cat ~/blog/post.md   # Display from path
-  cat file.txt | grep hello  # Use in pipeline`,
+  cat file.txt | grep hello  # Use in pipeline
+  echo "data" | cat    # Read from stdin`,
         };
       }
 
+      // If no arguments, try to read from stdin
       if (args.length === 0) {
+        if (stdin !== undefined) {
+          return {
+            output: stdin,
+          };
+        }
         return {
           output: "cat: missing file operand\nTry 'cat --help' for more information",
           error: true,
