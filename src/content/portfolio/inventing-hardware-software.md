@@ -1,9 +1,11 @@
 ---
 id: inventing-hardware-software
 title: 'Inventing Hardware + Software Solutions'
+summary: 'Invented portable vehicle undercarriage imaging system (US Patent 10893213B2) combining custom hardware with real-time video processing and ML-powered defect detection. Scaled from prototype to thousands of units nationwide, capturing 1.6M+ images used daily by 800+ inspectors. Industry-first capability that enabled digital-first wholesale marketplace for a company that went public on NASDAQ.'
 technologies: ['Hardware Design', 'Computer Vision', 'Machine Learning', 'Mobile Apps', 'Patents']
 impact: 'Industry-first capability: 1.6M+ images captured, scaled to thousands of deployed units nationwide'
 year: '2018-2019'
+order: 2
 tags: ['major', 'serious', 'innovation', 'patents', 'computer-vision', 'hardware']
 ---
 

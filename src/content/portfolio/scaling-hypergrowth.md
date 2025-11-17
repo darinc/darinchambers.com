@@ -1,9 +1,11 @@
 ---
 id: scaling-hypergrowth
 title: 'Scaling Infrastructure Through Hypergrowth'
+summary: 'Built and led infrastructure teams supporting explosive growth from 30 to 350+ engineers through IPO and $3B+ valuation. Created production K8s platform from scratch enabling continuous deployment at scale. Led 40% cloud cost reduction during COVID while completing $1M+ acquisition migration with half the people and one-third the budget. Created twice-yearly Hackathons and ACV Tech Talks program with 128+ presentations by 75 engineers.'
 technologies: ['Kubernetes', 'AWS', 'DevOps', 'Automation', 'SRE', 'Mentoring']
 impact: 'Supported infrastructure growth from 30 to 350+ engineers through IPO. Led 40% cost reduction while taking on major migration.'
 year: '2018-2022'
+order: 1
 tags: ['major', 'serious', 'infrastructure', 'leadership', 'scale', 'kubernetes']
 ---
 

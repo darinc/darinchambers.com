@@ -1,9 +1,11 @@
 ---
 id: creating-revenue-streams
 title: 'Creating New Product Categories & Revenue Streams'
+summary: 'Invented broadcast product that became 30% of company revenue within one year. Built patented distributed caching system (US Patent 7739332) saving hundreds of thousands monthly. Scaled from 30 to 20,000+ video sources with 99.99% reliability—systems still powering traffic cameras nationwide 15+ years later.'
 technologies: ['Java', 'Video Processing', 'Distributed Systems', 'Caching', 'Patents']
 impact: 'Created product that became 30% of company revenue. Built systems still powering traffic cameras nationwide today.'
 year: '2003-2011'
+order: 4
 tags: ['major', 'serious', 'patents', 'revenue-generation', 'video-streaming', 'innovation']
 ---
 

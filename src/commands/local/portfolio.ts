@@ -70,6 +70,14 @@ Examples:
           }
         }
 
+        // Sort projects by order field (ascending), then by title as fallback
+        projects.sort((a, b) => {
+          if (a.order !== b.order) {
+            return a.order - b.order;
+          }
+          return a.title.localeCompare(b.title);
+        });
+
         // Handle --tags flag
         if (hasTags) {
           // If --tags has no value, list all available tags

@@ -8,10 +8,10 @@ With 30+ years of experience in the technology industry, I specialize in buildin
 
 ## Expertise
 
-- Artificial Intelligence & Machine Learning
-- Distributed Systems Architecture
 - Software Engineering & Development
 - Technical Leadership & Innovation
+- Artificial Intelligence & Machine Learning
+- Distributed Systems Architecture
 - Developer Tools & Platforms
 
 ## Experience
@@ -20,7 +20,7 @@ Throughout my career, I've led teams, architected complex systems, and built pro
 
 ## Philosophy
 
-I believe in combining innovation with pragmatism—building what's next while ensuring it stands on rock-solid foundations. The future is built by those who understand both the art of the possible and the science of the reliable.
+I focus on the bridge between "what's possible" and "what's practical," ensuring that visionary concepts are realized as dependable, real-world solutions. The future is built by those who understand both the art of the possible and the science of the reliable.
 
 ---
 

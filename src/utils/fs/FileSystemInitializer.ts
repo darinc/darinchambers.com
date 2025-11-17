@@ -1,16 +1,3 @@
-// Import content markdown files
-import aboutMd from '../../content/about.md?raw';
-// Import blog markdown files
-import buildingSite from '../../content/blog/2025-11-07-01-building-this-site-ai-assisted-development.md?raw';
-import trickRocks from '../../content/blog/2025-11-07-02-we-trick-rocks-into-thinking.md?raw';
-import vibeCodeGraph from '../../content/blog/2025-11-09-01-vibe-coding-graph-library-one-week.md?raw';
-import contactMd from '../../content/contact.md?raw';
-import helpMd from '../../content/help.md?raw';
-// Import portfolio markdown files
-import creatingRevenueStreams from '../../content/portfolio/creating-revenue-streams.md?raw';
-import developerProductivity from '../../content/portfolio/developer-productivity.md?raw';
-import inventingHardwareSoftware from '../../content/portfolio/inventing-hardware-software.md?raw';
-import scalingHypergrowth from '../../content/portfolio/scaling-hypergrowth.md?raw';
 import type { FileSystemNode } from './types';
 
 export class FileSystemInitializer {
@@ -40,6 +27,69 @@ export class FileSystemInitializer {
       modifiedTime: new Date(),
       isHidden,
     };
+  }
+
+  /**
+   * Dynamically load all blog markdown files using Vite's import.meta.glob
+   */
+  private static loadBlogFiles(): Map<string, FileSystemNode> {
+    const blogFiles: Record<string, { default: string }> = import.meta.glob(
+      '../../content/blog/*.md',
+      {
+        query: '?raw',
+        eager: true,
+      }
+    );
+
+    const blogNodes = new Map<string, FileSystemNode>();
+    for (const [key, module] of Object.entries(blogFiles)) {
+      const filename = key.split('/').pop()!;
+      const content = module.default;
+      blogNodes.set(filename, this.createFileNode(filename, content));
+    }
+    return blogNodes;
+  }
+
+  /**
+   * Dynamically load all portfolio markdown files using Vite's import.meta.glob
+   */
+  private static loadPortfolioFiles(): Map<string, FileSystemNode> {
+    const portfolioFiles: Record<string, { default: string }> = import.meta.glob(
+      '../../content/portfolio/*.md',
+      {
+        query: '?raw',
+        eager: true,
+      }
+    );
+
+    const portfolioNodes = new Map<string, FileSystemNode>();
+    for (const [key, module] of Object.entries(portfolioFiles)) {
+      const filename = key.split('/').pop()!;
+      const content = module.default;
+      portfolioNodes.set(filename, this.createFileNode(filename, content));
+    }
+    return portfolioNodes;
+  }
+
+  /**
+   * Dynamically load root content markdown files using Vite's import.meta.glob
+   */
+  private static loadContentFiles(): Map<string, FileSystemNode> {
+    const contentFiles: Record<string, { default: string }> = import.meta.glob(
+      '../../content/*.md',
+      {
+        query: '?raw',
+        eager: true,
+      }
+    );
+
+    const contentNodes = new Map<string, FileSystemNode>();
+    for (const [key, module] of Object.entries(contentFiles)) {
+      const filename = key.split('/').pop()!;
+      const content = module.default;
+      contentNodes.set(filename, this.createFileNode(filename, content));
+    }
+    return contentNodes;
   }
 
   public static createDefaultStructure(): FileSystemNode {
@@ -135,51 +185,29 @@ Type 'blog' to read posts.
       )
     );
 
-    // /home/darin/blog directory with markdown blog posts
+    // /home/darin/blog directory with dynamically loaded markdown blog posts
     const blog = this.createDirectoryNode('blog');
     darin.children!.set('blog', blog);
-    blog.children!.set(
-      '2025-11-07-01-building-this-site-ai-assisted-development.md',
-      this.createFileNode(
-        '2025-11-07-01-building-this-site-ai-assisted-development.md',
-        buildingSite
-      )
-    );
-    blog.children!.set(
-      '2025-11-07-02-we-trick-rocks-into-thinking.md',
-      this.createFileNode('2025-11-07-02-we-trick-rocks-into-thinking.md', trickRocks)
-    );
-    blog.children!.set(
-      '2025-11-09-01-vibe-coding-graph-library-one-week.md',
-      this.createFileNode('2025-11-09-01-vibe-coding-graph-library-one-week.md', vibeCodeGraph)
-    );
+    const blogFiles = this.loadBlogFiles();
+    for (const [filename, fileNode] of blogFiles) {
+      blog.children!.set(filename, fileNode);
+    }
 
-    // /home/darin/content directory with markdown content files
+    // /home/darin/content directory with dynamically loaded markdown content files
     const content = this.createDirectoryNode('content');
     darin.children!.set('content', content);
-    content.children!.set('about.md', this.createFileNode('about.md', aboutMd));
-    content.children!.set('contact.md', this.createFileNode('contact.md', contactMd));
-    content.children!.set('help.md', this.createFileNode('help.md', helpMd));
+    const contentFiles = this.loadContentFiles();
+    for (const [filename, fileNode] of contentFiles) {
+      content.children!.set(filename, fileNode);
+    }
 
-    // /home/darin/portfolio directory with markdown portfolio files
+    // /home/darin/portfolio directory with dynamically loaded markdown portfolio files
     const portfolio = this.createDirectoryNode('portfolio');
     darin.children!.set('portfolio', portfolio);
-    portfolio.children!.set(
-      'inventing-hardware-software.md',
-      this.createFileNode('inventing-hardware-software.md', inventingHardwareSoftware)
-    );
-    portfolio.children!.set(
-      'creating-revenue-streams.md',
-      this.createFileNode('creating-revenue-streams.md', creatingRevenueStreams)
-    );
-    portfolio.children!.set(
-      'developer-productivity.md',
-      this.createFileNode('developer-productivity.md', developerProductivity)
-    );
-    portfolio.children!.set(
-      'scaling-hypergrowth.md',
-      this.createFileNode('scaling-hypergrowth.md', scalingHypergrowth)
-    );
+    const portfolioFiles = this.loadPortfolioFiles();
+    for (const [filename, fileNode] of portfolioFiles) {
+      portfolio.children!.set(filename, fileNode);
+    }
 
     // /usr directory
     const usr = this.createDirectoryNode('usr');

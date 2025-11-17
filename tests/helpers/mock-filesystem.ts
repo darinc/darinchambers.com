@@ -118,7 +118,9 @@ This is test content.`,
                             content: `---
 id: test-project
 title: Test Project
+summary: A test portfolio project
 year: 2024
+order: 1
 technologies: ['TypeScript', 'React']
 impact: Test impact
 ---
@@ -400,7 +402,9 @@ export function createPortfolioFileSystem(): FileSystemService {
                             content: `---
 id: test-project
 title: Test Project
+summary: A test portfolio project
 year: 2024
+order: 1
 technologies: ['TypeScript', 'React']
 impact: Test impact
 ---

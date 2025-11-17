@@ -1,8 +1,8 @@
 ---
 title: 'Vibe Coding a Graph Library in One Week'
-date: '2025-11-09'
+date: '2025-11-16'
 tags: ['Open-Source', 'Visualization', 'TypeScript']
-summary: 'What happens when you spend a week building a zero-dependency SVG graph library just for the joy of it? You get SVG-Graph-Network—a love letter to the craft of software engineering.'
+summary: 'What happens when you spend a week building a zero-dependency SVG graph library with force-directed physics and touch-optimized gestures just for the joy of it? You get SVG-Graph-Network—a love letter to the craft of software engineering that explores vibe coding, technical excellence, and why the best code brings joy.'
 ---
 
 Sometimes you build things not because you need them, but because building them brings you joy. That's exactly what happened with [SVG-Graph-Network](https://github.com/darinc/SVG-Graph-Network)—a graph visualization library I vibe-coded in my spare time over the course of one week.

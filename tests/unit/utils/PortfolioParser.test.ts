@@ -7,7 +7,9 @@ describe('PortfolioParser', () => {
       const content = `---
 id: test-project
 title: Test Project
+summary: A test project for validating parser functionality
 year: 2024
+order: 1
 technologies: [TypeScript, React]
 impact: Improved productivity by 50%
 ---
@@ -21,7 +23,9 @@ This is the project description.`;
       expect(result.frontmatter).toEqual({
         id: 'test-project',
         title: 'Test Project',
+        summary: 'A test project for validating parser functionality',
         year: '2024',
+        order: 1,
         technologies: ['TypeScript', 'React'],
         impact: 'Improved productivity by 50%',
       });
@@ -32,7 +36,9 @@ This is the project description.`;
       const content = `---
 id: test-project
 title: Test Project
+summary: A test project with tags
 year: 2024
+order: 1
 technologies: [TypeScript, React]
 tags: [major, serious, open-source]
 ---
@@ -46,7 +52,9 @@ This is the project description.`;
       expect(result.frontmatter).toEqual({
         id: 'test-project',
         title: 'Test Project',
+        summary: 'A test project with tags',
         year: '2024',
+        order: 1,
         technologies: ['TypeScript', 'React'],
         tags: ['major', 'serious', 'open-source'],
       });
@@ -56,7 +64,9 @@ This is the project description.`;
       const content = `---
 id: test-project
 title: Test Project
+summary: A test project without impact
 year: 2024
+order: 1
 technologies: [TypeScript]
 ---
 
@@ -67,7 +77,9 @@ Description`;
       expect(result.frontmatter).toEqual({
         id: 'test-project',
         title: 'Test Project',
+        summary: 'A test project without impact',
         year: '2024',
+        order: 1,
         technologies: ['TypeScript'],
       });
     });
@@ -76,7 +88,9 @@ Description`;
       const content = `---
 id: test
 title: Test
+summary: Test with quoted technologies
 year: 2024
+order: 1
 technologies: ["TypeScript", "React", "Node.js"]
 ---
 
@@ -91,7 +105,9 @@ Content`;
       const content = `---
 id: test
 title: Test
+summary: Test with single quoted technologies
 year: 2024
+order: 1
 technologies: ['TypeScript', 'React']
 ---
 
@@ -106,7 +122,9 @@ Content`;
       const content = `---
 id: test
 title: Test
+summary: Test with spaced technologies
 year: 2024
+order: 1
 technologies: [ TypeScript , React , Node.js ]
 ---
 
@@ -121,7 +139,9 @@ Content`;
       const content = `---
 id: test
 title: Test
+summary: Test with empty technologies
 year: 2024
+order: 1
 technologies: []
 ---
 
@@ -136,7 +156,9 @@ Content`;
       const content = `---
 id: "test-project"
 title: 'Test Project'
+summary: "Test summary"
 year: "2024"
+order: 1
 technologies: [TypeScript]
 impact: "High impact"
 ---
@@ -147,6 +169,7 @@ Content`;
 
       expect(result.frontmatter.id).toBe('test-project');
       expect(result.frontmatter.title).toBe('Test Project');
+      expect(result.frontmatter.summary).toBe('Test summary');
       expect(result.frontmatter.year).toBe('2024');
       expect(result.frontmatter.impact).toBe('High impact');
     });
@@ -248,7 +271,9 @@ Content`;
       const content = `---
 id: test
 title: Test
+summary: Test with multiline content
 year: 2024
+order: 1
 technologies: [TypeScript]
 ---
 
@@ -268,7 +293,9 @@ technologies: [TypeScript]
       const content = `---
 id: test
 title: Test
+summary: Test with whitespace trimming
 year: 2024
+order: 1
 technologies: [TypeScript]
 ---
 
@@ -288,7 +315,9 @@ Description here
 id: test
 invalid line without colon
 title: Test
+summary: Test with invalid lines
 year: 2024
+order: 1
 technologies: [TypeScript]
 ---
 
@@ -307,7 +336,9 @@ Content`;
       const content = `---
 id: inventing-hardware-software
 title: Inventing Hardware + Software Solutions
+summary: Developed machine learning systems that improved processing
 year: 2024
+order: 1
 technologies: [Python, TensorFlow, AWS]
 impact: Reduced processing time by 40%
 ---
@@ -321,11 +352,13 @@ Developed machine learning systems.`;
       expect(result).toEqual({
         id: 'inventing-hardware-software',
         title: 'Inventing Hardware + Software Solutions',
+        summary: 'Developed machine learning systems that improved processing',
         description:
           '# Inventing Hardware + Software Solutions\n\nDeveloped machine learning systems.',
         technologies: ['Python', 'TensorFlow', 'AWS'],
         impact: 'Reduced processing time by 40%',
         year: '2024',
+        order: 1,
         tags: undefined,
       });
     });
@@ -335,7 +368,9 @@ Developed machine learning systems.`;
       const content = `---
 id: test-project
 title: Test Project
+summary: A test project showcasing tag functionality
 year: 2024
+order: 1
 technologies: [TypeScript, React]
 tags: [major, serious, open-source]
 impact: Improved team productivity
@@ -350,10 +385,12 @@ This is a test project.`;
       expect(result).toEqual({
         id: 'test-project',
         title: 'Test Project',
+        summary: 'A test project showcasing tag functionality',
         description: '# Test Project\n\nThis is a test project.',
         technologies: ['TypeScript', 'React'],
         impact: 'Improved team productivity',
         year: '2024',
+        order: 1,
         tags: ['major', 'serious', 'open-source'],
       });
     });
@@ -363,7 +400,9 @@ This is a test project.`;
       const content = `---
 id: actual-project-id
 title: Project
+summary: Testing ID override behavior
 year: 2024
+order: 1
 technologies: [TypeScript]
 ---
 
@@ -394,7 +433,9 @@ Content`;
       const content = `---
 id: project
 title: Project
+summary: A simple project
 year: 2024
+order: 1
 technologies: [TypeScript]
 ---
 
@@ -410,7 +451,9 @@ Description`;
       const content = `---
 id: my-project
 title: My Project
+summary: My test project
 year: 2024
+order: 1
 technologies: [TypeScript]
 ---
 

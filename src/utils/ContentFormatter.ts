@@ -22,17 +22,13 @@ export class ContentFormatter {
 
     const items = projects
       .map((project, index) => {
-        const tech = project.technologies.join(', ');
-        const impact = project.impact ? `\n\n**Impact:** ${project.impact}` : '';
         const tags =
           project.tags?.map((t: string) => this.formatClickableTag(t, 'portfolio')).join(' ') ?? '';
         const tagsLine = tags ? `\n\n**Tags:** ${tags}` : '';
 
         return `### <a href="/portfolio/${project.id}" data-command="portfolio ${project.id}">${index + 1}. ${project.title} (${project.year})</a>
 
-${project.description}
-
-**Technologies:** ${tech}${impact}${tagsLine}
+${project.summary}${tagsLine}
 `;
       })
       .join('\n\n---\n\n');

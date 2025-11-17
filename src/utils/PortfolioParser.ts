@@ -3,9 +3,11 @@ import type { Project } from '../types/portfolio';
 export interface PortfolioFrontmatter {
   id: string;
   title: string;
+  summary: string;
   technologies: string[];
   impact?: string;
   year: string;
+  order: number;
   tags?: string[];
 }
 
@@ -22,7 +24,9 @@ function isPortfolioFrontmatter(data: unknown): data is PortfolioFrontmatter {
   return (
     typeof obj.id === 'string' &&
     typeof obj.title === 'string' &&
+    typeof obj.summary === 'string' &&
     typeof obj.year === 'string' &&
+    typeof obj.order === 'number' &&
     Array.isArray(obj.technologies) &&
     obj.technologies.every((tech) => typeof tech === 'string') &&
     (obj.impact === undefined || typeof obj.impact === 'string') &&
@@ -70,7 +74,7 @@ export class PortfolioParser {
     const markdownLines = lines.slice(endIndex + 1);
 
     // Parse frontmatter
-    const frontmatter: Record<string, string | string[]> = {};
+    const frontmatter: Record<string, string | string[] | number> = {};
     for (const line of frontmatterLines) {
       const colonIndex = line.indexOf(':');
       if (colonIndex === -1) continue;
@@ -88,7 +92,15 @@ export class PortfolioParser {
           .filter((item) => item.length > 0);
       } else {
         // Remove quotes if present
-        frontmatter[key] = value.replace(/^["']|["']$/g, '');
+        const stringValue = value.replace(/^["']|["']$/g, '');
+        // Try to parse as number only for 'order' field
+        // (year should stay as string since it can be ranges like "2018-2022")
+        if (key === 'order') {
+          const numValue = Number(stringValue);
+          frontmatter[key] = !isNaN(numValue) ? numValue : stringValue;
+        } else {
+          frontmatter[key] = stringValue;
+        }
       }
     }
 
@@ -97,7 +109,9 @@ export class PortfolioParser {
       const missing: string[] = [];
       if (!frontmatter.id) missing.push('id');
       if (!frontmatter.title) missing.push('title');
+      if (!frontmatter.summary) missing.push('summary');
       if (!frontmatter.year) missing.push('year');
+      if (typeof frontmatter.order !== 'number') missing.push('order');
       if (!Array.isArray(frontmatter.technologies)) missing.push('technologies');
 
       throw new Error(
@@ -125,10 +139,12 @@ export class PortfolioParser {
     return {
       id,
       title: frontmatter.title,
+      summary: frontmatter.summary,
       description: markdown,
       technologies: frontmatter.technologies,
       impact: frontmatter.impact,
       year: frontmatter.year,
+      order: frontmatter.order,
       tags: frontmatter.tags,
     };
   }

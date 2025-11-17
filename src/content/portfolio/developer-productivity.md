@@ -1,9 +1,11 @@
 ---
 id: developer-productivity
 title: 'Building Developer Productivity Platforms'
+summary: 'Built "Push Button Start" platform creating production-ready microservices in under 15 minutes with complete CICD, K8s deployment, and monitoring. Improved release success from 50% to 95% through comprehensive staging infrastructure. Reduced cloud costs by 40% while leading acquisition migration under budget.'
 technologies: ['Kubernetes', 'Docker', 'Jenkins', 'Helm', 'CICD', 'Automation']
 impact: 'Push Button Start: Working K8s deployment in <15 min. Improved release success from 50% to 95%.'
 year: '2018-2022'
+order: 3
 tags: ['major', 'serious', 'infrastructure', 'automation', 'kubernetes', 'devops']
 ---
 

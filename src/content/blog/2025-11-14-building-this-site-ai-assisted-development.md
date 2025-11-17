@@ -1,8 +1,8 @@
 ---
 title: 'Building This Site: A Love Letter to AI-Assisted Development'
-date: '2025-11-07'
-tags: ['AI', 'Developer-Experience', 'Web-Development']
-summary: 'How I went from vision to a fully-tested, production-ready personal site using AI as a collaborative partner—and why this workflow fills me with joy.'
+date: '2025-11-16'
+tags: ['AI', 'web-development', 'portfolio', 'terminal']
+summary: 'How I went from vision to a fully-tested, production-ready personal site with 1162 passing tests using AI as a collaborative partner—exploring conversational development, the joy of flow state, and why this workflow demonstrates that AI amplifies expertise rather than replacing it, making best practices accessible and achievable.'
 ---
 
 After 30+ years in software engineering, I thought I'd seen every development workflow. Then I built this site, and I'm genuinely giddy about the experience.

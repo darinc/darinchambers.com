@@ -1,0 +1,60 @@
+---
+title: 'We Trick Rocks Into Thinking'
+date: '2025-11-15'
+tags: ['computers', 'musings', 'memes']
+summary: 'A short meditation on the absurd miracle that is computing.  Tricking rocks to think by flattening them and adding lightning.  Exploring the tower of abstractions from physics to code.'
+---
+
+There's a meme that's been bouncing around the internet for years:
+
+> "If you ever code something that feels like a hack but it works, just remember that a CPU is literally a rock that we tricked into thinking."
+
+And then the follow-up:
+
+> "Not to oversimplify: first you have to flatten the rock and put lightning inside it."
+
+## The Magic We Take for Granted
+
+We take sand—silicon dioxide, literally beach sand—purify it, flatten it into wafers, etch microscopic patterns onto it with light, dope it with impurities, and then run electricity through it in very specific patterns.
+
+And, almost magically, this creates machines that can:
+
+- Store our memories
+- Simulate entire universes
+- Connect billions of people across the planet
+- Generate art, music, and now even conversations
+- Help us land robots on other planets
+
+## The Stack of Marvels
+
+Every time you write code, you're standing on top of the most ridiculous tower of abstractions:
+
+1. **Physics** - electrons moving through silicon
+2. **Transistors** - switches made from semiconductor magic
+3. **Logic gates** - AND, OR, NOT built from transistors
+4. **CPU instructions** - arithmetic and memory operations
+5. **Assembly** - human-readable machine code
+6. **Operating systems** - managing the chaos
+7. **High-level languages** - C, Java, Go, Python, Javascript, TypeScript, Rust
+8. **Frameworks** - abstractions on abstractions
+9. **Your code** - solving real problems
+
+And at the very bottom? Rocks with lightning in them.
+
+## Why This Still Matters
+
+In our day-to-day work, we deal with bugs, deadlines, technical debt, production incidents. We get frustrated when things don't work. We take for granted that pressing keys on a keyboard, and now conversing with computers somehow pokes this entire stack of turtles all the way to down make pixels appear on a screen.
+
+But sometimes it's worth stepping back and appreciating the sheer _impossibility_ of what we do.
+
+The next time you're debugging a gnarly issue at 2 AM, or refactoring legacy code, or wrestling with a complex algorithm, remember:
+
+You're not just pushing electrons around.
+
+You're instructing thinking rocks to do work.
+
+And that's pretty damn magical.
+
+---
+
+_P.S. Yes, modern CPUs are made from highly purified silicon with intricate manufacturing processes involving photolithography, chemical vapor deposition, ion implantation, and other incredibly sophisticated techniques. Check out this video! [ASML lithography](https://www.youtube.com/watch?v=9RZreu5z_Gc). But at the end of the day? We flattened some rocks and put lightning in them. And they think._
