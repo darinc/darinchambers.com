@@ -85,20 +85,37 @@ export function createMockFileSystem(): FileSystemService {
                       type: 'directory',
                       children: new Map([
                         [
-                          'test-post.md',
+                          '2024-01-01-test-post.md',
                           {
-                            name: 'test-post.md',
+                            name: '2024-01-01-test-post.md',
                             type: 'file',
                             content: `---
 title: Test Post
 date: 2024-01-01
 summary: A test blog post
-tags: test, blog
+tags: [test, blog]
 ---
 
 # Test Post
 
 This is test content.`,
+                          },
+                        ],
+                        [
+                          '2024-01-02-my-post-123.md',
+                          {
+                            name: '2024-01-02-my-post-123.md',
+                            type: 'file',
+                            content: `---
+title: My Post 123
+date: 2024-01-02
+summary: Another test blog post
+tags: [test, example]
+---
+
+# My Post 123
+
+This is another test post for integration testing.`,
                           },
                         ],
                       ]),
@@ -337,20 +354,37 @@ export function createBlogFileSystem(): FileSystemService {
                       type: 'directory',
                       children: new Map([
                         [
-                          'test-post.md',
+                          '2024-01-01-test-post.md',
                           {
-                            name: 'test-post.md',
+                            name: '2024-01-01-test-post.md',
                             type: 'file',
                             content: `---
 title: Test Post
 date: 2024-01-01
 summary: A test blog post
-tags: test, blog
+tags: [test, blog]
 ---
 
 # Test Post
 
 This is test content.`,
+                          },
+                        ],
+                        [
+                          '2024-01-02-my-post-123.md',
+                          {
+                            name: '2024-01-02-my-post-123.md',
+                            type: 'file',
+                            content: `---
+title: My Post 123
+date: 2024-01-02
+summary: Another test blog post
+tags: [test, example]
+---
+
+# My Post 123
+
+This is another test post for integration testing.`,
                           },
                         ],
                       ]),

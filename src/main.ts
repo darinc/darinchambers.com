@@ -253,7 +253,7 @@ Try 'about' to learn more, 'portfolio' to see my work, or explore with 'ls'.
 terminal.writeWelcome(welcomeMessage);
 
 // Initialize router for URL-based navigation
-const router = new Router(terminal);
+const router = new Router(terminal, fileSystem);
 
 // Connect router to terminal for URL sync when typing commands
 terminal.setRouter(router);

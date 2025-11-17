@@ -5,7 +5,10 @@
  * Maps URLs to terminal commands and keeps the address bar in sync with navigation.
  */
 
+import { PATHS } from '../constants';
+import { BlogParser } from './BlogParser';
 import type { Terminal } from '../components/Terminal';
+import type { IFileSystem } from './fs/IFileSystem';
 
 interface Route {
   pattern: RegExp;
@@ -17,14 +20,17 @@ export class Router {
   private routes: Route[];
   private isNavigating = false;
   private onRouteChangeCallback: ((command: string) => void) | null = null;
+  private fileSystem: IFileSystem;
 
   /**
    * Creates a new Router instance.
    *
    * @param terminal Terminal instance for command execution
+   * @param fileSystem File system for validating blog posts and portfolio items
    */
-  constructor(terminal: Terminal) {
+  constructor(terminal: Terminal, fileSystem: IFileSystem) {
     this.terminal = terminal;
+    this.fileSystem = fileSystem;
     this.routes = this.initializeRoutes();
     this.setupListeners();
   }
@@ -175,6 +181,28 @@ export class Router {
   }
 
   /**
+   * Get all valid blog post IDs from the file system.
+   * @returns Set of valid blog post IDs
+   */
+  private getValidBlogPostIds(): Set<string> {
+    try {
+      const blogDir = PATHS.CONTENT_BLOG;
+      const files = this.fileSystem.list(blogDir);
+      const blogFiles = files.filter((f) => f.endsWith('.md'));
+
+      const validIds = new Set<string>();
+      for (const filename of blogFiles) {
+        const id = BlogParser.getIdFromFilename(filename);
+        validIds.add(id);
+      }
+      return validIds;
+    } catch {
+      // If we can't read the blog directory, return empty set
+      return new Set();
+    }
+  }
+
+  /**
    * Get the route path for a given command.
    * Useful for updating URL when user types commands directly.
    *
@@ -187,7 +215,15 @@ export class Router {
     // Handle blog post commands
     if (trimmed.startsWith('blog ') && !trimmed.includes('--tag')) {
       const postId = trimmed.substring(5).trim();
-      return `/blog/${postId}`;
+
+      // Validate that the blog post exists before returning the path
+      const validIds = this.getValidBlogPostIds();
+      if (validIds.has(postId)) {
+        return `/blog/${postId}`;
+      }
+
+      // If the blog post doesn't exist, don't return a path
+      return null;
     }
 
     // Handle portfolio commands with tag filtering

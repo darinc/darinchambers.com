@@ -171,22 +171,30 @@ export class TerminalOutput {
 
   /**
    * Public method to perform scroll behavior.
-   * Uses double requestAnimationFrame to ensure HTML content is fully laid out.
+   * Uses triple requestAnimationFrame plus setTimeout to ensure HTML content is fully laid out.
+   * This is especially important for complex HTML content like blog posts with images and code blocks.
    *
    * @param explicitBehavior Scroll behavior ('top' scrolls to command, 'bottom' or undefined scrolls to bottom)
    */
   performScrollBehavior(explicitBehavior?: 'top' | 'bottom'): void {
-    // Use double RAF to ensure content is fully laid out before scrolling
+    // Use triple RAF plus setTimeout to ensure content is fully laid out before scrolling
     // First RAF: browser schedules a paint
-    // Second RAF: paint has completed, layout is stable
+    // Second RAF: paint has completed, layout is beginning
+    // Third RAF: layout should be stable
+    // setTimeout: gives additional time for complex content (images, code blocks, etc.)
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        if (explicitBehavior === 'top') {
-          this.scrollToCommand();
-        } else {
-          // Default to bottom for classic terminal behavior
-          this.scrollToBottom();
-        }
+        requestAnimationFrame(() => {
+          // Add a small timeout to ensure complex HTML is fully laid out
+          setTimeout(() => {
+            if (explicitBehavior === 'top') {
+              this.scrollToCommand();
+            } else {
+              // Default to bottom for classic terminal behavior
+              this.scrollToBottom();
+            }
+          }, 50);
+        });
       });
     });
   }

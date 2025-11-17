@@ -18,7 +18,7 @@ describe('Router and Navigation Integration', () => {
     setupMockLocalStorage();
     setupMockLocation();
     context = setupCompleteTerminal();
-    router = new Router(context.terminal);
+    router = new Router(context.terminal, context.fileSystem);
   });
 
   afterEach(() => {

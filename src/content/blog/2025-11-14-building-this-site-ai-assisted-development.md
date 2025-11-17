@@ -17,7 +17,7 @@ There's something magical about turning ideas into reality through conversation.
 
 Each question led to exploration, each exploration led to understanding, and each understanding led to better code.
 
-## 872 Passing Tests (For a Personal Site!)
+## 1218 Passing Tests (For a Personal Site!)
 
 Let me tell you what really blew my mind: **872 passing tests**. For a personal website.
 

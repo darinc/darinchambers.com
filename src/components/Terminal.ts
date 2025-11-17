@@ -15,6 +15,8 @@ import type { ThemeManager } from '../utils/ThemeManager';
 // Forward declaration to avoid circular dependency
 interface IRouter {
   syncUrlToCommand(command: string): void;
+  navigate(path: string, clearTerminal?: boolean): void;
+  getPathForCommand(command: string): string | null;
 }
 
 export class Terminal {
@@ -105,6 +107,18 @@ export class Terminal {
           if (button.tagName === 'A') {
             e.preventDefault();
           }
+
+          // If we have a router and this command maps to a route, use router.navigate()
+          // to properly update URL and trigger navigation callbacks
+          if (this.router) {
+            const path = this.router.getPathForCommand(command);
+            if (path) {
+              this.router.navigate(path, false);
+              return;
+            }
+          }
+
+          // Otherwise, execute command directly
           void this.executeCommand(command, false);
         }
       }

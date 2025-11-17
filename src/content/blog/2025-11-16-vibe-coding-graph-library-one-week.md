@@ -1,128 +1,96 @@
 ---
-title: 'Vibe Coding a Graph Library in One Week'
+title: 'Vibe Coding My Way into Best Practices - Building a Graph Library in One Week'
 date: '2025-11-16'
-tags: ['Open-Source', 'Visualization', 'TypeScript']
-summary: 'What happens when you spend a week building a zero-dependency SVG graph library with force-directed physics and touch-optimized gestures just for the joy of it? You get SVG-Graph-Network—a love letter to the craft of software engineering that explores vibe coding, technical excellence, and why the best code brings joy.'
+tags: ['open-source', 'visualization', 'TypeScript', 'vibe-coding', 'claude-code']
+summary: 'What vibe coding looks like taken to an extreme.  Claude Code and I programmed a zero-dependency SVG graph library with force-directed physics and touch-optimized gestures in a week in my spare time.  Why?  I wanted to see how far one could push vibe coding, and I learned a lot along the way.'
 ---
 
-Sometimes you build things not because you need them, but because building them brings you joy. That's exactly what happened with [SVG-Graph-Network](https://github.com/darinc/SVG-Graph-Network)—a graph visualization library I vibe-coded in my spare time over the course of one week.
+I love force directed graphs.  They bring me joy.  I bumped into a really neat proprietary SVG force directed graph library.  Unable to find it as open-source I tasked Gemini Pro 2.5 to build one.  Within the confines of lunchtime we had a plain but working SVG graph library.  What happened over the next week was an exercise in seeing how far we could go with vibe coding.  Check out the <a href="https://darinc.github.io/SVG-Graph-Network/" target="_blank" rel="noopener noreferrer">finished project page</a>. and <a href="https://github.com/darinc/SVG-Graph-Network" target="_blank" rel="noopener noreferrer">code: SVG-Graph-Network</a>.
 
-## What Is "Vibe Coding"?
+## The Lunchtime Project Gets Ambitious
 
-Vibe coding is when you're not building for a deadline, not solving a business problem, not trying to prove anything. You're just... creating. Following your intuition. Building what feels right. It's coding in flow state, driven purely by the joy of making something elegant.
+That "lunchtime project" didn't stay a simple toy. By that first evening, the "vibe" was strong. We had a new dataset, light/dark modes, collapsible legends, and multiple node shapes.
 
-For me, that meant building a graph visualization library from scratch. Zero dependencies. Pure SVG. Just TypeScript, physics, and good engineering practices.
+Then, on Thursday, the project hit its inflection point.
 
-## The Result: SVG-Graph-Network
+We'd just added comprehensive mobile and touch support. The physics kept running while dragging nodes. And then... we wrote the roadmap.
 
-Check out the [live demo](https://darinc.github.io/SVG-Graph-Network/) to see it in action.
+This was the moment "vibe coding" collided with "best practices." The project, which had zero users, was suddenly slated for a full architectural overhaul.
 
-**Key Features:**
+## The Great Refactoring
 
-- **Force-directed physics simulation** with configurable parameters
-- **Zero dependencies** (because sometimes less is more)
-- **Touch-optimized gestures** - pinch-to-zoom, drag, multi-touch support
-- **Dynamic theming** - dark/light modes that switch at runtime
-- **Multiple node shapes** - circles, rectangles, squares, triangles
-- **Event-driven architecture** with dependency injection
-- **Mobile-first design** that scales to desktop
+The initial code was a 1,500-line monolithic "God Object." It worked, but it wasn't _right_.
 
-## The Technical Decisions
+So, we did the "unnecessary" thing and tore it down to the studs.
 
-### Pure SVG, No Canvas
+- **Thursday:** We began an "aggressive architectural refactoring," breaking that huge file into a modular system: a physics engine, a UI manager, a renderer, and an event manager. The main class size was cut by 70%.
+- **Thursday Night:** The vibe turned professional. We added 92 unit tests, a full CI/CD pipeline, and then...
+- **Thursday, 10 PM:** We started the full TypeScript migration.
 
-I chose SVG over Canvas deliberately. SVG gives you:
+## From "Vibe" to "Production-Ready"
 
-- DOM integration (every node is an element)
-- Built-in accessibility features
-- Crisp rendering at any zoom level
-- Easy styling with CSS
-- Simpler event handling
+Friday was a blur. We completed the TypeScript migration and implemented professional-grade APIs for core data and bulk operations. The roadmap was updated: **"Production Readiness Upgrade: 4/10 → 7/10"**
 
-The trade-off? Canvas is faster for thousands of nodes. But for most use cases, SVG's advantages win.
+In 24 hours, the project had gone from a toy to a serious library. We immediately added 38 new methods for selection, highlighting, and camera control.
 
-### Zero Dependencies
+Then we added the _real_ professional infrastructure:
 
-This was a constraint I loved. No D3. No libraries. Just TypeScript and the browser APIs. Why?
+- TypeDoc for API docs
+- Husky pre-commit hooks
+- Lint-staged for quality gates
+- Size-limit for bundle monitoring (it's 19.53KB brotlied, by the way)
 
-- **Learning** - Building from scratch teaches you how things actually work
-- **Bundle size** - The entire library is lean and focused
-- **Control** - No black boxes, no mysterious behaviors
-- **Fun** - There's joy in figuring things out yourself
+## The Day of Deconstruction
 
-### Physics Simulation
+The project was looking good, but the "God Objects" we'd created _during_ the refactor were bothering me. Sunday was the day we paid the technical debt we had just incurred.
 
-The force-directed layout uses a multi-force system:
+We didn't just refactor _one_ God Object; we hunted down _all_ of them.
 
-- **Repulsion** between all nodes (keeps things spread out)
-- **Attraction** along links (keeps connected nodes together)
-- **Type-based grouping** (similar nodes cluster)
-- **Dampening** for stable convergence
+- **The 3,300-line God Object:** Refactored with an EventBus and dependency injection. **Result: 91% complexity reduction.**
+- **The 900-line Renderer:** Decomposed into focused managers. **Result: 78% complexity reduction.**
+- **The 1,000-line Event Manager:** Broken apart. **Result: 80% complexity reduction.**
+- **The 800-line UI Manager:** Split into five components. **Result: 76% complexity reduction.**
 
-Tweaking the physics parameters and watching the graph settle into natural patterns? Pure satisfaction.
+By the end of the day, we had **466 passing tests**, and the architecture was clean, testable, and maintainable.
 
-### Event-Driven Architecture
+## The "Honest README"
 
-Everything is events. Node clicked? Event. Physics updated? Event. Theme changed? Event.
+The sprint finished on Tuesday with a final, crucial commit: we wrote the documentation, which included a section honestly recommending _against_ using this for most production systems. It points everyone to D3.js, Cytoscape, and the other giants.
 
-This made the codebase incredibly flexible. Want to add custom behavior? Subscribe to events. Want to build something on top? The event system has you covered.
+Because that was never the point.
 
-## What I Learned
+This was about the joy of the craft. It was an exercise in seeing how far a developer-AI pair could push a "vibe" and still land on a foundation of rock-solid, professional-grade best practices.
 
-### 1. TypeScript Really Shines
+We "shipped" it on Wednesday by building the GitHub Pages site and, in a final act of dogfooding, using the library itself to visualize its own internal module dependencies.
 
-With full type definitions throughout, the code practically wrote itself. The type system caught bugs before they happened and made refactoring fearless.
-
-### 2. Mobile-First Is Harder Than You Think
-
-Getting touch gestures right—pinch-to-zoom that feels natural, momentum that doesn't overshoot, drag that doesn't conflict with scroll—takes real work. I probably spent a third of the week just on touch interactions.
-
-### 3. Performance Requires Discipline
-
-Even without dependencies, you can write slow code. I had to be deliberate about:
-
-- Minimizing DOM updates
-- Debouncing expensive operations
-- Using requestAnimationFrame for smooth animations
-- Optimizing the physics loop
-
-### 4. Testing Makes Everything Better
-
-Comprehensive testing with Jest meant I could refactor with confidence. When you're vibe coding, you're constantly trying new things. Tests let you experiment without fear.
-
-## The Honest README
-
-Here's what I love most: the README explicitly recommends mature alternatives like D3.js, Cytoscape.js, Vis.js, and Sigma.js for production use. It frames itself honestly:
-
-> "This is an exercise in vibe coding while implementing best practices."
-
-That's the whole point. This wasn't about building the world's best graph library. It was about the joy of building, the satisfaction of implementing best practices, and the pleasure of creating something elegant.
-
-## Why Build Things You Don't "Need"?
-
-After 30+ years in this field, I've learned that the projects you build for yourself often teach you more than the ones you build for money. They're where you:
-
-- **Experiment** without consequences
-- **Learn** without deadlines
-- **Perfect** without compromise
-- **Enjoy** without pressure
-
-SVG-Graph-Network might never power a production system (though it could—it's solid code). But it gave me a week of pure creative joy, taught me the internals of graph physics, and reminded me why I fell in love with programming in the first place.
-
-## Try It Yourself
-
-The [demo](https://darinc.github.io/SVG-Graph-Network/) is live. The [code](https://github.com/darinc/SVG-Graph-Network) is on GitHub. Fork it, break it, improve it, or just use it as inspiration for your own vibe coding projects.
-
-Because at the end of the day, the best code is the code that brings you joy.
+At the end of the day? It's a graph library. But for me, it's a one-week, 100-commit testament to the magic of building things _right_, just for the hell of it.
 
 ---
 
-**Tech Stack:** TypeScript • SVG • Webpack • Jest • Zero Dependencies
-
-**Time to Build:** One week of spare time
-
-**Lines of Code:** Several thousand
-
-**Dependencies:** Zero
-
-**Joy Experienced:** Immeasurable
+<div id="graph-container" style="width: 100%; height: 500px; border: 1px solid #333;"></div>
+<script src="https://darinc.github.io/SVG-Graph-Network/assets/svg-graph-network.js"></script>
+<script>
+  // Simple demo code to show it off
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('graph-container');
+    if (container && window.SVGGraphNetwork) {
+      const graph = new SVGGraphNetwork(container);
+      graph.setData({
+        nodes: [
+          { id: 'blog-post', label: 'My Blog Post' },
+          { id: 'vibe-coding', label: 'Vibe Coding' },
+          { id: 'best-practice', label: 'Best Practices' },
+          { id: 'refactor', label: 'Refactoring' },
+          { id: 'testing', label: '466 Tests!' }
+        ],
+        links: [
+          { source: 'blog-post', target: 'vibe-coding' },
+          { source: 'blog-post', target: 'best-practice' },
+          { source: 'vibe-coding', target: 'best-practice' },
+          { source: 'best-practice', target: 'refactor' },
+          { source: 'best-practice', target: 'testing' }
+        ]
+      });
+    }
+  });
+</script>

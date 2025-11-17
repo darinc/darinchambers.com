@@ -1,9 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Router } from '../../../src/utils/Router';
 import type { Terminal } from '../../../src/components/Terminal';
+import type { IFileSystem } from '../../../src/utils/fs/IFileSystem';
 
 describe('Router', () => {
   let mockTerminal: Terminal;
+  let mockFileSystem: IFileSystem;
   let router: Router;
   let originalLocation: Location;
   let originalHistory: History;
@@ -39,8 +41,30 @@ describe('Router', () => {
       executeCommand: vi.fn(),
     } as unknown as Terminal;
 
+    // Create mock filesystem with test blog posts
+    mockFileSystem = {
+      list: vi.fn((path: string) => {
+        if (path === '/home/darin/blog') {
+          return ['2024-01-01-test-post.md', '2024-01-02-my-post-123.md'];
+        }
+        return [];
+      }),
+      readFile: vi.fn(),
+      exists: vi.fn(),
+      isDirectory: vi.fn(),
+      isFile: vi.fn(),
+      writeFile: vi.fn(),
+      createDirectory: vi.fn(),
+      getCurrentPath: vi.fn(),
+      setCurrentUsername: vi.fn(),
+      getShortPath: vi.fn(),
+      changeDirectory: vi.fn(),
+      getTree: vi.fn(),
+      getNode: vi.fn(),
+    } as unknown as IFileSystem;
+
     // Create router (will set up listeners)
-    router = new Router(mockTerminal);
+    router = new Router(mockTerminal, mockFileSystem);
   });
 
   afterEach(() => {
