@@ -30,7 +30,7 @@ Options:
 Examples:
   alias                # List all aliases
   alias la='ls -a'     # Create an alias
-  alias blog-ai='blog --tag ai'  # Alias with flags`,
+  alias blog-ai='blog --tags ai'  # Alias with flags`,
         };
       }
 

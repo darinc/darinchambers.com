@@ -244,8 +244,8 @@ describe('Router', () => {
       expect(router.getPathForCommand('ddate')).toBeNull();
     });
 
-    it('should ignore blog commands with --tag flag', () => {
-      expect(router.getPathForCommand('blog --tag test')).toBeNull();
+    it('should ignore blog commands with --tags flag', () => {
+      expect(router.getPathForCommand('blog --tags test')).toBeNull();
     });
 
     it('should return /portfolio?tags= for "portfolio --tags" command with single tag', () => {

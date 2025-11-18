@@ -1,7 +1,8 @@
 ---
 title: 'A Love Letter to Developers (and the terminal)'
 date: '2025-11-16'
-tags: ['ai', 'web-development', 'developers', 'terminal', 'craftsmanship', 'invention']
+tags:
+  ['ai', 'claude-code', 'web-development', 'developers', 'terminal', 'craftsmanship', 'invention']
 summary: "I'm an inventor and infra guy, not a front end developer. This is the story of how I built this complex terminal site by delegating the grunt work to an AI assistant.  It's a love letter to the global developer community whose collective code makes these new tools possible.  As of writing this blog post, this personal portfolio website has 1,218 unit tests which became the safety net for pure, creative speed."
 ---
 

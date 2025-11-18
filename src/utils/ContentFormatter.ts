@@ -11,7 +11,7 @@ export class ContentFormatter {
    * Format a tag as a clickable button
    */
   private static formatClickableTag(tag: string, command: 'portfolio' | 'blog'): string {
-    const cmd = command === 'portfolio' ? `portfolio --tags ${tag}` : `blog --tag ${tag}`;
+    const cmd = command === 'portfolio' ? `portfolio --tags ${tag}` : `blog --tags ${tag}`;
     return `<button data-command="${cmd}" class="tag-link">${tag}</button>`;
   }
   /**
@@ -89,7 +89,7 @@ ${post.summary}
 
     const footer = filterTag
       ? '\n\n---\n\n<a href="/blog" data-command="blog">← Back to All Posts</a>'
-      : '\n\n---\n\n**Filter by tag:** Type `blog --tag <tag>`';
+      : '\n\n---\n\n**Filter by tag:** Type `blog --tags <tag>` or `blog --tags` to list all tags';
 
     return `${header}
 

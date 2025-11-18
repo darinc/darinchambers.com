@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.16] - 2025-11-18
+
+### Fixed
+- Blog command now uses `--tags` flag (plural) to match portfolio command
+- Fixed type handling bug that caused error when calling `blog --tags` without a value
+- Tag listing now displays all blog tags with counts when using `blog --tags`
+
+### Changed
+- Updated all documentation and examples to use `blog --tags` instead of `blog --tag`
+
 ## [0.10.15] - 2025-11-18
 
 ### Changed
@@ -809,7 +819,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blog posts stored as individual markdown files with YAML frontmatter
 - BlogParser utility for parsing frontmatter and markdown content
 - /home/darin/blog/ directory in virtual filesystem with blog post files
-- Tag filtering support in blog command (blog --tag <tag>)
+- Tag filtering support in blog command (blog --tags <tag>)
 - Blog posts accessible via cat command (e.g., cat /home/darin/blog/2024-09-15-ai-production-lessons.md)
 
 ### Changed

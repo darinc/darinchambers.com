@@ -531,7 +531,7 @@ const resolved = aliasManager.resolveAlias('ll ~/blog');
 
 // List all aliases
 const aliases = aliasManager.getAllAliases();
-// { ll: 'ls -la', blog-ai: 'blog --tag ai' }
+// { ll: 'ls -la', blog-ai: 'blog --tags ai' }
 ```
 
 ---

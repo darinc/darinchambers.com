@@ -1,7 +1,7 @@
 ---
 title: 'How We Trick Rocks Into Thinking'
 date: '2025-11-15'
-tags: ['computers', 'musings', 'memes']
+tags: ['computers', 'musings', 'memes', 'invention']
 summary: 'A short meditation on the absurd marvel that is computing.  Tricking rocks to think by flattening them and adding lightning.  Exploring the tower of abstractions from physics to code.'
 ---
 

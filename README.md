@@ -218,8 +218,8 @@ Blog posts are stored in `src/content/blog/` as markdown files with YAML frontma
 
 **Tag Naming**: Use hyphens for multi-word tags (e.g., `Web-Development`, `Developer-Experience`)
 
-- Allows filtering without quotes: `blog --tag Web-Development`
-- Quoted tags with spaces still work: `blog --tag "Web Development"`
+- Allows filtering without quotes: `blog --tags Web-Development`
+- Quoted tags with spaces still work: `blog --tags "Web Development"`
 
 Posts are sorted by filename (newest first), so the sequence number determines the order for posts published on the same day.
 

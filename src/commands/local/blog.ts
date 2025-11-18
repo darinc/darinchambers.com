@@ -3,7 +3,7 @@
  *
  * Lists and displays blog posts with support for filtering by tags. Shows post summaries
  * with dates and tags when listing, or renders full post content with markdown formatting
- * when a specific post is requested. Supports --tag flag for filtering posts by category.
+ * when a specific post is requested. Supports --tags flag for filtering posts by category.
  */
 import { PATHS } from '../../constants';
 import { BlogParser } from '../../utils/BlogParser';
@@ -29,14 +29,16 @@ Description:
   List and read blog posts
 
 Options:
-  --tag <tag>          Filter posts by tag
+  --tags               List all available tags
+  --tags <tag>         Filter posts by tag
 
 Examples:
   blog                          # List all posts
   blog 1                        # Read post #1
-  blog --tag AI                 # Filter by single-word tag
-  blog --tag Web-Development    # Filter by hyphenated tag
-  blog --tag "Web Development"  # Filter by quoted multi-word tag
+  blog --tags                   # List all tags
+  blog --tags AI                # Filter by single-word tag
+  blog --tags Web-Development   # Filter by hyphenated tag
+  blog --tags "Web Development" # Filter by quoted multi-word tag
   blog post-id                  # Read specific post by ID`,
         };
       }
@@ -52,7 +54,8 @@ Examples:
           .reverse(); // Newest first
 
         // Parse command arguments
-        const filterTag = cmdArgs.getFlag('tag') as string | undefined;
+        const tagsValue = cmdArgs.getFlag('tags');
+        const hasTags = cmdArgs.hasFlag('tags');
         const postId = cmdArgs.getPositional(0);
 
         // Parse all blog posts
@@ -61,6 +64,42 @@ Examples:
           const content = fs.readFile(`${blogDir}/${filename}`);
           const post = BlogParser.parseBlogPost(filename, content);
           posts.push(post);
+        }
+
+        // Handle --tags flag
+        if (hasTags) {
+          // If --tags has no value, list all available tags
+          if (typeof tagsValue === 'boolean' || !tagsValue) {
+            const allTags = new Set<string>();
+            const tagCounts = new Map<string, number>();
+
+            posts.forEach((post) => {
+              post.tags?.forEach((tag) => {
+                allTags.add(tag);
+                tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+              });
+            });
+
+            const sortedTags = Array.from(allTags).sort();
+
+            const tagList = sortedTags
+              .map((tag) => {
+                const count = tagCounts.get(tag) ?? 0;
+                return `- <button data-command="blog --tags ${tag}" class="tag-link">${tag}</button> (${count} post${count !== 1 ? 's' : ''})`;
+              })
+              .join('\n');
+
+            const markdown = `# Blog Tags
+
+${tagList}
+
+---
+
+**Usage:** Type \`blog --tags <tag>\` to filter posts`;
+
+            const html = MarkdownService.render(markdown);
+            return { output: html, html: true, scrollBehavior: 'top' };
+          }
         }
 
         // Show specific blog post
@@ -92,6 +131,7 @@ Examples:
 
         // Filter by tag if requested
         let filteredPosts = posts;
+        const filterTag = typeof tagsValue === 'string' ? tagsValue : undefined;
         if (filterTag) {
           filteredPosts = posts.filter((p) =>
             p.tags.some((t) => t.toLowerCase() === filterTag.toLowerCase())

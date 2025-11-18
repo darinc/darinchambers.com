@@ -560,8 +560,8 @@ summary: 'Brief description of the post (1-2 sentences)'
 
 - Use hyphens for multi-word tags: `Web-Development`, `Developer-Experience`
 - Single-word tags need no modification: `AI`, `TypeScript`, `Philosophy`
-- Hyphenated tags can be filtered without quotes: `blog --tag Web-Development`
-- Quoted tags with spaces still work: `blog --tag "Web Development"`
+- Hyphenated tags can be filtered without quotes: `blog --tags Web-Development`
+- Quoted tags with spaces still work: `blog --tags "Web Development"`
 
 Posts are sorted by filename in reverse order (newest first). The sequence number ensures correct ordering when multiple posts share the same date.
 

@@ -76,7 +76,7 @@ describe('FileSystemInitializer', () => {
       const blogDir = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
 
       const expectedPosts = [
-        '2025-11-14-building-this-site-ai-assisted-development.md',
+        '2025-11-14-a-love-letter-to-developers-and-the-terminal.md',
         '2025-11-15-we-trick-rocks-into-thinking.md',
         '2025-11-16-building-an-enterprise-grade-graph-library-in-one-week.md',
       ];
