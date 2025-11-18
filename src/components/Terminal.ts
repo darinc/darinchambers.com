@@ -56,11 +56,30 @@ export class Terminal {
 
   private setupClickHandler(outputElement: HTMLElement): void {
     // Click anywhere in terminal output to focus input
-    outputElement.addEventListener('click', () => {
+    outputElement.addEventListener('click', (e: MouseEvent) => {
       // Don't focus if user has selected text (they may be trying to copy)
       const selection = window.getSelection();
       if (selection && selection.toString().length > 0) {
         return; // User has selected text, don't steal focus
+      }
+
+      // Don't focus if clicking on interactive elements (graphs, buttons, links, etc.)
+      const target = e.target as HTMLElement;
+      const interactiveSelectors = [
+        'svg',
+        'button',
+        'a',
+        'input',
+        'select',
+        'textarea',
+        '[data-graph]',
+        '[data-graph-src]',
+        '.graph-container',
+      ].join(', ');
+
+      const isInteractive = target.closest(interactiveSelectors);
+      if (isInteractive) {
+        return; // User is interacting with content, don't steal focus
       }
 
       this.input.focus();
@@ -293,6 +312,10 @@ export class Terminal {
       } else if (result.html) {
         // Render HTML content with callback for scroll behavior
         this.output.writeHTML(result.output, () => {
+          // Initialize any graphs in the newly rendered HTML (async)
+          if (typeof window.initializeGraphs === 'function') {
+            void window.initializeGraphs();
+          }
           this.output.performScrollBehavior(result.scrollBehavior);
         });
 

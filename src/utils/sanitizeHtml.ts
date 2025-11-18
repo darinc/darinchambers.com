@@ -95,6 +95,12 @@ export function sanitizeHtml(html: string): string {
       'data-color-var',
       'data-theme',
       'data-settings-panel',
+      // Graph visualization attributes
+      'data-graph',
+      'data-graph-src',
+      'data-graph-theme',
+      'data-graph-initialized',
+      'data-graph-error',
       // Inline styles (limited to safe properties)
       'style',
       // Details element

@@ -1,0 +1,388 @@
+{
+  "config": {
+    "title": "Command File Structure",
+    "theme": "dark",
+    "damping": 0.5,
+    "repulsionStrength": 3500,
+    "attractionStrength": 0.01,
+    "showControls": false,
+    "showLegend": false
+  },
+  "data": {
+    "nodes": [
+      {
+        "id": "root",
+        "name": "Commands",
+        "type": "file",
+        "shape": "circle",
+        "size": 30
+      },
+      {
+        "id": "core",
+        "name": "core/",
+        "type": "directory",
+        "shape": "circle",
+        "size": 35
+      },
+      {
+        "id": "core-alias",
+        "name": "alias",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "core-date",
+        "name": "date",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "core-echo",
+        "name": "echo",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "core-env",
+        "name": "env",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "core-export",
+        "name": "export",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "core-history",
+        "name": "history",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "core-render",
+        "name": "render",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "core-unalias",
+        "name": "unalias",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "core-whoami",
+        "name": "whoami",
+        "type": "core",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "fs",
+        "name": "fs/",
+        "type": "filesystem",
+        "shape": "circle",
+        "size": 32
+      },
+      {
+        "id": "fs-cat",
+        "name": "cat",
+        "type": "filesystem",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "fs-cd",
+        "name": "cd",
+        "type": "filesystem",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "fs-ls",
+        "name": "ls",
+        "type": "filesystem",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "fs-pwd",
+        "name": "pwd",
+        "type": "filesystem",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "fs-tree",
+        "name": "tree",
+        "type": "filesystem",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "local",
+        "name": "local/",
+        "type": "local",
+        "shape": "circle",
+        "size": 32
+      },
+      {
+        "id": "local-about",
+        "name": "about",
+        "type": "local",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "local-blog",
+        "name": "blog",
+        "type": "local",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "local-contact",
+        "name": "contact",
+        "type": "local",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "local-portfolio",
+        "name": "portfolio",
+        "type": "local",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "local-settings",
+        "name": "settings",
+        "type": "local",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "novelty",
+        "name": "novelty/",
+        "type": "novelty",
+        "shape": "circle",
+        "size": 28
+      },
+      {
+        "id": "novelty-ddate",
+        "name": "ddate",
+        "type": "novelty",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "novelty-figlet",
+        "name": "figlet",
+        "type": "novelty",
+        "shape": "circle",
+        "size": 20
+      },
+      {
+        "id": "novelty-matrix",
+        "name": "matrix",
+        "type": "novelty",
+        "shape": "circle",
+        "size": 20
+      }
+    ],
+    "links": [
+      {
+        "source": "root",
+        "target": "core",
+        "label": "contains",
+        "weight": 2,
+        "line_type": "solid"
+      },
+      {
+        "source": "root",
+        "target": "fs",
+        "label": "contains",
+        "weight": 2,
+        "line_type": "solid"
+      },
+      {
+        "source": "root",
+        "target": "local",
+        "label": "contains",
+        "weight": 2,
+        "line_type": "solid"
+      },
+      {
+        "source": "root",
+        "target": "novelty",
+        "label": "contains",
+        "weight": 2,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-alias",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-date",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-echo",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-env",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-export",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-history",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-render",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-unalias",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "core-whoami",
+        "label": "core",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "fs",
+        "target": "fs-cat",
+        "label": "filesystem",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "fs",
+        "target": "fs-cd",
+        "label": "filesystem",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "fs",
+        "target": "fs-ls",
+        "label": "filesystem",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "fs",
+        "target": "fs-pwd",
+        "label": "filesystem",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "fs",
+        "target": "fs-tree",
+        "label": "filesystem",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "local",
+        "target": "local-about",
+        "label": "local",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "local",
+        "target": "local-blog",
+        "label": "local",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "local",
+        "target": "local-contact",
+        "label": "local",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "local",
+        "target": "local-portfolio",
+        "label": "local",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "local",
+        "target": "local-settings",
+        "label": "local",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "novelty",
+        "target": "novelty-ddate",
+        "label": "novelty",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "novelty",
+        "target": "novelty-figlet",
+        "label": "novelty",
+        "weight": 1,
+        "line_type": "solid"
+      },
+      {
+        "source": "novelty",
+        "target": "novelty-matrix",
+        "label": "novelty",
+        "weight": 1,
+        "line_type": "solid"
+      }
+    ]
+  }
+}

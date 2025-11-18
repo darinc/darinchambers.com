@@ -78,7 +78,7 @@ describe('FileSystemInitializer', () => {
       const expectedPosts = [
         '2025-11-14-building-this-site-ai-assisted-development.md',
         '2025-11-15-we-trick-rocks-into-thinking.md',
-        '2025-11-16-vibe-coding-graph-library-one-week.md',
+        '2025-11-16-building-an-enterprise-grade-graph-library-in-one-week.md',
       ];
 
       for (const postName of expectedPosts) {

@@ -299,4 +299,117 @@ if (initialCommand) {
 // Initialize matrix rain animation observer
 initMatrixRainObserver();
 
+// Initialize SVG Graph Network visualizations
+// This function finds all elements with data-graph or data-graph-src attributes and initializes them
+async function initializeGraphs(): Promise<void> {
+  // Check if window.SVGGraphNetwork is available
+  if (typeof window.SVGGraphNetwork === 'undefined') {
+    console.warn('SVGGraphNetwork library not loaded');
+    return;
+  }
+
+  // Handle inline data-graph attributes (backward compatibility)
+  const inlineContainers = document.querySelectorAll('[data-graph]');
+  inlineContainers.forEach((container) => {
+    // Check if already initialized
+    if (container.hasAttribute('data-graph-initialized')) {
+      return;
+    }
+
+    const containerElement = container as HTMLElement;
+    const containerId = containerElement.id || 'unknown';
+
+    try {
+      const graphData = container.getAttribute('data-graph');
+      if (!graphData) {
+        console.warn(`Graph container ${containerId} has no data-graph attribute`);
+        return;
+      }
+
+      // The browser automatically decodes HTML entities in attribute values
+      const graphOptions: unknown = JSON.parse(graphData);
+
+      // Allow data-graph-theme attribute to override JSON config theme
+      const themeAttr = container.getAttribute('data-graph-theme');
+      if (
+        themeAttr &&
+        graphOptions &&
+        typeof graphOptions === 'object' &&
+        'config' in graphOptions
+      ) {
+        (graphOptions.config as Record<string, unknown>).theme = themeAttr;
+      }
+
+      // Use the container's ID if it has one, otherwise the library accepts the element
+      // Pass the entire options object (includes data and config) to constructor
+      new window.SVGGraphNetwork(containerElement.id || containerElement, graphOptions);
+
+      // Mark as initialized
+      container.setAttribute('data-graph-initialized', 'true');
+    } catch (error) {
+      console.error(`Failed to initialize graph ${containerId}:`, error);
+      // Mark as initialized anyway to prevent infinite retry loops
+      container.setAttribute('data-graph-initialized', 'true');
+      container.setAttribute('data-graph-error', 'true');
+    }
+  });
+
+  // Handle external data-graph-src attributes (fetch from JSON files)
+  const externalContainers = document.querySelectorAll('[data-graph-src]');
+
+  for (const container of externalContainers) {
+    // Check if already initialized
+    if (container.hasAttribute('data-graph-initialized')) {
+      continue;
+    }
+
+    const containerElement = container as HTMLElement;
+    const containerId = containerElement.id || 'unknown';
+    const src = container.getAttribute('data-graph-src');
+
+    if (!src) {
+      console.warn(`Graph container ${containerId} has no data-graph-src attribute`);
+      continue;
+    }
+
+    try {
+      // Fetch external JSON file
+      const response = await fetch(src);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${src}: ${response.statusText}`);
+      }
+      const graphOptions: unknown = await response.json();
+
+      // Allow data-graph-theme attribute to override JSON config theme
+      const themeAttr = container.getAttribute('data-graph-theme');
+      if (
+        themeAttr &&
+        graphOptions &&
+        typeof graphOptions === 'object' &&
+        'config' in graphOptions
+      ) {
+        (graphOptions.config as Record<string, unknown>).theme = themeAttr;
+      }
+
+      // Initialize the graph
+      // Pass the entire options object (includes data and config) to constructor
+      new window.SVGGraphNetwork(containerElement.id || containerElement, graphOptions);
+
+      // Mark as initialized
+      container.setAttribute('data-graph-initialized', 'true');
+    } catch (error) {
+      console.error(`Failed to initialize graph ${containerId} from ${src}:`, error);
+      // Mark as initialized anyway to prevent infinite retry loops
+      container.setAttribute('data-graph-initialized', 'true');
+      container.setAttribute('data-graph-error', 'true');
+    }
+  }
+}
+
+// Initialize graphs on load
+void initializeGraphs();
+
+// Make initializeGraphs available globally for explicit calls after content loads
+window.initializeGraphs = initializeGraphs;
+
 terminal.focus();

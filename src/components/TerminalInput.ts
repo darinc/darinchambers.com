@@ -207,7 +207,7 @@ export class TerminalInput {
   }
 
   focus(): void {
-    this.inputElement.focus();
+    this.inputElement.focus({ preventScroll: true });
   }
 
   setPrompt(prompt: string): void {

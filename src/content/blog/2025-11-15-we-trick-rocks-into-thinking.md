@@ -1,8 +1,8 @@
 ---
-title: 'We Trick Rocks Into Thinking'
+title: 'How We Trick Rocks Into Thinking'
 date: '2025-11-15'
 tags: ['computers', 'musings', 'memes']
-summary: 'A short meditation on the absurd miracle that is computing.  Tricking rocks to think by flattening them and adding lightning.  Exploring the tower of abstractions from physics to code.'
+summary: 'A short meditation on the absurd marvel that is computing.  Tricking rocks to think by flattening them and adding lightning.  Exploring the tower of abstractions from physics to code.'
 ---
 
 There's a meme that's been bouncing around the internet for years:

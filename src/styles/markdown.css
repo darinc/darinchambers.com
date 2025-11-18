@@ -212,3 +212,38 @@
   outline: 2px solid var(--terminal-accent);
   outline-offset: 2px;
 }
+
+/* Graph visualization container */
+.graph-container {
+  position: relative; /* Required for SVG-Graph-Network controls to overlay properly */
+}
+
+/* Side-by-side layout for content + graph */
+.markdown-output .side-by-side-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 16px 0;
+  align-items: start;
+}
+
+.markdown-output .side-by-side-layout .content-column {
+  /* Text content column */
+}
+
+.markdown-output .side-by-side-layout .graph-column {
+  /* Graph container column */
+  min-height: 400px;
+}
+
+/* Responsive: Stack vertically on mobile */
+@media (max-width: 768px) {
+  .markdown-output .side-by-side-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Show graph first on mobile for visual impact */
+  .markdown-output .side-by-side-layout .graph-column {
+    order: -1;
+  }
+}
