@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.19] - 2025-11-21
+
+### Changed
+- Simplified README from 285 to 114 lines
+- Removed all emojis from README headers
+- Fixed inaccuracies in test counts and flag names
+
+## [0.10.18] - 2025-11-21
+
+### Added
+- SEO: robots.txt and sitemap.xml for search engine crawling
+- Social sharing: Open Graph and Twitter Card meta tags
+
+### Fixed
+- README version badge now matches package.json
+
 ## [0.10.17] - 2025-11-21
 
 ### Added
