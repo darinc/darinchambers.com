@@ -5,7 +5,7 @@
  * with dates and tags when listing, or renders full post content with markdown formatting
  * when a specific post is requested. Supports --tags flag for filtering posts by category.
  */
-import { PATHS } from '../../constants';
+import { MESSAGES, PATHS } from '../../constants';
 import { BlogParser } from '../../utils/BlogParser';
 import { CommandArgs } from '../../utils/CommandArgs';
 import { ContentFormatter } from '../../utils/ContentFormatter';
@@ -66,6 +66,15 @@ Examples:
           posts.push(post);
         }
 
+        // Handle empty blog
+        if (posts.length === 0 && !hasTags && !postId) {
+          const markdown = `# Blog
+
+${MESSAGES.EMPTY_BLOG}`;
+          const html = MarkdownService.render(markdown);
+          return { output: html, html: true, scrollBehavior: 'top' };
+        }
+
         // Handle --tags flag
         if (hasTags) {
           // If --tags has no value, list all available tags
@@ -81,6 +90,14 @@ Examples:
             });
 
             const sortedTags = Array.from(allTags).sort();
+
+            if (sortedTags.length === 0) {
+              const markdown = `# Blog Tags
+
+${MESSAGES.NO_TAGS_AVAILABLE}`;
+              const html = MarkdownService.render(markdown);
+              return { output: html, html: true, scrollBehavior: 'top' };
+            }
 
             const tagList = sortedTags
               .map((tag) => {
@@ -138,8 +155,23 @@ ${tagList}
           );
 
           if (filteredPosts.length === 0) {
+            // Get top 5 most popular tags to suggest
+            const tagCounts = new Map<string, number>();
+            posts.forEach((post) => {
+              post.tags?.forEach((tag) => {
+                tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+              });
+            });
+            const topTags = Array.from(tagCounts.entries())
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 5)
+              .map(([tag]) => tag);
+
+            const suggestion =
+              topTags.length > 0 ? `\nTry one of these tags: ${topTags.join(', ')}` : '';
+
             return {
-              output: `No blog posts found with tag '${filterTag}'.\nUse 'blog' to see all posts.`,
+              output: `No blog posts found with tag '${filterTag}'.${suggestion}\nUse 'blog' to see all posts.`,
               error: false,
             };
           }

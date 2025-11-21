@@ -28,6 +28,12 @@ export const STORAGE_KEYS = {
   ENVIRONMENT: 'terminal_env_vars',
 } as const;
 
+export const MESSAGES = {
+  EMPTY_PORTFOLIO: 'No portfolio projects yet. Check back soon!',
+  EMPTY_BLOG: 'No blog posts yet. Check back soon!',
+  NO_TAGS_AVAILABLE: 'No tags available yet.',
+} as const;
+
 export const DEFAULT_SETTINGS: SettingsConfig = {
   theme: {
     preset: 'dc',

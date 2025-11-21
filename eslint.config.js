@@ -98,6 +98,7 @@ export default tseslint.config(
       '*.config.js',
       'vite.config.ts',
       'vitest.config.ts',
+      'public/libs/**/*.js',
     ],
   },
   prettierConfig

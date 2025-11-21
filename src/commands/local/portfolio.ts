@@ -7,7 +7,7 @@
  * is requested. Supports --tags flag to list available tags or filter projects by
  * one or more tags (comma-separated).
  */
-import { PATHS } from '../../constants';
+import { MESSAGES, PATHS } from '../../constants';
 import { CommandArgs } from '../../utils/CommandArgs';
 import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownService } from '../../utils/MarkdownService';
@@ -78,6 +78,15 @@ Examples:
           return a.title.localeCompare(b.title);
         });
 
+        // Handle empty portfolio
+        if (projects.length === 0 && !hasTags && !projectId) {
+          const markdown = `# Portfolio
+
+${MESSAGES.EMPTY_PORTFOLIO}`;
+          const html = MarkdownService.render(markdown);
+          return { output: html, html: true, scrollBehavior: 'top' };
+        }
+
         // Handle --tags flag
         if (hasTags) {
           // If --tags has no value, list all available tags
@@ -93,6 +102,14 @@ Examples:
             });
 
             const sortedTags = Array.from(allTags).sort();
+
+            if (sortedTags.length === 0) {
+              const markdown = `# Portfolio Tags
+
+${MESSAGES.NO_TAGS_AVAILABLE}`;
+              const html = MarkdownService.render(markdown);
+              return { output: html, html: true, scrollBehavior: 'top' };
+            }
 
             const tagList = sortedTags
               .map((tag) => {
@@ -144,8 +161,24 @@ ${tagList}
 
           if (filteredProjects.length === 0) {
             const tagList = filterTags.map((t) => `'${t}'`).join(', ');
+
+            // Get top 5 most popular tags to suggest
+            const tagCounts = new Map<string, number>();
+            projects.forEach((project) => {
+              project.tags?.forEach((tag) => {
+                tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+              });
+            });
+            const topTags = Array.from(tagCounts.entries())
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 5)
+              .map(([tag]) => tag);
+
+            const suggestion =
+              topTags.length > 0 ? `\nTry one of these tags: ${topTags.join(', ')}` : '';
+
             return {
-              output: `No projects found with tag${filterTags.length > 1 ? 's' : ''} ${tagList}.\nUse 'portfolio' to see all projects.`,
+              output: `No projects found with tag${filterTags.length > 1 ? 's' : ''} ${tagList}.${suggestion}\nUse 'portfolio' to see all projects.`,
               error: false,
             };
           }
