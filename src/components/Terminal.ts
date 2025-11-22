@@ -1,4 +1,5 @@
 import { COMMAND_SIGNALS } from '../constants';
+import { initEmailProtection } from '../utils/EmailProtection';
 import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
 import { sanitizeHtml } from '../utils/sanitizeHtml';
 import { generateSettingsUI } from './SettingsUI';
@@ -316,6 +317,8 @@ export class Terminal {
           if (typeof window.initializeGraphs === 'function') {
             void window.initializeGraphs();
           }
+          // Initialize email protection for any protected email links
+          initEmailProtection();
           this.output.performScrollBehavior(result.scrollBehavior);
         });
 

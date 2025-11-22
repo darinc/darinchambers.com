@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2025-11-22
+
+### Added
+- JavaScript-based email obfuscation to protect contact email from bots
+- EmailProtection utility with click handler and keyboard accessibility
+- Comprehensive test suite for email protection functionality
+
 ## [0.10.21] - 2025-11-22
 
 ### Changed

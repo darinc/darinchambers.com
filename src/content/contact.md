@@ -2,7 +2,7 @@
 
 ## Get in Touch
 
-- Email: [hello@darinchambers.com](mailto:hello@darinchambers.com)
+- Email: <a href="#" class="email-protected" data-user="hello" data-domain="darinchambers.com">hello@darinchambers.com</a>
 - LinkedIn: [linkedin.com/in/darinchambers](https://www.linkedin.com/in/darinchambers)
 - GitHub: [github.com/darinc](https://github.com/darinc)
 - Blog: [darinchambers.com/blog](https://darinchambers.com/blog)
