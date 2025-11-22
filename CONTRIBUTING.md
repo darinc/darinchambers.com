@@ -49,11 +49,11 @@ Thank you for your interest in contributing! This document provides guidelines a
 ```bash
 # Fork the repository on GitHub
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/dc.com.git
+git clone https://github.com/YOUR_USERNAME/darinchambers.com.git
 cd dc.com
 
 # Add upstream remote
-git remote add upstream https://github.com/darinchambers/dc.com.git
+git remote add upstream https://github.com/darinc/darinchambers.com.git
 
 # Install dependencies
 npm install

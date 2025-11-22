@@ -41,7 +41,7 @@ Git Push → GitHub → Cloudflare Pages → Build → Deploy → CDN
    - Navigate to Pages
    - Click "Create a project"
    - Connect your GitHub account
-   - Select the repository: `darinchambers/dc.com`
+   - Select the repository: `darinc/darinchambers.com`
 
 2. **Configure Build Settings**
 
