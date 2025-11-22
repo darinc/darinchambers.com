@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.21] - 2025-11-22
+
+### Changed
+- Updated CSP header to allow mailto links in form-action directive
+- Improved contact page formatting with proper markdown list syntax
+- Fixed navigation text in about page to reference blog
+
 ## [0.10.20] - 2025-11-22
 
 ### Changed

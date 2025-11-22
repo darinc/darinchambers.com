@@ -24,4 +24,4 @@ I focus on the bridge between "what's possible" and "what's practical," ensuring
 
 ---
 
-**Next Steps:** Type `portfolio` to see projects, `skills` for technical skills, or `contact` to get in touch.
+**Next Steps:** Type `portfolio` to see projects, `blog` to see the blog, or `contact` to get in touch.
