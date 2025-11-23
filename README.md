@@ -1,10 +1,12 @@
 # Darin Chambers - Terminal Portfolio
 
-[![Version](https://img.shields.io/badge/version-0.10.19-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.13.3-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
 A terminal-inspired portfolio website with a fully functional command-line interface in your browser.
+
+Try it out: https://darinchambers.com
 
 ## Features
 
@@ -12,7 +14,7 @@ A terminal-inspired portfolio website with a fully functional command-line inter
 - Virtual file system with directory navigation
 - Command pipeline support (`|`)
 - Markdown rendering with syntax highlighting
-- Multiple terminal themes (Green, Amber, White, Cyan, Paper)
+- Multiple terminal themes (Green, Amber, White, Cyan, Paper, DC)
 - WCAG 2.1 compliant accessibility
 - Type-safe TypeScript with strict mode
 - 121KB total bundle size
@@ -82,7 +84,7 @@ darinchambers.com/
 │   ├── content/         # Markdown content (blog, portfolio)
 │   ├── utils/           # Parsers, managers, renderers
 │   └── types/           # TypeScript interfaces
-├── tests/               # 1247 tests, 80% coverage
+├── tests/               # 1337 tests, 80% coverage
 └── public/              # Static assets
 ```
 
@@ -90,7 +92,7 @@ darinchambers.com/
 
 - Strict TypeScript, zero `any` usage
 - Multi-layered XSS protection (DOMPurify + CSP)
-- 1247 tests across 51 test files
+- 1337 tests across 55 test files
 - Zero known vulnerabilities
 - 121KB total bundle (110KB JS, 11KB CSS)
 
@@ -113,3 +115,4 @@ MIT License - see [LICENSE](LICENSE)
 
 - [darinchambers.com](https://darinchambers.com)
 - [@darinc](https://github.com/darinc)
+- [linkedin/darinchambers](https://www.linkedin.com/in/darinchambers/)

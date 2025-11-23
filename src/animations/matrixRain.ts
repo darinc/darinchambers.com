@@ -40,24 +40,17 @@ export function stopAllMatrixAnimations(): void {
  * Start animating a matrix rain element
  */
 export function startMatrixRainAnimation(rainElement: HTMLElement): void {
-  // Don't start if already animating
-  if (activeAnimations.has(rainElement)) {
-    return;
-  }
-
-  // Stop any previous matrix animations EXCEPT this one
+  // Stop ALL previous matrix animations (including any on this element)
   // This ensures only one matrix animation runs at a time
   activeAnimations.forEach((animation, element) => {
-    if (element !== rainElement) {
-      animation.stopAnimation();
-      // Pause CSS animations on the old element
-      const columns = element.querySelectorAll('.matrix-column');
-      columns.forEach((column) => {
-        (column as HTMLElement).style.animationPlayState = 'paused';
-      });
-      activeAnimations.delete(element);
-    }
+    animation.stopAnimation();
+    // Pause CSS animations on the old element
+    const columns = element.querySelectorAll('.matrix-column');
+    columns.forEach((column) => {
+      (column as HTMLElement).style.animationPlayState = 'paused';
+    });
   });
+  activeAnimations.clear();
 
   // Get the character set from data attribute
   const matrixChars = rainElement.dataset.matrixChars ?? '';

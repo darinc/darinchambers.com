@@ -50,7 +50,7 @@ Thank you for your interest in contributing! This document provides guidelines a
 # Fork the repository on GitHub
 # Clone your fork
 git clone https://github.com/YOUR_USERNAME/darinchambers.com.git
-cd dc.com
+cd darinchambers.com
 
 # Add upstream remote
 git remote add upstream https://github.com/darinc/darinchambers.com.git
@@ -480,7 +480,7 @@ Describe testing performed
 ### Directory Layout
 
 ```
-dc.com/
+darinchambers.com/
 ├── src/
 │   ├── commands/        # Command implementations
 │   │   ├── core/        # Core terminal commands
