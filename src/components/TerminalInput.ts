@@ -206,8 +206,22 @@ export class TerminalInput {
     this.historyIndex = -1;
   }
 
-  focus(): void {
+  focus(force = false): void {
+    // On mobile, only focus if explicitly forced (user clicked terminal input area)
+    // This prevents unwanted keyboard popup when clicking navigation links
+    if (!force && this.isMobileDevice()) {
+      return;
+    }
     this.inputElement.focus({ preventScroll: true });
+  }
+
+  private isMobileDevice(): boolean {
+    // Check for mobile device using multiple signals
+    return (
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.matchMedia('(max-width: 768px)').matches
+    );
   }
 
   setPrompt(prompt: string): void {

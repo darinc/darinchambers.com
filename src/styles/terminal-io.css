@@ -1,7 +1,7 @@
 #terminal-output {
   flex: 1;
   line-height: 1;
-  font-size: var(--terminal-font-size, 14px);
+  font-size: var(--terminal-font-size, 16px);
   font-family: var(--terminal-font-family, 'Courier New', monospace);
   white-space: pre;
   word-wrap: break-word;
@@ -27,7 +27,7 @@
 #terminal-input-line {
   display: flex;
   align-items: center;
-  font-size: var(--terminal-font-size, 14px);
+  font-size: var(--terminal-font-size, 16px);
   font-family: var(--terminal-font-family, 'Courier New', monospace);
   margin-top: 0;
   line-height: 1;
@@ -47,7 +47,8 @@
   outline: none;
   color: var(--terminal-fg);
   font-family: inherit;
-  font-size: inherit;
+  /* Minimum 16px to prevent iOS Safari auto-zoom on focus */
+  font-size: max(16px, var(--terminal-font-size, 16px));
   caret-color: var(--terminal-cursor);
 }
 

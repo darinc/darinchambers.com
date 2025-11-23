@@ -5,6 +5,41 @@
  * for component testing.
  */
 
+import { vi } from 'vitest';
+
+/**
+ * Sets up global mocks for browser APIs that affect mobile detection.
+ * Call this in beforeEach to ensure consistent test environment.
+ */
+export function setupGlobalMocks(): void {
+  // Mock matchMedia to return desktop by default (prevents mobile-specific behavior in tests)
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: vi.fn().mockImplementation((query: string) => ({
+      matches: false, // Always return false for desktop-first testing
+      media: query,
+      onchange: null,
+      addListener: vi.fn(), // Deprecated
+      removeListener: vi.fn(), // Deprecated
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+
+  // Ensure navigator.maxTouchPoints is 0 (desktop)
+  Object.defineProperty(navigator, 'maxTouchPoints', {
+    writable: true,
+    configurable: true,
+    value: 0,
+  });
+
+  // Remove ontouchstart from window if it exists (jsdom sometimes adds it)
+  if ('ontouchstart' in window) {
+    delete (window as any).ontouchstart;
+  }
+}
+
 /**
  * Sets up a complete terminal DOM structure for testing components
  */

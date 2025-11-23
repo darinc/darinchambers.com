@@ -412,4 +412,4 @@ void initializeGraphs();
 // Make initializeGraphs available globally for explicit calls after content loads
 window.initializeGraphs = initializeGraphs;
 
-terminal.focus();
+// Note: Input focuses automatically via autofocus attribute in HTML
