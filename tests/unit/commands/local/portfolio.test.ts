@@ -142,4 +142,69 @@ describe('Portfolio Command', () => {
       expect(result.html).toBe(true);
     });
   });
+
+  describe('accessing specific projects', () => {
+    beforeEach(() => {
+      const files = new Map([
+        ['project1.md', createPortfolioFile('proj1', 'Project 1', '2024', ['web'], 1)],
+        ['project2.md', createPortfolioFile('proj2', 'Project 2', '2023', ['api'], 2)],
+        ['project3.md', createPortfolioFile('proj3', 'Project 3', '2022', ['mobile'], 3)],
+      ]);
+      const mockFs = createMockFs(files);
+      portfolioCommand = createPortfolioCommand(mockFs);
+    });
+
+    it('should access project by numeric index (1)', () => {
+      const result = portfolioCommand.execute(['1']);
+
+      expect(result.output).toContain('Project 1');
+      expect(result.html).toBe(true);
+      expect(result.error).toBeUndefined();
+    });
+
+    it('should access project by numeric index (2)', () => {
+      const result = portfolioCommand.execute(['2']);
+
+      expect(result.output).toContain('Project 2');
+      expect(result.html).toBe(true);
+      expect(result.error).toBeUndefined();
+    });
+
+    it('should access project by numeric index (3)', () => {
+      const result = portfolioCommand.execute(['3']);
+
+      expect(result.output).toContain('Project 3');
+      expect(result.html).toBe(true);
+      expect(result.error).toBeUndefined();
+    });
+
+    it('should access project by string ID', () => {
+      const result = portfolioCommand.execute(['proj2']);
+
+      expect(result.output).toContain('Project 2');
+      expect(result.html).toBe(true);
+      expect(result.error).toBeUndefined();
+    });
+
+    it('should return error for invalid numeric index (0)', () => {
+      const result = portfolioCommand.execute(['0']);
+
+      expect(result.output).toContain("Project '0' not found");
+      expect(result.error).toBe(true);
+    });
+
+    it('should return error for invalid numeric index (out of range)', () => {
+      const result = portfolioCommand.execute(['999']);
+
+      expect(result.output).toContain("Project '999' not found");
+      expect(result.error).toBe(true);
+    });
+
+    it('should return error for non-existent string ID', () => {
+      const result = portfolioCommand.execute(['nonexistent']);
+
+      expect(result.output).toContain("Project 'nonexistent' not found");
+      expect(result.error).toBe(true);
+    });
+  });
 });
