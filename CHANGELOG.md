@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.4] - 2025-11-23
+
+### Fixed
+- Mobile viewport handling to prevent header from staying hidden after keyboard dismissal
+- iOS Safari auto-zoom when focusing terminal input by enforcing 16px minimum font size
+- Terminal input not receiving focus on mobile when clicking navigation links
+
+### Changed
+- Updated CSS to use dynamic viewport height (100dvh) for better mobile keyboard support
+- Added Visual Viewport API listener to restore scroll position after mobile keyboard dismissal
+
 ## [0.13.3] - 2025-11-23
 
 ### Fixed

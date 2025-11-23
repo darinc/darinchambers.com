@@ -52,6 +52,7 @@ export class Terminal {
     this.setupClickHandler(outputElement);
     this.setupSettingsUIHandler();
     this.setupKeyboardHandlers();
+    this.setupMobileViewportHandler();
     this.updatePrompt();
   }
 
@@ -83,7 +84,8 @@ export class Terminal {
         return; // User is interacting with content, don't steal focus
       }
 
-      this.input.focus();
+      // Force focus (user explicitly clicked in terminal area)
+      this.input.focus(true);
     });
   }
 
@@ -98,9 +100,44 @@ export class Terminal {
           const activeElement = document.activeElement;
           if (activeElement && settingsPanels[0].contains(activeElement)) {
             e.preventDefault();
-            this.input.focus();
+            // Force focus since user intentionally pressed Escape
+            this.input.focus(true);
           }
         }
+      }
+    });
+  }
+
+  private setupMobileViewportHandler(): void {
+    // Only set up if Visual Viewport API is available (mobile browsers)
+    if (!window.visualViewport) {
+      return;
+    }
+
+    let lastHeight = window.visualViewport.height;
+
+    // Listen for viewport resize events (triggered by mobile keyboard)
+    window.visualViewport.addEventListener('resize', () => {
+      const currentHeight = window.visualViewport!.height;
+
+      // Keyboard was dismissed (viewport height increased)
+      if (currentHeight > lastHeight) {
+        this.scrollToHeader();
+      }
+
+      lastHeight = currentHeight;
+    });
+  }
+
+  private scrollToHeader(): void {
+    // Scroll to the top to show the header
+    requestAnimationFrame(() => {
+      const header = document.getElementById('terminal-header');
+      if (header) {
+        header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // Fallback: scroll window to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   }
@@ -287,9 +324,9 @@ export class Terminal {
         }
       }
 
-      // Clear input and focus
+      // Clear input and focus (force because user just typed)
       this.input.clear();
-      this.input.focus();
+      this.input.focus(true);
     });
   }
 
@@ -394,8 +431,8 @@ export class Terminal {
     this.updatePrompt();
   }
 
-  focus(): void {
-    this.input.focus();
+  focus(force = false): void {
+    this.input.focus(force);
   }
 
   getInput(): TerminalInput {
@@ -437,7 +474,7 @@ export class Terminal {
       this.displayResult(result);
     }
 
-    // Clear input and ensure it is focused after command execution
+    // Clear input (don't force focus on mobile for programmatic commands)
     this.input.clear();
     this.input.focus();
   }

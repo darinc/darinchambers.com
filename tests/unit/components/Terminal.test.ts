@@ -8,6 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Terminal } from '../../../src/components/Terminal';
 import { COMMAND_SIGNALS } from '../../../src/constants';
+import { setupGlobalMocks } from '../../helpers/dom-setup';
 import type { Command, CommandResult } from '../../../src/commands/Command';
 import type { CommandDispatcher } from '../../../src/utils/CommandDispatcher';
 import type { CommandExecutor } from '../../../src/utils/CommandExecutor';
@@ -105,6 +106,7 @@ describe('Terminal', () => {
   let mockEnvVarManager: EnvVarManager;
 
   beforeEach(() => {
+    setupGlobalMocks();
     setupDOM();
     mockDispatcher = createMockDispatcher();
     mockExecutor = createMockExecutor();

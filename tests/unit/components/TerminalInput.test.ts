@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TerminalInput } from '../../../src/components/TerminalInput';
-import { setupInputDOM, cleanupDOM, getElement } from '../../helpers/dom-setup';
+import { setupInputDOM, cleanupDOM, getElement, setupGlobalMocks } from '../../helpers/dom-setup';
 
 describe('TerminalInput', () => {
   let terminalInput: TerminalInput;
@@ -8,6 +8,7 @@ describe('TerminalInput', () => {
   let promptElement: HTMLElement;
 
   beforeEach(() => {
+    setupGlobalMocks();
     setupInputDOM();
     inputElement = getElement<HTMLInputElement>('terminal-input');
     promptElement = getElement('terminal-prompt');
