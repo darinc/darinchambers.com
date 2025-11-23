@@ -213,6 +213,14 @@
   outline-offset: 2px;
 }
 
+/* Responsive images */
+.markdown-output img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 12px 0;
+}
+
 /* Graph visualization container */
 .graph-container {
   position: relative; /* Required for SVG-Graph-Network controls to overlay properly */
