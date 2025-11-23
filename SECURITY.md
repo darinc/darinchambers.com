@@ -15,8 +15,8 @@
 
 | Version          | Supported | Status             |
 | ---------------- | --------- | ------------------ |
-| 0.11.x (current) | ✅ Yes    | Active development |
-| < 0.11.0         | ❌ No     | Legacy versions    |
+| 0.13.x (current) | ✅ Yes    | Active development |
+| < 0.13.0         | ❌ No     | Legacy versions    |
 
 **Note**: Once version 1.0.0 is released, security patches will only be provided for the latest minor version.
 
@@ -238,7 +238,7 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 Instead, report security vulnerabilities privately:
 
-1. **Email**: Send details to [security contact - add your email here]
+1. **Email**: Send details to hello at the_full_domain_name
 2. **Subject**: "Security Vulnerability: Terminal Portfolio"
 3. **Include**:
    - Description of the vulnerability
@@ -324,7 +324,7 @@ pnpm audit
 | Package   | Version | Security Notes                       |
 | --------- | ------- | ------------------------------------ |
 | marked    | 17.0.1  | ✅ No known vulnerabilities          |
-| figlet    | 1.9.3   | ✅ No known vulnerabilities          |
+| figlet    | 1.9.4   | ✅ No known vulnerabilities          |
 | dompurify | 3.3.0   | ✅ Security library (XSS protection) |
 
 ### Security Update Policy

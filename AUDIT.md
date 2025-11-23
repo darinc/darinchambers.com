@@ -1,7 +1,7 @@
 # Codebase Audit Report
 
 **Project:** darinchambers.com (Terminal Portfolio)
-**Version:** 0.11.1
+**Version:** 0.13.3
 **Audit Date:** November 22, 2025
 **Audited By:** Claude Code
 
