@@ -65,6 +65,6 @@
     "@types/marked": "^5.0.2",
     "dompurify": "^3.3.0",
     "figlet": "^1.9.3",
-    "marked": "^16.4.1"
+    "marked": "^17.0.1"
   }
 }
