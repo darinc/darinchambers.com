@@ -25,7 +25,7 @@ export function createPortfolioCommand(fs: IFileSystem): Command {
 
       if (cmdArgs.hasFlag('help')) {
         return {
-          output: `Usage: portfolio [project-id]
+          output: `Usage: portfolio [options] [project-id|number]
 
 Description:
   Showcase projects and accomplishments
@@ -37,10 +37,11 @@ Options:
 
 Examples:
   portfolio                     # List all projects
+  portfolio 1                   # View project #1
   portfolio --tags              # Show available tags
   portfolio --tags major        # Filter by single tag
   portfolio --tags major,patents  # Filter by multiple tags
-  portfolio proj-id             # View specific project`,
+  portfolio proj-id             # View specific project by ID`,
         };
       }
 
@@ -133,7 +134,18 @@ ${tagList}
 
         // Show specific project
         if (projectId) {
-          const project = projects.find((p) => p.id === projectId);
+          let project: Project | undefined;
+
+          // Check if projectId is a number (e.g., "1", "2", "3")
+          const projectNumber = parseInt(projectId, 10);
+          if (!isNaN(projectNumber) && projectNumber > 0 && projectNumber <= projects.length) {
+            // Convert display number to array index (1 = index 0)
+            const arrayIndex = projectNumber - 1;
+            project = projects[arrayIndex];
+          } else {
+            // Otherwise try to find by ID
+            project = projects.find((p) => p.id === projectId);
+          }
 
           if (!project) {
             return {
