@@ -22,6 +22,8 @@ export default defineConfig({
         'src/data/**',
         'src/content/**',
         'src/blog/**',
+        'src/utils/discordian.ts', // Novelty
+        'src/commands/novelty/ddate.ts', // Novelty
       ],
       // Coverage thresholds
       thresholds: {
