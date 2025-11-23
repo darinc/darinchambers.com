@@ -1,5 +1,7 @@
 # Architecture Documentation
 
+**Last Updated:** 2025-11-22 (v0.11.0)
+
 ## Table of Contents
 
 1. [Overview](#overview)
@@ -78,7 +80,7 @@ This terminal portfolio is built as a **single-page application (SPA)** using va
 │  ┌──────────────────────▼──────────────────────────────┐  │
 │  │          FileSystemService (data layer)             │  │
 │  │  ┌────────────────────────────────────────────┐    │  │
-│  │  │     Virtual File System (FileNode tree)    │    │  │
+│  │  │  Virtual File System (FileSystemNode tree) │    │  │
 │  │  └────────────────────────────────────────────┘    │  │
 │  └─────────────────────────────────────────────────────┘  │
 │                                                            │
@@ -95,7 +97,7 @@ This terminal portfolio is built as a **single-page application (SPA)** using va
 ### Technology Stack
 
 - **Core**: TypeScript 5.7.3 (strict mode)
-- **Build Tool**: Vite 6.0.11
+- **Build Tool**: Vite 7.2.1
 - **Testing**: Vitest 4.0.4 + jsdom + @testing-library
 - **Runtime**: Vanilla JavaScript (no framework)
 - **Dependencies**: marked (markdown), figlet (ASCII art), DOMPurify (XSS protection)
@@ -208,7 +210,7 @@ const envVarManager = new EnvVarManager(fileSystem, 'darin', 'darinchambers.com'
 ```typescript
 // src/utils/fs/FileSystemInitializer.ts
 export class FileSystemInitializer {
-  static createDefaultStructure(): FileNode {
+  static createDefaultStructure(): FileSystemNode {
     // Creates entire filesystem tree
   }
 }
@@ -240,6 +242,7 @@ document.addEventListener('settings-changed', () => {
 - Manages terminal state (prompt, current path)
 - Coordinates TerminalInput and TerminalOutput
 - Handles settings UI
+- Formats terminal prompt using PromptFormatter
 
 **Key Methods**:
 
@@ -248,9 +251,14 @@ executeCommand(command: string, addToHistory: boolean): Promise<void>
 setCurrentPath(path: string): void
 registerCommands(commands: Command[]): void
 focus(): void
+updatePrompt(): void
 ```
 
-**Dependencies**: CommandDispatcher, CommandExecutor, SettingsManager, ThemeManager, EnvVarManager
+**Dependencies**: CommandDispatcher, CommandExecutor, SettingsManager, ThemeManager, EnvVarManager, PromptFormatter
+
+**PromptFormatter Integration**:
+
+The Terminal uses PromptFormatter (`src/utils/PromptFormatter.ts`) to render bash-style prompt format strings with escape sequences like `\u` (username), `\h` (hostname), `\w` (working directory). This allows customizable prompts matching user preferences from settings.
 
 #### 2. TerminalInput (`src/components/TerminalInput.ts`)
 
@@ -309,6 +317,38 @@ clear(): void
 
 - Responsive design (different ASCII fonts for mobile)
 - Semantic HTML
+
+#### 6. Router (`src/utils/Router.ts`)
+
+**Responsibilities**:
+
+- Manage browser history (pushState/replaceState/popstate)
+- Synchronize URL with application state
+- Handle route changes and navigation
+- Map URL paths to commands
+- Trigger command execution on route changes
+
+**Key Methods**:
+
+```typescript
+navigate(path: string, addToHistory: boolean): void
+handleRoute(): void
+getCurrentPath(): string
+```
+
+**Key Features**:
+
+- URL-to-command mapping (`/about` → `about` command)
+- Browser back/forward button support
+- Programmatic navigation
+- Route change callbacks
+- Clean URL structure (no hash routing)
+
+**Integration**:
+
+- Works with Navigation component for button clicks
+- Executes commands through Terminal on route changes
+- Updates navigation active state via callbacks
 
 ---
 
@@ -449,7 +489,7 @@ Navigation.setActiveItem() (update aria-current)
 **Responsibilities**:
 
 - Load/save settings from localStorage
-- Sync settings to virtual filesystem (`~/.terminalrc`)
+- Sync settings to virtual filesystem (`~/.settings`)
 - Validate settings structure
 - Emit change events
 
@@ -501,7 +541,7 @@ Navigation.setActiveItem() (update aria-current)
 
 - Create command aliases (`alias ll='ls -la'`)
 - Resolve aliases during execution
-- Persist to filesystem (`~/.bash_aliases`)
+- Persist to filesystem (`/home/guest/.alias`)
 - Validate alias syntax
 
 #### ThemeManager (`src/utils/ThemeManager.ts`)
@@ -521,14 +561,21 @@ Navigation.setActiveItem() (update aria-current)
 
 The virtual file system uses a **hierarchical tree structure** with Map-based storage for O(1) lookups.
 
-#### FileNode Structure
+#### FileSystemNode Structure
+
+Location: `src/utils/fs/types.ts`
 
 ```typescript
-interface FileNode {
+interface FileSystemNode {
   name: string;
   type: 'file' | 'directory';
   content?: string; // File content (for files)
-  children?: Map<string, FileNode>; // Child nodes (for directories)
+  children?: Map<string, FileSystemNode>; // Child nodes (for directories)
+  permissions?: string; // Unix-style permissions (e.g., 'rw-r--r--')
+  owner?: string; // File owner
+  size?: number; // File size in bytes
+  modifiedTime?: Date; // Last modified timestamp
+  isHidden?: boolean; // Hidden file flag
 }
 ```
 
@@ -537,22 +584,23 @@ interface FileNode {
 ```
 /
 └── home/
-    └── darin/
-        ├── about.md
-        ├── contact.md
-        ├── skills.md
-        ├── help.md
-        ├── .terminalrc (settings JSON)
-        ├── .env (environment variables)
-        ├── .bash_aliases (command aliases)
-        ├── portfolio/
-        │   ├── project1.md
-        │   ├── project2.md
-        │   └── ...
-        └── blog/
-            ├── post1.md
-            ├── post2.md
-            └── ...
+    ├── darin/
+    │   ├── about.md
+    │   ├── contact.md
+    │   ├── skills.md
+    │   ├── help.md
+    │   ├── .settings (settings JSON)
+    │   ├── .env (environment variables)
+    │   ├── portfolio/
+    │   │   ├── project1.md
+    │   │   ├── project2.md
+    │   │   └── ...
+    │   └── blog/
+    │       ├── post1.md
+    │       ├── post2.md
+    │       └── ...
+    └── guest/
+        └── .alias (command aliases)
 ```
 
 ### Path Resolution
@@ -722,59 +770,125 @@ document.addEventListener('settings-changed', () => {
 
 ### Multi-Layer XSS Protection
 
-#### Layer 1: HTML Escaping
-
-**Location**: `src/utils/htmlEscape.ts`
-
-```typescript
-export function escapeHtml(unsafe: string): string {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-```
-
-**Usage**: All user content escaped before processing
-
-#### Layer 2: DOMPurify Sanitization
+#### Layer 1: DOMPurify Sanitization
 
 **Location**: `src/utils/sanitizeHtml.ts`
 
 ```typescript
 import DOMPurify from 'dompurify';
 
-export function sanitizeHtml(dirty: string): string {
-  return DOMPurify.sanitize(dirty, {
-    ALLOWED_TAGS: ['p', 'h1', 'h2', 'code', 'pre', 'a', 'ul', 'ol', 'li'],
-    ALLOWED_ATTR: ['href', 'class'],
+export function sanitizeHtml(html: string): string {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      // Text formatting
+      'p',
+      'div',
+      'span',
+      'br',
+      'strong',
+      'b',
+      'em',
+      'i',
+      'u',
+      's',
+      // Links and code
+      'a',
+      'code',
+      'pre',
+      // Headers
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      // Lists
+      'ul',
+      'ol',
+      'li',
+      'blockquote',
+      // Tables
+      'table',
+      'thead',
+      'tbody',
+      'tr',
+      'th',
+      'td',
+      // Media
+      'img',
+      // Interactive elements for settings UI
+      'button',
+      'input',
+      'select',
+      'option',
+      'label',
+      // Semantic HTML
+      'aside',
+      'section',
+      'details',
+      'summary',
+    ],
+    ALLOWED_ATTR: [
+      'class',
+      'id',
+      'href',
+      'target',
+      'rel',
+      'src',
+      'alt',
+      'title',
+      'type',
+      'value',
+      'checked',
+      'selected',
+      'disabled',
+      'min',
+      'max',
+      'step',
+      'placeholder',
+      'open',
+      'style',
+      // Data attributes for event delegation
+      'data-command',
+      'data-setting-type',
+      'data-color-var',
+      'data-theme',
+      'data-settings-panel',
+      'data-graph',
+      // ARIA attributes for accessibility
+      'role',
+      'aria-label',
+      'aria-labelledby',
+      'aria-describedby',
+      'aria-valuemin',
+      'aria-valuemax',
+      'aria-valuenow',
+      'aria-valuetext',
+      'aria-live',
+      'aria-atomic',
+      'aria-current',
+    ],
   });
 }
 ```
 
 **Usage**: All HTML sanitized before `innerHTML` assignment
 
-#### Layer 3: Content Security Policy
+#### Layer 2: Content Security Policy
 
-**Location**: `index.html` + `public/_headers`
+**Location**: `public/_headers` (production only)
 
-```html
-<meta
-  http-equiv="Content-Security-Policy"
-  content="
-  default-src 'self';
-  script-src 'self';
-  style-src 'self' 'unsafe-inline';
-  img-src 'self' data:;
-"
-/>
+**Note**: CSP is configured only in the production `_headers` file for Cloudflare Pages deployment. It is intentionally not included in `index.html` as a meta tag to allow the Vite development server to function properly with hot module replacement (HMR).
+
+**Protection**: Browser blocks inline scripts and restricts resource loading even if sanitization fails
+
+**Headers Configuration**:
+
+```
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; ...
 ```
 
-**Protection**: Browser blocks inline scripts even if sanitization fails
-
-#### Layer 4: Event Delegation
+#### Layer 3: Event Delegation
 
 **Implementation**: No inline event handlers
 
@@ -800,10 +914,12 @@ export function sanitizeHtml(dirty: string): string {
 
 ### Bundle Optimization
 
-- **Code Splitting**: Not needed (small bundle at 121KB)
+- **Bundle Size**: ~121KB total (110KB JS, 11KB CSS) - gzipped and minified
+- **Code Splitting**: Not needed (single-page application with small bundle)
 - **Tree Shaking**: Enabled via Vite (ES modules)
 - **Minification**: esbuild minification
 - **Content Hashing**: Cache busting enabled
+- **Current Build**: ~281KB uncompressed JavaScript (compresses to ~110KB with gzip)
 
 ### Runtime Performance
 
@@ -822,13 +938,18 @@ export function sanitizeHtml(dirty: string): string {
 
 ## Testing Strategy
 
-### Test Coverage: 70%
+### Test Coverage: 80%
 
-- **Unit Tests**: 895 tests across 40 files
+- **Unit Tests**: 1247 tests across 51 files
 - **Test Utilities**: Mock filesystem, DOM setup helpers
+- **Coverage Breakdown**:
+  - Statements: 70.03%
+  - Branches: 83.86%
+  - Functions: 80.49%
+  - Lines: 70.08%
 - **Coverage Areas**:
   - ✅ Core utilities (100% - parsers, managers)
-  - ✅ Commands (70% - core, fs, novelty)
+  - ✅ Commands (80% - core, fs, novelty)
   - ✅ Components (90% - Input, Output, Navigation)
   - 🟡 Integration tests (minimal)
 

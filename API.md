@@ -1,5 +1,7 @@
 # API Documentation
 
+**Last Updated:** 2025-11-22 (v0.11.0)
+
 ## Table of Contents
 
 1. [Overview](#overview)
@@ -44,6 +46,7 @@ interface CommandResult {
   error?: boolean; // True if command failed
   html?: boolean; // True if output is HTML to render
   raw?: boolean; // True if output is for piping (don't display)
+  scrollBehavior?: 'top' | 'bottom'; // Controls scroll position after output
 }
 ```
 
@@ -197,8 +200,7 @@ Location: `src/utils/fs/IFileSystem.ts`
 interface IFileSystem {
   // Path operations
   getCurrentPath(): string;
-  setCurrentPath(path: string): void;
-  resolvePath(path: string): string;
+  changeDirectory(path: string): void;
   getShortPath(): string;
 
   // File operations
@@ -206,24 +208,36 @@ interface IFileSystem {
   writeFile(path: string, content: string): void;
   exists(path: string): boolean;
   isDirectory(path: string): boolean;
+  isFile(path: string): boolean;
 
   // Directory operations
-  listDirectory(path: string, showHidden?: boolean): string[];
-  getNode(path: string): FileNode | null;
+  list(path: string): string[];
+  getNode(path: string): FileSystemNode | null;
+  createDirectory(path: string): void;
 
   // Tree operations
-  getTree(path: string, maxDepth?: number): string;
+  getTree(path: string, maxDepth?: number): string[];
+
+  // User operations
+  setCurrentUsername(username: string): void;
 }
 ```
 
-### FileNode Structure
+### FileSystemNode Structure
+
+Location: `src/utils/fs/types.ts`
 
 ```typescript
-interface FileNode {
+interface FileSystemNode {
   name: string;
   type: 'file' | 'directory';
   content?: string; // For files
-  children?: Map<string, FileNode>; // For directories
+  children?: Map<string, FileSystemNode>; // For directories
+  permissions?: string; // Unix-style permissions (e.g., 'rw-r--r--')
+  owner?: string; // File owner
+  size?: number; // File size in bytes
+  modifiedTime?: Date; // Last modified timestamp
+  isHidden?: boolean; // Hidden file flag
 }
 ```
 
@@ -258,7 +272,7 @@ function saveSettings(fs: IFileSystem, settings: object): void {
 ```typescript
 function listBlogPosts(fs: IFileSystem): string[] {
   const blogPath = '~/blog';
-  const entries = fs.listDirectory(blogPath);
+  const entries = fs.list(blogPath);
 
   // Filter for markdown files
   return entries.filter((entry) => entry.endsWith('.md'));
@@ -267,16 +281,20 @@ function listBlogPosts(fs: IFileSystem): string[] {
 
 ### Path Resolution
 
-```typescript
-function resolvePath(fs: IFileSystem, input: string): string {
-  // Handles:
-  // - Tilde expansion: ~ → /home/darin
-  // - Relative paths: ./file → /current/path/file
-  // - Parent directory: ../file → /parent/path/file
-  // - Absolute paths: /home/darin/file → /home/darin/file
+Path resolution (tilde expansion, relative paths, etc.) is handled internally by the FileSystemService implementation. Commands should pass paths to the file system methods and they will be resolved automatically:
 
-  return fs.resolvePath(input);
-}
+```typescript
+// Tilde expansion: ~ → /home/darin
+fs.readFile('~/about.md');
+
+// Relative paths: ./file → /current/path/file
+fs.readFile('./file.txt');
+
+// Parent directory: ../file → /parent/path/file
+fs.readFile('../file.txt');
+
+// Absolute paths: /home/darin/file → /home/darin/file
+fs.readFile('/home/darin/file.txt');
 ```
 
 ### Checking File/Directory
@@ -288,7 +306,7 @@ function processPath(fs: IFileSystem, path: string): void {
   }
 
   if (fs.isDirectory(path)) {
-    const entries = fs.listDirectory(path);
+    const entries = fs.list(path);
     console.log('Directory contains:', entries);
   } else {
     const content = fs.readFile(path);
@@ -302,7 +320,7 @@ function processPath(fs: IFileSystem, path: string): void {
 ```typescript
 // src/utils/fs/FileSystemInitializer.ts
 class FileSystemInitializer {
-  static createDefaultStructure(): FileNode {
+  static createDefaultStructure(): FileSystemNode {
     return {
       name: '',
       type: 'directory',
@@ -318,7 +336,9 @@ class FileSystemInitializer {
                 ['about.md', {
                   name: 'about.md',
                   type: 'file',
-                  content: '# About Me\n...'
+                  content: '# About Me\n...',
+                  permissions: 'rw-r--r--',
+                  owner: 'darin'
                 }],
                 ['blog', {
                   name: 'blog',
@@ -353,34 +373,65 @@ class SettingsManager {
   getSetting(key: keyof SettingsConfig): any;
   setSetting(key: keyof SettingsConfig, value: any): void;
 
-  // Convenience methods
-  getTheme(): ThemeConfig;
-  setTheme(preset: string): void;
+  // Theme methods
+  getThemePreset(): ThemePresetName;
+  setThemePreset(preset: ThemePresetName): void;
+  getCustomColors(): CustomColors | undefined;
+  setCustomColors(colors: CustomColors): void;
+
+  // Font methods
   getFont(): FontConfig;
   setFontSize(size: number): void;
-  setFontFamily(family: string): void;
+  setFontFamily(family: FontFamily): void;
+
+  // Effects methods
   getScanLines(): boolean;
+  setScanLines(enabled: boolean): void;
   getGlow(): boolean;
+  setGlow(enabled: boolean): void;
   getBorder(): boolean;
+  setBorder(enabled: boolean): void;
   getAnimationSpeed(): number;
+  setAnimationSpeed(speed: number): void;
+  getSoundEffects(): boolean;
+  setSoundEffects(enabled: boolean): void;
+  getAutoScrollBehavior(): boolean;
+  setAutoScrollBehavior(enabled: boolean): void;
+
+  // Prompt methods
+  getPromptFormat(): string;
+  setPromptFormat(format: string): void;
 
   // Reset to defaults
-  resetSettings(): void;
+  reset(): void;
 }
 ```
 
 ### SettingsConfig Structure
 
+Location: `src/types/settings.ts`
+
 ```typescript
 interface SettingsConfig {
-  theme: ThemeConfig;
+  theme: {
+    preset: ThemePresetName;
+    customColors?: CustomColors;
+  };
   font: FontConfig;
   effects: EffectsConfig;
   prompt: PromptConfig;
 }
 
-interface ThemeConfig {
-  preset: ThemePreset; // 'green' | 'amber' | 'white' | 'cyan' | 'paper'
+type ThemePresetName =
+  | 'green'
+  | 'yellow' // Previously 'amber'
+  | 'white'
+  | 'light-blue' // Previously 'cyan'
+  | 'paper'
+  | 'dc' // New custom preset
+  | 'custom'; // For user-defined colors
+
+interface CustomColors {
   foreground: string; // Hex color
   background: string; // Hex color
   dim: string; // Hex color
@@ -388,66 +439,155 @@ interface ThemeConfig {
 }
 
 interface FontConfig {
-  family: string; // 'monospace' | 'courier' | 'consolas'
+  family: FontFamily;
   size: number; // 8-24 (pixels)
 }
+
+type FontFamily =
+  | 'Fira Code'
+  | 'JetBrains Mono'
+  | 'Cascadia Code'
+  | 'Menlo'
+  | 'Monaco'
+  | 'Courier New'
+  | 'monospace';
 
 interface EffectsConfig {
   scanLines: boolean;
   glow: boolean;
   border: boolean;
+  animationSpeed: number; // 0.5-2.0
+  soundEffects: boolean; // New
+  autoScrollBehavior: boolean; // New
 }
 
 interface PromptConfig {
-  style: 'full' | 'short' | 'minimal';
-  animationSpeed: number; // 0.5-2.0
+  format: string; // Bash-style format string (e.g., '\u@\h:\w$ ')
 }
 ```
 
 ### Using Settings
 
 ```typescript
-// Get current theme
-const theme = settingsManager.getTheme();
-console.log(theme.preset); // 'green'
+// Get current theme preset
+const themePreset = settingsManager.getThemePreset();
+console.log(themePreset); // 'green'
 
-// Change theme
-settingsManager.setTheme('amber');
+// Change theme preset
+settingsManager.setThemePreset('yellow');
 
-// Adjust font size
+// Set custom colors
+settingsManager.setCustomColors({
+  foreground: '#ff6600',
+  background: '#000000',
+  dim: '#666666',
+  accent: '#ff9944',
+});
+
+// Adjust font settings
 settingsManager.setFontSize(16);
+settingsManager.setFontFamily('Fira Code');
 
 // Toggle effects
 const scanLines = settingsManager.getScanLines();
-settingsManager.setSetting('effects', {
-  ...settingsManager.getSetting('effects'),
-  scanLines: !scanLines,
-});
+settingsManager.setScanLines(!scanLines);
+
+// Enable sound effects
+settingsManager.setSoundEffects(true);
+
+// Set prompt format
+settingsManager.setPromptFormat('\\u@\\h:\\w$ ');
 
 // Reset to defaults
-settingsManager.resetSettings();
+settingsManager.reset();
 ```
 
-### Theme Application
+### ThemeManager
+
+Location: `src/utils/ThemeManager.ts`
 
 ```typescript
-// src/utils/ThemeManager.ts
 class ThemeManager {
-  applyTheme(themePreset: ThemePreset): void {
-    const colors = THEME_PRESETS[themePreset];
+  constructor(settingsManager: SettingsManager);
 
-    document.documentElement.style.setProperty('--terminal-fg', colors.foreground);
-    document.documentElement.style.setProperty('--terminal-bg', colors.background);
-    document.documentElement.style.setProperty('--terminal-dim', colors.dim);
-    document.documentElement.style.setProperty('--terminal-accent', colors.accent);
-  }
+  // Get available theme presets
+  getPresets(): ThemePreset[];
 
-  applyCurrentTheme(): void {
-    const theme = this.settingsManager.getTheme();
-    this.applyTheme(theme.preset);
-  }
+  // Get specific preset configuration
+  getPreset(name: ThemePresetName): ThemePreset | null;
+
+  // Apply theme by name
+  applyTheme(themeName: ThemePresetName): void;
+
+  // Apply custom colors
+  applyCustomColors(colors: Partial<ColorScheme>): void;
+
+  // Apply current theme from settings
+  applyCurrentTheme(): void;
+
+  // Get current color scheme
+  getCurrentColors(): ColorScheme;
 }
 ```
+
+**Types**:
+
+```typescript
+interface ThemePreset {
+  name: ThemePresetName;
+  displayName: string;
+  colors: ColorScheme;
+}
+
+interface ColorScheme {
+  foreground: string;
+  background: string;
+  dim: string;
+  accent: string;
+}
+```
+
+**Usage**:
+
+```typescript
+// Get all available presets
+const presets = themeManager.getPresets();
+// Returns array of ThemePreset objects
+
+// Get specific preset
+const greenTheme = themeManager.getPreset('green');
+// Returns: { name: 'green', displayName: 'Green', colors: {...} }
+
+// Apply theme
+themeManager.applyTheme('yellow');
+// Applies yellow theme to CSS variables
+
+// Apply custom colors
+themeManager.applyCustomColors({
+  foreground: '#ff6600',
+  background: '#000000',
+  dim: '#666666',
+  accent: '#ff9944',
+});
+
+// Apply theme from settings
+themeManager.applyCurrentTheme();
+// Reads current theme from SettingsManager and applies it
+
+// Get current colors
+const colors = themeManager.getCurrentColors();
+// Returns: { foreground: '#...', background: '#...', ... }
+```
+
+**Available Themes**:
+
+- `green` - Classic terminal green
+- `yellow` - Amber/yellow (previously 'amber')
+- `white` - High contrast white
+- `light-blue` - Cyan/light blue (previously 'cyan')
+- `paper` - Paper-like beige
+- `dc` - Custom DC theme
+- `custom` - User-defined colors
 
 ---
 
@@ -459,41 +599,70 @@ Location: `src/utils/EnvVarManager.ts`
 
 ```typescript
 class EnvVarManager {
+  constructor(fileSystem: IFileSystem, username: string, hostname: string);
+
   // Get environment variable
   getVariable(name: string): string | undefined;
 
-  // Set environment variable
+  // Set user environment variable
   setVariable(name: string, value: string): void;
 
-  // Get all variables
-  getAllVariables(): Record<string, string>;
+  // Unset environment variable
+  unsetVariable(name: string): void;
 
-  // Expand variables in string
+  // Get all variables (platform + user)
+  getAllVariables(): Map<string, string>;
+
+  // Get platform-managed variables
+  getPlatformVariables(): Map<string, string>;
+
+  // Get user-defined variables
+  getUserVariables(): Map<string, string>;
+
+  // Update platform variable (internal use)
+  updatePlatformVariable(name: string, value: string): void;
+
+  // Expand variables in string ($VAR syntax)
   expandVariables(input: string): string;
 
-  // Built-in variables
-  getHome(): string; // $HOME
-  getPwd(): string; // $PWD
-  setPwd(path: string): void;
-  getOldPwd(): string; // $OLDPWD
-  setOldPwd(path: string): void;
-  getUser(): string; // $USER
-  getHostname(): string; // $HOSTNAME
+  // Export variables as shell format
+  exportFormat(): string[];
 }
 ```
+
+**Built-in Platform Variables**:
+
+- `$HOME` - User home directory (e.g., `/home/darin`)
+- `$PWD` - Current working directory
+- `$OLDPWD` - Previous working directory
+- `$USER` - Username
+- `$HOSTNAME` - Host name
+- `$SHELL` - Shell path
+- `$PATH` - Executable search path
 
 **Usage**:
 
 ```typescript
-// Get variable
+// Get built-in variable
 const home = envVarManager.getVariable('HOME');
+const pwd = envVarManager.getVariable('PWD');
 
 // Set custom variable
 envVarManager.setVariable('MY_VAR', 'value');
 
-// Expand in command
+// Unset variable
+envVarManager.unsetVariable('MY_VAR');
+
+// Expand variables in command
 const expanded = envVarManager.expandVariables('cd $HOME/blog');
 // Result: 'cd /home/darin/blog'
+
+// Get all user-defined variables
+const userVars = envVarManager.getUserVariables();
+
+// Export format (for 'env' command)
+const exports = envVarManager.exportFormat();
+// Result: ['HOME=/home/darin', 'PWD=/home/darin', ...]
 ```
 
 ### AliasManager
@@ -505,16 +674,22 @@ class AliasManager {
   // Create/update alias
   setAlias(name: string, command: string): void;
 
-  // Remove alias
-  removeAlias(name: string): void;
+  // Remove alias (returns true if removed, false if not found)
+  removeAlias(name: string): boolean;
 
   // Get alias command
   getAlias(name: string): string | undefined;
 
   // Get all aliases
-  getAllAliases(): Record<string, string>;
+  getAllAliases(): Map<string, string>;
 
-  // Resolve alias in command
+  // Check if alias is a default/built-in alias
+  isDefaultAlias(name: string): boolean;
+
+  // Resolve alias in command (primary method)
+  resolve(input: string): string;
+
+  // Legacy method (kept for compatibility)
   resolveAlias(command: string): string;
 }
 ```
@@ -525,13 +700,24 @@ class AliasManager {
 // Create alias
 aliasManager.setAlias('ll', 'ls -la');
 
-// Use alias
-const resolved = aliasManager.resolveAlias('ll ~/blog');
+// Resolve alias (preferred method)
+const resolved = aliasManager.resolve('ll ~/blog');
 // Result: 'ls -la ~/blog'
 
-// List all aliases
+// Check if alias is built-in
+const isBuiltIn = aliasManager.isDefaultAlias('ll');
+
+// Remove alias
+const removed = aliasManager.removeAlias('ll');
+// Returns: true (if existed), false (if not found)
+
+// List all aliases (returns Map)
 const aliases = aliasManager.getAllAliases();
-// { ll: 'ls -la', blog-ai: 'blog --tags ai' }
+// Map { 'll' => 'ls -la', 'blog-ai' => 'blog --tags ai' }
+
+// Convert to object if needed
+const aliasesObj = Object.fromEntries(aliases);
+// { ll: 'ls -la', 'blog-ai': 'blog --tags ai' }
 ```
 
 ---
@@ -546,7 +732,7 @@ Location: `src/utils/CommandParser.ts`
 interface ParsedCommand {
   command: string;
   args: string[];
-  options: Record<string, boolean | string>;
+  raw: string; // Original input string
 }
 
 class CommandParser {
@@ -561,9 +747,12 @@ const parsed = CommandParser.parse('ls -la ~/blog');
 // Result:
 // {
 //   command: 'ls',
-//   args: ['-la', '/home/darin/blog'],
-//   options: { l: true, a: true }
+//   args: ['-la', '~/blog'],
+//   raw: 'ls -la ~/blog'
 // }
+
+// Note: Individual commands are responsible for parsing their own flags
+// Path expansion (~ -> /home/darin) happens later in the execution pipeline
 ```
 
 ### PipelineParser
@@ -572,15 +761,27 @@ Location: `src/utils/PipelineParser.ts`
 
 ```typescript
 class PipelineParser {
+  // Parse input into pipeline commands
   static parse(input: string): string[];
+
+  // Check if input contains pipe operators
+  static hasPipe(input: string): boolean;
 }
 ```
 
 **Usage**:
 
 ```typescript
+// Parse pipeline
 const commands = PipelineParser.parse('cat file.md | render');
 // Result: ['cat file.md', 'render']
+
+// Check for pipes
+const isPipeline = PipelineParser.hasPipe('cat file.md | render');
+// Result: true
+
+const isSimple = PipelineParser.hasPipe('ls -la');
+// Result: false
 ```
 
 ### Markdown Parser
@@ -589,19 +790,7 @@ Location: `src/utils/MarkdownService.ts`
 
 ```typescript
 class MarkdownService {
-  static render(markdown: string): string;
-
-  static parse(
-    content: string,
-    options?: {
-      extractFrontmatter?: boolean;
-    }
-  ): ParsedContent;
-}
-
-interface ParsedContent {
-  content: string;
-  frontmatter?: Record<string, any>;
+  static render(markdown: string, renderFrontmatter = false): string;
 }
 ```
 
@@ -611,12 +800,18 @@ interface ParsedContent {
 // Render markdown to HTML
 const html = MarkdownService.render('# Hello\nWorld');
 
-// Parse with frontmatter
-const parsed = MarkdownService.parse(fileContent, {
-  extractFrontmatter: true,
-});
-// Result: { content: '...', frontmatter: { title: '...', date: '...' } }
+// Render with frontmatter included
+const htmlWithFrontmatter = MarkdownService.render(fileContent, true);
 ```
+
+**Implementation Notes**:
+
+- MarkdownService is a facade that delegates to either:
+  - `MarkdownRenderer` (custom implementation, default)
+  - `MarkedAdapter` (marked library wrapper)
+- Renderer selection is controlled by `config.features.useMarkedRenderer` flag
+- Frontmatter parsing is handled internally using `FrontmatterParser` class
+- The `render()` method handles both markdown rendering and optional frontmatter extraction/rendering
 
 ---
 
@@ -751,7 +946,14 @@ export const THEME_PRESETS = {
   },
 };
 
-export type ThemePreset = 'green' | 'amber' | 'white' | 'cyan' | 'paper' | 'custom'; // Add this
+export type ThemePresetName =
+  | 'green'
+  | 'yellow'
+  | 'white'
+  | 'light-blue'
+  | 'paper'
+  | 'dc'
+  | 'custom'; // Add this
 ```
 
 ### Adding Custom Markdown Handler

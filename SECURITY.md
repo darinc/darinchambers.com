@@ -13,10 +13,10 @@
 
 ## Supported Versions
 
-| Version         | Supported | Status             |
-| --------------- | --------- | ------------------ |
-| 0.0.x (current) | ✅ Yes    | Active development |
-| < 0.0.50        | ❌ No     | Legacy versions    |
+| Version          | Supported | Status             |
+| ---------------- | --------- | ------------------ |
+| 0.11.x (current) | ✅ Yes    | Active development |
+| < 0.11.0         | ❌ No     | Legacy versions    |
 
 **Note**: Once version 1.0.0 is released, security patches will only be provided for the latest minor version.
 
@@ -28,24 +28,7 @@ This application implements multiple layers of security protection:
 
 ### 1. XSS (Cross-Site Scripting) Protection
 
-#### Layer 1: HTML Escaping
-
-**Location**: `src/utils/htmlEscape.ts`
-
-All user-generated content is HTML-escaped before processing:
-
-```typescript
-function escapeHtml(unsafe: string): string {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-```
-
-#### Layer 2: DOMPurify Sanitization
+#### Layer 1: DOMPurify Sanitization
 
 **Library**: `dompurify@3.3.0`
 **Location**: `src/utils/sanitizeHtml.ts`
@@ -55,17 +38,106 @@ All HTML is sanitized before rendering:
 ```typescript
 import DOMPurify from 'dompurify';
 
-function sanitizeHtml(dirty: string): string {
-  return DOMPurify.sanitize(dirty, {
-    ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'code', 'pre', 'a', 'ul', 'ol', 'li', 'strong', 'em'],
-    ALLOWED_ATTR: ['href', 'class', 'id'],
+function sanitizeHtml(html: string): string {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      // Text formatting
+      'p',
+      'div',
+      'span',
+      'br',
+      'strong',
+      'b',
+      'em',
+      'i',
+      'u',
+      's',
+      // Links and code
+      'a',
+      'code',
+      'pre',
+      // Headers
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      // Lists
+      'ul',
+      'ol',
+      'li',
+      'blockquote',
+      // Tables
+      'table',
+      'thead',
+      'tbody',
+      'tr',
+      'th',
+      'td',
+      // Media
+      'img',
+      // Interactive elements for settings UI
+      'button',
+      'input',
+      'select',
+      'option',
+      'label',
+      // Semantic HTML
+      'aside',
+      'section',
+      'details',
+      'summary',
+    ],
+    ALLOWED_ATTR: [
+      'class',
+      'id',
+      'href',
+      'target',
+      'rel',
+      'src',
+      'alt',
+      'title',
+      'type',
+      'value',
+      'checked',
+      'selected',
+      'disabled',
+      'min',
+      'max',
+      'step',
+      'placeholder',
+      'open',
+      'style',
+      // Data attributes for event delegation
+      'data-command',
+      'data-setting-type',
+      'data-color-var',
+      'data-theme',
+      'data-settings-panel',
+      'data-graph',
+      // ARIA attributes for accessibility
+      'role',
+      'aria-label',
+      'aria-labelledby',
+      'aria-describedby',
+      'aria-valuemin',
+      'aria-valuemax',
+      'aria-valuenow',
+      'aria-valuetext',
+      'aria-live',
+      'aria-atomic',
+      'aria-current',
+    ],
   });
 }
 ```
 
-#### Layer 3: Content Security Policy (CSP)
+#### Layer 2: Content Security Policy (CSP)
 
-**Location**: `index.html` + `public/_headers`
+**Location**: `public/_headers` (production only)
+
+**Note**: CSP is configured only in the production `_headers` file for Cloudflare Pages deployment. It is intentionally not included in `index.html` as a meta tag to allow the Vite development server to function properly with hot module replacement (HMR).
 
 Strict CSP prevents execution of inline scripts:
 
@@ -90,7 +162,7 @@ Content-Security-Policy:
 - Unsafe dynamic code execution
 - Loading scripts from external domains
 
-#### Layer 4: Event Delegation
+#### Layer 3: Event Delegation
 
 **Implementation**: No inline event handlers
 
@@ -434,7 +506,7 @@ We would like to thank the security researchers and contributors who have helped
 
 ---
 
-**Last Updated**: November 6, 2025
+**Last Updated**: 2025-11-22 (v0.11.0)
 **Security Policy Version**: 1.0
 **Next Review**: January 2026
 

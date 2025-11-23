@@ -45,7 +45,7 @@ Visit `http://localhost:5173`
 ```bash
 npm run dev              # Start dev server
 npm run build            # Production build
-npm run test             # Run tests (1229 tests, 70% coverage)
+npm run test             # Run tests (1247 tests, 80% coverage)
 npm run test:coverage    # Coverage report
 npm run lint             # Run linter
 ```
@@ -82,7 +82,7 @@ darinchambers.com/
 │   ├── content/         # Markdown content (blog, portfolio)
 │   ├── utils/           # Parsers, managers, renderers
 │   └── types/           # TypeScript interfaces
-├── tests/               # 1229 tests, 70% coverage
+├── tests/               # 1247 tests, 80% coverage
 └── public/              # Static assets
 ```
 
@@ -90,7 +90,7 @@ darinchambers.com/
 
 - Strict TypeScript, zero `any` usage
 - Multi-layered XSS protection (DOMPurify + CSP)
-- 1229 tests across 50 test files
+- 1247 tests across 51 test files
 - Zero known vulnerabilities
 - 121KB total bundle (110KB JS, 11KB CSS)
 
