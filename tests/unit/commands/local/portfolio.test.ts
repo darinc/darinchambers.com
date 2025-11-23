@@ -7,7 +7,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createPortfolioCommand } from '../../../../src/commands/local/portfolio';
 import { MESSAGES } from '../../../../src/constants';
-import type { Command } from '../../../../src/commands/Command';
+import type { Command, CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 // Mock filesystem for testing
@@ -25,9 +25,14 @@ function createMockFs(files = new Map<string, string>()): IFileSystem {
     },
     exists: () => true,
     isDirectory: () => true,
-    getCurrentDirectory: () => '/home/darin',
-    setCurrentDirectory: () => {},
-    resolve: (path: string) => path,
+    isFile: () => false,
+    getCurrentPath: () => '/home/darin',
+    getShortPath: () => '~',
+    setCurrentUsername: () => {},
+    changeDirectory: () => {},
+    writeFile: () => {},
+    createDirectory: () => {},
+    getTree: () => [],
     getNode: () => null,
   };
 }
@@ -67,14 +72,14 @@ describe('Portfolio Command', () => {
     });
 
     it('should return friendly message when portfolio is empty', () => {
-      const result = portfolioCommand.execute([]);
+      const result = portfolioCommand.execute([]) as CommandResult;
 
       expect(result.output).toContain(MESSAGES.EMPTY_PORTFOLIO);
       expect(result.html).toBe(true);
     });
 
     it('should return no tags available when --tags called on empty portfolio', () => {
-      const result = portfolioCommand.execute(['--tags']);
+      const result = portfolioCommand.execute(['--tags']) as CommandResult;
 
       expect(result.output).toContain(MESSAGES.NO_TAGS_AVAILABLE);
       expect(result.html).toBe(true);
@@ -95,7 +100,7 @@ describe('Portfolio Command', () => {
     });
 
     it('should show top 5 popular tags when filtering returns no results', () => {
-      const result = portfolioCommand.execute(['--tags', 'nonexistent']);
+      const result = portfolioCommand.execute(['--tags', 'nonexistent']) as CommandResult;
 
       expect(result.output).toContain("No projects found with tag 'nonexistent'");
       expect(result.output).toContain('Try one of these tags:');
@@ -112,14 +117,14 @@ describe('Portfolio Command', () => {
       const mockFs = createMockFs(filesWithoutTags);
       const cmd = createPortfolioCommand(mockFs);
 
-      const result = cmd.execute(['--tags', 'nonexistent']);
+      const result = cmd.execute(['--tags', 'nonexistent']) as CommandResult;
 
       expect(result.output).toContain("No projects found with tag 'nonexistent'");
       expect(result.output).not.toContain('Try one of these tags:');
     });
 
     it('should handle multiple tag filter with no results', () => {
-      const result = portfolioCommand.execute(['--tags', 'foo,bar']);
+      const result = portfolioCommand.execute(['--tags', 'foo,bar']) as CommandResult;
 
       expect(result.output).toContain("No projects found with tags 'foo', 'bar'");
       expect(result.output).toContain('Try one of these tags:');
@@ -135,7 +140,7 @@ describe('Portfolio Command', () => {
       const mockFs = createMockFs(files);
       const cmd = createPortfolioCommand(mockFs);
 
-      const result = cmd.execute(['--tags']);
+      const result = cmd.execute(['--tags']) as CommandResult;
 
       expect(result.output).toContain('web');
       expect(result.output).toContain('react');
@@ -155,7 +160,7 @@ describe('Portfolio Command', () => {
     });
 
     it('should access project by numeric index (1)', () => {
-      const result = portfolioCommand.execute(['1']);
+      const result = portfolioCommand.execute(['1']) as CommandResult;
 
       expect(result.output).toContain('Project 1');
       expect(result.html).toBe(true);
@@ -163,7 +168,7 @@ describe('Portfolio Command', () => {
     });
 
     it('should access project by numeric index (2)', () => {
-      const result = portfolioCommand.execute(['2']);
+      const result = portfolioCommand.execute(['2']) as CommandResult;
 
       expect(result.output).toContain('Project 2');
       expect(result.html).toBe(true);
@@ -171,7 +176,7 @@ describe('Portfolio Command', () => {
     });
 
     it('should access project by numeric index (3)', () => {
-      const result = portfolioCommand.execute(['3']);
+      const result = portfolioCommand.execute(['3']) as CommandResult;
 
       expect(result.output).toContain('Project 3');
       expect(result.html).toBe(true);
@@ -179,7 +184,7 @@ describe('Portfolio Command', () => {
     });
 
     it('should access project by string ID', () => {
-      const result = portfolioCommand.execute(['proj2']);
+      const result = portfolioCommand.execute(['proj2']) as CommandResult;
 
       expect(result.output).toContain('Project 2');
       expect(result.html).toBe(true);
@@ -187,21 +192,21 @@ describe('Portfolio Command', () => {
     });
 
     it('should return error for invalid numeric index (0)', () => {
-      const result = portfolioCommand.execute(['0']);
+      const result = portfolioCommand.execute(['0']) as CommandResult;
 
       expect(result.output).toContain("Project '0' not found");
       expect(result.error).toBe(true);
     });
 
     it('should return error for invalid numeric index (out of range)', () => {
-      const result = portfolioCommand.execute(['999']);
+      const result = portfolioCommand.execute(['999']) as CommandResult;
 
       expect(result.output).toContain("Project '999' not found");
       expect(result.error).toBe(true);
     });
 
     it('should return error for non-existent string ID', () => {
-      const result = portfolioCommand.execute(['nonexistent']);
+      const result = portfolioCommand.execute(['nonexistent']) as CommandResult;
 
       expect(result.output).toContain("Project 'nonexistent' not found");
       expect(result.error).toBe(true);

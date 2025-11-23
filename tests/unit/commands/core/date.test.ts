@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { dateCommand } from '../../../../src/commands/core/date';
+import type { CommandResult } from '../../../../src/commands/Command';
 
 describe('date command', () => {
   let originalDate: typeof Date;
@@ -13,7 +14,7 @@ describe('date command', () => {
   });
 
   it('should return current date and time', () => {
-    const result = dateCommand.execute([]);
+    const result = dateCommand.execute([]) as CommandResult;
 
     expect(result.output).toBeTruthy();
     expect(typeof result.output).toBe('string');
@@ -22,7 +23,7 @@ describe('date command', () => {
   });
 
   it('should return a valid date string format', () => {
-    const result = dateCommand.execute([]);
+    const result = dateCommand.execute([]) as CommandResult;
 
     // Verify it's a valid date string by parsing it
     const parsed = new Date(result.output);
@@ -40,14 +41,14 @@ describe('date command', () => {
       }
     } as any;
 
-    const result = dateCommand.execute([]);
+    const result = dateCommand.execute([]) as CommandResult;
 
     expect(result.output).toBe(mockDate.toString());
   });
 
   it('should ignore arguments', () => {
-    const result1 = dateCommand.execute([]);
-    const result2 = dateCommand.execute(['--format', '%Y-%m-%d']);
+    const result1 = dateCommand.execute([]) as CommandResult;
+    const result2 = dateCommand.execute(['--format', '%Y-%m-%d']) as CommandResult;
 
     // Both should return date strings (arguments ignored)
     expect(typeof result1.output).toBe('string');
@@ -55,7 +56,7 @@ describe('date command', () => {
   });
 
   it('should ignore stdin', () => {
-    const result = dateCommand.execute([], 'piped input');
+    const result = dateCommand.execute([], 'piped input') as CommandResult;
 
     // Should return date, not stdin
     expect(result.output).toMatch(/\d{4}/);
@@ -63,10 +64,10 @@ describe('date command', () => {
   });
 
   it('should return different times on subsequent calls', () => {
-    const result1 = dateCommand.execute([]);
+    const result1 = dateCommand.execute([]) as CommandResult;
 
     // Wait a tiny bit (setTimeout not needed in tests, but conceptually)
-    const result2 = dateCommand.execute([]);
+    const result2 = dateCommand.execute([]) as CommandResult;
 
     // Should both be valid date strings
     expect(result1.output).toBeTruthy();

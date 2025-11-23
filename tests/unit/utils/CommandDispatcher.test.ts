@@ -19,7 +19,7 @@ class MockUppercaseCommand implements Command {
   description = 'Convert stdin to uppercase';
   aliases = ['upper', 'uc'];
 
-  execute(args: string[], stdin?: string): CommandResult {
+  execute(_args: string[], stdin?: string): CommandResult {
     const output = stdin ? stdin.toUpperCase() : '';
     return { output };
   }
@@ -29,7 +29,7 @@ class MockCountCommand implements Command {
   name = 'count';
   description = 'Count characters in stdin';
 
-  execute(args: string[], stdin?: string): CommandResult {
+  execute(_args: string[], stdin?: string): CommandResult {
     const output = stdin ? String(stdin.length) : '0';
     return { output };
   }

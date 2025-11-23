@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createWhoamiCommand } from '../../../../src/commands/core/whoami';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { Terminal } from '../../../../src/components/Terminal';
 
 describe('whoami command', () => {
@@ -9,7 +10,7 @@ describe('whoami command', () => {
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('testuser');
     expect(mockTerminal.getUsername).toHaveBeenCalled();
@@ -32,7 +33,7 @@ describe('whoami command', () => {
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
-    const result = command.execute(['arg1', 'arg2']);
+    const result = command.execute(['arg1', 'arg2']) as CommandResult;
 
     expect(result.output).toBe('darin');
   });
@@ -43,7 +44,7 @@ describe('whoami command', () => {
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
-    const result = command.execute([], 'piped input');
+    const result = command.execute([], 'piped input') as CommandResult;
 
     expect(result.output).toBe('alice');
     expect(result.output).not.toBe('piped input');
@@ -55,7 +56,7 @@ describe('whoami command', () => {
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('root');
   });

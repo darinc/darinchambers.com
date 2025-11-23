@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createAliasCommand } from '../../../../src/commands/core/alias';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { AliasManager } from '../../../../src/utils/AliasManager';
 
 describe('alias command', () => {
@@ -18,7 +19,7 @@ describe('alias command', () => {
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toContain(`alias ll='ls -lah'`);
       expect(result.output).toContain(`alias gs='git status'`);
@@ -33,7 +34,7 @@ describe('alias command', () => {
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('No aliases defined.');
     });
@@ -53,7 +54,7 @@ describe('alias command', () => {
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       const lines = result.output.split('\n');
       expect(lines[0]).toContain('aa=');
@@ -72,7 +73,7 @@ describe('alias command', () => {
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
-      const result = command.execute(['ll=ls', '-lah']);
+      const result = command.execute(['ll=ls', '-lah']) as CommandResult;
 
       expect(mockManager.setAlias).toHaveBeenCalledWith('ll', 'ls -lah');
       expect(result.output).toBe(`Alias created: ll='ls -lah'`);
@@ -87,7 +88,14 @@ describe('alias command', () => {
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
-      const result = command.execute(['deploy=git', 'push', '&&', 'npm', 'run', 'build']);
+      const result = command.execute([
+        'deploy=git',
+        'push',
+        '&&',
+        'npm',
+        'run',
+        'build',
+      ]) as CommandResult;
 
       expect(mockManager.setAlias).toHaveBeenCalledWith('deploy', 'git push && npm run build');
       expect(result.output).toContain('Alias created');
@@ -102,7 +110,7 @@ describe('alias command', () => {
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
-      const result = command.execute(['invalid']);
+      const result = command.execute(['invalid']) as CommandResult;
 
       expect(result.output).toContain('Usage: alias name=');
       expect(result.error).toBe(true);
@@ -118,7 +126,7 @@ describe('alias command', () => {
       } as unknown as AliasManager;
 
       const command = createAliasCommand(mockManager);
-      const result = command.execute(['bad-name=cmd']);
+      const result = command.execute(['bad-name=cmd']) as CommandResult;
 
       expect(result.output).toBe('Invalid alias name');
       expect(result.error).toBe(true);

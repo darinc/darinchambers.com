@@ -24,9 +24,13 @@ function createMockFileSystem(): IFileSystem {
     list: vi.fn(() => []),
     exists: vi.fn(() => true),
     isDirectory: vi.fn(() => false),
-    getCurrentDirectory: vi.fn(() => '/home/darin'),
-    setCurrentDirectory: vi.fn(),
-    resolve: vi.fn((path: string) => path),
+    isFile: vi.fn(() => true),
+    getCurrentPath: vi.fn(() => '/home/darin'),
+    getShortPath: vi.fn(() => '~'),
+    setCurrentUsername: vi.fn(),
+    changeDirectory: vi.fn(),
+    createDirectory: vi.fn(),
+    getTree: vi.fn(() => []),
     getNode: vi.fn(() => null),
   };
 }

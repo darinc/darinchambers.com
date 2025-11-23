@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createCatCommand } from '../../../../src/commands/fs/cat';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 describe('cat command', () => {
@@ -9,7 +10,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['test.txt']);
+    const result = command.execute(['test.txt']) as CommandResult;
 
     expect(mockFs.readFile).toHaveBeenCalledWith('test.txt');
     expect(result.output).toBe('File contents here');
@@ -21,7 +22,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['multiline.txt']);
+    const result = command.execute(['multiline.txt']) as CommandResult;
 
     expect(result.output).toBe('Line 1\nLine 2\nLine 3');
   });
@@ -32,7 +33,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe("cat: missing file operand\nTry 'cat --help' for more information");
     expect(result.error).toBe(true);
@@ -47,7 +48,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['test.txt']);
+    const result = command.execute(['test.txt']) as CommandResult;
 
     expect(result.output).toBe('cat: test.txt: No such file or directory');
     expect(result.error).toBe(true);
@@ -61,7 +62,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['mydir']);
+    const result = command.execute(['mydir']) as CommandResult;
 
     expect(result.output).toBe('cat: mydir: Is a directory');
     expect(result.error).toBe(true);
@@ -84,7 +85,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['empty.txt']);
+    const result = command.execute(['empty.txt']) as CommandResult;
 
     expect(result.output).toBe('');
   });
@@ -95,7 +96,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['special.txt']);
+    const result = command.execute(['special.txt']) as CommandResult;
 
     expect(result.output).toBe('Special chars: <>&"\'\n\t');
   });
@@ -107,7 +108,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['large.txt']);
+    const result = command.execute(['large.txt']) as CommandResult;
 
     expect(result.output.length).toBe(100000);
   });
@@ -132,7 +133,7 @@ describe('cat command', () => {
     } as unknown as IFileSystem;
 
     const command = createCatCommand(mockFs);
-    const result = command.execute(['test.txt']);
+    const result = command.execute(['test.txt']) as CommandResult;
 
     expect(result.output).toBe('string error');
     expect(result.error).toBe(true);

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createRenderCommand } from '../../../../src/commands/core/render';
 import * as MarkdownServiceModule from '../../../../src/utils/MarkdownService';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 // Mock MarkdownService
@@ -26,7 +27,7 @@ describe('render command', () => {
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
-      const result = command.execute(['test.md']);
+      const result = command.execute(['test.md']) as CommandResult;
 
       expect(mockFs.readFile).toHaveBeenCalledWith('test.md');
       expect(result.output).toContain('<p>');
@@ -73,7 +74,7 @@ describe('render command', () => {
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
-      const result = command.execute(['missing.md']);
+      const result = command.execute(['missing.md']) as CommandResult;
 
       expect(result.output).toContain('No such file or directory');
       expect(result.error).toBe(true);
@@ -87,7 +88,7 @@ describe('render command', () => {
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
-      const result = command.execute(['somedir']);
+      const result = command.execute(['somedir']) as CommandResult;
 
       expect(result.output).toContain('Is a directory');
       expect(result.error).toBe(true);
@@ -103,7 +104,7 @@ describe('render command', () => {
       } as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
-      const result = command.execute(['test.md']);
+      const result = command.execute(['test.md']) as CommandResult;
 
       expect(result.output).toBe('Read error');
       expect(result.error).toBe(true);
@@ -115,7 +116,7 @@ describe('render command', () => {
       const mockFs = {} as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
-      const result = command.execute([], '# Test\n\nFrom stdin');
+      const result = command.execute([], '# Test\n\nFrom stdin') as CommandResult;
 
       expect(result.output).toContain('<p>');
       expect(result.html).toBe(true);
@@ -125,7 +126,7 @@ describe('render command', () => {
       const mockFs = {} as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
-      const result = command.execute([], '# Stdin content');
+      const result = command.execute([], '# Stdin content') as CommandResult;
 
       expect(result.output).toContain('<p>');
       expect(result.html).toBe(true);
@@ -149,7 +150,7 @@ describe('render command', () => {
       const mockFs = {} as unknown as IFileSystem;
 
       const command = createRenderCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe(
         "render: missing file operand\nTry 'render --help' for more information"

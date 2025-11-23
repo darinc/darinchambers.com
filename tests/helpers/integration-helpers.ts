@@ -120,12 +120,12 @@ function registerAllCommands(context: IntegrationTestContext): void {
   // Core commands
   terminal.registerCommand(echoCommand);
   terminal.registerCommand(dateCommand);
-  terminal.registerCommand(createWhoamiCommand(envVarManager));
+  terminal.registerCommand(createWhoamiCommand(terminal));
   terminal.registerCommand(createHistoryCommand(terminalInput));
   terminal.registerCommand(createAliasCommand(aliasManager));
   terminal.registerCommand(createEnvCommand(envVarManager));
   terminal.registerCommand(createExportCommand(envVarManager));
-  terminal.registerCommand(createRenderCommand(terminalOutput));
+  terminal.registerCommand(createRenderCommand(fileSystem));
 
   // Help command (defined inline like in main.ts)
   const helpCommand: Command = {
@@ -162,7 +162,7 @@ function registerAllCommands(context: IntegrationTestContext): void {
   terminal.registerCommand(createAboutCommand(fileSystem));
   terminal.registerCommand(createBlogCommand(fileSystem));
   terminal.registerCommand(createPortfolioCommand(fileSystem));
-  terminal.registerCommand(createContactCommand());
+  terminal.registerCommand(createContactCommand(fileSystem));
   terminal.registerCommand(
     createSettingsCommand(fileSystem, context.settingsManager, context.themeManager)
   );

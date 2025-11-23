@@ -305,6 +305,7 @@ describe('ThemeManager', () => {
     it('should load custom theme from settings', () => {
       const customColors = {
         background: '#000000',
+        backgroundSecondary: '#111111',
         foreground: '#ffffff',
         accent: '#ff0000',
         dim: '#888888',

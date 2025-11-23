@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createExportCommand } from '../../../../src/commands/core/export';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { EnvVarManager } from '../../../../src/utils/EnvVarManager';
 
 describe('export command', () => {
@@ -17,7 +18,7 @@ describe('export command', () => {
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toContain('VAR1=value1');
       expect(result.output).toContain('VAR2=value2');
@@ -31,7 +32,7 @@ describe('export command', () => {
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('');
     });
@@ -44,7 +45,7 @@ describe('export command', () => {
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
-      const result = command.execute(['VAR1']);
+      const result = command.execute(['VAR1']) as CommandResult;
 
       expect(result.output).toBe('VAR1=test value');
     });
@@ -57,7 +58,7 @@ describe('export command', () => {
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
-      const result = command.execute(['MISSING']);
+      const result = command.execute(['MISSING']) as CommandResult;
 
       expect(result.output).toBe('export: MISSING: not found');
     });
@@ -72,7 +73,7 @@ describe('export command', () => {
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
-      const result = command.execute(['VAR=value']);
+      const result = command.execute(['VAR=value']) as CommandResult;
 
       expect(mockManager.setVariable).toHaveBeenCalledWith('VAR', 'value');
       expect(result.output).toBe('');
@@ -130,7 +131,7 @@ describe('export command', () => {
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
-      const result = command.execute(['INVALID=value']);
+      const result = command.execute(['INVALID=value']) as CommandResult;
 
       expect(result.output).toBe('Invalid variable name');
       expect(result.error).toBe(true);
@@ -146,7 +147,7 @@ describe('export command', () => {
       } as unknown as EnvVarManager;
 
       const command = createExportCommand(mockManager);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('error string');
       expect(result.error).toBe(true);

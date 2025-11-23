@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createTreeCommand } from '../../../../src/commands/fs/tree';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 describe('tree command', () => {
@@ -10,7 +11,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(mockFs.getTree).toHaveBeenCalledWith('.', 4);
       expect(result.output).toContain('file1.txt');
@@ -94,7 +95,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute(['-L']);
+      const result = command.execute(['-L']) as CommandResult;
 
       expect(result.output).toContain('-L flag requires a depth value');
       expect(result.error).toBe(true);
@@ -106,7 +107,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute(['-L', 'abc']);
+      const result = command.execute(['-L', 'abc']) as CommandResult;
 
       expect(result.output).toContain('invalid level');
       expect(result.error).toBe(true);
@@ -120,7 +121,7 @@ describe('tree command', () => {
       const command = createTreeCommand(mockFs);
       // Note: -L -1 is parsed as separate flags, so -L has no value
       // This tests that the command handles this correctly
-      const result = command.execute(['-L', '-1']);
+      const result = command.execute(['-L', '-1']) as CommandResult;
 
       expect(result.output).toContain('-L flag requires a depth value');
       expect(result.error).toBe(true);
@@ -132,7 +133,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute(['-L', '0']);
+      const result = command.execute(['-L', '0']) as CommandResult;
 
       expect(result.output).toContain('invalid level');
       expect(result.error).toBe(true);
@@ -146,7 +147,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('root\n├── file1\n└── file2');
     });
@@ -157,7 +158,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('.');
     });
@@ -168,7 +169,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('');
     });
@@ -183,7 +184,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute(['/path']);
+      const result = command.execute(['/path']) as CommandResult;
 
       expect(result.output).toBe('tree: /path: No such file or directory');
       expect(result.error).toBe(true);
@@ -197,7 +198,7 @@ describe('tree command', () => {
       } as unknown as IFileSystem;
 
       const command = createTreeCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('string error');
       expect(result.error).toBe(true);

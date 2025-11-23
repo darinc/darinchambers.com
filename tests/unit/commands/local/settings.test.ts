@@ -10,7 +10,7 @@ import { createSettingsCommand } from '../../../../src/commands/local/settings';
 import { FileSystemService } from '../../../../src/utils/fs/FileSystemService';
 import { SettingsManager } from '../../../../src/utils/SettingsManager';
 import { ThemeManager } from '../../../../src/utils/ThemeManager';
-import type { Command } from '../../../../src/commands/Command';
+import type { Command, CommandResult } from '../../../../src/commands/Command';
 import type { FileSystemNode } from '../../../../src/utils/fs/types';
 
 describe('Settings Command', () => {
@@ -74,7 +74,6 @@ describe('Settings Command', () => {
 
     // Mock getComputedStyle for SettingsUI
     // Need to do this at the window level since jsdom validates the element parameter
-    const _originalGetComputedStyle = window.getComputedStyle;
     window.getComputedStyle = vi.fn(() => {
       return {
         getPropertyValue: (prop: string) => {
@@ -92,7 +91,7 @@ describe('Settings Command', () => {
         trim: function () {
           return '';
         },
-      } as CSSStyleDeclaration;
+      } as unknown as CSSStyleDeclaration;
     }) as any;
   });
 
@@ -112,7 +111,7 @@ describe('Settings Command', () => {
 
   describe('No arguments - Interactive UI', () => {
     it('should return HTML output when called with no arguments', () => {
-      const result = settingsCommand.execute([]);
+      const result = settingsCommand.execute([]) as CommandResult;
 
       expect(result.html).toBe(true);
       expect(result.output).toBeDefined();
@@ -120,13 +119,13 @@ describe('Settings Command', () => {
     });
 
     it('should include settings panel in output', () => {
-      const result = settingsCommand.execute([]);
+      const result = settingsCommand.execute([]) as CommandResult;
 
       expect(result.output).toContain('settings-panel');
     });
 
     it('should include theme preset buttons', () => {
-      const result = settingsCommand.execute([]);
+      const result = settingsCommand.execute([]) as CommandResult;
 
       // Check for theme preset display names (they appear in button text)
       // Based on actual output: Green, Amber, White, Cyan, Paper
@@ -140,14 +139,14 @@ describe('Settings Command', () => {
     });
 
     it('should include font controls', () => {
-      const result = settingsCommand.execute([]);
+      const result = settingsCommand.execute([]) as CommandResult;
 
       expect(result.output).toContain('Font Size');
       expect(result.output).toContain('Font Family');
     });
 
     it('should include effects controls', () => {
-      const result = settingsCommand.execute([]);
+      const result = settingsCommand.execute([]) as CommandResult;
 
       expect(result.output).toContain('Scan Lines');
       expect(result.output).toContain('Glow');
@@ -157,14 +156,14 @@ describe('Settings Command', () => {
 
   describe('settings list', () => {
     it('should return formatted settings display', () => {
-      const result = settingsCommand.execute(['list']);
+      const result = settingsCommand.execute(['list']) as CommandResult;
 
       expect(result.html).toBe(true);
       expect(result.output).toBeDefined();
     });
 
     it('should include current theme information', () => {
-      const result = settingsCommand.execute(['list']);
+      const result = settingsCommand.execute(['list']) as CommandResult;
 
       // The output is HTML rendered markdown, so check for the theme name
       // Default theme is green which has display name "Green (Default)"
@@ -176,7 +175,7 @@ describe('Settings Command', () => {
       settingsManager.setFontSize(16);
       settingsManager.setFontFamily('Monaco');
 
-      const result = settingsCommand.execute(['list']);
+      const result = settingsCommand.execute(['list']) as CommandResult;
 
       expect(result.output).toContain('16px');
       expect(result.output).toContain('Monaco');
@@ -187,14 +186,14 @@ describe('Settings Command', () => {
       settingsManager.setGlow(true);
       settingsManager.setAnimationSpeed(1.5);
 
-      const result = settingsCommand.execute(['list']);
+      const result = settingsCommand.execute(['list']) as CommandResult;
 
       expect(result.output).toContain('Enabled');
       expect(result.output).toContain('1.5x');
     });
 
     it('should include usage examples', () => {
-      const result = settingsCommand.execute(['list']);
+      const result = settingsCommand.execute(['list']) as CommandResult;
 
       expect(result.output).toContain('settings set theme');
       expect(result.output).toContain('settings set font-size');
@@ -204,7 +203,7 @@ describe('Settings Command', () => {
 
   describe('settings set theme', () => {
     it('should successfully change to green theme', () => {
-      const result = settingsCommand.execute(['set', 'theme', 'green']);
+      const result = settingsCommand.execute(['set', 'theme', 'green']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Theme changed to: green');
@@ -212,7 +211,7 @@ describe('Settings Command', () => {
     });
 
     it('should successfully change to dc theme', () => {
-      const result = settingsCommand.execute(['set', 'theme', 'dc']);
+      const result = settingsCommand.execute(['set', 'theme', 'dc']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Theme changed to: dc');
@@ -220,7 +219,7 @@ describe('Settings Command', () => {
     });
 
     it('should successfully change to white theme', () => {
-      const result = settingsCommand.execute(['set', 'theme', 'white']);
+      const result = settingsCommand.execute(['set', 'theme', 'white']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Theme changed to: white');
@@ -228,7 +227,7 @@ describe('Settings Command', () => {
     });
 
     it('should successfully change to light-blue theme', () => {
-      const result = settingsCommand.execute(['set', 'theme', 'light-blue']);
+      const result = settingsCommand.execute(['set', 'theme', 'light-blue']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Theme changed to: light-blue');
@@ -236,7 +235,7 @@ describe('Settings Command', () => {
     });
 
     it('should successfully change to paper theme', () => {
-      const result = settingsCommand.execute(['set', 'theme', 'paper']);
+      const result = settingsCommand.execute(['set', 'theme', 'paper']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Theme changed to: paper');
@@ -244,7 +243,7 @@ describe('Settings Command', () => {
     });
 
     it('should reject invalid theme name', () => {
-      const result = settingsCommand.execute(['set', 'theme', 'invalid']);
+      const result = settingsCommand.execute(['set', 'theme', 'invalid']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Invalid theme: invalid');
@@ -260,21 +259,31 @@ describe('Settings Command', () => {
 
   describe('settings set color', () => {
     it('should set custom accent color', () => {
-      const result = settingsCommand.execute(['set', 'color', '--terminal-accent', '#ff0000']);
+      const result = settingsCommand.execute([
+        'set',
+        'color',
+        '--terminal-accent',
+        '#ff0000',
+      ]) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Color --terminal-accent set to #ff0000');
     });
 
     it('should set custom background color', () => {
-      const result = settingsCommand.execute(['set', 'color', '--terminal-bg', '#000000']);
+      const result = settingsCommand.execute([
+        'set',
+        'color',
+        '--terminal-bg',
+        '#000000',
+      ]) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Color --terminal-bg set to #000000');
     });
 
     it('should show error when color variable is missing', () => {
-      const result = settingsCommand.execute(['set', 'color']);
+      const result = settingsCommand.execute(['set', 'color']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set color');
@@ -290,7 +299,7 @@ describe('Settings Command', () => {
 
   describe('settings set font-size', () => {
     it('should set valid font size', () => {
-      const result = settingsCommand.execute(['set', 'font-size', '16']);
+      const result = settingsCommand.execute(['set', 'font-size', '16']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Font size set to: 16px');
@@ -307,28 +316,28 @@ describe('Settings Command', () => {
     });
 
     it('should reject font size below minimum (8)', () => {
-      const result = settingsCommand.execute(['set', 'font-size', '6']);
+      const result = settingsCommand.execute(['set', 'font-size', '6']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Invalid font size: 6. Must be between 8 and 24');
     });
 
     it('should reject font size above maximum (24)', () => {
-      const result = settingsCommand.execute(['set', 'font-size', '30']);
+      const result = settingsCommand.execute(['set', 'font-size', '30']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Invalid font size: 30. Must be between 8 and 24');
     });
 
     it('should reject non-numeric font size', () => {
-      const result = settingsCommand.execute(['set', 'font-size', 'abc']);
+      const result = settingsCommand.execute(['set', 'font-size', 'abc']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Font size must be a number');
     });
 
     it('should reject missing font size value', () => {
-      const result = settingsCommand.execute(['set', 'font-size']);
+      const result = settingsCommand.execute(['set', 'font-size']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
@@ -337,7 +346,11 @@ describe('Settings Command', () => {
 
   describe('settings set font-family', () => {
     it('should set Courier New font family', () => {
-      const result = settingsCommand.execute(['set', 'font-family', 'Courier New']);
+      const result = settingsCommand.execute([
+        'set',
+        'font-family',
+        'Courier New',
+      ]) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Font family set to: Courier New');
@@ -345,21 +358,25 @@ describe('Settings Command', () => {
     });
 
     it('should set JetBrains Mono font family', () => {
-      const result = settingsCommand.execute(['set', 'font-family', 'JetBrains Mono']);
+      const result = settingsCommand.execute([
+        'set',
+        'font-family',
+        'JetBrains Mono',
+      ]) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(settingsManager.getFontFamily()).toBe('JetBrains Mono');
     });
 
     it('should set Monaco font family', () => {
-      const result = settingsCommand.execute(['set', 'font-family', 'Monaco']);
+      const result = settingsCommand.execute(['set', 'font-family', 'Monaco']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(settingsManager.getFontFamily()).toBe('Monaco');
     });
 
     it('should set monospace font family', () => {
-      const result = settingsCommand.execute(['set', 'font-family', 'monospace']);
+      const result = settingsCommand.execute(['set', 'font-family', 'monospace']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(settingsManager.getFontFamily()).toBe('monospace');
@@ -375,7 +392,7 @@ describe('Settings Command', () => {
     });
 
     it('should reject invalid font family', () => {
-      const result = settingsCommand.execute(['set', 'font-family', 'Arial']);
+      const result = settingsCommand.execute(['set', 'font-family', 'Arial']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Invalid font family: Arial');
@@ -384,7 +401,7 @@ describe('Settings Command', () => {
     });
 
     it('should reject missing font family value', () => {
-      const result = settingsCommand.execute(['set', 'font-family']);
+      const result = settingsCommand.execute(['set', 'font-family']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
@@ -393,7 +410,7 @@ describe('Settings Command', () => {
 
   describe('settings set scan-lines', () => {
     it('should enable scan lines', () => {
-      const result = settingsCommand.execute(['set', 'scan-lines', 'on']);
+      const result = settingsCommand.execute(['set', 'scan-lines', 'on']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Scan lines: on');
@@ -402,7 +419,7 @@ describe('Settings Command', () => {
 
     it('should disable scan lines', () => {
       settingsManager.setScanLines(true);
-      const result = settingsCommand.execute(['set', 'scan-lines', 'off']);
+      const result = settingsCommand.execute(['set', 'scan-lines', 'off']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Scan lines: off');
@@ -422,14 +439,14 @@ describe('Settings Command', () => {
     });
 
     it('should reject invalid value', () => {
-      const result = settingsCommand.execute(['set', 'scan-lines', 'maybe']);
+      const result = settingsCommand.execute(['set', 'scan-lines', 'maybe']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Scan lines must be "on" or "off"');
     });
 
     it('should reject missing value', () => {
-      const result = settingsCommand.execute(['set', 'scan-lines']);
+      const result = settingsCommand.execute(['set', 'scan-lines']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
@@ -438,7 +455,7 @@ describe('Settings Command', () => {
 
   describe('settings set glow', () => {
     it('should enable glow effect', () => {
-      const result = settingsCommand.execute(['set', 'glow', 'on']);
+      const result = settingsCommand.execute(['set', 'glow', 'on']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Glow: on');
@@ -447,7 +464,7 @@ describe('Settings Command', () => {
 
     it('should disable glow effect', () => {
       settingsManager.setGlow(true);
-      const result = settingsCommand.execute(['set', 'glow', 'off']);
+      const result = settingsCommand.execute(['set', 'glow', 'off']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Glow: off');
@@ -467,14 +484,14 @@ describe('Settings Command', () => {
     });
 
     it('should reject invalid value', () => {
-      const result = settingsCommand.execute(['set', 'glow', 'true']);
+      const result = settingsCommand.execute(['set', 'glow', 'true']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Glow must be "on" or "off"');
     });
 
     it('should reject missing value', () => {
-      const result = settingsCommand.execute(['set', 'glow']);
+      const result = settingsCommand.execute(['set', 'glow']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
@@ -483,7 +500,7 @@ describe('Settings Command', () => {
 
   describe('settings set border', () => {
     it('should enable page border', () => {
-      const result = settingsCommand.execute(['set', 'border', 'on']);
+      const result = settingsCommand.execute(['set', 'border', 'on']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Border: on');
@@ -491,7 +508,7 @@ describe('Settings Command', () => {
     });
 
     it('should disable page border', () => {
-      const result = settingsCommand.execute(['set', 'border', 'off']);
+      const result = settingsCommand.execute(['set', 'border', 'off']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Border: off');
@@ -511,14 +528,14 @@ describe('Settings Command', () => {
     });
 
     it('should reject invalid value', () => {
-      const result = settingsCommand.execute(['set', 'border', '1']);
+      const result = settingsCommand.execute(['set', 'border', '1']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Border must be "on" or "off"');
     });
 
     it('should reject missing value', () => {
-      const result = settingsCommand.execute(['set', 'border']);
+      const result = settingsCommand.execute(['set', 'border']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
@@ -527,7 +544,7 @@ describe('Settings Command', () => {
 
   describe('settings set animation-speed', () => {
     it('should set animation speed to 1.5x', () => {
-      const result = settingsCommand.execute(['set', 'animation-speed', '1.5']);
+      const result = settingsCommand.execute(['set', 'animation-speed', '1.5']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Animation speed set to: 1.5x');
@@ -535,14 +552,14 @@ describe('Settings Command', () => {
     });
 
     it('should set animation speed to minimum (0.5)', () => {
-      const result = settingsCommand.execute(['set', 'animation-speed', '0.5']);
+      const result = settingsCommand.execute(['set', 'animation-speed', '0.5']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(settingsManager.getAnimationSpeed()).toBe(0.5);
     });
 
     it('should set animation speed to maximum (2.0)', () => {
-      const result = settingsCommand.execute(['set', 'animation-speed', '2.0']);
+      const result = settingsCommand.execute(['set', 'animation-speed', '2.0']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(settingsManager.getAnimationSpeed()).toBe(2.0);
@@ -558,28 +575,28 @@ describe('Settings Command', () => {
     });
 
     it('should reject animation speed below minimum', () => {
-      const result = settingsCommand.execute(['set', 'animation-speed', '0.3']);
+      const result = settingsCommand.execute(['set', 'animation-speed', '0.3']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Invalid animation speed: 0.3. Must be between 0.5 and 2.0');
     });
 
     it('should reject animation speed above maximum', () => {
-      const result = settingsCommand.execute(['set', 'animation-speed', '3.0']);
+      const result = settingsCommand.execute(['set', 'animation-speed', '3.0']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Invalid animation speed: 3. Must be between 0.5 and 2.0');
     });
 
     it('should reject non-numeric animation speed', () => {
-      const result = settingsCommand.execute(['set', 'animation-speed', 'fast']);
+      const result = settingsCommand.execute(['set', 'animation-speed', 'fast']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Animation speed must be a number');
     });
 
     it('should reject missing animation speed value', () => {
-      const result = settingsCommand.execute(['set', 'animation-speed']);
+      const result = settingsCommand.execute(['set', 'animation-speed']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
@@ -588,7 +605,7 @@ describe('Settings Command', () => {
 
   describe('settings set sound-effects', () => {
     it('should enable sound effects', () => {
-      const result = settingsCommand.execute(['set', 'sound-effects', 'on']);
+      const result = settingsCommand.execute(['set', 'sound-effects', 'on']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Sound effects: on');
@@ -596,7 +613,7 @@ describe('Settings Command', () => {
     });
 
     it('should disable sound effects', () => {
-      const result = settingsCommand.execute(['set', 'sound-effects', 'off']);
+      const result = settingsCommand.execute(['set', 'sound-effects', 'off']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Sound effects: off');
@@ -604,14 +621,14 @@ describe('Settings Command', () => {
     });
 
     it('should reject invalid value', () => {
-      const result = settingsCommand.execute(['set', 'sound-effects', 'yes']);
+      const result = settingsCommand.execute(['set', 'sound-effects', 'yes']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Sound effects must be "on" or "off"');
     });
 
     it('should reject missing value', () => {
-      const result = settingsCommand.execute(['set', 'sound-effects']);
+      const result = settingsCommand.execute(['set', 'sound-effects']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
@@ -620,21 +637,21 @@ describe('Settings Command', () => {
 
   describe('settings set - error handling', () => {
     it('should show usage when setting name is missing', () => {
-      const result = settingsCommand.execute(['set']);
+      const result = settingsCommand.execute(['set']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
     });
 
     it('should show usage when value is missing for non-color settings', () => {
-      const result = settingsCommand.execute(['set', 'theme']);
+      const result = settingsCommand.execute(['set', 'theme']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Usage: settings set <setting> <value>');
     });
 
     it('should reject unknown setting name', () => {
-      const result = settingsCommand.execute(['set', 'unknown', 'value']);
+      const result = settingsCommand.execute(['set', 'unknown', 'value']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Unknown setting: unknown');
@@ -643,7 +660,7 @@ describe('Settings Command', () => {
 
     it('should handle errors thrown by SettingsManager', () => {
       // Force an error by providing invalid data type
-      const result = settingsCommand.execute(['set', 'font-size', 'NaN']);
+      const result = settingsCommand.execute(['set', 'font-size', 'NaN']) as CommandResult;
 
       expect(result.error).toBe(true);
     });
@@ -658,7 +675,7 @@ describe('Settings Command', () => {
       settingsManager.setGlow(true);
       settingsManager.setAnimationSpeed(2.0);
 
-      const result = settingsCommand.execute(['reset']);
+      const result = settingsCommand.execute(['reset']) as CommandResult;
 
       expect(result.error).toBeUndefined();
       expect(result.output).toContain('Settings reset to defaults');
@@ -701,7 +718,7 @@ describe('Settings Command', () => {
 
   describe('Unknown subcommand', () => {
     it('should show error for unknown subcommand', () => {
-      const result = settingsCommand.execute(['invalid']);
+      const result = settingsCommand.execute(['invalid']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toBe(
@@ -710,7 +727,7 @@ describe('Settings Command', () => {
     });
 
     it('should show error for typo in list', () => {
-      const result = settingsCommand.execute(['lst']);
+      const result = settingsCommand.execute(['lst']) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('Unknown subcommand: lst');

@@ -6,12 +6,12 @@ import type { CommandDispatcher } from '../../../src/utils/CommandDispatcher';
 
 // Mock implementations for dependencies
 class MockCommandDispatcher {
-  dispatch = vi.fn<[string], Promise<CommandResult>>();
-  dispatchPipeline = vi.fn<[string], Promise<CommandResult>>();
+  dispatch = vi.fn<(command: string) => Promise<CommandResult>>();
+  dispatchPipeline = vi.fn<(command: string) => Promise<CommandResult>>();
 }
 
 class MockAliasManager {
-  resolve = vi.fn<[string], string>();
+  resolve = vi.fn<(command: string) => string>();
 }
 
 describe('CommandExecutor', () => {

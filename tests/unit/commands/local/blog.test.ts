@@ -7,7 +7,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createBlogCommand } from '../../../../src/commands/local/blog';
 import { MESSAGES } from '../../../../src/constants';
-import type { Command } from '../../../../src/commands/Command';
+import type { Command, CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 // Mock filesystem for testing
@@ -25,9 +25,14 @@ function createMockFs(files = new Map<string, string>()): IFileSystem {
     },
     exists: () => true,
     isDirectory: () => true,
-    getCurrentDirectory: () => '/home/darin',
-    setCurrentDirectory: () => {},
-    resolve: (path: string) => path,
+    isFile: () => false,
+    getCurrentPath: () => '/home/darin',
+    getShortPath: () => '~',
+    setCurrentUsername: () => {},
+    changeDirectory: () => {},
+    writeFile: () => {},
+    createDirectory: () => {},
+    getTree: () => [],
     getNode: () => null,
   };
 }
@@ -58,14 +63,14 @@ describe('Blog Command', () => {
     });
 
     it('should return friendly message when blog is empty', () => {
-      const result = blogCommand.execute([]);
+      const result = blogCommand.execute([]) as CommandResult;
 
       expect(result.output).toContain(MESSAGES.EMPTY_BLOG);
       expect(result.html).toBe(true);
     });
 
     it('should return no tags available when --tags called on empty blog', () => {
-      const result = blogCommand.execute(['--tags']);
+      const result = blogCommand.execute(['--tags']) as CommandResult;
 
       expect(result.output).toContain(MESSAGES.NO_TAGS_AVAILABLE);
       expect(result.html).toBe(true);
@@ -86,7 +91,7 @@ describe('Blog Command', () => {
     });
 
     it('should show top 5 popular tags when filtering returns no results', () => {
-      const result = blogCommand.execute(['--tags', 'nonexistent']);
+      const result = blogCommand.execute(['--tags', 'nonexistent']) as CommandResult;
 
       expect(result.output).toContain("No blog posts found with tag 'nonexistent'");
       expect(result.output).toContain('Try one of these tags:');
@@ -103,7 +108,7 @@ describe('Blog Command', () => {
       const mockFs = createMockFs(filesWithoutTags);
       const cmd = createBlogCommand(mockFs);
 
-      const result = cmd.execute(['--tags', 'nonexistent']);
+      const result = cmd.execute(['--tags', 'nonexistent']) as CommandResult;
 
       expect(result.output).toContain("No blog posts found with tag 'nonexistent'");
       expect(result.output).not.toContain('Try one of these tags:');
@@ -119,7 +124,7 @@ describe('Blog Command', () => {
       const mockFs = createMockFs(files);
       const cmd = createBlogCommand(mockFs);
 
-      const result = cmd.execute(['--tags']);
+      const result = cmd.execute(['--tags']) as CommandResult;
 
       expect(result.output).toContain('AI');
       expect(result.output).toContain('ML');
