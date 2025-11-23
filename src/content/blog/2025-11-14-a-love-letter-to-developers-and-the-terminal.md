@@ -27,7 +27,7 @@ My workflow became a high speed conversation. I spent my time on the _architectu
 
 - **Me:** "I need a command parser and a virtual file system that can be hydrated from a JSON object."
 - **AI:** _Generates the boilerplate and initial class structure in seconds._
-- **Me:** "Good. Now, write the `ls` command. Support flags like `ls -al`. Add the `tree` command as weel.
+- **Me:** "Great, works well. Now, write the `ls` command. Support flags like `ls -al`. Also add the `tree` command.
 - **AI:** _Handles the implementation, including the async/await logic._
 - **Me:** "Bug report: The command line flags can be together, seperate, or in any order."
 - **AI:** _Goes about refactoring._
