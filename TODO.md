@@ -1,43 +1,26 @@
 # TODO
 
-Priority levels based on software development best practices:
-
-- **P0 (Critical)**: Must complete before release - quality, stability, core functionality
-- **P1 (High)**: Should complete soon - important for user experience and reliability
-- **P2 (Medium)**: Nice to have - enhances experience but not blocking
-- **P3 (Low)**: Future enhancements - can be deferred
+Remaining tasks for the settings system and site enhancements.
 
 ---
 
-## Settings System - Backlog
+## Testing & Quality
 
-### P0 - Critical (Quality & Stability)
+- [ ] Increase test coverage to 80%+ target (run `npm run test:coverage`)
+- [ ] Cross-browser testing: Chrome, Firefox, Safari
+- [ ] Mobile/tablet responsive testing
 
-- [ ] Write integration tests for settings persistence
-- [ ] Write integration tests for theme application
-- [ ] Handle edge cases (rapid changes, invalid states, etc.)
-- [ ] Verify test coverage meets 80%+ target
+## Accessibility ⚠️
 
-### P1 - High (User Experience & Reliability)
+- [ ] **Reduced motion support** - Add `@media (prefers-reduced-motion)` (documented in AUDIT.md)
+- [ ] High contrast mode - Add theme or `prefers-contrast` media query
+- [ ] Enhanced screen reader support - Complete ARIA implementation, test with screen readers
 
-- [ ] Test settings UI on different browsers (Chrome, Firefox, Safari)
-- [ ] Test responsive behavior on mobile/tablet devices
-- [ ] Accessibility features (high contrast mode, screen reader support, reduced motion)
+## UX Polish
 
-### P2 - Medium (Polish & Enhancement)
+- [ ] Loading states/transitions for settings changes - Visual feedback
 
-- [ ] Refine UI styling and transitions
-- [ ] Add loading states/transitions for settings changes
-- [ ] Create `src/content/settings-help.md` (detailed help documentation)
-- [ ] Add settings-help.md to virtual filesystem
-- [ ] Preview themes before applying
+## Future Enhancements
 
-### P3 - Low (Future Features)
-
-- [ ] Import/Export settings as JSON file
-- [ ] Share settings via URL parameter
 - [ ] Additional preset themes (dracula, solarized, monokai)
-- [ ] Theme gallery with community-contributed themes
-- [ ] Sound effects integration (keyboard typing sounds, completion sounds)
-- [ ] Volume control for sound effects
-- [ ] Advanced customization (line height, letter spacing, cursor style, blink rate)
+- [ ] Advanced customization options (line height, letter spacing, cursor style, blink rate)
