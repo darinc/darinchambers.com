@@ -1,0 +1,66 @@
+{
+  "config": {
+    "title": "Graph Library Features",
+    "theme": "dark",
+    "damping": 0.5,
+    "repulsionStrength": 4500,
+    "attractionStrength": 0.001,
+    "showControls": false,
+    "showLegend": false
+  },
+  "data": {
+    "nodes": [
+      {
+        "id": "core",
+        "name": "Core Engine",
+        "type": "primary",
+        "shape": "rectangle",
+        "size": 25
+      },
+      {
+        "id": "renderer",
+        "name": "SVG Renderer",
+        "type": "secondary",
+        "shape": "rectangle",
+        "size": 20
+      },
+      {
+        "id": "physics",
+        "name": "Physics",
+        "type": "secondary",
+        "shape": "rectangle",
+        "size": 20
+      },
+      {
+        "id": "interactions",
+        "name": "Interactions",
+        "type": "tertiary",
+        "shape": "rectangle",
+        "size": 18
+      }
+    ],
+    "links": [
+      {
+        "source": "core",
+        "target": "renderer",
+        "label": "renders",
+        "weight": 2,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "physics",
+        "label": "simulates",
+        "weight": 2,
+        "line_type": "solid"
+      },
+      {
+        "source": "core",
+        "target": "interactions",
+        "label": "handles",
+        "weight": 2,
+        "line_type": "solid"
+      }
+    ]
+  }
+}

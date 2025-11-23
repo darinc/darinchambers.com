@@ -1,0 +1,12 @@
+# Netlify redirects for SPA routing
+# Static assets should be served directly - exclude them from SPA fallback
+/og-image.png   /og-image.png   200
+/robots.txt     /robots.txt     200
+/sitemap.xml    /sitemap.xml    200
+/_headers       /_headers       200
+/libs/*         /libs/:splat    200
+/data/*         /data/:splat    200
+
+# Catch-all: serve index.html for all other routes to enable client-side routing
+# This must be the LAST rule
+/*              /index.html     200
