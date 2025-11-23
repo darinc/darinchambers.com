@@ -6,7 +6,8 @@ Remaining tasks for the settings system and site enhancements.
 
 ## Testing & Quality
 
-- [ ] Increase test coverage to 80%+ target (run `npm run test:coverage`)
+- [x] Test coverage improvements (Phase 1: Terminal, EnvVarManager, contact - 70.33% → 74.53%)
+- [ ] Test coverage improvements (Phase 2-4: remaining gaps to reach 80% target)
 - [ ] Cross-browser testing: Chrome, Firefox, Safari
 - [ ] Mobile/tablet responsive testing
 

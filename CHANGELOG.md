@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.3] - 2025-11-23
+
+### Added
+- Comprehensive test coverage for Terminal component
+- Comprehensive test coverage for EnvVarManager utility
+- Comprehensive test coverage for contact command
+
+### Changed
+- Branch coverage improved from 70.33% to 74.53%
+- Overall test suite expanded from 1,248 to 1,326 tests
+
 ## [0.11.2] - 2025-11-22
 
 ### Fixed
