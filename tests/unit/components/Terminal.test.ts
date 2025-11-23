@@ -47,7 +47,7 @@ function createMockExecutor(result?: CommandResult): CommandExecutor {
   const defaultResult: CommandResult = result ?? { output: 'test output' };
 
   return {
-    execute: vi.fn(async () => defaultResult),
+    execute: vi.fn(() => Promise.resolve(defaultResult)),
   } as unknown as CommandExecutor;
 }
 
@@ -258,8 +258,6 @@ describe('Terminal', () => {
       const input = document.getElementById('terminal-input') as HTMLInputElement;
       input.value = 'about';
 
-      // Trigger submit via input
-      const submitHandler = terminal.getInput();
       // Note: We can't directly test the onSubmit callback, but we can test executeCommand
       await terminal.executeCommand('about');
 

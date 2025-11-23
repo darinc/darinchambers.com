@@ -22,7 +22,7 @@ A terminal-inspired portfolio website with a fully functional command-line inter
 ### Prerequisites
 
 - Node.js 20.x or higher
-- npm 10.x or higher
+- pnpm 10.x or higher
 
 ### Installation
 
@@ -32,10 +32,10 @@ git clone https://github.com/darinc/darinchambers.com.git
 cd darinchambers.com
 
 # Install dependencies
-npm install
+pnpm install
 
 # Start development server
-npm run dev
+pnpm dev
 ```
 
 Visit `http://localhost:5173`
@@ -43,11 +43,11 @@ Visit `http://localhost:5173`
 ### Development Commands
 
 ```bash
-npm run dev              # Start dev server
-npm run build            # Production build
-npm run test             # Run tests (1247 tests, 80% coverage)
-npm run test:coverage    # Coverage report
-npm run lint             # Run linter
+pnpm dev                 # Start dev server
+pnpm build               # Production build
+pnpm test                # Run tests (1326 tests, 80% coverage)
+pnpm test:coverage       # Coverage report
+pnpm lint                # Run linter
 ```
 
 ## Available Commands

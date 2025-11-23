@@ -16,7 +16,7 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 
 **Bundle Size:** 121KB total (110KB JS, 11KB CSS)
 **Test Coverage:** 80% (1247 tests across 51 test files)
-**Deployment:** Cloudflare Pages
+**Deployment:** GitHub Pages
 
 ## Development Commands
 
@@ -24,41 +24,41 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 
 ```bash
 # Development
-npm run dev              # Start dev server on http://localhost:5173
-npm run dev:host         # Start dev server with network access
+pnpm dev              # Start dev server on http://localhost:5173
+pnpm dev:host         # Start dev server with network access
 
 # Building
-npm run build            # Production build (runs tsc + vite build)
-npm run preview          # Preview production build locally
+pnpm build            # Production build (runs tsc + vite build)
+pnpm preview          # Preview production build locally
 
 # Testing
-npm run test             # Run tests in watch mode
-npm run test:run         # Run tests once (use in CI/pre-commit)
-npm run test:coverage    # Generate coverage report
-npm run test:ui          # Open Vitest UI
+pnpm test             # Run tests in watch mode
+pnpm test:run         # Run tests once (use in CI/pre-commit)
+pnpm test:coverage    # Generate coverage report
+pnpm test:ui          # Open Vitest UI
 
 # Linting and Formatting
-npm run lint             # Run ESLint
-npm run lint:fix         # Fix ESLint errors
-npm run format           # Format with Prettier
-npm run format:check     # Check formatting
+pnpm lint             # Run ESLint
+pnpm lint:fix         # Fix ESLint errors
+pnpm format           # Format with Prettier
+pnpm format:check     # Check formatting
 
 # Type Checking
-npm run type-check       # Run TypeScript compiler (no emit)
-npm run type-coverage    # Check type coverage (requires 95%+)
+pnpm type-check       # Run TypeScript compiler (no emit)
+pnpm type-coverage    # Check type coverage (requires 95%+)
 
 # Validation (runs all checks)
-npm run validate         # type-check + lint + format:check + test:run
+pnpm validate         # type-check + lint + format:check + test:run
 ```
 
 ### Running Single Tests
 
 ```bash
 # Run a specific test file
-npm run test:run tests/unit/commands/core/help.test.ts
+pnpm test:run tests/unit/commands/core/help.test.ts
 
 # Run tests matching a pattern
-npm run test -- --grep "CommandParser"
+pnpm test -- --grep "CommandParser"
 ```
 
 ## Architecture Overview
@@ -314,7 +314,7 @@ tags: ['tag1', 'tag2']
 
 ### Running the Development Server
 
-The dev server runs on port 5173. If you need to access it from another device on the network, use `npm run dev:host`.
+The dev server runs on port 5173. If you need to access it from another device on the network, use `pnpm dev:host`.
 
 ### Building for Production
 
@@ -388,14 +388,14 @@ This project follows semantic versioning. See `.claude/commands/CLAUDE.md` for t
 **TypeScript errors:**
 
 ```bash
-npm run type-check  # Run tsc to see all errors
+pnpm type-check  # Run tsc to see all errors
 ```
 
 **Missing dependencies:**
 
 ```bash
-rm -rf node_modules package-lock.json
-npm install
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
 ```
 
 ### Test Failures
@@ -403,13 +403,13 @@ npm install
 **Update snapshots:**
 
 ```bash
-npm run test:run -- -u
+pnpm test:run -- -u
 ```
 
 **Run specific test:**
 
 ```bash
-npm run test:run -- tests/unit/path/to/test.test.ts
+pnpm test:run -- tests/unit/path/to/test.test.ts
 ```
 
 ### Performance Issues
@@ -423,7 +423,7 @@ npm run test:run -- tests/unit/path/to/test.test.ts
 
 - **ARCHITECTURE.md**: Detailed system design, design patterns, data flow
 - **CONTRIBUTING.md**: Development guidelines, code style, testing requirements
-- **DEPLOYMENT.md**: Cloudflare Pages deployment instructions
+- **DEPLOYMENT.md**: GitHub Pages deployment instructions
 - **README.md**: Project overview, quick start, available commands
 - **SECURITY.md**: Security policy and reporting
 

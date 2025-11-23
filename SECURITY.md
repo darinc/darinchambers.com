@@ -224,9 +224,9 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 ### 5. Dependency Security
 
 - **Zero known vulnerabilities** (last audit: November 2025)
-- Regular `npm audit` checks
-- Minimal dependency footprint (5 production dependencies)
-- All dependencies from trusted sources (npm registry)
+- Regular `pnpm audit` checks
+- Minimal dependency footprint (3 production dependencies)
+- All dependencies from trusted sources (npm/pnpm registry)
 
 ---
 
@@ -313,7 +313,7 @@ Before merging PRs, verify:
 ### Current Security Scan
 
 ```bash
-npm audit
+pnpm audit
 
 # Result (as of November 2025):
 # 0 vulnerabilities (0 low, 0 moderate, 0 high, 0 critical)
@@ -321,20 +321,18 @@ npm audit
 
 ### Production Dependencies
 
-| Package          | Version | Security Notes                       |
-| ---------------- | ------- | ------------------------------------ |
-| marked           | 16.4.1  | ✅ No known vulnerabilities          |
-| figlet           | 1.9.3   | ✅ No known vulnerabilities          |
-| dompurify        | 3.3.0   | ✅ Security library (XSS protection) |
-| @types/marked    | 5.0.2   | ✅ Type definitions only             |
-| @types/dompurify | 3.0.5   | ✅ Type definitions only             |
+| Package   | Version | Security Notes                       |
+| --------- | ------- | ------------------------------------ |
+| marked    | 17.0.1  | ✅ No known vulnerabilities          |
+| figlet    | 1.9.3   | ✅ No known vulnerabilities          |
+| dompurify | 3.3.0   | ✅ Security library (XSS protection) |
 
 ### Security Update Policy
 
 1. **Critical vulnerabilities**: Patched within 24 hours
 2. **High vulnerabilities**: Patched within 7 days
 3. **Medium/Low vulnerabilities**: Patched in next release
-4. **Regular audits**: Weekly `npm audit` checks
+4. **Regular audits**: Weekly `pnpm audit` checks
 
 ### Automated Monitoring
 
@@ -342,7 +340,7 @@ Consider enabling:
 
 - **GitHub Dependabot**: Automatic dependency updates
 - **Snyk**: Continuous security monitoring
-- **npm audit**: CI/CD pipeline integration
+- **pnpm audit**: CI/CD pipeline integration
 
 ---
 
@@ -434,10 +432,10 @@ tests/security/
 
 ```bash
 # Run all security tests
-npm run test:run tests/security/
+pnpm test:run tests/security/
 
 # Generate coverage report
-npm run test:coverage -- tests/security/
+pnpm test:coverage -- tests/security/
 ```
 
 ---
