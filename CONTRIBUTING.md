@@ -56,26 +56,26 @@ cd dc.com
 git remote add upstream https://github.com/darinc/darinchambers.com.git
 
 # Install dependencies
-npm install
+pnpm install
 
 # Start development server
-npm run dev
+pnpm dev
 
 # Run tests
-npm run test
+pnpm test
 ```
 
 ### Verify Setup
 
 ```bash
 # Check that tests pass
-npm run test:run
+pnpm test:run
 
 # Check that build succeeds
-npm run build
+pnpm build
 
 # Preview production build
-npm run preview
+pnpm preview
 ```
 
 ---

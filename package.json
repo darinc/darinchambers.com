@@ -1,6 +1,6 @@
 {
   "name": "darinchambers.com",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "description": "Terminal-inspired personal website showcasing AI and software engineering expertise",
   "type": "module",
   "scripts": {
@@ -8,6 +8,7 @@
     "dev:host": "vite --host",
     "build": "tsc --project tsconfig.build.json && vite build",
     "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
@@ -40,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/figlet": "^1.7.0",
@@ -50,6 +52,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import-x": "^4.16.1",
     "eslint-plugin-unused-imports": "^4.3.0",
+    "gh-pages": "^6.3.0",
     "husky": "^9.1.7",
     "jsdom": "^27.0.1",
     "lint-staged": "^16.2.6",
@@ -61,8 +64,6 @@
     "vitest": "^4.0.4"
   },
   "dependencies": {
-    "@types/dompurify": "^3.0.5",
-    "@types/marked": "^5.0.2",
     "dompurify": "^3.3.0",
     "figlet": "^1.9.3",
     "marked": "^17.0.1"

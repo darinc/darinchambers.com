@@ -219,12 +219,12 @@ Terminal (UI orchestrator)
 
 **Deployment:**
 
-- Platform: Cloudflare Pages
-- Build command: `npm run build`
+- Platform: GitHub Pages
+- Build command: `pnpm build`
 - Output: `dist/`
 - Node version: 20.x
-- ✅ Security headers configured (`_headers`)
-- ✅ SPA routing configured (`_redirects`)
+- ✅ Custom domain configured (`CNAME`)
+- ✅ SPA routing configured (`404.html`)
 
 **Browser Support:**
 
@@ -270,8 +270,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm ci
-      - run: npm run validate # type-check + lint + format + test
+      - run: pnpm install
+      - run: pnpm validate # type-check + lint + format + test
 ```
 
 - Estimated effort: 30 minutes
@@ -346,25 +346,25 @@ jobs:
 
 ```bash
 # Development
-npm run dev              # Start dev server (localhost:5173)
-npm run build            # Production build
-npm run preview          # Preview production build
+pnpm dev              # Start dev server (localhost:5173)
+pnpm build            # Production build
+pnpm preview          # Preview production build
 
 # Testing
-npm run test             # Watch mode
-npm run test:run         # Run once
-npm run test:coverage    # Coverage report
+pnpm test             # Watch mode
+pnpm test:run         # Run once
+pnpm test:coverage    # Coverage report
 
 # Quality Checks
-npm run validate         # Run all checks (type + lint + format + test)
-npm run type-check       # TypeScript compiler
-npm run lint             # ESLint
-npm run format           # Prettier
+pnpm validate         # Run all checks (type + lint + format + test)
+pnpm type-check       # TypeScript compiler
+pnpm lint             # ESLint
+pnpm format           # Prettier
 
 # Maintenance
-npm audit                # Security check
-npm audit fix            # Fix vulnerabilities
-npm outdated             # Check for updates
+pnpm audit            # Security check
+pnpm update           # Update dependencies
+pnpm outdated         # Check for updates
 ```
 
 ### Key Files

@@ -112,8 +112,20 @@ export class Router {
   /**
    * Handle initial page load routing.
    * Call this once after terminal is fully initialized.
+   *
+   * Also handles GitHub Pages SPA redirect workaround by checking sessionStorage
+   * for a saved redirect path from 404.html.
    */
   handleInitialRoute(): void {
+    // GitHub Pages SPA redirect workaround
+    // Check if we're being redirected from 404.html
+    const redirectPath = sessionStorage.getItem('ghPagesRedirect');
+    if (redirectPath) {
+      sessionStorage.removeItem('ghPagesRedirect');
+      // Use replaceState to replace the history entry
+      window.history.replaceState({}, '', redirectPath);
+    }
+
     this.handleRouteChange(false);
   }
 

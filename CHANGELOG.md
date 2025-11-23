@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2025-11-23
+
+### Added
+- @eslint/js dependency for ESLint configuration
+
+### Changed
+- Migrated package manager from npm to pnpm
+- Updated all documentation to reflect pnpm usage
+
+### Removed
+- @types/dompurify dependency (dompurify provides its own types)
+- @types/marked dependency (marked provides its own types)
+
+### Fixed
+- Linting warnings in Terminal component tests
+
+## [0.11.5] - 2025-11-23
+
+### Added
+- GitHub Pages deployment configuration with automatic CI/CD
+- SPA routing support via 404.html redirect workaround
+- Manual deployment script using gh-pages package
+
+### Changed
+- Switched deployment platform from Cloudflare Pages to GitHub Pages
+- Updated documentation to reflect GitHub Pages setup and configuration
+
 ## [0.11.4] - 2025-11-23
 
 ### Added

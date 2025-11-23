@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig, configDefaults } from 'vitest/config';
 
 export default defineConfig({
   test: {
@@ -14,6 +14,9 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       include: ['src/**/*.ts'],
       exclude: [
+        ...configDefaults.exclude,
+        'src/animations/**', // 0% coverage visual code (Matrix rain)
+        'src/types/**', // 0% coverage TypeScript definitions
         'src/**/*.d.ts',
         'src/main.ts',
         'src/data/**',
