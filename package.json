@@ -1,6 +1,6 @@
 {
   "name": "darinchambers.com",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "description": "Terminal-inspired personal website showcasing AI and software engineering expertise",
   "type": "module",
   "scripts": {
@@ -8,7 +8,7 @@
     "dev:host": "vite --host",
     "build": "tsc --project tsconfig.build.json && vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && gh-pages -d dist",
+    "deploy": "pnpm build && gh-pages -d dist",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
@@ -20,7 +20,7 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\" \"tests/**/*.{ts,tsx}\" \"*.{json,md}\"",
     "type-check": "tsc --noEmit",
     "type-coverage": "type-coverage --at-least 95",
-    "validate": "npm run type-check && npm run lint && npm run format:check && npm run test:run",
+    "validate": "pnpm type-check && pnpm lint && pnpm format:check && pnpm test:run",
     "prepare": "husky"
   },
   "keywords": [
