@@ -443,14 +443,7 @@ interface FontConfig {
   size: number; // 8-24 (pixels)
 }
 
-type FontFamily =
-  | 'Fira Code'
-  | 'JetBrains Mono'
-  | 'Cascadia Code'
-  | 'Menlo'
-  | 'Monaco'
-  | 'Courier New'
-  | 'monospace';
+type FontFamily = 'Fira Code' | 'JetBrains Mono' | 'Cascadia Code' | 'Menlo' | 'Monaco' | 'Courier New' | 'monospace';
 
 interface EffectsConfig {
   scanLines: boolean;
@@ -946,14 +939,7 @@ export const THEME_PRESETS = {
   },
 };
 
-export type ThemePresetName =
-  | 'green'
-  | 'yellow'
-  | 'white'
-  | 'light-blue'
-  | 'paper'
-  | 'dc'
-  | 'custom'; // Add this
+export type ThemePresetName = 'green' | 'yellow' | 'white' | 'light-blue' | 'paper' | 'dc' | 'custom'; // Add this
 ```
 
 ### Adding Custom Markdown Handler

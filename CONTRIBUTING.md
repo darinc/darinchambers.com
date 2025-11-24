@@ -155,12 +155,7 @@ Use type guards for runtime validation:
 
 ```typescript
 function isValidConfig(data: unknown): data is Config {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'property' in data &&
-    typeof data.property === 'string'
-  );
+  return typeof data === 'object' && data !== null && 'property' in data && typeof data.property === 'string';
 }
 ```
 

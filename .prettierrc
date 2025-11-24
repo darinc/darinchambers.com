@@ -6,5 +6,14 @@
   "printWidth": 100,
   "arrowParens": "always",
   "endOfLine": "lf",
-  "useTabs": false
+  "useTabs": false,
+  "proseWrap": "preserve",
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "printWidth": 1000
+      }
+    }
+  ]
 }
