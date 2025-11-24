@@ -220,8 +220,10 @@ Type 'blog' to read posts.
     bin.children!.set('clear', this.createFileNode('clear', '[Core command: clear]'));
     bin.children!.set('history', this.createFileNode('history', '[Core command: history]'));
     bin.children!.set('date', this.createFileNode('date', '[Core command: date]'));
+    bin.children!.set('echo', this.createFileNode('echo', '[Core command: echo]'));
     bin.children!.set('ddate', this.createFileNode('ddate', '[Novelty command: ddate]'));
     bin.children!.set('figlet', this.createFileNode('figlet', '[Novelty command: figlet]'));
+    bin.children!.set('matrix', this.createFileNode('matrix', '[Novelty command: matrix]'));
     bin.children!.set('whoami', this.createFileNode('whoami', '[Core command: whoami]'));
     bin.children!.set('alias', this.createFileNode('alias', '[Core command: alias]'));
     bin.children!.set('unalias', this.createFileNode('unalias', '[Core command: unalias]'));
