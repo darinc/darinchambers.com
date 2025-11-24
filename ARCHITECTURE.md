@@ -938,15 +938,15 @@ Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'
 
 ## Testing Strategy
 
-### Test Coverage: 80%
+### Test Coverage: 80%+ Target
 
-- **Unit Tests**: 1247 tests across 51 files
+- **Unit Tests**: 1,000+ tests across 50+ files
 - **Test Utilities**: Mock filesystem, DOM setup helpers
 - **Coverage Breakdown**:
-  - Statements: 70.03%
-  - Branches: 83.86%
-  - Functions: 80.49%
-  - Lines: 70.08%
+  - Statements: 70%+
+  - Branches: 80%+
+  - Functions: 80%+
+  - Lines: 70%+
 - **Coverage Areas**:
   - ✅ Core utilities (100% - parsers, managers)
   - ✅ Commands (80% - core, fs, novelty)

@@ -276,8 +276,8 @@ function resolvePath(path: string): string {
 
 ### Test Coverage
 
-- **Minimum coverage**: 80% for new code
-- **Current coverage**: 70% (improving to 80%)
+- **Target coverage**: 80%+ for new code
+- **Maintaining coverage**: Ensure new code meets 80%+ target
 - All new features must include tests
 - Bug fixes should include regression tests
 

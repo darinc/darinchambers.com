@@ -79,7 +79,7 @@ describe('EnvVarManager', () => {
       expect(envManager.getVariable('HOSTNAME')).toBe('testhost');
       expect(envManager.getVariable('PWD')).toBe('/home/testuser');
       expect(envManager.getVariable('OLDPWD')).toBe('');
-      expect(envManager.getVariable('SHELL')).toBe('/bin/bash');
+      expect(envManager.getVariable('SHELL')).toBe('/bin/dcsh');
       expect(envManager.getVariable('PATH')).toBe('/usr/local/bin:/usr/bin:/bin');
       expect(envManager.getVariable('TERM')).toBe('xterm-256color');
     });

@@ -40,7 +40,7 @@ export class EnvVarManager {
     this.platformVars.set('HOSTNAME', hostname);
     this.platformVars.set('PWD', homeDir);
     this.platformVars.set('OLDPWD', '');
-    this.platformVars.set('SHELL', '/bin/bash');
+    this.platformVars.set('SHELL', '/bin/dcsh');
     this.platformVars.set('PATH', '/usr/local/bin:/usr/bin:/bin');
     this.platformVars.set('TERM', 'xterm-256color');
   }

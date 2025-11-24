@@ -14,8 +14,8 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 - No framework - vanilla JavaScript/TypeScript
 - Dependencies: marked (markdown), figlet (ASCII art), DOMPurify (XSS protection)
 
-**Bundle Size:** 121KB total (110KB JS, 11KB CSS)
-**Test Coverage:** 80% (1247 tests across 51 test files)
+**Bundle Size:** ~120KB total
+**Test Coverage:** 80%+ target (1,000+ tests across 50+ test files)
 **Deployment:** GitHub Pages
 
 ## Development Commands

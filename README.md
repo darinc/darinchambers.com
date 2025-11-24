@@ -47,7 +47,7 @@ Visit `http://localhost:5173`
 ```bash
 pnpm dev                 # Start dev server
 pnpm build               # Production build
-pnpm test                # Run tests (1326 tests, 80% coverage)
+pnpm test                # Run tests (comprehensive suite, target 80% coverage)
 pnpm test:coverage       # Coverage report
 pnpm lint                # Run linter
 ```
@@ -84,7 +84,7 @@ darinchambers.com/
 │   ├── content/         # Markdown content (blog, portfolio)
 │   ├── utils/           # Parsers, managers, renderers
 │   └── types/           # TypeScript interfaces
-├── tests/               # 1337 tests, 80% coverage
+├── tests/               # Comprehensive test suite, 80%+ coverage
 └── public/              # Static assets
 ```
 
@@ -92,9 +92,9 @@ darinchambers.com/
 
 - Strict TypeScript, zero `any` usage
 - Multi-layered XSS protection (DOMPurify + CSP)
-- 1337 tests across 55 test files
+- 1,000+ tests across 50+ test files
 - Zero known vulnerabilities
-- 121KB total bundle (110KB JS, 11KB CSS)
+- ~120KB total bundle
 
 ## Documentation
 

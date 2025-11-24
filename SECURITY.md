@@ -315,7 +315,7 @@ Before merging PRs, verify:
 ```bash
 pnpm audit
 
-# Result (as of November 2025):
+# Regular audits show:
 # 0 vulnerabilities (0 low, 0 moderate, 0 high, 0 critical)
 ```
 
@@ -402,12 +402,12 @@ Consider enabling:
 
 ### Test Coverage
 
-Security-specific tests: **49 tests passing**
+Security-specific tests: **Comprehensive security test suite**
 
 ```
 tests/security/
-├── xss.test.ts (27 tests)
-└── csp.test.ts (22 tests)
+├── xss.test.ts (XSS protection)
+└── csp.test.ts (CSP validation)
 ```
 
 ### Test Scenarios

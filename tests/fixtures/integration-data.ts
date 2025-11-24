@@ -142,7 +142,7 @@ export const sampleConfigFile = `{
 export const sampleEnvVars = `USER=testuser
 HOME=/home/testuser
 PWD=/home/testuser
-SHELL=/bin/bash
+SHELL=/bin/dcsh
 EDITOR=vim
 `;
 
