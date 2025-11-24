@@ -78,6 +78,8 @@ export function sanitizeHtml(html: string): string {
       'src',
       'alt',
       'title',
+      'width',
+      'height',
       // Form control attributes
       'type',
       'value',

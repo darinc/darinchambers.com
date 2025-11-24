@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] - 2025-11-23
+
+### Added
+- New blog post: "1337 Unit Tests: Leet Status Unlocked"
+- Blog post images directory structure (`public/images/blog/`)
+- Responsive image CSS rules for markdown content
+- `width` and `height` attributes to sanitizer allowlist
+
 ## [0.12.5] - 2025-11-23
 
 ### Fixed
