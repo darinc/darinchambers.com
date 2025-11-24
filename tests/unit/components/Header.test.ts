@@ -16,7 +16,6 @@ vi.mock('../../../src/utils/AsciiArt', () => ({
 }));
 
 describe('Header', () => {
-  let header: Header;
   let headerElement: HTMLElement;
 
   beforeEach(() => {
@@ -30,7 +29,7 @@ describe('Header', () => {
 
   describe('Rendering', () => {
     it('should render with ASCII art and tagline', () => {
-      header = new Header(headerElement);
+      new Header(headerElement);
 
       // Check that the header contains the prompt
       expect(headerElement.innerHTML).toContain('$ whoami | figlet | lolcat');
@@ -54,7 +53,7 @@ describe('Header', () => {
     it('should sanitize HTML during render', async () => {
       const { sanitizeHtml } = await import('../../../src/utils/sanitizeHtml');
 
-      header = new Header(headerElement);
+      new Header(headerElement);
 
       // Verify sanitizeHtml was called
       expect(sanitizeHtml).toHaveBeenCalled();
@@ -69,7 +68,7 @@ describe('Header', () => {
 
   describe('Click Event Handling', () => {
     it('should dispatch terminal-command event with "clear" when clicking on ASCII art', () => {
-      header = new Header(headerElement);
+      new Header(headerElement);
 
       // Set up event listener to capture the custom event
       let eventFired = false;
@@ -101,7 +100,7 @@ describe('Header', () => {
     });
 
     it('should not dispatch event when clicking on non-clickable area', () => {
-      header = new Header(headerElement);
+      new Header(headerElement);
 
       // Set up event listener to capture any custom events
       let eventFired = false;
