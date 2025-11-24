@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createHistoryCommand } from '../../../../src/commands/core/history';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { TerminalInput } from '../../../../src/components/TerminalInput';
 
 describe('history command', () => {
@@ -9,7 +10,7 @@ describe('history command', () => {
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('    1  ls\n    2  cd /home\n    3  pwd');
     expect(mockInput.getHistory).toHaveBeenCalled();
@@ -21,7 +22,7 @@ describe('history command', () => {
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('No commands in history.');
   });
@@ -32,7 +33,7 @@ describe('history command', () => {
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     // Line number should be padded to 5 characters
     expect(result.output).toMatch(/^\s{4}1 {2}cmd1$/);
@@ -45,7 +46,7 @@ describe('history command', () => {
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     const lines = result.output.split('\n');
     expect(lines.length).toBe(100);
@@ -70,7 +71,7 @@ describe('history command', () => {
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
-    const result = command.execute(['arg1', 'arg2']);
+    const result = command.execute(['arg1', 'arg2']) as CommandResult;
 
     expect(result.output).toBe('    1  test');
   });
@@ -81,7 +82,7 @@ describe('history command', () => {
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
-    const result = command.execute([], 'piped input');
+    const result = command.execute([], 'piped input') as CommandResult;
 
     expect(result.output).toBe('    1  cmd');
   });
@@ -92,7 +93,7 @@ describe('history command', () => {
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toContain('echo "hello world"');
     expect(result.output).toContain('ls -la | grep test');
@@ -105,7 +106,7 @@ describe('history command', () => {
     } as unknown as TerminalInput;
 
     const command = createHistoryCommand(mockInput);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toContain(longCommand);
   });

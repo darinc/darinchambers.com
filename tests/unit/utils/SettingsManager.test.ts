@@ -77,6 +77,7 @@ describe('SettingsManager', () => {
           border: true,
           animationSpeed: 1.5,
           soundEffects: true,
+          autoScrollBehavior: true,
         },
         prompt: { format: '\\u@\\h:\\W\\$ ' },
       };
@@ -158,6 +159,7 @@ describe('SettingsManager', () => {
     it('should set custom colors and switch to custom theme', () => {
       const colors = {
         background: '#000000',
+        backgroundSecondary: '#111111',
         foreground: '#ffffff',
         accent: '#ff0000',
         dim: '#888888',
@@ -414,7 +416,9 @@ describe('SettingsManager', () => {
           border: false,
           animationSpeed: 1.2,
           soundEffects: true,
+          autoScrollBehavior: false,
         },
+        prompt: { format: '\\u@\\h:\\w\\$ ' },
       };
 
       settingsManager.saveSettings(newSettings);
@@ -426,14 +430,16 @@ describe('SettingsManager', () => {
     it('should persist complete settings to both storages', () => {
       const newSettings: SettingsConfig = {
         theme: { preset: 'light-blue', customColors: undefined },
-        font: { size: 12, family: 'Consolas' },
+        font: { size: 12, family: 'Monaco' },
         effects: {
           scanLines: true,
           glow: false,
           border: true,
           animationSpeed: 0.8,
           soundEffects: false,
+          autoScrollBehavior: true,
         },
+        prompt: { format: '\\u@\\h:\\w\\$ ' },
       };
 
       settingsManager.saveSettings(newSettings);
@@ -475,7 +481,12 @@ describe('SettingsManager', () => {
 
     it('should handle filesystem write errors gracefully', () => {
       // Create a filesystem that throws on write
-      const errorFS = new FileSystemService();
+      const mockRoot: FileSystemNode = {
+        name: '',
+        type: 'directory',
+        children: new Map(),
+      };
+      const errorFS = new FileSystemService(mockRoot);
       errorFS.writeFile = vi.fn(() => {
         throw new Error('Write failed');
       });

@@ -15,11 +15,14 @@ describe('AliasManager', () => {
       isDirectory: vi.fn().mockReturnValue(false),
       readFile: vi.fn().mockReturnValue(''),
       writeFile: vi.fn(),
-      listDirectory: vi.fn().mockReturnValue([]),
-      getCurrentDirectory: vi.fn().mockReturnValue('/home/darin'),
-      setCurrentDirectory: vi.fn(),
+      list: vi.fn().mockReturnValue([]),
+      getCurrentPath: vi.fn().mockReturnValue('/home/darin'),
+      getShortPath: vi.fn().mockReturnValue('~'),
+      setCurrentUsername: vi.fn(),
+      changeDirectory: vi.fn(),
       getNode: vi.fn(),
       createDirectory: vi.fn(),
+      getTree: vi.fn().mockReturnValue([]),
     };
   });
 

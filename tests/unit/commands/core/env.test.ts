@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createEnvCommand } from '../../../../src/commands/core/env';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { EnvVarManager } from '../../../../src/utils/EnvVarManager';
 
 describe('env command', () => {
@@ -15,7 +16,7 @@ describe('env command', () => {
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toContain('PATH=/usr/bin');
     expect(result.output).toContain('HOME=/home/user');
@@ -34,7 +35,7 @@ describe('env command', () => {
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     const lines = result.output.split('\n');
     expect(lines[0]).toBe('ALPHA=first');
@@ -48,7 +49,7 @@ describe('env command', () => {
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('');
   });
@@ -70,7 +71,7 @@ describe('env command', () => {
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
-    const result = command.execute(['arg1', 'arg2']);
+    const result = command.execute(['arg1', 'arg2']) as CommandResult;
 
     expect(result.output).toBe('TEST=value');
   });
@@ -81,7 +82,7 @@ describe('env command', () => {
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
-    const result = command.execute([], 'stdin input');
+    const result = command.execute([], 'stdin input') as CommandResult;
 
     expect(result.output).toBe('VAR=value');
   });
@@ -94,7 +95,7 @@ describe('env command', () => {
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('Manager error');
     expect(result.error).toBe(true);
@@ -108,7 +109,7 @@ describe('env command', () => {
     } as unknown as EnvVarManager;
 
     const command = createEnvCommand(mockManager);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('string error');
     expect(result.error).toBe(true);

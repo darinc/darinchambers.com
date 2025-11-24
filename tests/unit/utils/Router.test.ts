@@ -7,7 +7,7 @@ describe('Router', () => {
   let mockTerminal: Terminal;
   let mockFileSystem: IFileSystem;
   let router: Router;
-  let originalLocation: Location;
+  let originalLocation: typeof window.location;
   let originalHistory: History;
 
   beforeEach(() => {
@@ -17,12 +17,12 @@ describe('Router', () => {
 
     // Mock window.location
     delete (window as any).location;
-    window.location = {
+    (window as any).location = {
       pathname: '/',
       href: 'http://localhost/',
       search: '',
       hash: '',
-    } as Location;
+    };
 
     // Mock window.history
     window.history = {
@@ -69,7 +69,7 @@ describe('Router', () => {
 
   afterEach(() => {
     // Restore original window objects
-    window.location = originalLocation;
+    (window as any).location = originalLocation;
     window.history = originalHistory;
     vi.clearAllMocks();
   });
@@ -148,9 +148,11 @@ describe('Router', () => {
       window.location.pathname = '/unknown-route';
 
       // Mock pushState to update pathname when called (prevent infinite loop)
-      (window.history.pushState as any).mockImplementation((state, title, path) => {
-        window.location.pathname = path;
-      });
+      (window.history.pushState as any).mockImplementation(
+        (_state: any, _title: string, path: string) => {
+          window.location.pathname = path;
+        }
+      );
 
       router.handleInitialRoute();
       expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/');
@@ -408,11 +410,13 @@ describe('Router', () => {
       window.location.pathname = '/';
 
       // Mock pushState to update location when called
-      (window.history.pushState as any).mockImplementation((state, title, path) => {
-        const url = new URL(path, 'http://localhost');
-        window.location.pathname = url.pathname;
-        window.location.search = url.search;
-      });
+      (window.history.pushState as any).mockImplementation(
+        (_state: any, _title: string, path: string) => {
+          const url = new URL(path, 'http://localhost');
+          window.location.pathname = url.pathname;
+          window.location.search = url.search;
+        }
+      );
 
       router.navigate('/portfolio?tags=major,serious');
 

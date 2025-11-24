@@ -5,13 +5,14 @@
  * filesystem-dependent components and commands.
  */
 
-import { FileSystemService, type FileNode } from '../../src/utils/fs/FileSystemService';
+import { FileSystemService } from '../../src/utils/fs/FileSystemService';
+import type { FileSystemNode } from '../../src/utils/fs/types';
 
 /**
  * Creates a basic mock filesystem with common structure
  */
 export function createMockFileSystem(): FileSystemService {
-  const mockRoot: FileNode = {
+  const mockRoot: FileSystemNode = {
     name: '',
     type: 'directory',
     children: new Map([
@@ -300,7 +301,7 @@ Available commands and usage information.`,
  * Creates a minimal mock filesystem (just home directory)
  */
 export function createMinimalFileSystem(): FileSystemService {
-  const mockRoot: FileNode = {
+  const mockRoot: FileSystemNode = {
     name: '',
     type: 'directory',
     children: new Map([
@@ -331,7 +332,7 @@ export function createMinimalFileSystem(): FileSystemService {
  * Creates a filesystem with blog content for testing
  */
 export function createBlogFileSystem(): FileSystemService {
-  const mockRoot: FileNode = {
+  const mockRoot: FileSystemNode = {
     name: '',
     type: 'directory',
     children: new Map([
@@ -406,7 +407,7 @@ This is another test post for integration testing.`,
  * Creates a filesystem with portfolio content for testing
  */
 export function createPortfolioFileSystem(): FileSystemService {
-  const mockRoot: FileNode = {
+  const mockRoot: FileSystemNode = {
     name: '',
     type: 'directory',
     children: new Map([
@@ -467,7 +468,7 @@ Project description.`,
  * Creates an empty filesystem (only root)
  */
 export function createEmptyFileSystem(): FileSystemService {
-  const mockRoot: FileNode = {
+  const mockRoot: FileSystemNode = {
     name: '',
     type: 'directory',
     children: new Map(),

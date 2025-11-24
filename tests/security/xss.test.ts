@@ -273,10 +273,8 @@ describe('XSS Protection Security Tests', () => {
   describe('CSP compliance', () => {
     it('should not use inline event handlers in generated HTML', () => {
       // Verify that SettingsUI doesn't generate inline handlers
-      const _htmlWithOnclick = 'onclick="executeCommand';
-      const _htmlWithOnchange = 'onchange="executeCommand';
-
-      // These patterns should not exist in the codebase after refactoring
+      // Patterns like 'onclick="executeCommand' or 'onchange="executeCommand'
+      // should not exist in the codebase after refactoring
       // This is a documentation test - actual check would be in code review
       expect(true).toBe(true);
     });

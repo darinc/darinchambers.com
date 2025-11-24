@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createCdCommand } from '../../../../src/commands/fs/cd';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { EnvVarManager } from '../../../../src/utils/EnvVarManager';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
@@ -14,7 +15,7 @@ describe('cd command', () => {
       const onPathChange = vi.fn();
 
       const command = createCdCommand(mockFs, onPathChange);
-      const result = command.execute(['/home/user/documents']);
+      const result = command.execute(['/home/user/documents']) as CommandResult;
 
       expect(mockFs.changeDirectory).toHaveBeenCalledWith('/home/user/documents');
       expect(onPathChange).toHaveBeenCalledWith('~');
@@ -30,7 +31,7 @@ describe('cd command', () => {
       const onPathChange = vi.fn();
 
       const command = createCdCommand(mockFs, onPathChange);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(mockFs.changeDirectory).toHaveBeenCalledWith('~');
       expect(result.output).toBe('');
@@ -47,7 +48,7 @@ describe('cd command', () => {
       const onPathChange = vi.fn();
 
       const command = createCdCommand(mockFs, onPathChange);
-      const result = command.execute(['/nonexistent']);
+      const result = command.execute(['/nonexistent']) as CommandResult;
 
       expect(result.output).toBe('cd: /nonexistent: No such file or directory');
       expect(result.error).toBe(true);
@@ -118,7 +119,7 @@ describe('cd command', () => {
       const onPathChange = vi.fn();
 
       const command = createCdCommand(mockFs, onPathChange, mockEnvManager);
-      const result = command.execute(['-']);
+      const result = command.execute(['-']) as CommandResult;
 
       expect(mockFs.changeDirectory).toHaveBeenCalledWith('/previous/dir');
       expect(result.output).toBe('');
@@ -137,7 +138,7 @@ describe('cd command', () => {
       const onPathChange = vi.fn();
 
       const command = createCdCommand(mockFs, onPathChange, mockEnvManager);
-      const result = command.execute(['-']);
+      const result = command.execute(['-']) as CommandResult;
 
       expect(result.output).toBe('cd: OLDPWD not set');
       expect(result.error).toBe(true);
@@ -152,7 +153,7 @@ describe('cd command', () => {
       const onPathChange = vi.fn();
 
       const command = createCdCommand(mockFs, onPathChange);
-      const result = command.execute(['/home/user/documents']);
+      const result = command.execute(['/home/user/documents']) as CommandResult;
 
       expect(mockFs.changeDirectory).toHaveBeenCalledWith('/home/user/documents');
       expect(result.output).toBe('');
@@ -185,7 +186,7 @@ describe('cd command', () => {
       const onPathChange = vi.fn();
 
       const command = createCdCommand(mockFs, onPathChange);
-      const result = command.execute(['/test']);
+      const result = command.execute(['/test']) as CommandResult;
 
       expect(result.output).toBe('string error');
       expect(result.error).toBe(true);

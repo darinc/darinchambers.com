@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createLsCommand } from '../../../../src/commands/fs/ls';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 import type { FileSystemNode } from '../../../../src/utils/fs/types';
 
@@ -28,7 +29,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toContain('file1.txt');
       expect(result.output).toContain('file2.txt');
@@ -79,7 +80,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute(['file.txt']);
+      const result = command.execute(['file.txt']) as CommandResult;
 
       expect(result.output).toBe('file.txt');
     });
@@ -100,7 +101,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       const files = result.output.split('  ');
       expect(files[0]).toBe('alpha.txt');
@@ -120,7 +121,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('');
     });
@@ -131,7 +132,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute(['/nonexistent']);
+      const result = command.execute(['/nonexistent']) as CommandResult;
 
       expect(result.output).toContain('No such file or directory');
       expect(result.error).toBe(true);
@@ -154,7 +155,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toContain('visible.txt');
       expect(result.output).not.toContain('.hidden');
@@ -175,7 +176,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute(['-a']);
+      const result = command.execute(['-a']) as CommandResult;
 
       expect(result.output).toContain('visible.txt');
       expect(result.output).toContain('.hidden');
@@ -195,7 +196,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute(['-l']);
+      const result = command.execute(['-l']) as CommandResult;
 
       expect(result.output).toContain('total');
       expect(result.output).toContain('file.txt');
@@ -212,7 +213,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute(['-l', 'file.txt']);
+      const result = command.execute(['-l', 'file.txt']) as CommandResult;
 
       expect(result.output).toContain('file.txt');
       expect(result.output).not.toContain('total'); // No total for single file
@@ -235,7 +236,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute(['-la']);
+      const result = command.execute(['-la']) as CommandResult;
 
       expect(result.output).toContain('total');
       expect(result.output).toContain('visible.txt');
@@ -254,7 +255,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute(['-lah']);
+      const result = command.execute(['-lah']) as CommandResult;
 
       expect(result.output).toContain('total');
       expect(result.output).toContain('file.txt');
@@ -270,7 +271,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('Filesystem error');
       expect(result.error).toBe(true);
@@ -284,7 +285,7 @@ describe('ls command', () => {
       } as unknown as IFileSystem;
 
       const command = createLsCommand(mockFs);
-      const result = command.execute([]);
+      const result = command.execute([]) as CommandResult;
 
       expect(result.output).toBe('string error');
       expect(result.error).toBe(true);

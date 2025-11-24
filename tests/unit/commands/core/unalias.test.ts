@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createUnaliasCommand } from '../../../../src/commands/core/unalias';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { AliasManager } from '../../../../src/utils/AliasManager';
 
 describe('unalias command', () => {
@@ -9,7 +10,7 @@ describe('unalias command', () => {
     } as unknown as AliasManager;
 
     const command = createUnaliasCommand(mockManager);
-    const result = command.execute(['ll']);
+    const result = command.execute(['ll']) as CommandResult;
 
     expect(mockManager.removeAlias).toHaveBeenCalledWith('ll');
     expect(result.output).toBe('Alias removed: ll');
@@ -22,7 +23,7 @@ describe('unalias command', () => {
     } as unknown as AliasManager;
 
     const command = createUnaliasCommand(mockManager);
-    const result = command.execute(['nonexistent']);
+    const result = command.execute(['nonexistent']) as CommandResult;
 
     expect(result.output).toBe('unalias: nonexistent: not found');
     expect(result.error).toBe(true);
@@ -34,7 +35,7 @@ describe('unalias command', () => {
     } as unknown as AliasManager;
 
     const command = createUnaliasCommand(mockManager);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe("Usage: unalias name\nTry 'unalias --help' for more information.");
     expect(result.error).toBe(true);

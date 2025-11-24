@@ -7,7 +7,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createContactCommand } from '../../../../src/commands/local/contact';
 import { PATHS } from '../../../../src/constants';
-import type { Command } from '../../../../src/commands/Command';
+import type { Command, CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 // Mock filesystem for testing
@@ -40,9 +40,14 @@ Location: United States / Eastern Time
     list: () => [],
     exists: () => true,
     isDirectory: () => false,
-    getCurrentDirectory: () => '/home/darin',
-    setCurrentDirectory: () => {},
-    resolve: (path: string) => path,
+    isFile: () => true,
+    getCurrentPath: () => '/home/darin',
+    getShortPath: () => '~',
+    setCurrentUsername: () => {},
+    changeDirectory: () => {},
+    writeFile: () => {},
+    createDirectory: () => {},
+    getTree: () => [],
     getNode: () => null,
   };
 }
@@ -57,7 +62,7 @@ describe('Contact Command', () => {
     });
 
     it('should display help text when --help flag is provided', () => {
-      const result = contactCommand.execute(['--help']);
+      const result = contactCommand.execute(['--help']) as CommandResult;
 
       expect(result.output).toContain('Usage: contact');
       expect(result.output).toContain('Display contact information');
@@ -75,7 +80,7 @@ describe('Contact Command', () => {
     });
 
     it('should display contact information from markdown file', () => {
-      const result = contactCommand.execute([]);
+      const result = contactCommand.execute([]) as CommandResult;
 
       expect(result.html).toBe(true);
       expect(result.output).toContain('<div class="markdown-output">');
@@ -102,7 +107,7 @@ I love working with people on bold projects and quirky ideas.
       const mockFs = createMockFs({ fileContent: fullContent });
       contactCommand = createContactCommand(mockFs);
 
-      const result = contactCommand.execute([]);
+      const result = contactCommand.execute([]) as CommandResult;
 
       expect(result.html).toBe(true);
       expect(result.output).toContain('Contact Information');
@@ -119,7 +124,7 @@ I love working with people on bold projects and quirky ideas.
     });
 
     it('should ignore extra arguments', () => {
-      const result = contactCommand.execute(['extra', 'args', 'ignored']);
+      const result = contactCommand.execute(['extra', 'args', 'ignored']) as CommandResult;
 
       expect(result.html).toBe(true);
       expect(result.output).toContain('Contact Information');
@@ -135,7 +140,7 @@ I love working with people on bold projects and quirky ideas.
       });
       contactCommand = createContactCommand(mockFs);
 
-      const result = contactCommand.execute([]);
+      const result = contactCommand.execute([]) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toContain('File not found');
@@ -149,7 +154,7 @@ I love working with people on bold projects and quirky ideas.
       });
       contactCommand = createContactCommand(mockFs);
 
-      const result = contactCommand.execute([]);
+      const result = contactCommand.execute([]) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toBe('Unexpected error occurred');
@@ -165,14 +170,19 @@ I love working with people on bold projects and quirky ideas.
         list: () => [],
         exists: () => true,
         isDirectory: () => false,
-        getCurrentDirectory: () => '/home/darin',
-        setCurrentDirectory: () => {},
-        resolve: (path: string) => path,
+        isFile: () => true,
+        getCurrentPath: () => '/home/darin',
+        getShortPath: () => '~',
+        setCurrentUsername: () => {},
+        changeDirectory: () => {},
+        writeFile: () => {},
+        createDirectory: () => {},
+        getTree: () => [],
         getNode: () => null,
       };
       contactCommand = createContactCommand(mockFs);
 
-      const result = contactCommand.execute([]);
+      const result = contactCommand.execute([]) as CommandResult;
 
       expect(result.error).toBe(true);
       expect(result.output).toBe('String error');

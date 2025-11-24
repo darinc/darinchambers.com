@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createPwdCommand } from '../../../../src/commands/fs/pwd';
+import type { CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 describe('pwd command', () => {
@@ -9,7 +10,7 @@ describe('pwd command', () => {
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('/home/user');
     expect(mockFs.getCurrentPath).toHaveBeenCalled();
@@ -32,7 +33,7 @@ describe('pwd command', () => {
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
-    const result = command.execute(['arg1', 'arg2']);
+    const result = command.execute(['arg1', 'arg2']) as CommandResult;
 
     expect(result.output).toBe('/home/user/documents');
   });
@@ -43,7 +44,7 @@ describe('pwd command', () => {
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
-    const result = command.execute([], 'stdin input');
+    const result = command.execute([], 'stdin input') as CommandResult;
 
     expect(result.output).toBe('/etc');
   });
@@ -54,7 +55,7 @@ describe('pwd command', () => {
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('/');
   });
@@ -65,7 +66,7 @@ describe('pwd command', () => {
     } as unknown as IFileSystem;
 
     const command = createPwdCommand(mockFs);
-    const result = command.execute([]);
+    const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('/home/user/documents/projects/my-app/src');
   });
