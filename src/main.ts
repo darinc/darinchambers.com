@@ -8,6 +8,7 @@ import { createExportCommand } from './commands/core/export';
 import { createHistoryCommand } from './commands/core/history';
 import { createRenderCommand } from './commands/core/render';
 import { createUnaliasCommand } from './commands/core/unalias';
+import { createWhichCommand } from './commands/core/which';
 import { createWhoamiCommand } from './commands/core/whoami';
 import { createCatCommand } from './commands/fs/cat';
 import { createCdCommand } from './commands/fs/cd';
@@ -208,6 +209,9 @@ const exportCommand = createExportCommand(envVarManager);
 // Create novelty commands
 const matrixCommand = createMatrixCommand(themeManager);
 
+// Create which command
+const whichCommand = createWhichCommand(dispatcher, aliasManager);
+
 terminal.registerCommands([
   helpCommand,
   clearCommand,
@@ -233,6 +237,7 @@ terminal.registerCommands([
   ddateCommand,
   figletCommand,
   matrixCommand,
+  whichCommand,
 ]);
 
 // Set up navigation items

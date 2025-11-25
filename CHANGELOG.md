@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.0] - 2025-11-25
+
+### Added
+- New `which` command to locate commands and display their virtual filesystem paths
+- Support for `-a` flag to show all matching paths including aliases
+- Alias resolution showing shell-style output (e.g., `ll: aliased to ls -alh`)
+
 ## [0.13.5] - 2025-11-24
 
 ### Changed

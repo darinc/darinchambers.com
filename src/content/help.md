@@ -36,6 +36,7 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`history`** - Show command history
 - **`alias`** - Create command shortcuts
 - **`whoami`** - Display current user
+- **`which`** - Show path of commands
 
 ### Novelty
 

@@ -233,6 +233,7 @@ Type 'blog' to read posts.
     bin.children!.set('cat', this.createFileNode('cat', '[Core command: cat]'));
     bin.children!.set('tree', this.createFileNode('tree', '[Core command: tree]'));
     bin.children!.set('render', this.createFileNode('render', '[Core command: render]'));
+    bin.children!.set('which', this.createFileNode('which', '[Core command: which]'));
 
     // /usr/local/bin directory (custom/content commands)
     const local = this.createDirectoryNode('local');
