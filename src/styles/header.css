@@ -1,6 +1,6 @@
 /* Terminal Header */
 #terminal-header {
-  padding: 20px 20px 10px;
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-sm);
   background-color: var(--terminal-bg-secondary);
   border-bottom: 1px solid var(--terminal-dim);
   position: relative;
@@ -19,7 +19,7 @@
 
 .header-ascii {
   overflow-x: hidden;
-  margin-bottom: 5px;
+  margin-bottom: var(--spacing-xs);
   text-align: center;
   position: relative;
   z-index: 2;
@@ -76,6 +76,6 @@
   color: var(--terminal-dim);
   font-size: 16px;
   text-align: center;
-  margin-top: 5px;
+  margin-top: var(--spacing-xs);
   letter-spacing: 0.5px;
 }

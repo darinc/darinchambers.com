@@ -59,10 +59,10 @@
 /* Mobile responsive */
 @media (max-width: 768px) {
   #terminal-nav {
-    padding: 8px 10px;
+    padding: var(--spacing-sm) var(--spacing-sm);
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: var(--spacing-sm);
   }
 
   .nav-brand {
@@ -70,7 +70,7 @@
   }
 
   .nav-links {
-    gap: 10px;
+    gap: var(--spacing-sm);
   }
 
   .nav-link {
@@ -79,12 +79,26 @@
   }
 
   #terminal-container {
-    padding: 10px;
+    padding: var(--spacing-sm);
   }
 
   #terminal-output,
   #terminal-input-line {
     font-size: 16px;
+  }
+
+  /* Tighter spacing for markdown content on mobile */
+  .markdown-output {
+    line-height: var(--line-height-tight);
+  }
+
+  .markdown-output h1 {
+    margin: var(--spacing-md) 0 var(--spacing-xs);
+  }
+
+  .markdown-output h2,
+  .markdown-output h3 {
+    margin: var(--spacing-sm) 0 var(--spacing-xs);
   }
 }
 

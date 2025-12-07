@@ -1,16 +1,16 @@
 /* Markdown rendering styles */
 .markdown-output {
-  line-height: 1.4;
-  margin: 4px 0;
-  margin-top: 12px;
+  line-height: var(--line-height-normal);
+  margin: var(--spacing-sm) 0;
+  margin-top: var(--spacing-md);
   white-space: normal;
 }
 
 .markdown-output h1 {
   font-size: 24px;
   font-weight: bold;
-  margin: 16px 0 4px;
-  padding: 4px 8px;
+  margin: var(--spacing-lg) 0 var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
   color: var(--terminal-accent);
   background-color: var(--terminal-accent-10);
   border-bottom: 2px solid var(--terminal-accent);
@@ -20,7 +20,7 @@
 .markdown-output h2 {
   font-size: 20px;
   font-weight: bold;
-  margin: 6px 0 3px;
+  margin: var(--spacing-md) 0 var(--spacing-sm);
   color: var(--terminal-accent);
   filter: hue-rotate(180deg);
 }
@@ -28,17 +28,17 @@
 .markdown-output h3 {
   font-size: 18px;
   font-weight: bold;
-  margin: 6px 0 3px;
+  margin: var(--spacing-md) 0 var(--spacing-sm);
   color: var(--terminal-dim);
 }
 
 .markdown-output ul,
 .markdown-output ol {
-  margin: 4px 0 4px 20px;
+  margin: var(--spacing-sm) 0 var(--spacing-sm) var(--spacing-lg);
 }
 
 .markdown-output li {
-  margin: 2px 0;
+  margin: var(--spacing-xs) 0;
 }
 
 .markdown-output code {
@@ -53,8 +53,8 @@
 
 .markdown-output pre {
   background: var(--terminal-bg-secondary);
-  padding: 8px;
-  margin: 4px 0;
+  padding: var(--spacing-sm);
+  margin: var(--spacing-sm) 0;
   border-radius: 4px;
   overflow-x: auto;
   border-left: 3px solid var(--terminal-dim);
@@ -86,18 +86,18 @@
 }
 
 .markdown-output p {
-  margin: 4px 0;
+  margin: var(--spacing-sm) 0;
 }
 
 /* Extra spacing after paragraphs that contain tags (typically before next blog post) */
 .markdown-output p:has(.tag-link) {
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-2xl);
   margin-left: 0; /* Don't indent Tags: paragraphs */
 }
 
 /* Blog list entry indentation - indent content under post titles */
 .markdown-output h3 ~ p {
-  margin-left: 24px;
+  margin-left: var(--spacing-lg);
 }
 
 /* Reset indentation after horizontal rules (between blog posts and sections) */
@@ -111,7 +111,7 @@
 .markdown-output h2 ~ ul,
 .markdown-output h2 ~ ol,
 .markdown-output h2 ~ pre {
-  margin-left: 24px;
+  margin-left: var(--spacing-lg);
 }
 
 /* Reset indentation for new sections (next h2) */
@@ -124,7 +124,7 @@
 .markdown-output h2 ~ h2 ~ ul,
 .markdown-output h2 ~ h2 ~ ol,
 .markdown-output h2 ~ h2 ~ pre {
-  margin-left: 24px;
+  margin-left: var(--spacing-lg);
 }
 
 .markdown-output br {
@@ -134,13 +134,13 @@
 /* Frontmatter styles */
 .markdown-output .fm-title {
   font-size: 26px;
-  margin: 4px 0;
+  margin: var(--spacing-sm) 0;
   color: var(--terminal-accent);
   text-shadow: 0 0 10px var(--terminal-accent);
 }
 
 .markdown-output .fm-meta {
-  margin: 4px 0;
+  margin: var(--spacing-sm) 0;
   opacity: 0.8;
   font-size: 14px;
 }
@@ -150,34 +150,34 @@
 }
 
 .markdown-output .fm-tags {
-  margin-left: 8px;
+  margin-left: var(--spacing-sm);
 }
 
 .markdown-output .fm-tag {
   background: var(--terminal-accent-15);
-  padding: 2px 8px;
+  padding: 2px var(--spacing-sm);
   border-radius: 3px;
-  margin: 0 4px;
+  margin: 0 var(--spacing-xs);
   font-size: 12px;
 }
 
 .markdown-output .fm-summary {
   font-style: italic;
   opacity: 0.9;
-  margin: 6px 0;
+  margin: var(--spacing-sm) 0;
 }
 
 .markdown-output .fm-divider {
   border: none;
   border-top: 1px solid var(--terminal-dim);
-  margin: 8px 0;
+  margin: var(--spacing-md) 0;
   opacity: 0.3;
 }
 
 .markdown-output hr {
   border: none;
   border-top: 1px solid var(--terminal-dim);
-  margin: 16px 0;
+  margin: var(--spacing-lg) 0;
   opacity: 0.3;
 }
 
@@ -186,7 +186,7 @@
   background: var(--terminal-accent-10);
   color: var(--terminal-accent);
   border: 1px solid var(--terminal-accent);
-  padding: 2px 8px;
+  padding: 2px var(--spacing-sm);
   border-radius: 4px;
   font-family:
     'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Menlo', 'Monaco', 'Liberation Mono',
@@ -218,7 +218,7 @@
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 12px 0;
+  margin: var(--spacing-md) 0;
 }
 
 /* Graph visualization container */
@@ -230,8 +230,8 @@
 .markdown-output .side-by-side-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin: 16px 0;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
   align-items: start;
 }
 

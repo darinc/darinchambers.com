@@ -1,4 +1,5 @@
 :root {
+  /* Colors */
   --terminal-bg: #0a0e14;
   --terminal-fg: #39ff14;
   --terminal-accent: #39ff14;
@@ -12,4 +13,17 @@
   --terminal-accent-10: color-mix(in srgb, var(--terminal-accent) 10%, transparent);
   --terminal-accent-15: color-mix(in srgb, var(--terminal-accent) 15%, transparent);
   --terminal-accent-30: color-mix(in srgb, var(--terminal-accent) 30%, transparent);
+
+  /* Spacing scale (rem-based for responsive scaling) */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 3rem; /* 48px */
+
+  /* Typography */
+  --line-height-tight: 1;
+  --line-height-normal: 1.125;
+  --line-height-relaxed: 1.4;
 }

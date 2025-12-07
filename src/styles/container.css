@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 100vw;
   flex: 1;
-  padding: 20px;
+  padding: var(--spacing-lg);
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
