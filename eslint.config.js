@@ -91,6 +91,25 @@ export default tseslint.config(
     },
   },
   {
+    // Node.js scripts - lint JavaScript without TypeScript
+    files: ['scripts/**/*.js'],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
+    rules: {
+      // Keep JavaScript best practices
+      'no-console': 'off', // Scripts use console.log
+      'prefer-const': 'warn',
+      'no-var': 'error',
+    },
+  },
+  {
     ignores: [
       'dist/',
       'coverage/',
