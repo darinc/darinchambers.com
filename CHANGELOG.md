@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.0] - 2025-12-07
+
+### Added
+- Screensaver system with configurable inactivity timeout (default 5 minutes)
+- Matrix digital rain as first screensaver with automatic activation after idle period
+- Activity monitoring for keyboard, mouse, and touch events with smart debouncing
+- Screensaver settings in settings UI and CLI (enable/disable, timeout 1-60 minutes, type selection)
+- Page Visibility API integration to pause screensaver when tab is hidden
+
 ## [0.14.3] - 2025-12-07
 
 ### Fixed

@@ -80,6 +80,11 @@ describe('SettingsManager', () => {
           autoScrollBehavior: true,
         },
         prompt: { format: '\\u@\\h:\\W\\$ ' },
+        screensaver: {
+          enabled: true,
+          timeoutMinutes: 5,
+          activeScreensaver: 'matrix',
+        },
       };
 
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(customSettings));
@@ -397,6 +402,83 @@ describe('SettingsManager', () => {
     });
   });
 
+  describe('Screensaver Settings', () => {
+    it('should get screensaver enabled state', () => {
+      expect(settingsManager.getScreensaverEnabled()).toBe(true); // Default
+    });
+
+    it('should set screensaver enabled state', () => {
+      settingsManager.setScreensaverEnabled(false);
+      expect(settingsManager.getScreensaverEnabled()).toBe(false);
+    });
+
+    it('should persist screensaver enabled state', () => {
+      settingsManager.setScreensaverEnabled(false);
+
+      const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+      const parsed = JSON.parse(stored!);
+
+      expect(parsed.screensaver.enabled).toBe(false);
+    });
+
+    it('should get screensaver timeout', () => {
+      expect(settingsManager.getScreensaverTimeout()).toBe(5); // Default 5 minutes
+    });
+
+    it('should set screensaver timeout', () => {
+      settingsManager.setScreensaverTimeout(10);
+      expect(settingsManager.getScreensaverTimeout()).toBe(10);
+    });
+
+    it('should validate screensaver timeout minimum', () => {
+      expect(() => settingsManager.setScreensaverTimeout(0)).toThrow();
+    });
+
+    it('should validate screensaver timeout maximum', () => {
+      expect(() => settingsManager.setScreensaverTimeout(61)).toThrow();
+    });
+
+    it('should persist screensaver timeout', () => {
+      settingsManager.setScreensaverTimeout(15);
+
+      const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+      const parsed = JSON.parse(stored!);
+
+      expect(parsed.screensaver.timeoutMinutes).toBe(15);
+    });
+
+    it('should get active screensaver', () => {
+      expect(settingsManager.getActiveScreensaver()).toBe('matrix'); // Default
+    });
+
+    it('should set active screensaver', () => {
+      settingsManager.setActiveScreensaver('stars');
+      expect(settingsManager.getActiveScreensaver()).toBe('stars');
+    });
+
+    it('should persist active screensaver', () => {
+      settingsManager.setActiveScreensaver('stars');
+
+      const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+      const parsed = JSON.parse(stored!);
+
+      expect(parsed.screensaver.activeScreensaver).toBe('stars');
+    });
+
+    it('should sync screensaver settings to filesystem', () => {
+      settingsManager.setScreensaverEnabled(false);
+      settingsManager.setScreensaverTimeout(20);
+      settingsManager.setActiveScreensaver('stars');
+
+      const content = fs.readFile(PATHS.CONFIG_SETTINGS);
+      const parsed = JSON.parse(content);
+
+      expect(parsed.screensaver.enabled).toBe(false);
+      expect(parsed.screensaver.timeoutMinutes).toBe(20);
+      expect(parsed.screensaver.activeScreensaver).toBe('stars');
+    });
+  });
+
   describe('Complete Settings Operations', () => {
     it('should load complete settings', () => {
       const settings = settingsManager.loadSettings();
@@ -419,6 +501,11 @@ describe('SettingsManager', () => {
           autoScrollBehavior: false,
         },
         prompt: { format: '\\u@\\h:\\w\\$ ' },
+        screensaver: {
+          enabled: true,
+          timeoutMinutes: 5,
+          activeScreensaver: 'matrix',
+        },
       };
 
       settingsManager.saveSettings(newSettings);
@@ -440,6 +527,11 @@ describe('SettingsManager', () => {
           autoScrollBehavior: true,
         },
         prompt: { format: '\\u@\\h:\\w\\$ ' },
+        screensaver: {
+          enabled: true,
+          timeoutMinutes: 5,
+          activeScreensaver: 'matrix',
+        },
       };
 
       settingsManager.saveSettings(newSettings);
