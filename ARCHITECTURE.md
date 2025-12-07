@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-**Last Updated:** 2025-12-07 (v0.14.2)
+**Last Updated:** 2025-12-07 (v0.14.3)
 
 ## Table of Contents
 
