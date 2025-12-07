@@ -11,8 +11,10 @@
  * Metrics updated:
  * - Package version (exact)
  * - Command count (exact)
- * - Bundle size (approximate with 10% threshold)
+ * - Bundle size (approximate with 10% threshold, includes gzipped)
+ * - Test coverage percentage (from coverage data)
  * - Test counts (ranges validated)
+ * - Screensaver constants (timeout, min/max range)
  * - Filesystem path corrections
  */
 
@@ -111,6 +113,79 @@ async function getBundleSize() {
     css: cssGzipped,
     total: jsGzipped + cssGzipped
   };
+}
+
+async function getScreensaverConstants() {
+  const constantsPath = path.join(projectRoot, 'src/constants.ts');
+
+  try {
+    const content = await fs.readFile(constantsPath, 'utf8');
+
+    // Extract DEFAULT_SETTINGS.screensaver.timeoutMinutes
+    const defaultTimeoutMatch = content.match(
+      /screensaver:\s*\{[^}]*timeoutMinutes:\s*(\d+)/s
+    );
+    const defaultTimeout = defaultTimeoutMatch
+      ? parseInt(defaultTimeoutMatch[1])
+      : 5;
+
+    // Extract SCREENSAVER_CONSTANTS.MIN_TIMEOUT_MINUTES
+    const minTimeoutMatch = content.match(
+      /MIN_TIMEOUT_MINUTES:\s*(\d+)/
+    );
+    const minTimeout = minTimeoutMatch
+      ? parseInt(minTimeoutMatch[1])
+      : 1;
+
+    // Extract SCREENSAVER_CONSTANTS.MAX_TIMEOUT_MINUTES
+    const maxTimeoutMatch = content.match(
+      /MAX_TIMEOUT_MINUTES:\s*(\d+)/
+    );
+    const maxTimeout = maxTimeoutMatch
+      ? parseInt(maxTimeoutMatch[1])
+      : 60;
+
+    return {
+      defaultTimeout,
+      minTimeout,
+      maxTimeout
+    };
+  } catch (error) {
+    console.warn('  ⚠️  Could not read screensaver constants, using defaults');
+    return {
+      defaultTimeout: 5,
+      minTimeout: 1,
+      maxTimeout: 60
+    };
+  }
+}
+
+async function getCoveragePercentage() {
+  const coveragePath = path.join(projectRoot, 'coverage/coverage-final.json');
+
+  try {
+    await fs.access(coveragePath);
+    const content = await fs.readFile(coveragePath, 'utf8');
+    const data = JSON.parse(content);
+
+    // Calculate line coverage percentage
+    const files = Object.keys(data);
+    const totals = files.reduce((acc, filePath) => {
+      const fileData = data[filePath];
+      const statements = Object.values(fileData.s || {});
+      acc.total += statements.length;
+      acc.covered += statements.filter(n => n > 0).length;
+      return acc;
+    }, { total: 0, covered: 0 });
+
+    if (totals.total === 0) return null;
+
+    const percentage = (totals.covered / totals.total) * 100;
+    return Math.round(percentage); // Round to nearest integer
+  } catch (error) {
+    // Coverage data not available (e.g., tests haven't been run with --coverage)
+    return null;
+  }
 }
 
 function getCurrentDate() {
@@ -287,31 +362,79 @@ async function updateClaude(metrics) {
   const original = content;
   const changes = [];
 
-  // Pattern 1: Bundle size in tech stack
+  // Pattern 1: Bundle size with gzipped total
   if (metrics.bundleTotal) {
-    const bundlePattern1 = /(\*\*Bundle Size:\*\* ~)(\d+)(KB total)/;
-    if (content.match(bundlePattern1)) {
-      const oldSize = content.match(bundlePattern1)[2];
-      if (shouldUpdateBundleSize(oldSize, metrics.bundleTotal)) {
-        content = content.replace(bundlePattern1, `$1${metrics.bundleTotal}$3`);
-        changes.push(`Bundle size ~${oldSize}KB → ~${metrics.bundleTotal}KB`);
+    const bundlePattern1 = /(\*\*Bundle Size:\*\* ~)(\d+)(KB total)(\s*\(gzipped:\s*~)(\d+)(KB\))?/;
+    const match = content.match(bundlePattern1);
+
+    if (match) {
+      const oldTotal = match[2];
+      const oldGzipped = match[5] || null;
+
+      if (shouldUpdateBundleSize(oldTotal, metrics.bundleTotal)) {
+        const replacement = `$1${metrics.bundleTotal}$3 (gzipped: ~${metrics.bundleTotal}KB)`;
+        content = content.replace(bundlePattern1, replacement);
+        changes.push(`Bundle size ~${oldTotal}KB → ~${metrics.bundleTotal}KB`);
+      }
+    } else {
+      // Fallback for old format without gzipped
+      const bundlePatternOld = /(\*\*Bundle Size:\*\* ~)(\d+)(KB total)/;
+      if (content.match(bundlePatternOld)) {
+        const oldSize = content.match(bundlePatternOld)[2];
+        if (shouldUpdateBundleSize(oldSize, metrics.bundleTotal)) {
+          content = content.replace(
+            bundlePatternOld,
+            `$1${metrics.bundleTotal}$3 (gzipped: ~${metrics.bundleTotal}KB)`
+          );
+          changes.push(`Bundle size ~${oldSize}KB → ~${metrics.bundleTotal}KB (added gzipped)`);
+        }
       }
     }
   }
 
-  // Pattern 2: Test coverage line
-  const testPattern = /(\*\*Test Coverage:\*\* 80%\+ target \()([\d,]+)(\+ tests across )(\d+)(\+ test files\))/;
-  if (content.match(testPattern)) {
-    const match = content.match(testPattern);
-    const testMin = parseInt(match[2].replace(/,/g, ''));
-    const fileMin = parseInt(match[4]);
+  // Pattern 2: Test coverage line with percentage
+  const testPattern = /(\*\*Test Coverage:\*\* )(\d+)(%)(\+ target \()(\d+%)(\+ current, )([\d,]+)(\+ tests across )(\d+)(\+ test files\))/;
+  const testMatch = content.match(testPattern);
+
+  if (testMatch) {
+    const targetPercent = testMatch[2];
+    const currentPercent = testMatch[5].replace('%', '');
+    const testMin = parseInt(testMatch[7].replace(/,/g, ''));
+    const fileMin = parseInt(testMatch[9]);
 
     const newTestRange = validateRange(`${testMin.toLocaleString()}+`, metrics.tests, 'Test count');
     const newFileRange = validateRange(`${fileMin}+`, metrics.testFiles, 'Test files');
 
+    let hasChanges = false;
+    let newContent = content;
+
+    // Update coverage percentage if available
+    if (metrics.coveragePercent !== null) {
+      const newCurrentPercent = metrics.coveragePercent;
+      if (parseInt(currentPercent) !== newCurrentPercent) {
+        newContent = newContent.replace(
+          testPattern,
+          `$1$2$3$4${newCurrentPercent}%+ current, ${newTestRange} tests across ${newFileRange} test files)`
+        );
+        changes.push(`Coverage ${currentPercent}% → ${newCurrentPercent}%`);
+        hasChanges = true;
+      }
+    }
+
+    // Update test counts if needed
     if (newTestRange !== `${testMin.toLocaleString()}+` || newFileRange !== `${fileMin}+`) {
-      content = content.replace(testPattern, `$1${newTestRange}$3${newFileRange}$5`);
+      if (!hasChanges) {
+        newContent = newContent.replace(
+          testPattern,
+          `$1$2$3$4$5+ current, ${newTestRange} tests across ${newFileRange} test files)`
+        );
+      }
       changes.push(`Test counts validated`);
+      hasChanges = true;
+    }
+
+    if (hasChanges) {
+      content = newContent;
     }
   }
 
@@ -350,6 +473,40 @@ async function updateClaude(metrics) {
     }
   }
 
+  // Pattern 6: Screensaver default timeout
+  const screensaverTimeoutPattern = /(- \*\*Default timeout\*\*: )(\d+)( minutes \()(\d+)(,000ms\))/;
+  if (content.match(screensaverTimeoutPattern)) {
+    const match = content.match(screensaverTimeoutPattern);
+    const oldMinutes = match[2];
+    const oldMs = match[4];
+
+    if (parseInt(oldMinutes) !== metrics.screensaverDefaultTimeout) {
+      const newMs = metrics.screensaverDefaultTimeout * 60; // Convert to thousands
+      content = content.replace(
+        screensaverTimeoutPattern,
+        `$1${metrics.screensaverDefaultTimeout}$3${newMs}$5`
+      );
+      changes.push(`Screensaver timeout ${oldMinutes}min → ${metrics.screensaverDefaultTimeout}min`);
+    }
+  }
+
+  // Pattern 7: Screensaver min/max range
+  const screensaverRangePattern = /(- \*\*Min\/Max range\*\*: )(\d+)(-)(\d+)( minutes)/;
+  if (content.match(screensaverRangePattern)) {
+    const match = content.match(screensaverRangePattern);
+    const oldMin = match[2];
+    const oldMax = match[4];
+
+    if (parseInt(oldMin) !== metrics.screensaverMinTimeout ||
+        parseInt(oldMax) !== metrics.screensaverMaxTimeout) {
+      content = content.replace(
+        screensaverRangePattern,
+        `$1${metrics.screensaverMinTimeout}$3${metrics.screensaverMaxTimeout}$5`
+      );
+      changes.push(`Screensaver range ${oldMin}-${oldMax}min → ${metrics.screensaverMinTimeout}-${metrics.screensaverMaxTimeout}min`);
+    }
+  }
+
   if (content !== original) {
     await fs.writeFile(claudePath, content, 'utf8');
     return changes;
@@ -373,6 +530,8 @@ async function main() {
     const testFiles = await getTestFileCount();
     const tests = await getTestCount();
     const bundleSize = await getBundleSize();
+    const screensaverConfig = await getScreensaverConstants();
+    const coveragePercent = await getCoveragePercentage();
     const date = getCurrentDate();
 
     const metrics = {
@@ -383,6 +542,10 @@ async function main() {
       bundleTotal: bundleSize.total || 84,  // Fallback to last known
       bundleJs: bundleSize.js,
       bundleCss: bundleSize.css,
+      coveragePercent,  // Can be null if coverage not available
+      screensaverDefaultTimeout: screensaverConfig.defaultTimeout,
+      screensaverMinTimeout: screensaverConfig.minTimeout,
+      screensaverMaxTimeout: screensaverConfig.maxTimeout,
       date
     };
 
@@ -393,10 +556,16 @@ async function main() {
     console.log(`  Test files: ${testFiles}`);
     console.log(`  Tests: ${tests}`);
     if (bundleSize.total) {
-      console.log(`  Bundle: ~${bundleSize.total}KB (${bundleSize.js}KB JS + ${bundleSize.css}KB CSS gzipped)`);
+      console.log(`  Bundle: ~${bundleSize.total}KB gzipped (${bundleSize.js}KB JS + ${bundleSize.css}KB CSS)`);
     } else {
       console.log(`  Bundle: (using cached value ~84KB - run 'pnpm build' for actual)`);
     }
+    if (coveragePercent !== null) {
+      console.log(`  Coverage: ${coveragePercent}%`);
+    } else {
+      console.log(`  Coverage: (not available - run 'pnpm test:coverage' to generate)`);
+    }
+    console.log(`  Screensaver: ${screensaverConfig.defaultTimeout}min default (${screensaverConfig.minTimeout}-${screensaverConfig.maxTimeout}min range)`);
     console.log(`  Date: ${date}`);
     console.log();
 
