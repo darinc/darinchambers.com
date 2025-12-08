@@ -1,6 +1,7 @@
 Execute the complete version bump and commit workflow after completing any implementation task.
 
 **CRITICAL REQUIREMENTS:**
+
 - Write SHORT TO MEDIUM changelog entries (2-5 bullet points MAXIMUM)
 - Do NOT mention stage, phase, or part numbers
 - Do NOT include detailed coverage statistics or test counts
@@ -10,7 +11,13 @@ Execute the complete version bump and commit workflow after completing any imple
 
 **Steps to execute:**
 
-1. **Determine Version Bump**
+1. **Update Documentation Metrics**
+   - Run `pnpm update-docs` to synchronize all documentation
+   - Updates version badges, command counts, bundle sizes, filesystem paths
+   - Auto-adjusts ranges if metrics drop below documented minimums
+   - If fails, log warning but continue workflow (non-blocking)
+
+2. **Determine Version Bump**
    - Read the current version from package.json or relevant version file
    - Analyze the changes just implemented
    - Determine the appropriate semantic version bump:
@@ -20,23 +27,22 @@ Execute the complete version bump and commit workflow after completing any imple
    - For pre-1.0.0 versions: MINOR can include breaking changes, PATCH for fixes
    - Calculate and update the new version number in all relevant files
 
-2. **Write Changelog Entry**
+3. **Write Changelog Entry**
    - Create a SHORT TO MEDIUM keepachangelog entry (2-5 bullet points MAX)
    - Use keepachangelog categories: Added, Changed, Fixed, Removed
    - Keep descriptions concise and high-level
    - Format: `## [X.Y.Z] - YYYY-MM-DD` (use calculated version and current date)
 
-3. **Update Tracking Files**
+4. **Update Tracking Files**
    - Update the project tracking file that was being worked from (TEST.md, TODO.md, REFACTOR.md, etc.)
    - Check off completed sections using [x]
    - Update any progress indicators
    - If no tracking file was used, skip this step
 
-4. **Git Commit**
+5. **Git Commit**
    - Stage all changed files: `git add .`
    - Create commit using the changelog entry as the commit message
    - Use format: `git commit -m "Your changelog message"`
    - Keep commit message simple, clear, and in present tense
 
 Execute all steps now.
-

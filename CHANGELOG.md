@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.2] - 2025-12-07
+
+### Added
+- Automated documentation update script to sync metrics across README, ARCHITECTURE, and CLAUDE documentation files
+- New `pnpm update-docs` command for on-demand documentation synchronization
+
+### Changed
+- Integrated documentation updates into `/finalize` workflow as automatic first step
+- Corrected documentation metrics (command count 22→25, bundle size ~120KB→~82KB)
+
 ## [0.14.1] - 2025-12-07
 
 ### Changed
