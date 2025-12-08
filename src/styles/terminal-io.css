@@ -126,3 +126,17 @@
     filter: brightness(1.5);
   }
 }
+
+/* Conway's Game of Life styles */
+.life-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+.life-grid {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}

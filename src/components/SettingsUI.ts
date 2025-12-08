@@ -129,7 +129,10 @@ function generateScreensaverControls(screensaver: {
   timeoutMinutes: number;
   activeScreensaver: string;
 }): string {
-  const screensaverTypes = [{ value: 'matrix', label: 'Matrix Digital Rain' }];
+  const screensaverTypes = [
+    { value: 'matrix', label: 'Matrix Digital Rain' },
+    { value: 'life', label: "Conway's Game of Life" },
+  ];
 
   return `<div class="setting-group"><label><input type="checkbox" ${screensaver.enabled ? 'checked' : ''} data-command-template="settings set screensaver-enabled" data-setting-type="screensaver-enabled"/>Enable Screensaver</label></div><div class="setting-group"><label>Timeout: <span id="screensaver-timeout-value">${screensaver.timeoutMinutes}min</span></label><input type="range" min="1" max="60" step="1" value="${screensaver.timeoutMinutes}" aria-label="Screensaver timeout" aria-valuemin="1" aria-valuemax="60" aria-valuenow="${screensaver.timeoutMinutes}" aria-valuetext="${screensaver.timeoutMinutes} minutes" data-command-template="settings set screensaver-timeout" data-setting-type="screensaver-timeout"/></div><div class="setting-group"><label>Screensaver Type</label><select aria-label="Screensaver type" data-command-template="settings set screensaver-type" data-setting-type="screensaver-type">${screensaverTypes.map((type) => `<option value="${type.value}" ${type.value === screensaver.activeScreensaver ? 'selected' : ''}>${type.label}</option>`).join('')}</select></div>`;
 }

@@ -635,6 +635,54 @@ describe('Settings Command', () => {
     });
   });
 
+  describe('settings set screensaver-type', () => {
+    it('should set screensaver type to matrix', () => {
+      const result = settingsCommand.execute([
+        'set',
+        'screensaver-type',
+        'matrix',
+      ]) as CommandResult;
+
+      expect(result.error).toBeUndefined();
+      expect(result.output).toContain('Screensaver type set to: matrix');
+      expect(settingsManager.getActiveScreensaver()).toBe('matrix');
+    });
+
+    it('should set screensaver type to life', () => {
+      const result = settingsCommand.execute(['set', 'screensaver-type', 'life']) as CommandResult;
+
+      expect(result.error).toBeUndefined();
+      expect(result.output).toContain('Screensaver type set to: life');
+      expect(settingsManager.getActiveScreensaver()).toBe('life');
+    });
+
+    it('should reject invalid screensaver type', () => {
+      const result = settingsCommand.execute([
+        'set',
+        'screensaver-type',
+        'invalid',
+      ]) as CommandResult;
+
+      expect(result.error).toBe(true);
+      expect(result.output).toContain('Invalid screensaver type: invalid');
+      expect(result.output).toContain('Available: matrix, life');
+    });
+
+    it('should reject missing value', () => {
+      const result = settingsCommand.execute(['set', 'screensaver-type']) as CommandResult;
+
+      expect(result.error).toBe(true);
+      expect(result.output).toContain('Usage: settings set <setting> <value>');
+    });
+
+    it('should support camelCase alias screensaverType', () => {
+      const result = settingsCommand.execute(['set', 'screensaverType', 'life']) as CommandResult;
+
+      expect(result.error).toBeUndefined();
+      expect(settingsManager.getActiveScreensaver()).toBe('life');
+    });
+  });
+
   describe('settings set - error handling', () => {
     it('should show usage when setting name is missing', () => {
       const result = settingsCommand.execute(['set']) as CommandResult;

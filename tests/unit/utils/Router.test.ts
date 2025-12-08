@@ -144,6 +144,12 @@ describe('Router', () => {
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('matrix', false);
     });
 
+    it('should parse /life route', () => {
+      window.location.pathname = '/life';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('life', false);
+    });
+
     it('should redirect unknown routes to home', () => {
       window.location.pathname = '/unknown-route';
 
@@ -236,6 +242,10 @@ describe('Router', () => {
 
     it('should return /matrix for "matrix" command', () => {
       expect(router.getPathForCommand('matrix')).toBe('/matrix');
+    });
+
+    it('should return /life for "life" command', () => {
+      expect(router.getPathForCommand('life')).toBe('/life');
     });
 
     it('should return null for unmapped commands', () => {

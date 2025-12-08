@@ -391,7 +391,7 @@ function handleSet(
       case 'screensaver-type':
       case 'screensaverType': {
         if (!value) return { output: 'Screensaver type value required', error: true };
-        const validTypes = ['matrix']; // Add more as they're implemented
+        const validTypes = ['matrix', 'life'];
         if (!validTypes.includes(value)) {
           return {
             output: `Invalid screensaver type: ${value}. Available: ${validTypes.join(', ')}`,

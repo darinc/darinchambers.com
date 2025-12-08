@@ -1,4 +1,5 @@
 import './styles/index.css';
+import { initLifeObserver } from './animations/gameOfLife';
 import { initMatrixRainObserver } from './animations/matrixRain';
 import { createAliasCommand } from './commands/core/alias';
 import { dateCommand } from './commands/core/date';
@@ -22,6 +23,7 @@ import { createPortfolioCommand } from './commands/local/portfolio';
 import { createSettingsCommand } from './commands/local/settings';
 import { ddateCommand } from './commands/novelty/ddate';
 import { figletCommand } from './commands/novelty/figlet';
+import { createLifeCommand } from './commands/novelty/life';
 import { createMatrixCommand } from './commands/novelty/matrix';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
@@ -211,6 +213,7 @@ const exportCommand = createExportCommand(envVarManager);
 
 // Create novelty commands
 const matrixCommand = createMatrixCommand(themeManager);
+const lifeCommand = createLifeCommand(themeManager);
 
 // Create which command
 const whichCommand = createWhichCommand(dispatcher, aliasManager);
@@ -240,6 +243,7 @@ terminal.registerCommands([
   ddateCommand,
   figletCommand,
   matrixCommand,
+  lifeCommand,
   whichCommand,
 ]);
 
@@ -304,8 +308,9 @@ if (initialCommand) {
   navigation.setActiveItem(initialCommand);
 }
 
-// Initialize matrix rain animation observer
+// Initialize animation observers
 initMatrixRainObserver();
+initLifeObserver();
 
 // Initialize screensaver system
 const screensaverManager = new ScreensaverManager(settingsManager, terminal);

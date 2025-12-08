@@ -91,6 +91,11 @@ export class Router {
         pattern: /^\/matrix\/?$/,
         commandBuilder: () => 'matrix',
       },
+      // Life route: /life
+      {
+        pattern: /^\/life\/?$/,
+        commandBuilder: () => 'life',
+      },
       // Home route: /
       {
         pattern: /^\/$/,
@@ -262,6 +267,7 @@ export class Router {
       settings: '/settings',
       help: '/help',
       matrix: '/matrix',
+      life: '/life',
     };
 
     return commandMap[trimmed] || null;

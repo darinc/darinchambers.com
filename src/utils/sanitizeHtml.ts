@@ -56,6 +56,7 @@ export function sanitizeHtml(html: string): string {
       'th',
       'td',
       'img',
+      'canvas',
       // Interactive elements for settings UI
       'button',
       'input',
@@ -103,6 +104,12 @@ export function sanitizeHtml(html: string): string {
       'data-graph-theme',
       'data-graph-initialized',
       'data-graph-error',
+      // Canvas animation attributes
+      'data-speed',
+      'data-density',
+      'data-pattern',
+      'data-accent-color',
+      'data-dim-color',
       // Inline styles (limited to safe properties)
       'style',
       // Details element
