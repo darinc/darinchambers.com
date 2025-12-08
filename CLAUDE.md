@@ -14,8 +14,8 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 - No framework - vanilla JavaScript/TypeScript
 - Dependencies: marked (markdown), figlet (ASCII art), DOMPurify (XSS protection)
 
-**Bundle Size:** ~82KB total
-**Test Coverage:** 80%+ target (1,000+ tests across 50+ test files)
+**Bundle Size:** ~84KB total (gzipped: ~84KB)
+**Test Coverage:** 80%+ target (91%+ current, 1,000+ tests across 50+ test files)
 **Deployment:** GitHub Pages
 
 ## Development Commands
@@ -78,6 +78,7 @@ pnpm test -- --grep "CommandParser"
 Terminal (orchestrator)
 ├── TerminalInput (keyboard input, history, tab completion)
 ├── TerminalOutput (render output, sanitize HTML)
+├── ScreensaverManager (idle detection, screensaver activation)
 └── CommandExecutor (parse, expand aliases/vars, execute)
     └── CommandDispatcher (route to specific command)
         └── Command implementations (25 commands)
@@ -90,6 +91,8 @@ Terminal (orchestrator)
 - `AliasManager`: Command aliases (`/home/guest/.alias`)
 - `ThemeManager`: CSS variables for themes
 - `Router`: Browser History API for URL state
+- `ScreensaverManager`: Activity monitoring and screensaver control
+- `ActivityMonitor`: DOM event tracking for user activity
 
 **Virtual File System:**
 
@@ -136,18 +139,20 @@ Implementation: `PipelineParser.ts` splits by `|`, passes stdout as stdin to nex
 
 ```
 src/
-├── commands/           # Command implementations (25 commands)
-│   ├── core/          # Core terminal commands (echo, date, env, export, etc.)
-│   ├── fs/            # File system commands (ls, cd, pwd, cat, tree)
-│   ├── local/         # Content commands (about, blog, portfolio, contact)
-│   └── novelty/       # Fun commands (matrix, figlet, ddate)
+├── animations/        # Screensaver animations (Matrix rain, etc.)
+├── commands/          # Command implementations (25 commands)
+│   ├── core/         # Core terminal commands (echo, date, env, export, etc.)
+│   ├── fs/           # File system commands (ls, cd, pwd, cat, tree)
+│   ├── local/        # Content commands (about, blog, portfolio, contact, settings)
+│   └── novelty/      # Fun commands (matrix, figlet, ddate)
 ├── components/        # UI components (Terminal, TerminalInput, TerminalOutput, etc.)
 ├── content/           # Markdown content
 │   ├── blog/         # Blog posts (YYYY-MM-DD-NN-slug.md format)
 │   └── portfolio/    # Portfolio projects (slug.md format)
 ├── utils/             # Utilities
 │   ├── fs/           # Virtual file system (FileSystemService, FileSystemInitializer)
-│   └── markdown/     # Markdown parsing (MarkdownParser, handlers)
+│   ├── markdown/     # Markdown parsing (MarkdownParser, handlers)
+│   └── screensaver/  # Screensaver system (ScreensaverManager, ActivityMonitor)
 ├── styles/            # CSS
 ├── types/             # TypeScript interfaces
 └── main.ts            # Application entry point
@@ -331,10 +336,23 @@ The build process:
 
 ### Adding a New Theme
 
-1. Add theme preset to `src/constants.ts`
+1. Add theme preset to `src/constants.ts` in `THEME_PRESETS`
 2. Ensure WCAG AA contrast compliance (use contrast checker)
-3. Update theme type definitions
-4. Add to settings UI options in `src/commands/local/settings.ts`
+3. Update theme type definitions in `src/types/settings.ts`
+4. The theme will automatically appear in settings UI
+
+### Configuring the Screensaver
+
+The screensaver system activates after a configurable period of inactivity:
+
+- **Default timeout**: 5 minutes (300,000ms)
+- **Min/Max range**: 1-60 minutes
+- **Configuration**: Via `settings screensaver-timeout <minutes>` command
+- **Storage**: Saved in `SettingsManager` (localStorage + `~/.settings`)
+- **Components**:
+  - `ScreensaverManager`: Coordinates idle detection and activation
+  - `ActivityMonitor`: Tracks DOM events (mousemove, keydown, click, etc.)
+  - Animations in `src/animations/` (e.g., Matrix rain effect)
 
 ### Modifying the Virtual File System
 
@@ -414,8 +432,8 @@ pnpm test:run -- tests/unit/path/to/test.test.ts
 
 ### Performance Issues
 
-- Bundle should be ~121KB total
-- Use `npm run build` to check bundle size
+- Bundle should be ~121KB total (gzipped: ~40KB)
+- Use `pnpm build` to check bundle size
 - Use Chrome DevTools Lighthouse for performance profiling
 - Check for memory leaks with Chrome DevTools Memory profiler
 

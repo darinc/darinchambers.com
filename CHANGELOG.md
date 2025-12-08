@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.0] - 2025-12-07
+
+### Added
+- Test coverage percentage tracking in documentation update script
+- Screensaver constants tracking from source code
+- Gzipped bundle size notation in documentation metrics
+
+### Changed
+- Enhanced update-docs.js with automatic CLAUDE.md synchronization
+
 ## [0.15.0] - 2025-12-07
 
 ### Added
