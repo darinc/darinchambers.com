@@ -64,6 +64,11 @@ export interface SettingsConfig {
   prompt: {
     format: string; // Prompt format string (bash-style escapes supported)
   };
+  screensaver: {
+    enabled: boolean;
+    timeoutMinutes: number; // 1-60 minutes range
+    activeScreensaver: string; // Command name: 'matrix', 'stars', etc.
+  };
 }
 
 /**

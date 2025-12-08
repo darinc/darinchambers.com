@@ -54,6 +54,11 @@ export class SettingsManager {
         return null;
       }
 
+      // Migrate old settings: add screensaver if missing
+      if (!parsed.screensaver) {
+        parsed.screensaver = DEFAULT_SETTINGS.screensaver;
+      }
+
       return parsed;
     } catch (error) {
       console.warn('SettingsManager: Failed to load settings from localStorage:', error);
@@ -372,6 +377,65 @@ export class SettingsManager {
   }
 
   /**
+   * Gets the screensaver enabled state.
+   */
+  getScreensaverEnabled(): boolean {
+    return this.settings.screensaver.enabled;
+  }
+
+  /**
+   * Sets the screensaver enabled state.
+   *
+   * @param enabled Whether screensaver should be enabled
+   */
+  setScreensaverEnabled(enabled: boolean): void {
+    this.settings.screensaver.enabled = enabled;
+    this.saveToLocalStorage();
+    this.syncToFileSystem();
+  }
+
+  /**
+   * Gets the screensaver timeout in minutes.
+   */
+  getScreensaverTimeout(): number {
+    return this.settings.screensaver.timeoutMinutes;
+  }
+
+  /**
+   * Sets the screensaver timeout in minutes.
+   * Validates timeout is within acceptable range (1-60 minutes).
+   *
+   * @param minutes Timeout in minutes
+   */
+  setScreensaverTimeout(minutes: number): void {
+    if (!this.validateScreensaverTimeout(minutes)) {
+      throw new Error(`Invalid screensaver timeout: ${minutes}. Must be between 1 and 60 minutes.`);
+    }
+
+    this.settings.screensaver.timeoutMinutes = minutes;
+    this.saveToLocalStorage();
+    this.syncToFileSystem();
+  }
+
+  /**
+   * Gets the active screensaver command name.
+   */
+  getActiveScreensaver(): string {
+    return this.settings.screensaver.activeScreensaver;
+  }
+
+  /**
+   * Sets the active screensaver command name.
+   *
+   * @param command Command name (e.g., 'matrix', 'stars')
+   */
+  setActiveScreensaver(command: string): void {
+    this.settings.screensaver.activeScreensaver = command;
+    this.saveToLocalStorage();
+    this.syncToFileSystem();
+  }
+
+  /**
    * Resets all settings to their default values.
    * Clears localStorage and re-syncs to filesystem.
    */
@@ -428,5 +492,12 @@ export class SettingsManager {
    */
   private validateAnimationSpeed(speed: number): boolean {
     return typeof speed === 'number' && speed >= 0.5 && speed <= 2.0 && !isNaN(speed);
+  }
+
+  /**
+   * Validates a screensaver timeout value.
+   */
+  private validateScreensaverTimeout(minutes: number): boolean {
+    return typeof minutes === 'number' && minutes >= 1 && minutes <= 60 && !isNaN(minutes);
   }
 }

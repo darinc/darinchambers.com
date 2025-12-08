@@ -92,6 +92,12 @@ Examples:
         case 'auto-scroll':
         case 'autoScroll':
         case 'prompt':
+        case 'screensaver-enabled':
+        case 'screensaverEnabled':
+        case 'screensaver-timeout':
+        case 'screensaverTimeout':
+        case 'screensaver-type':
+        case 'screensaverType':
           // Convert shorthand to 'set' format: prepend 'set' to arguments
           return handleSet(
             new CommandArgs(['set', subcommand, ...args.slice(1)]),
@@ -351,9 +357,55 @@ function handleSet(
         return { output: `Prompt format set to: ${value}` };
       }
 
+      case 'screensaver-enabled':
+      case 'screensaverEnabled': {
+        if (!value) return { output: 'Screensaver enabled value required (on/off)', error: true };
+        if (value !== 'on' && value !== 'off') {
+          return {
+            output: 'Screensaver enabled must be "on" or "off"',
+            error: true,
+          };
+        }
+        const enabled = value === 'on';
+        settingsManager.setScreensaverEnabled(enabled);
+        broadcastSettingsChange();
+        return { output: `Screensaver: ${value}` };
+      }
+
+      case 'screensaver-timeout':
+      case 'screensaverTimeout': {
+        if (!value)
+          return { output: 'Screensaver timeout value required (1-60 minutes)', error: true };
+        const minutes = parseInt(value, 10);
+        if (isNaN(minutes) || minutes < 1 || minutes > 60) {
+          return {
+            output: 'Screensaver timeout must be between 1 and 60 minutes',
+            error: true,
+          };
+        }
+        settingsManager.setScreensaverTimeout(minutes);
+        broadcastSettingsChange();
+        return { output: `Screensaver timeout set to: ${minutes} minutes` };
+      }
+
+      case 'screensaver-type':
+      case 'screensaverType': {
+        if (!value) return { output: 'Screensaver type value required', error: true };
+        const validTypes = ['matrix']; // Add more as they're implemented
+        if (!validTypes.includes(value)) {
+          return {
+            output: `Invalid screensaver type: ${value}. Available: ${validTypes.join(', ')}`,
+            error: true,
+          };
+        }
+        settingsManager.setActiveScreensaver(value);
+        broadcastSettingsChange();
+        return { output: `Screensaver type set to: ${value}` };
+      }
+
       default:
         return {
-          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, border, animation-speed, sound-effects, autoscroll, prompt`,
+          output: `Unknown setting: ${setting}. Available: theme, color, font-size, font-family, scan-lines, glow, border, animation-speed, sound-effects, autoscroll, prompt, screensaver-enabled, screensaver-timeout, screensaver-type`,
           error: true,
         };
     }

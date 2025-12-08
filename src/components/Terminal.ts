@@ -10,6 +10,7 @@ import type { CommandDispatcher } from '../utils/CommandDispatcher';
 import type { CommandExecutor } from '../utils/CommandExecutor';
 import type { EnvVarManager } from '../utils/EnvVarManager';
 import type { IFileSystem } from '../utils/fs/IFileSystem';
+import type { ScreensaverManager } from '../utils/screensaver/ScreensaverManager';
 import type { SettingsManager } from '../utils/SettingsManager';
 import type { ThemeManager } from '../utils/ThemeManager';
 
@@ -28,6 +29,7 @@ export class Terminal {
   private currentPath = '~';
   private promptFormatter: PromptFormatter;
   private router?: IRouter;
+  private screensaverManager?: ScreensaverManager;
 
   constructor(
     private dispatcher: CommandDispatcher,
@@ -245,6 +247,7 @@ export class Terminal {
     document.addEventListener('settings-changed', () => {
       this.refreshSettingsPanels();
       this.updatePrompt();
+      this.screensaverManager?.handleSettingsChange();
     });
   }
 
@@ -306,6 +309,9 @@ export class Terminal {
   private setupInputHandler(): void {
     this.input.onSubmit(async (value) => {
       const trimmedValue = value.trim();
+
+      // Deactivate screensaver if active
+      this.screensaverManager?.deactivateScreensaver();
 
       // Echo command
       this.output.writeCommand(this.getPromptString(), trimmedValue);
@@ -447,6 +453,16 @@ export class Terminal {
    */
   setRouter(router: IRouter): void {
     this.router = router;
+  }
+
+  /**
+   * Set the screensaver manager for screensaver functionality.
+   * Call this after both Terminal and ScreensaverManager are initialized.
+   *
+   * @param screensaverManager - ScreensaverManager instance
+   */
+  setScreensaverManager(screensaverManager: ScreensaverManager): void {
+    this.screensaverManager = screensaverManager;
   }
 
   /**

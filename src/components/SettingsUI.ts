@@ -27,7 +27,7 @@ export function generateSettingsUI(
   const settings = settingsManager.loadSettings();
   const presets = themeManager.getPresets();
 
-  return `<aside class="settings-panel" role="complementary" aria-label="Terminal settings" data-settings-panel="true"><h2>Terminal Settings</h2><section class="settings-section"><h3>Color Theme</h3>${generateThemePresetButtons(presets, settings.theme.preset)}</section><section class="settings-section"><details ${settings.theme.preset === 'custom' ? 'open' : ''}><summary>Advanced: Custom Colors</summary>${generateColorPickers(settings.theme.customColors)}</details></section><section class="settings-section"><h3>Font</h3>${generateFontControls(settings.font)}</section><section class="settings-section"><h3>Effects</h3>${generateEffectControls(settings.effects)}</section><div class="settings-actions"><button data-command="settings reset" class="btn-reset">Reset to Defaults</button></div></aside>`;
+  return `<aside class="settings-panel" role="complementary" aria-label="Terminal settings" data-settings-panel="true"><h2>Terminal Settings</h2><section class="settings-section"><h3>Color Theme</h3>${generateThemePresetButtons(presets, settings.theme.preset)}</section><section class="settings-section"><details ${settings.theme.preset === 'custom' ? 'open' : ''}><summary>Advanced: Custom Colors</summary>${generateColorPickers(settings.theme.customColors)}</details></section><section class="settings-section"><h3>Font</h3>${generateFontControls(settings.font)}</section><section class="settings-section"><h3>Effects</h3>${generateEffectControls(settings.effects)}</section><section class="settings-section"><h3>Screensaver</h3>${generateScreensaverControls(settings.screensaver)}</section><div class="settings-actions"><button data-command="settings reset" class="btn-reset">Reset to Defaults</button></div></aside>`;
 }
 
 /**
@@ -116,4 +116,20 @@ function generateEffectControls(effects: {
   soundEffects: boolean;
 }): string {
   return `<div class="setting-group"><label><input type="checkbox" ${effects.scanLines ? 'checked' : ''} data-command-template="settings set scan-lines" data-setting-type="scan-lines"/>Scan Lines</label></div><div class="setting-group"><label><input type="checkbox" ${effects.glow ? 'checked' : ''} data-command-template="settings set glow" data-setting-type="glow"/>Glow Effect</label></div><div class="setting-group"><label><input type="checkbox" ${effects.border ? 'checked' : ''} data-command-template="settings set border" data-setting-type="border"/>Page Border</label></div><div class="setting-group"><label>Animation Speed: <span id="animation-speed-value">${effects.animationSpeed}x</span></label><input type="range" min="0.5" max="2.0" step="0.1" value="${effects.animationSpeed}" aria-label="Animation speed" aria-valuemin="0.5" aria-valuemax="2" aria-valuenow="${effects.animationSpeed}" aria-valuetext="${effects.animationSpeed} times speed" data-command-template="settings set animation-speed" data-setting-type="animation-speed"/></div><div class="setting-group"><label><input type="checkbox" ${effects.soundEffects ? 'checked' : ''} data-command-template="settings set sound-effects" data-setting-type="sound-effects"/>Sound Effects (future feature)</label></div>`;
+}
+
+/**
+ * Generates screensaver controls (enable, timeout, type).
+ *
+ * @param screensaver Current screensaver settings
+ * @returns HTML string for screensaver controls
+ */
+function generateScreensaverControls(screensaver: {
+  enabled: boolean;
+  timeoutMinutes: number;
+  activeScreensaver: string;
+}): string {
+  const screensaverTypes = [{ value: 'matrix', label: 'Matrix Digital Rain' }];
+
+  return `<div class="setting-group"><label><input type="checkbox" ${screensaver.enabled ? 'checked' : ''} data-command-template="settings set screensaver-enabled" data-setting-type="screensaver-enabled"/>Enable Screensaver</label></div><div class="setting-group"><label>Timeout: <span id="screensaver-timeout-value">${screensaver.timeoutMinutes}min</span></label><input type="range" min="1" max="60" step="1" value="${screensaver.timeoutMinutes}" aria-label="Screensaver timeout" aria-valuemin="1" aria-valuemax="60" aria-valuenow="${screensaver.timeoutMinutes}" aria-valuetext="${screensaver.timeoutMinutes} minutes" data-command-template="settings set screensaver-timeout" data-setting-type="screensaver-timeout"/></div><div class="setting-group"><label>Screensaver Type</label><select aria-label="Screensaver type" data-command-template="settings set screensaver-type" data-setting-type="screensaver-type">${screensaverTypes.map((type) => `<option value="${type.value}" ${type.value === screensaver.activeScreensaver ? 'selected' : ''}>${type.label}</option>`).join('')}</select></div>`;
 }

@@ -27,6 +27,7 @@ import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { Terminal } from './components/Terminal';
 import { PATHS, COMMAND_SIGNALS } from './constants';
+import { SCREENSAVER_CONSTANTS } from './constants';
 import { AliasManager } from './utils/AliasManager';
 import { CommandArgs } from './utils/CommandArgs';
 import { CommandDispatcher } from './utils/CommandDispatcher';
@@ -36,6 +37,8 @@ import { FileSystemInitializer } from './utils/fs/FileSystemInitializer';
 import { FileSystemService } from './utils/fs/FileSystemService';
 import { MarkdownService } from './utils/MarkdownService';
 import { Router } from './utils/Router';
+import { ActivityMonitor } from './utils/screensaver/ActivityMonitor';
+import { ScreensaverManager } from './utils/screensaver/ScreensaverManager';
 import { SettingsManager } from './utils/SettingsManager';
 import { ThemeManager } from './utils/ThemeManager';
 import type { Command } from './commands/Command';
@@ -303,6 +306,24 @@ if (initialCommand) {
 
 // Initialize matrix rain animation observer
 initMatrixRainObserver();
+
+// Initialize screensaver system
+const screensaverManager = new ScreensaverManager(settingsManager, terminal);
+
+// Inject screensaver manager into terminal
+terminal.setScreensaverManager(screensaverManager);
+
+// Set up activity monitoring
+const activityMonitor = new ActivityMonitor(
+  () => screensaverManager.recordActivity(),
+  SCREENSAVER_CONSTANTS.ACTIVITY_DEBOUNCE_MS
+);
+activityMonitor.start();
+
+// Start idle timer if screensaver is enabled
+if (screensaverManager.isEnabled()) {
+  screensaverManager.startIdleTimer();
+}
 
 // Initialize SVG Graph Network visualizations
 // This function finds all elements with data-graph or data-graph-src attributes and initializes them

@@ -54,4 +54,16 @@ export const DEFAULT_SETTINGS: SettingsConfig = {
   prompt: {
     format: '\\W \\$ ',
   },
+  screensaver: {
+    enabled: true,
+    timeoutMinutes: 5,
+    activeScreensaver: 'matrix',
+  },
+} as const;
+
+export const SCREENSAVER_CONSTANTS = {
+  MIN_TIMEOUT_MINUTES: 1,
+  MAX_TIMEOUT_MINUTES: 60,
+  ACTIVITY_DEBOUNCE_MS: 100,
+  DEFAULT_SCREENSAVER: 'matrix',
 } as const;
