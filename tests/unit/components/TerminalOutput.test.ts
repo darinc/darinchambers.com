@@ -245,4 +245,100 @@ describe('TerminalOutput', () => {
       expect(lines.length).toBe(1);
     });
   });
+
+  describe('Screensaver output tracking', () => {
+    it('should track screensaver output elements', () => {
+      terminalOutput.startScreensaverOutput();
+      terminalOutput.writeCommand('guest@host ~$', 'matrix');
+      terminalOutput.writeHTML('<div class="matrix-rain">Animation</div>');
+
+      // Verify elements are in DOM
+      const lines = outputElement.querySelectorAll('.output-line');
+      expect(lines.length).toBe(2);
+    });
+
+    it('should clear screensaver output on demand', () => {
+      terminalOutput.startScreensaverOutput();
+      terminalOutput.writeCommand('guest@host ~$', 'matrix');
+      terminalOutput.writeHTML('<div class="matrix-rain">Animation</div>');
+
+      terminalOutput.clearScreensaverOutput();
+
+      // Verify elements removed
+      const lines = outputElement.querySelectorAll('.output-line');
+      expect(lines.length).toBe(0);
+    });
+
+    it('should reset flag after HTML output', () => {
+      terminalOutput.startScreensaverOutput();
+      terminalOutput.writeCommand('guest@host ~$', 'matrix');
+      terminalOutput.writeHTML('<div>Animation</div>');
+
+      // Next output should not be tracked
+      terminalOutput.writeCommand('guest@host ~$', 'ls');
+      terminalOutput.clearScreensaverOutput();
+
+      // Only first command should be cleared, 'ls' command remains
+      const lines = outputElement.querySelectorAll('.output-line');
+      expect(lines.length).toBe(1);
+      expect(lines[0].textContent).toContain('ls');
+    });
+
+    it('should handle clearing when elements already removed', () => {
+      terminalOutput.startScreensaverOutput();
+      terminalOutput.writeCommand('guest@host ~$', 'matrix');
+
+      // Manually remove element
+      outputElement.innerHTML = '';
+
+      // Should not throw
+      expect(() => terminalOutput.clearScreensaverOutput()).not.toThrow();
+    });
+
+    it('should track both command and HTML elements', () => {
+      terminalOutput.startScreensaverOutput();
+      terminalOutput.writeCommand('$', 'test');
+      terminalOutput.writeHTML('<p>content</p>');
+
+      const linesBefore = outputElement.querySelectorAll('.output-line');
+      expect(linesBefore.length).toBe(2);
+
+      terminalOutput.clearScreensaverOutput();
+
+      const linesAfter = outputElement.querySelectorAll('.output-line');
+      expect(linesAfter.length).toBe(0);
+    });
+
+    it('should not track non-screensaver output', () => {
+      // Regular output without startScreensaverOutput
+      terminalOutput.writeCommand('$', 'echo test');
+      terminalOutput.writeHTML('<p>output</p>');
+
+      terminalOutput.clearScreensaverOutput();
+
+      // Elements should remain (not tracked as screensaver)
+      const lines = outputElement.querySelectorAll('.output-line');
+      expect(lines.length).toBe(2);
+    });
+
+    it('should handle multiple screensaver activations', () => {
+      // First screensaver
+      terminalOutput.startScreensaverOutput();
+      terminalOutput.writeCommand('$', 'matrix');
+      terminalOutput.writeHTML('<div>matrix</div>');
+
+      // Second screensaver (should only track this one)
+      terminalOutput.startScreensaverOutput();
+      terminalOutput.writeCommand('$', 'life');
+      terminalOutput.writeHTML('<div>life</div>');
+
+      terminalOutput.clearScreensaverOutput();
+
+      // Only second screensaver cleared, first remains
+      const lines = outputElement.querySelectorAll('.output-line');
+      expect(lines.length).toBe(2);
+      expect(lines[0].textContent).toContain('matrix');
+      expect(lines[1].textContent).toContain('matrix');
+    });
+  });
 });

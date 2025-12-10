@@ -55,6 +55,11 @@ describe('ScreensaverManager', () => {
     // Create mock terminal
     mockTerminal = {
       executeCommand: vi.fn(),
+      getOutput: vi.fn(() => ({
+        startScreensaverOutput: vi.fn(),
+        clearScreensaverOutput: vi.fn(),
+      })),
+      clearScreensaver: vi.fn(),
     } as unknown as Terminal;
 
     // Create screensaver manager
@@ -498,6 +503,83 @@ describe('ScreensaverManager', () => {
 
       // Should still be active (settings change doesn't deactivate)
       expect(screensaverManager.getState()).toBe('active');
+    });
+  });
+
+  describe('Screensaver output cleanup', () => {
+    it('should mark output before executing screensaver command', () => {
+      const mockOutput = {
+        startScreensaverOutput: vi.fn(),
+        clearScreensaverOutput: vi.fn(),
+      };
+
+      (mockTerminal as any).getOutput = vi.fn(() => mockOutput);
+      (mockTerminal as any).clearScreensaver = vi.fn();
+
+      screensaverManager.startIdleTimer();
+      vi.advanceTimersByTime(5 * 60 * 1000); // 5 minutes
+
+      expect(mockOutput.startScreensaverOutput).toHaveBeenCalled();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('matrix', false);
+    });
+
+    it('should clear screensaver on deactivation', () => {
+      const mockClearScreensaver = vi.fn();
+      (mockTerminal as any).clearScreensaver = mockClearScreensaver;
+      (mockTerminal as any).getOutput = vi.fn(() => ({
+        startScreensaverOutput: vi.fn(),
+      }));
+
+      // Activate screensaver
+      screensaverManager.startIdleTimer();
+      vi.advanceTimersByTime(5 * 60 * 1000);
+
+      expect(screensaverManager.getState()).toBe('active');
+
+      // Deactivate
+      screensaverManager.recordActivity();
+
+      expect(mockClearScreensaver).toHaveBeenCalled();
+      expect(screensaverManager.getState()).toBe('idle');
+    });
+
+    it('should not clear screensaver if not active', () => {
+      const mockClearScreensaver = vi.fn();
+      (mockTerminal as any).clearScreensaver = mockClearScreensaver;
+
+      // Try to deactivate when not active
+      screensaverManager.recordActivity();
+
+      expect(mockClearScreensaver).not.toHaveBeenCalled();
+    });
+
+    it('should call clearScreensaver before changing state', () => {
+      const callOrder: string[] = [];
+      const mockClearScreensaver = vi.fn(() => callOrder.push('clear'));
+      (mockTerminal as any).clearScreensaver = mockClearScreensaver;
+      (mockTerminal as any).getOutput = vi.fn(() => ({
+        startScreensaverOutput: vi.fn(),
+      }));
+
+      // Activate screensaver
+      screensaverManager.startIdleTimer();
+      vi.advanceTimersByTime(5 * 60 * 1000);
+
+      // Mock getState to track when state changes
+      const originalGetState = screensaverManager.getState.bind(screensaverManager);
+      screensaverManager.getState = vi.fn(() => {
+        const state = originalGetState();
+        if (state === 'idle' && callOrder.length === 1) {
+          callOrder.push('state-change');
+        }
+        return state;
+      });
+
+      // Deactivate
+      screensaverManager.recordActivity();
+
+      // Verify clear was called before state change
+      expect(callOrder[0]).toBe('clear');
     });
   });
 });

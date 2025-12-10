@@ -113,6 +113,10 @@ export class ScreensaverManager {
     // Get the screensaver command from settings
     const screensaverCommand = this.settingsManager.getActiveScreensaver();
 
+    // Mark next terminal output as screensaver content
+    // This must happen BEFORE executeCommand so output is tracked
+    this.terminal.getOutput().startScreensaverOutput();
+
     // Execute the screensaver command
     // Use executeCommand with clearFirst=false to let command handle display
     // Second parameter false means don't add to history
@@ -136,6 +140,9 @@ export class ScreensaverManager {
     if (this.state !== 'active') {
       return;
     }
+
+    // Clear screensaver output and stop animations
+    this.terminal.clearScreensaver();
 
     // Update state
     this.state = 'idle';

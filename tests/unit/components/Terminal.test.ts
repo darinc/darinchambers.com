@@ -594,5 +594,42 @@ describe('Terminal', () => {
       expect(input).toBeDefined();
       expect(input).toBe(terminal.getInput());
     });
+
+    it('should return output instance', () => {
+      const output = terminal.getOutput();
+
+      expect(output).toBeDefined();
+      expect(output).toBe(terminal.getOutput());
+    });
+  });
+
+  describe('screensaver integration', () => {
+    beforeEach(() => {
+      terminal = new Terminal(
+        mockDispatcher,
+        mockExecutor,
+        mockSettingsManager,
+        mockThemeManager,
+        mockEnvVarManager
+      );
+    });
+
+    it('should clear screensaver animations and output', () => {
+      const output = terminal.getOutput();
+      const clearSpy = vi.spyOn(output, 'clearScreensaverOutput');
+
+      terminal.clearScreensaver();
+
+      expect(clearSpy).toHaveBeenCalled();
+    });
+
+    it('should expose getOutput for screensaver manager', () => {
+      const output = terminal.getOutput();
+      const startSpy = vi.spyOn(output, 'startScreensaverOutput');
+
+      output.startScreensaverOutput();
+
+      expect(startSpy).toHaveBeenCalled();
+    });
   });
 });

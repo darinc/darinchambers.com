@@ -1,3 +1,5 @@
+import { stopAllLifeAnimations } from '../animations/gameOfLife';
+import { stopAllMatrixAnimations } from '../animations/matrixRain';
 import { COMMAND_SIGNALS } from '../constants';
 import { initEmailProtection } from '../utils/EmailProtection';
 import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
@@ -310,9 +312,6 @@ export class Terminal {
     this.input.onSubmit(async (value) => {
       const trimmedValue = value.trim();
 
-      // Deactivate screensaver if active
-      this.screensaverManager?.deactivateScreensaver();
-
       // Echo command
       this.output.writeCommand(this.getPromptString(), trimmedValue);
 
@@ -443,6 +442,32 @@ export class Terminal {
 
   getInput(): TerminalInput {
     return this.input;
+  }
+
+  /**
+   * Get the TerminalOutput instance
+   * Used by ScreensaverManager to mark screensaver output
+   */
+  getOutput(): TerminalOutput {
+    return this.output;
+  }
+
+  /**
+   * Stop all active screensaver animations
+   * This ensures animations are cleaned up when screensaver is dismissed
+   */
+  private stopScreensaverAnimations(): void {
+    stopAllMatrixAnimations();
+    stopAllLifeAnimations();
+  }
+
+  /**
+   * Clear screensaver output and stop animations
+   * Called by ScreensaverManager when user activity is detected
+   */
+  clearScreensaver(): void {
+    this.stopScreensaverAnimations();
+    this.output.clearScreensaverOutput();
   }
 
   /**

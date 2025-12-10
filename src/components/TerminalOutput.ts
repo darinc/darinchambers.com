@@ -3,10 +3,23 @@ import { sanitizeHtml } from '../utils/sanitizeHtml';
 export class TerminalOutput {
   private outputElement: HTMLElement;
   private inputLineElement: HTMLElement | null;
+  private screensaverElements: HTMLElement[] = [];
+  private isScreensaverOutput = false;
 
   constructor(outputElement: HTMLElement) {
     this.outputElement = outputElement;
     this.inputLineElement = document.getElementById('terminal-input-line');
+  }
+
+  /**
+   * Mark the next output as screensaver content
+   * This allows tracking for later removal
+   * Clears any previously tracked screensaver elements
+   */
+  startScreensaverOutput(): void {
+    // Clear previous screensaver tracking (only track the most recent)
+    this.screensaverElements = [];
+    this.isScreensaverOutput = true;
   }
 
   writeLine(text: string, className?: string, onComplete?: () => void): void {
@@ -46,6 +59,13 @@ export class TerminalOutput {
     container.className = 'output-line';
     // Sanitize HTML to prevent XSS attacks
     container.innerHTML = sanitizeHtml(html);
+
+    // Track if this is screensaver output
+    if (this.isScreensaverOutput) {
+      this.screensaverElements.push(container);
+      // Reset flag after tracking (screensaver output is complete)
+      this.isScreensaverOutput = false;
+    }
 
     // Insert before the input line if it exists, otherwise append
     if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
@@ -117,6 +137,11 @@ export class TerminalOutput {
     line.appendChild(promptSpan);
     line.appendChild(commandSpan);
 
+    // Track if this is screensaver output
+    if (this.isScreensaverOutput) {
+      this.screensaverElements.push(line);
+    }
+
     // Insert before the input line if it exists, otherwise append
     if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
       this.outputElement.insertBefore(line, this.inputLineElement);
@@ -138,6 +163,25 @@ export class TerminalOutput {
         child.remove();
       }
     });
+  }
+
+  /**
+   * Clear screensaver output elements from the terminal
+   * Removes both command echo and animation content
+   */
+  clearScreensaverOutput(): void {
+    // Remove all tracked screensaver elements from DOM
+    this.screensaverElements.forEach((element) => {
+      if (element.parentElement) {
+        element.remove();
+      }
+    });
+
+    // Clear tracking array
+    this.screensaverElements = [];
+
+    // Reset flag in case it was set but never used
+    this.isScreensaverOutput = false;
   }
 
   private scrollToBottom(): void {

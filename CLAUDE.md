@@ -14,7 +14,7 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 - No framework - vanilla JavaScript/TypeScript
 - Dependencies: marked (markdown), figlet (ASCII art), DOMPurify (XSS protection)
 
-**Bundle Size:** ~84KB total (gzipped: ~84KB)
+**Bundle Size:** ~86KB total (gzipped: ~86KB)
 **Test Coverage:** 80%+ target (91%+ current, 1,000+ tests across 50+ test files)
 **Deployment:** GitHub Pages
 
@@ -81,7 +81,7 @@ Terminal (orchestrator)
 ├── ScreensaverManager (idle detection, screensaver activation)
 └── CommandExecutor (parse, expand aliases/vars, execute)
     └── CommandDispatcher (route to specific command)
-        └── Command implementations (25 commands)
+        └── Command implementations (26 commands)
 ```
 
 **State Management:**
@@ -140,7 +140,7 @@ Implementation: `PipelineParser.ts` splits by `|`, passes stdout as stdin to nex
 ```
 src/
 ├── animations/        # Screensaver animations (Matrix rain, etc.)
-├── commands/          # Command implementations (25 commands)
+├── commands/          # Command implementations (26 commands)
 │   ├── core/         # Core terminal commands (echo, date, env, export, etc.)
 │   ├── fs/           # File system commands (ls, cd, pwd, cat, tree)
 │   ├── local/        # Content commands (about, blog, portfolio, contact, settings)
