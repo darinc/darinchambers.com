@@ -41,6 +41,7 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 ### Novelty
 
 - **`figlet`** - ASCII art text banners
+- **`lolcat`** - Rainbow-colorize text output
 - **`ddate`** - Discordian calendar date
 
 ## Quick Start
@@ -62,6 +63,7 @@ ls ~            # List home directory
 ```
 cat ~/blog/post.md | render
 echo "Hello" | figlet
+figlet "Hi" | lolcat
 ```
 
 **Navigation:** Use arrow keys for command history, Tab for auto-complete

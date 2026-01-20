@@ -24,6 +24,7 @@ import { createSettingsCommand } from './commands/local/settings';
 import { ddateCommand } from './commands/novelty/ddate';
 import { figletCommand } from './commands/novelty/figlet';
 import { createLifeCommand } from './commands/novelty/life';
+import { lolcatCommand } from './commands/novelty/lolcat';
 import { createMatrixCommand } from './commands/novelty/matrix';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
@@ -242,6 +243,7 @@ terminal.registerCommands([
   settingsCommand,
   ddateCommand,
   figletCommand,
+  lolcatCommand,
   matrixCommand,
   lifeCommand,
   whichCommand,

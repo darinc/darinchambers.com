@@ -81,7 +81,7 @@ Terminal (orchestrator)
 ├── ScreensaverManager (idle detection, screensaver activation)
 └── CommandExecutor (parse, expand aliases/vars, execute)
     └── CommandDispatcher (route to specific command)
-        └── Command implementations (26 commands)
+        └── Command implementations (27 commands)
 ```
 
 **State Management:**
@@ -140,7 +140,7 @@ Implementation: `PipelineParser.ts` splits by `|`, passes stdout as stdin to nex
 ```
 src/
 ├── animations/        # Screensaver animations (Matrix rain, etc.)
-├── commands/          # Command implementations (26 commands)
+├── commands/          # Command implementations (27 commands)
 │   ├── core/         # Core terminal commands (echo, date, env, export, etc.)
 │   ├── fs/           # File system commands (ls, cd, pwd, cat, tree)
 │   ├── local/        # Content commands (about, blog, portfolio, contact, settings)
