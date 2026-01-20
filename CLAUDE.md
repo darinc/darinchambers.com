@@ -14,8 +14,8 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 - No framework - vanilla JavaScript/TypeScript
 - Dependencies: marked (markdown), figlet (ASCII art), DOMPurify (XSS protection)
 
-**Bundle Size:** ~86KB total (gzipped: ~86KB)
-**Test Coverage:** 80%+ target (91%+ current, 1,000+ tests across 50+ test files)
+**Bundle Size:** ~87KB total (gzipped: ~87KB) (gzipped)
+**Test Coverage:** 80%+ target (90%+ current, 60+ test files)
 **Deployment:** GitHub Pages
 
 ## Development Commands
@@ -304,7 +304,7 @@ tags: ['tag1', 'tag2']
 
 ### Testing
 
-- **Coverage requirement**: 80% for new code (current: 70%, improving)
+- **Coverage requirement**: 80% for new code (current: 90%+)
 - **Test structure**: Arrange-Act-Assert pattern
 - **Use descriptive test names**: "should return error when path is invalid"
 - **Test edge cases**: Empty inputs, null, undefined, errors
@@ -432,7 +432,7 @@ pnpm test:run -- tests/unit/path/to/test.test.ts
 
 ### Performance Issues
 
-- Bundle should be ~121KB total (gzipped: ~40KB)
+- Bundle should be ~86KB total (gzipped)
 - Use `pnpm build` to check bundle size
 - Use Chrome DevTools Lighthouse for performance profiling
 - Check for memory leaks with Chrome DevTools Memory profiler
@@ -450,7 +450,7 @@ pnpm test:run -- tests/unit/path/to/test.test.ts
 - **No framework**: This is vanilla TypeScript, no React/Vue/etc.
 - **Zero `any` usage**: Strict TypeScript mode, all types must be explicit
 - **Security first**: Multi-layer XSS protection, always sanitize before rendering
-- **Test coverage**: Maintain 70%+ coverage, aim for 80%+ on new code
-- **Bundle size**: Keep total bundle under 150KB
+- **Test coverage**: Maintain 80%+ coverage
+- **Bundle size**: Keep total bundle under 100KB (gzipped)
 - **Accessibility**: WCAG 2.1 Level AA compliant
 - **Browser support**: Chrome 107+, Firefox 104+, Safari 16+ (via Vite's `baseline-widely-available`)

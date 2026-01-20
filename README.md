@@ -94,7 +94,7 @@ darinchambers.com/
 - Multi-layered XSS protection (DOMPurify + CSP)
 - 1,000+ tests across 50+ test files
 - Zero known vulnerabilities
-- ~86KB total bundle
+- ~87KB total bundle
 
 ## Documentation
 
