@@ -165,7 +165,6 @@ describe('TerminalOutput', () => {
 
       expect(spans?.length).toBe(2);
       expect(spans?.[0].style.color).toBe('var(--terminal-accent)');
-      expect(spans?.[0].style.fontWeight).toBe('bold');
     });
 
     it('should preserve prompt text exactly as provided', () => {

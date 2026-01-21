@@ -37,7 +37,6 @@
   color: var(--terminal-accent);
   margin-right: 8px;
   white-space: nowrap;
-  font-weight: bold;
 }
 
 #terminal-input {
