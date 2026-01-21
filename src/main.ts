@@ -3,6 +3,7 @@ import { initBootSequenceObserver } from './animations/bootSequence';
 import { initBsodObserver } from './animations/bsodAnimation';
 import { initLifeObserver } from './animations/gameOfLife';
 import { initMatrixRainObserver } from './animations/matrixRain';
+import { initMeltObserver } from './animations/meltEffect';
 import { createAliasCommand } from './commands/core/alias';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
@@ -17,6 +18,7 @@ import { createCatCommand } from './commands/fs/cat';
 import { createCdCommand } from './commands/fs/cd';
 import { createLsCommand } from './commands/fs/ls';
 import { createPwdCommand } from './commands/fs/pwd';
+import { createRmCommand } from './commands/fs/rm';
 import { createTreeCommand } from './commands/fs/tree';
 import { createAboutCommand } from './commands/local/about';
 import { createBlogCommand } from './commands/local/blog';
@@ -191,6 +193,7 @@ const cdCommand = createCdCommand(
 const pwdCommand = createPwdCommand(fileSystem);
 const catCommand = createCatCommand(fileSystem);
 const treeCommand = createTreeCommand(fileSystem);
+const rmCommand = createRmCommand(fileSystem, dispatcher);
 
 // Create history command
 const historyCommand = createHistoryCommand(terminal.getInput());
@@ -241,6 +244,7 @@ terminal.registerCommands([
   pwdCommand,
   catCommand,
   treeCommand,
+  rmCommand,
   renderCommand,
   aboutCommand,
   portfolioCommand,
@@ -325,6 +329,7 @@ initMatrixRainObserver();
 initLifeObserver();
 initBootSequenceObserver();
 initBsodObserver();
+initMeltObserver();
 
 // Initialize screensaver system
 const screensaverManager = new ScreensaverManager(settingsManager, terminal);

@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fake Terminal — Smooth Melt</title>
+  <style>
+    :root{
+      --bg:#05070b;
+      --fg:#cfe7d6;
+      --dim:#86a093;
+      --accent:#3cffb7;
+      --err:#ff4d6d;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}
+    .wrap{height:100%;display:grid;place-items:center;}
+    .terminal{
+      width:min(980px,92vw);
+      height:min(560px,82vh);
+      border-radius:14px;
+      box-shadow:0 20px 70px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06) inset;
+      overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      position:relative;
+    }
+    .bar{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 14px;background:rgba(0,0,0,.55);
+      border-bottom:1px solid rgba(255,255,255,.06);user-select:none;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;}
+    .dot.r{background:#ff5f56;}
+    .dot.y{background:#ffbd2e;}
+    .dot.g{background:#27c93f;}
+    .title{margin-left:8px;color:rgba(255,255,255,.55);font-size:12px;letter-spacing:.2px}
+    .screen{
+      padding:16px 16px 20px;
+      height:calc(100% - 44px);
+      overflow:hidden;
+      background:radial-gradient(1200px 700px at 30% 20%, rgba(60,255,183,.07), transparent 60%),
+                 radial-gradient(1000px 600px at 70% 80%, rgba(70,120,255,.06), transparent 60%),
+                 rgba(0,0,0,.55);
+    }
+    pre{margin:0;white-space:pre;line-height:1.35;font-size:14px;
+      text-shadow:0 0 14px rgba(60,255,183,.12);}
+    .prompt{color:var(--accent);}
+    .dim{color:var(--dim);}
+    .err{color:var(--err);}
+    .caret{
+      display:inline-block;width:8px;height:1.15em;vertical-align:-2px;
+      background:var(--accent);
+      box-shadow:0 0 12px rgba(60,255,183,.6);
+      animation:blink 1s steps(1) infinite;
+    }
+    @keyframes blink{50%{opacity:0;}}
+    canvas#fx{position:absolute;inset:0;width:100%;height:100%;display:none;}
+    .hint{position:absolute;right:14px;bottom:12px;font-size:12px;color:rgba(255,255,255,.35);user-select:none;}
+    .controls{
+      position:absolute;left:14px;bottom:10px;display:flex;gap:10px;align-items:center;
+      font-size:12px;color:rgba(255,255,255,.55);user-select:none;
+    }
+    .btn{
+      cursor:pointer;border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.35);color:rgba(255,255,255,.75);
+      padding:6px 10px;border-radius:10px;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.25)}
+    label{display:flex;gap:6px;align-items:center;}
+    input[type="range"]{width:140px;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="terminal" id="terminal">
+      <div class="bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="title">demo@laptop — zsh</span>
+      </div>
+      <div class="screen">
+        <pre id="out"></pre>
+        <div class="controls">
+          <button class="btn" id="replay">Replay melt</button>
+          <label>Quality
+            <input id="quality" type="range" min="1" max="4" step="1" value="2" />
+          </label>
+          <label>Melt
+            <input id="meltPower" type="range" min="0.6" max="2.2" step="0.1" value="1.2" />
+          </label>
+        </div>
+        <div class="hint">visual simulation only</div>
+      </div>
+      <canvas id="fx"></canvas>
+    </div>
+  </div>
+
+<script>
+/**
+ * Smoother melt: uses per-cell particles (not per-pixel) + requestAnimationFrame.
+ * This avoids per-frame full-image read/write loops that can tank FPS.
+ *
+ * Quality slider controls the cell size:
+ *   1 = chunky fast, 2 = default, 3 = smoother, 4 = very smooth (heavier)
+ */
+
+const out = document.getElementById("out");
+const canvas = document.getElementById("fx");
+const term = document.getElementById("terminal");
+const replayBtn = document.getElementById("replay");
+const qualityEl = document.getElementById("quality");
+const meltPowerEl = document.getElementById("meltPower");
+
+const state = { lines: [], cursorLine: "", startedFx: false, typing: false };
+let fx = null;
+
+// --- fake terminal data ---
+const prompt = `<span class="prompt">demo@laptop</span>:<span class="dim">~/projects/faux-term</span>$ `;
+const lsCmd = "ls -alh";
+const lsOut = [
+  "total 88K",
+  "drwxr-xr-x  9 demo  staff  288B Jan 21 10:14 .",
+  "drwxr-xr-x  6 demo  staff  192B Jan 21 09:55 ..",
+  "-rw-r--r--  1 demo  staff  1.2K Jan 21 10:02 README.md",
+  "-rw-r--r--  1 demo  staff   14K Jan 21 10:12 index.html",
+  "drwxr-xr-x  4 demo  staff  128B Jan 21 10:01 assets",
+  "drwxr-xr-x  7 demo  staff  224B Jan 21 10:07 src",
+  "-rw-r--r--  1 demo  staff  3.6K Jan 21 10:10 package.json",
+  "-rw-r--r--  1 demo  staff  37K Jan 21 10:10 package-lock.json",
+  "-rw-r--r--  1 demo  staff  1.8K Jan 21 10:11 vite.config.js",
+];
+
+function render(){
+  const htmlLines = state.lines.slice();
+  htmlLines.push(state.cursorLine + `<span class="caret"></span>`);
+  out.innerHTML = htmlLines.join("\n");
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+}
+
+async function typeLine(prefixHtml, text, speed=20){
+  state.typing = true;
+  state.cursorLine = prefixHtml;
+  render();
+  for (let i=0;i<text.length;i++){
+    state.cursorLine = prefixHtml + escapeHtml(text.slice(0,i+1));
+    render();
+    await sleep(speed + Math.random()*10);
+  }
+  state.lines.push(prefixHtml + escapeHtml(text));
+  state.cursorLine = "";
+  state.typing = false;
+  render();
+}
+
+function pushLines(linesArr){
+  for (const l of linesArr) state.lines.push(escapeHtml(l));
+  render();
+}
+function pushRaw(html){ state.lines.push(html); render(); }
+
+// ----------------- FX helpers -----------------
+function drawTerminalSnapshot(lines, w, h, dpr){
+  const off = document.createElement("canvas");
+  off.width = Math.floor(w*dpr);
+  off.height = Math.floor(h*dpr);
+  const ctx = off.getContext("2d");
+
+  // bg
+  ctx.fillStyle = "#05070b";
+  ctx.fillRect(0,0,off.width,off.height);
+
+  // faint glow
+  const g = ctx.createRadialGradient(off.width*0.35, off.height*0.2, 20, off.width*0.35, off.height*0.2, off.width*0.95);
+  g.addColorStop(0, "rgba(60,255,183,0.12)");
+  g.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,off.width,off.height);
+
+  const pad = 16*dpr;
+  const fontSize = 14*dpr;
+  const lineH = Math.round(1.35*fontSize);
+  ctx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace`;
+  ctx.textBaseline = "top";
+
+  // strip our simple span tags -> plain
+  const decode = (s) => s
+    .replace(/<span class="prompt">/g, "")
+    .replace(/<span class="dim">/g, "")
+    .replace(/<span class="err">/g, "")
+    .replace(/<\/span>/g, "")
+    .replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#039;/g,"'");
+
+  let y = pad + 8*dpr;
+  for (const line of lines){
+    const plain = decode(line);
+
+    // color prompts a bit
+    if (plain.includes("demo@laptop") && plain.includes("$")) {
+      const a = "demo@laptop";
+      const idxB = plain.indexOf(":");
+      const rest = plain.slice(idxB);
+
+      ctx.fillStyle = "#3cffb7";
+      ctx.fillText(a, pad, y);
+      ctx.fillStyle = "#86a093";
+      ctx.fillText(rest, pad + ctx.measureText(a).width, y);
+    } else if (plain.startsWith("zsh:")) {
+      ctx.fillStyle = "#ff4d6d";
+      ctx.fillText(plain, pad, y);
+    } else {
+      ctx.fillStyle = "#cfe7d6";
+      ctx.fillText(plain, pad, y);
+    }
+
+    y += lineH;
+    if (y > off.height - pad) break;
+  }
+
+  return off;
+}
+
+// Smooth noise without heavy per-pixel work:
+// a cheap hash-based value noise (enough for wobble)
+function hash2(x,y){
+  let n = x*374761393 + y*668265263;
+  n = (n ^ (n >> 13)) * 1274126177;
+  n = (n ^ (n >> 16)) >>> 0;
+  return n / 4294967296;
+}
+function smoothstep(t){ return t*t*(3-2*t); }
+function lerp(a,b,t){ return a + (b-a)*t; }
+function vnoise(x,y){
+  const xi = Math.floor(x), yi = Math.floor(y);
+  const xf = x - xi, yf = y - yi;
+  const u = smoothstep(xf), v = smoothstep(yf);
+  const a = hash2(xi, yi);
+  const b = hash2(xi+1, yi);
+  const c = hash2(xi, yi+1);
+  const d = hash2(xi+1, yi+1);
+  return lerp(lerp(a,b,u), lerp(c,d,u), v) * 2 - 1; // ~[-1,1]
+}
+
+function createMeltFx(){
+  const rect = term.getBoundingClientRect();
+  const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  canvas.style.display = "block";
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
+
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+
+  const snapshot = drawTerminalSnapshot(state.lines.slice(), rect.width, rect.height, dpr);
+
+  // cell size from quality slider (higher = smaller cells = smoother)
+  const q = parseInt(qualityEl.value, 10);        // 1..4
+  const cell = Math.max(2, Math.round((8 - q*1.5) * dpr)); // ~6..2 px at dpr=1
+  const cols = Math.ceil(snapshot.width / cell);
+  const rows = Math.ceil(snapshot.height / cell);
+
+  // build "particles" per cell (way fewer than pixels)
+  const parts = new Array(cols * rows);
+  let k = 0;
+  for (let y=0;y<rows;y++){
+    for (let x=0;x<cols;x++){
+      const px = x*cell;
+      const py = y*cell;
+
+      // random-ish properties per column (for drips)
+      const drip = 0.6 + hash2(x, 1) * 1.2;
+      const wob  = 0.6 + hash2(x, 9) * 1.2;
+
+      parts[k++] = {
+        x, y,
+        px, py,
+        vx: 0,
+        vy: 0,
+        fall: drip,
+        wob,
+        // slight horizontal bias so it doesn't look uniform
+        bias: (hash2(x, y) - 0.5) * 0.8,
+        // per-cell "liquidity"
+        slip: 0.2 + hash2(x, y+77) * 0.9
+      };
+    }
+  }
+
+  const power = parseFloat(meltPowerEl.value); // user tunable
+
+  const fxObj = {
+    ctx,
+    snapshot,
+    cell,
+    cols,
+    rows,
+    parts,
+    t0: performance.now(),
+    running: true,
+    dpr,
+    power,
+    // for low-GC animation
+    draw(){
+      const now = performance.now();
+      const t = (now - this.t0) / 1000;
+
+      // time-eased melt ramp
+      const melt = Math.min(1, t / 1.2);
+      const meltEase = melt*melt*(3-2*melt); // smoothstep
+
+      // clear
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      // draw in back-to-front order so lower drips overlap
+      // (iterate by y ascending but actual y offset adds "depth")
+      for (let i=0;i<this.parts.length;i++){
+        const p = this.parts[i];
+
+        // noise fields for wobble (cheap)
+        const n = vnoise(p.x*0.12 + t*0.8, p.y*0.10 + t*0.6);
+
+        // gravity grows over time; plus per-column variation
+        const g = (18 * this.dpr) * this.power * p.fall * meltEase;
+        // accelerate downward with some viscosity variation
+        p.vy += g * 0.016 * (0.6 + p.slip);
+
+        // sideways drifting, subtle
+        const side = (n * 10 * this.dpr) * p.wob * meltEase + p.bias * 2 * this.dpr;
+        p.vx = side * 0.06;
+
+        // integrate (dt ~= 16ms; good enough for smooth look)
+        p.py += p.vy * 0.016;
+        p.px += p.vx;
+
+        // a little damping so it doesn't rocket
+        p.vy *= 0.985;
+        p.vx *= 0.92;
+
+        // sample source region
+        const sx = p.x * this.cell;
+        const sy = p.y * this.cell;
+
+        // draw cell
+        ctx.drawImage(
+          this.snapshot,
+          sx, sy, this.cell, this.cell,
+          p.px, p.py, this.cell, this.cell
+        );
+      }
+
+      // subtle scanlines + fade
+      const fade = Math.max(0, 1 - t/4.0);
+      ctx.globalAlpha = 0.12 * fade;
+      ctx.fillStyle = "#000";
+      for (let yy=0; yy<canvas.height; yy += Math.max(3, Math.round(3*this.dpr))){
+        ctx.fillRect(0, yy, canvas.width, 1);
+      }
+      ctx.globalAlpha = 1;
+
+      // stop after a while
+      if (t > 4.2) this.running = false;
+    }
+  };
+
+  return fxObj;
+}
+
+function startFx(){
+  fx = createMeltFx();
+  state.startedFx = true;
+
+  function tick(){
+    if (!fx || !fx.running) return;
+    fx.draw();
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ----------------- Demo script -----------------
+async function runDemo(){
+  // reset
+  state.lines = [];
+  state.cursorLine = "";
+  state.startedFx = false;
+  canvas.style.display = "none";
+  render();
+
+  await sleep(200);
+  await typeLine(prompt, lsCmd, 18);
+  await sleep(160);
+  pushLines(lsOut);
+  await sleep(420);
+
+  await typeLine(prompt, "rm -rf /", 22);
+  await sleep(160);
+  pushRaw(`<span class="err">zsh:</span> operation not permitted`);
+  await sleep(220);
+
+  startFx();
+}
+
+replayBtn.addEventListener("click", () => runDemo());
+qualityEl.addEventListener("input", () => { if (state.startedFx) startFx(); });
+meltPowerEl.addEventListener("input", () => { if (state.startedFx) startFx(); });
+
+runDemo();
+</script>
+</body>
+</html>

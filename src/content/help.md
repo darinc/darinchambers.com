@@ -26,6 +26,7 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`pwd`** - Print working directory
 - **`cat`** - Display file contents
 - **`tree`** - Show directory structure
+- **`rm`** - Remove files or directories
 - **`render`** - Render markdown files
 
 ### Core Utilities

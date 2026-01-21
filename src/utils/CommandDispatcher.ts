@@ -17,6 +17,27 @@ export class CommandDispatcher {
     }
   }
 
+  unregisterCommand(commandName: string): boolean {
+    const normalizedName = commandName.toLowerCase();
+    const command = this.commands.get(normalizedName);
+
+    if (!command) {
+      return false;
+    }
+
+    // Remove the main command
+    this.commands.delete(command.name.toLowerCase());
+
+    // Remove any aliases for this command
+    this.commands.forEach((cmd, key) => {
+      if (cmd === command) {
+        this.commands.delete(key);
+      }
+    });
+
+    return true;
+  }
+
   async dispatch(input: string): Promise<CommandResult> {
     const parsed: ParsedCommand = CommandParser.parse(input);
 

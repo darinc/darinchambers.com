@@ -34,6 +34,8 @@ function createMockFs(files = new Map<string, string>()): IFileSystem {
     createDirectory: () => {},
     getTree: () => [],
     getNode: () => null,
+    deleteFile: () => {},
+    deleteDirectory: () => {},
   };
 }
 

@@ -32,6 +32,8 @@ function createMockFileSystem(): IFileSystem {
     createDirectory: vi.fn(),
     getTree: vi.fn(() => []),
     getNode: vi.fn(() => null),
+    deleteFile: vi.fn(),
+    deleteDirectory: vi.fn(),
   };
 }
 

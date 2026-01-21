@@ -129,7 +129,7 @@ export class TerminalOutput {
     const promptSpan = document.createElement('span');
     promptSpan.style.color = 'var(--terminal-accent)';
     promptSpan.style.fontWeight = 'bold';
-    promptSpan.textContent = prompt + ' ';
+    promptSpan.textContent = prompt;
 
     const commandSpan = document.createElement('span');
     commandSpan.textContent = command;

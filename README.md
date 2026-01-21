@@ -79,7 +79,7 @@ settings font-size 16    # Adjust font size
 ```
 darinchambers.com/
 ├── src/
-│   ├── commands/        # 31 command implementations
+│   ├── commands/        # 32 command implementations
 │   ├── components/      # UI components
 │   ├── content/         # Markdown content (blog, portfolio)
 │   ├── utils/           # Parsers, managers, renderers
@@ -94,7 +94,7 @@ darinchambers.com/
 - Multi-layered XSS protection (DOMPurify + CSP)
 - 1,000+ tests across 50+ test files
 - Zero known vulnerabilities
-- ~92KB total bundle
+- ~94KB total bundle
 
 ## Documentation
 

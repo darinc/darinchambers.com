@@ -242,4 +242,69 @@ export class FileSystemService implements IFileSystem {
       }
     });
   }
+
+  deleteFile(path: string): void {
+    const resolved = this.resolvePath(path);
+    const node = this.getNode(resolved);
+
+    if (!node) {
+      throw new FileSystemError(`rm: cannot remove '${path}': No such file or directory`);
+    }
+    if (node.type !== 'file') {
+      throw new FileSystemError(`rm: cannot remove '${path}': Is a directory`);
+    }
+
+    // Get parent directory and remove the file
+    const pathParts = resolved.split('/').filter((p) => p.length > 0);
+    const fileName = pathParts.pop();
+
+    if (!fileName) {
+      throw new FileSystemError(`rm: cannot remove '${path}': Invalid path`);
+    }
+
+    let parent = this.root;
+    for (const part of pathParts) {
+      parent = parent.children!.get(part)!;
+    }
+
+    parent.children!.delete(fileName);
+  }
+
+  deleteDirectory(path: string, recursive = false): void {
+    const resolved = this.resolvePath(path);
+
+    // Prevent deletion of root
+    if (resolved === '/') {
+      throw new FileSystemError(`rm: cannot remove '/': Permission denied`);
+    }
+
+    const node = this.getNode(resolved);
+
+    if (!node) {
+      throw new FileSystemError(`rm: cannot remove '${path}': No such file or directory`);
+    }
+    if (node.type !== 'directory') {
+      throw new FileSystemError(`rm: cannot remove '${path}': Not a directory`);
+    }
+
+    // Check if directory is empty (unless recursive)
+    if (!recursive && node.children && node.children.size > 0) {
+      throw new FileSystemError(`rm: cannot remove '${path}': Directory not empty`);
+    }
+
+    // Get parent directory and remove the directory
+    const pathParts = resolved.split('/').filter((p) => p.length > 0);
+    const dirName = pathParts.pop();
+
+    if (!dirName) {
+      throw new FileSystemError(`rm: cannot remove '${path}': Invalid path`);
+    }
+
+    let parent = this.root;
+    for (const part of pathParts) {
+      parent = parent.children!.get(part)!;
+    }
+
+    parent.children!.delete(dirName);
+  }
 }

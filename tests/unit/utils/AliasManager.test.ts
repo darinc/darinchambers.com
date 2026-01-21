@@ -23,6 +23,8 @@ describe('AliasManager', () => {
       getNode: vi.fn(),
       createDirectory: vi.fn(),
       getTree: vi.fn().mockReturnValue([]),
+      deleteFile: vi.fn(),
+      deleteDirectory: vi.fn(),
     };
   });
 

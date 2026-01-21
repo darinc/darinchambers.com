@@ -14,4 +14,6 @@ export interface IFileSystem {
   createDirectory(path: string): void;
   getTree(path: string, maxDepth?: number): string[];
   getNode(path: string): FileSystemNode | null;
+  deleteFile(path: string): void;
+  deleteDirectory(path: string, recursive?: boolean): void;
 }

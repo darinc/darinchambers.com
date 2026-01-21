@@ -150,7 +150,7 @@ describe('TerminalOutput', () => {
 
   describe('writeCommand', () => {
     it('should write command with prompt', () => {
-      terminalOutput.writeCommand('user@host:~$', 'ls -la');
+      terminalOutput.writeCommand('user@host:~$ ', 'ls -la');
 
       const line = outputElement.querySelector('.output-line');
       expect(line).toBeTruthy();
@@ -168,12 +168,12 @@ describe('TerminalOutput', () => {
       expect(spans?.[0].style.fontWeight).toBe('bold');
     });
 
-    it('should add space after prompt', () => {
-      terminalOutput.writeCommand('$', 'test');
+    it('should preserve prompt text exactly as provided', () => {
+      terminalOutput.writeCommand('~ $ ', 'test');
 
       const line = outputElement.querySelector('.output-line');
       const promptSpan = line?.querySelector('span:first-child');
-      expect(promptSpan?.textContent).toBe('$ ');
+      expect(promptSpan?.textContent).toBe('~ $ ');
     });
   });
 

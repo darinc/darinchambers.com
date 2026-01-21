@@ -49,6 +49,8 @@ Location: United States / Eastern Time
     createDirectory: () => {},
     getTree: () => [],
     getNode: () => null,
+    deleteFile: () => {},
+    deleteDirectory: () => {},
   };
 }
 
@@ -179,6 +181,8 @@ I love working with people on bold projects and quirky ideas.
         createDirectory: () => {},
         getTree: () => [],
         getNode: () => null,
+        deleteFile: () => {},
+        deleteDirectory: () => {},
       };
       contactCommand = createContactCommand(mockFs);
 

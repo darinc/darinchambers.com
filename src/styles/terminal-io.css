@@ -412,3 +412,39 @@
     font-size: 11px;
   }
 }
+
+/* Melt Effect styles (rm -rf / easter egg) */
+.melt-container {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--terminal-bg, #0a0a0a);
+  overflow: hidden;
+}
+
+.melt-column {
+  position: absolute;
+  top: 0;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.melt-message {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--terminal-error, #ff5555);
+  font-family: var(--terminal-font-family, 'Courier New', monospace);
+  font-size: clamp(14px, 2.5vw, 24px);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.melt-trigger {
+  display: none;
+}
