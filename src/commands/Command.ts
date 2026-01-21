@@ -4,6 +4,7 @@ export interface CommandResult {
   html?: boolean; // Flag indicating output is HTML to be rendered
   raw?: boolean; // Flag indicating output is raw text for piping (don't display)
   scrollBehavior?: 'top' | 'bottom'; // Flag to control scroll position after output
+  clearBefore?: boolean; // Flag to clear terminal before displaying output
 }
 
 export interface Command {

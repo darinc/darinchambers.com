@@ -216,17 +216,19 @@ Type 'blog' to read posts.
     // /usr/bin directory (core commands)
     const bin = this.createDirectoryNode('bin');
     usr.children!.set('bin', bin);
+    // Core commands
     bin.children!.set('help', this.createFileNode('help', '[Core command: help]'));
     bin.children!.set('clear', this.createFileNode('clear', '[Core command: clear]'));
     bin.children!.set('history', this.createFileNode('history', '[Core command: history]'));
     bin.children!.set('date', this.createFileNode('date', '[Core command: date]'));
     bin.children!.set('echo', this.createFileNode('echo', '[Core command: echo]'));
-    bin.children!.set('ddate', this.createFileNode('ddate', '[Novelty command: ddate]'));
-    bin.children!.set('figlet', this.createFileNode('figlet', '[Novelty command: figlet]'));
-    bin.children!.set('matrix', this.createFileNode('matrix', '[Novelty command: matrix]'));
     bin.children!.set('whoami', this.createFileNode('whoami', '[Core command: whoami]'));
     bin.children!.set('alias', this.createFileNode('alias', '[Core command: alias]'));
     bin.children!.set('unalias', this.createFileNode('unalias', '[Core command: unalias]'));
+    bin.children!.set('env', this.createFileNode('env', '[Core command: env]'));
+    bin.children!.set('export', this.createFileNode('export', '[Core command: export]'));
+
+    // File system commands
     bin.children!.set('ls', this.createFileNode('ls', '[Core command: ls]'));
     bin.children!.set('cd', this.createFileNode('cd', '[Core command: cd]'));
     bin.children!.set('pwd', this.createFileNode('pwd', '[Core command: pwd]'));
@@ -234,6 +236,17 @@ Type 'blog' to read posts.
     bin.children!.set('tree', this.createFileNode('tree', '[Core command: tree]'));
     bin.children!.set('render', this.createFileNode('render', '[Core command: render]'));
     bin.children!.set('which', this.createFileNode('which', '[Core command: which]'));
+
+    // Novelty commands
+    bin.children!.set('ddate', this.createFileNode('ddate', '[Novelty command: ddate]'));
+    bin.children!.set('figlet', this.createFileNode('figlet', '[Novelty command: figlet]'));
+    bin.children!.set('lolcat', this.createFileNode('lolcat', '[Novelty command: lolcat]'));
+    bin.children!.set('matrix', this.createFileNode('matrix', '[Novelty command: matrix]'));
+    bin.children!.set('life', this.createFileNode('life', '[Novelty command: life]'));
+    bin.children!.set('boot', this.createFileNode('boot', '[Novelty command: boot]'));
+    bin.children!.set('shutdown', this.createFileNode('shutdown', '[Novelty command: shutdown]'));
+    bin.children!.set('reboot', this.createFileNode('reboot', '[Novelty command: reboot]'));
+    bin.children!.set('bsod', this.createFileNode('bsod', '[Novelty command: bsod]'));
 
     // /usr/local/bin directory (custom/content commands)
     const local = this.createDirectoryNode('local');

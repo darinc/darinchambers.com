@@ -312,6 +312,9 @@ export class Terminal {
     this.input.onSubmit(async (value) => {
       const trimmedValue = value.trim();
 
+      // Clear input immediately (before async operations)
+      this.input.clear();
+
       // Echo command
       this.output.writeCommand(this.getPromptString(), trimmedValue);
 
@@ -329,8 +332,7 @@ export class Terminal {
         }
       }
 
-      // Clear input and focus (force because user just typed)
-      this.input.clear();
+      // Focus input (force because user just typed)
       this.input.focus(true);
     });
   }
@@ -340,6 +342,11 @@ export class Terminal {
    * Handles special signals, errors, HTML, and plain text output.
    */
   private displayResult(result: CommandResult): void {
+    // Handle clear before output if requested
+    if (result.clearBefore) {
+      this.output.clear();
+    }
+
     // Handle clear command specially
     if (result.output === COMMAND_SIGNALS.CLEAR_SCREEN) {
       this.output.clear();

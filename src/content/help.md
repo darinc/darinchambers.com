@@ -43,6 +43,12 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`figlet`** - ASCII art text banners
 - **`lolcat`** - Rainbow-colorize text output
 - **`ddate`** - Discordian calendar date
+- **`matrix`** - Matrix digital rain animation
+- **`life`** - Conway's Game of Life
+- **`boot`** - Simulated Linux boot sequence
+- **`shutdown`** - Simulated Linux shutdown
+- **`reboot`** - Full reboot animation
+- **`bsod`** - Fake Windows Blue Screen of Death
 
 ## Quick Start
 

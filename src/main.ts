@@ -1,4 +1,6 @@
 import './styles/index.css';
+import { initBootSequenceObserver } from './animations/bootSequence';
+import { initBsodObserver } from './animations/bsodAnimation';
 import { initLifeObserver } from './animations/gameOfLife';
 import { initMatrixRainObserver } from './animations/matrixRain';
 import { createAliasCommand } from './commands/core/alias';
@@ -21,11 +23,15 @@ import { createBlogCommand } from './commands/local/blog';
 import { createContactCommand } from './commands/local/contact';
 import { createPortfolioCommand } from './commands/local/portfolio';
 import { createSettingsCommand } from './commands/local/settings';
+import { bootCommand } from './commands/novelty/boot';
+import { bsodCommand } from './commands/novelty/bsod';
 import { ddateCommand } from './commands/novelty/ddate';
 import { figletCommand } from './commands/novelty/figlet';
 import { createLifeCommand } from './commands/novelty/life';
 import { lolcatCommand } from './commands/novelty/lolcat';
 import { createMatrixCommand } from './commands/novelty/matrix';
+import { rebootCommand } from './commands/novelty/reboot';
+import { shutdownCommand } from './commands/novelty/shutdown';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { Terminal } from './components/Terminal';
@@ -246,6 +252,10 @@ terminal.registerCommands([
   lolcatCommand,
   matrixCommand,
   lifeCommand,
+  bootCommand,
+  shutdownCommand,
+  rebootCommand,
+  bsodCommand,
   whichCommand,
 ]);
 
@@ -313,6 +323,8 @@ if (initialCommand) {
 // Initialize animation observers
 initMatrixRainObserver();
 initLifeObserver();
+initBootSequenceObserver();
+initBsodObserver();
 
 // Initialize screensaver system
 const screensaverManager = new ScreensaverManager(settingsManager, terminal);

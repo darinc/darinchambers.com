@@ -140,3 +140,275 @@
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+/* Boot/Shutdown sequence styles */
+.boot-sequence {
+  font-family: var(--terminal-font-family, 'Courier New', monospace);
+  font-size: var(--terminal-font-size, 16px);
+  line-height: 0.65;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.boot-line {
+  opacity: 0;
+  animation: boot-line-appear 0.05s ease forwards;
+}
+
+.boot-line-ok {
+  color: var(--terminal-accent);
+}
+
+.boot-line-ok::before {
+  content: '[  OK  ] ';
+  color: var(--terminal-accent);
+}
+
+.boot-line-failed {
+  color: var(--terminal-error, #ff5555);
+}
+
+.boot-line-failed::before {
+  content: '[FAILED] ';
+  color: var(--terminal-error, #ff5555);
+}
+
+.boot-line-info {
+  color: var(--terminal-dim);
+}
+
+.boot-line-info::before {
+  content: '         ';
+}
+
+.boot-line-kernel {
+  color: var(--terminal-fg);
+}
+
+.boot-line-bios {
+  color: var(--terminal-accent);
+}
+
+.boot-line-welcome {
+  color: var(--terminal-accent);
+  font-weight: bold;
+}
+
+.boot-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: boot-overlay-appear 0.5s ease forwards;
+}
+
+.boot-overlay-text {
+  color: #333;
+  font-family: var(--terminal-font-family, 'Courier New', monospace);
+  font-size: calc(var(--terminal-font-size, 16px) * 1.5);
+}
+
+@keyframes boot-line-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes boot-overlay-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes boot-overlay-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* BSOD (Blue Screen of Death) styles */
+.bsod-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bsod-fade-in 0.2s ease forwards;
+}
+
+/* Modern Windows 10/11 style BSOD */
+.bsod-modern {
+  background-color: #0078d7;
+  color: #fff;
+  font-family:
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  padding: 5%;
+  box-sizing: border-box;
+}
+
+.bsod-content {
+  max-width: 800px;
+  width: 100%;
+}
+
+.bsod-emoticon {
+  font-size: clamp(80px, 15vw, 140px);
+  font-weight: 200;
+  margin-bottom: 20px;
+}
+
+.bsod-message {
+  font-size: clamp(16px, 2.5vw, 24px);
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
+
+.bsod-progress {
+  font-size: clamp(16px, 2.5vw, 24px);
+  margin-bottom: 40px;
+}
+
+.bsod-qr-section {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.bsod-qr {
+  width: 100px;
+  height: 100px;
+  min-width: 100px;
+  background-color: #fff;
+  position: relative;
+  /* CSS-only decorative QR pattern */
+  background-image:
+    linear-gradient(45deg, #000 25%, transparent 25%),
+    linear-gradient(-45deg, #000 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #000 75%),
+    linear-gradient(-45deg, transparent 75%, #000 75%);
+  background-size: 10px 10px;
+  background-position:
+    0 0,
+    0 5px,
+    5px -5px,
+    -5px 0px;
+}
+
+.bsod-qr-info {
+  font-size: clamp(10px, 1.5vw, 14px);
+  line-height: 1.6;
+}
+
+.bsod-qr-info p {
+  margin: 0 0 8px 0;
+}
+
+.bsod-technical {
+  margin-top: 15px !important;
+}
+
+.bsod-stop-code {
+  font-weight: bold;
+}
+
+.bsod-description {
+  opacity: 0.9;
+}
+
+/* Classic Windows XP/NT style BSOD */
+.bsod-classic {
+  background-color: #000080;
+  color: #fff;
+  font-family: 'Lucida Console', 'Courier New', monospace;
+  font-size: clamp(12px, 1.5vw, 16px);
+  line-height: 1.4;
+  padding: 3%;
+  box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.bsod-classic-content {
+  max-width: 100%;
+  width: 100%;
+}
+
+.bsod-classic-content p {
+  margin: 0;
+  word-wrap: break-word;
+}
+
+.bsod-classic-content br {
+  display: block;
+  content: '';
+  margin-top: 0.5em;
+}
+
+.bsod-classic-cursor {
+  display: inline;
+  animation: none; /* Cursor blink handled by JS */
+}
+
+/* BSOD animations */
+@keyframes bsod-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bsod-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments for BSOD */
+@media (max-width: 600px) {
+  .bsod-qr-section {
+    flex-direction: column;
+  }
+
+  .bsod-qr {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+  }
+
+  .bsod-modern {
+    padding: 8%;
+  }
+
+  .bsod-classic {
+    padding: 5%;
+    font-size: 11px;
+  }
+}

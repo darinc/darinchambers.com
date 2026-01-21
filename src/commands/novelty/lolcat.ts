@@ -36,9 +36,20 @@ function getRainbowColor(
 }
 
 /**
- * Colorize text with rainbow colors
+ * Check if input appears to be safe HTML from our commands
+ * Only match structural tags like div, span, pre that our commands use
+ * NOT script, iframe, or other potentially dangerous tags
  */
-function colorizeText(text: string, spread: number, freq: number): string {
+function isSafeHtmlInput(text: string): boolean {
+  // Check for safe HTML patterns from our terminal commands
+  // Must contain div or span with class or style attributes (typical of our output)
+  return /<(div|span|pre)\s+(class|style)=/i.test(text);
+}
+
+/**
+ * Colorize text with rainbow colors (plain text version)
+ */
+function colorizePlainText(text: string, spread: number, freq: number): string {
   return text
     .split('\n')
     .map((line, lineIdx) => {
@@ -55,6 +66,59 @@ function colorizeText(text: string, spread: number, freq: number): string {
         .join('');
     })
     .join('\n');
+}
+
+/**
+ * Colorize HTML content - apply colors to text while preserving HTML structure
+ */
+function colorizeHtml(html: string, spread: number, freq: number): string {
+  let lineIdx = 0;
+  let charIdx = 0;
+
+  // Process HTML by finding text content and applying colors
+  // We iterate character by character, tracking whether we're inside a tag
+  let result = '';
+  let inTag = false;
+  let inEntity = false;
+  let entityBuffer = '';
+
+  for (const char of html) {
+    if (char === '<') {
+      inTag = true;
+      result += char;
+    } else if (char === '>') {
+      inTag = false;
+      result += char;
+    } else if (inTag) {
+      // Inside HTML tag - pass through unchanged
+      result += char;
+    } else if (char === '&') {
+      // Start of HTML entity
+      inEntity = true;
+      entityBuffer = char;
+    } else if (inEntity) {
+      entityBuffer += char;
+      if (char === ';') {
+        // End of entity - colorize as single character
+        inEntity = false;
+        const color = getRainbowColor(charIdx++, lineIdx, spread, freq);
+        result += `<span style="color: ${color}">${entityBuffer}</span>`;
+        entityBuffer = '';
+      }
+    } else if (char === '\n') {
+      result += char;
+      lineIdx++;
+      charIdx = 0;
+    } else if (char === ' ' || char === '\t') {
+      result += char;
+    } else {
+      // Regular text character - colorize it
+      const color = getRainbowColor(charIdx++, lineIdx, spread, freq);
+      result += `<span style="color: ${color}">${char}</span>`;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -131,12 +195,21 @@ Examples:
       };
     }
 
-    // Colorize the text
-    const colorized = colorizeText(text, spread, freq);
-
-    return {
-      output: `<pre class="lolcat-output">${colorized}</pre>`,
-      html: true,
-    };
+    // Detect if input is safe HTML and colorize appropriately
+    if (isSafeHtmlInput(text)) {
+      // HTML input - colorize text content while preserving structure
+      const colorized = colorizeHtml(text, spread, freq);
+      return {
+        output: colorized,
+        html: true,
+      };
+    } else {
+      // Plain text input - wrap in pre tag
+      const colorized = colorizePlainText(text, spread, freq);
+      return {
+        output: `<pre class="lolcat-output">${colorized}</pre>`,
+        html: true,
+      };
+    }
   },
 };
