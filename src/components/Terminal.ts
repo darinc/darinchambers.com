@@ -332,8 +332,11 @@ export class Terminal {
         }
       }
 
-      // Focus input (force because user just typed)
-      this.input.focus(true);
+      // Focus input after scroll behavior completes
+      // Delay ensures focus happens after performScrollBehavior's RAF chain + 50ms timeout
+      setTimeout(() => {
+        this.input.focus(true);
+      }, 100);
     });
   }
 

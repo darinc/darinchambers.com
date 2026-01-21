@@ -13,6 +13,7 @@
 
 .output-line {
   margin-bottom: 0;
+  font-weight: 500;
 }
 
 .output-error {
@@ -29,6 +30,7 @@
   align-items: center;
   font-size: var(--terminal-font-size, 16px);
   font-family: var(--terminal-font-family, 'Courier New', monospace);
+  font-weight: 500;
   margin-top: 0;
   line-height: 1;
 }
