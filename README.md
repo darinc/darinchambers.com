@@ -1,6 +1,6 @@
 # Darin Chambers - Terminal Portfolio
 
-[![Version](https://img.shields.io/badge/version-0.22.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.22.1-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
@@ -79,7 +79,7 @@ settings font-size 16    # Adjust font size
 ```
 darinchambers.com/
 ├── src/
-│   ├── commands/        # 32 command implementations
+│   ├── commands/        # 33 command implementations
 │   ├── components/      # UI components
 │   ├── content/         # Markdown content (blog, portfolio)
 │   ├── utils/           # Parsers, managers, renderers
@@ -94,7 +94,7 @@ darinchambers.com/
 - Multi-layered XSS protection (DOMPurify + CSP)
 - 1,000+ tests across 50+ test files
 - Zero known vulnerabilities
-- ~94KB total bundle
+- ~108KB total bundle
 
 ## Documentation
 

@@ -18,6 +18,7 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`portfolio`** - View my projects and accomplishments
 - **`blog`** - Read my blog posts and articles
 - **`contact`** - Get in touch with me
+- **`changelog`** - View project version history
 
 ### File System
 

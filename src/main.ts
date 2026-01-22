@@ -22,6 +22,7 @@ import { createRmCommand } from './commands/fs/rm';
 import { createTreeCommand } from './commands/fs/tree';
 import { createAboutCommand } from './commands/local/about';
 import { createBlogCommand } from './commands/local/blog';
+import { createChangelogCommand } from './commands/local/changelog';
 import { createContactCommand } from './commands/local/contact';
 import { createPortfolioCommand } from './commands/local/portfolio';
 import { createSettingsCommand } from './commands/local/settings';
@@ -211,6 +212,12 @@ const contactCommand = createContactCommand(fileSystem);
 const portfolioCommand = createPortfolioCommand(fileSystem);
 const blogCommand = createBlogCommand(fileSystem);
 
+// Create changelog command - load content from virtual filesystem
+const changelogContent = fileSystem.exists('/home/darin/CHANGELOG.md')
+  ? fileSystem.readFile('/home/darin/CHANGELOG.md')
+  : '';
+const changelogCommand = createChangelogCommand(changelogContent);
+
 // Create render command
 const renderCommand = createRenderCommand(fileSystem);
 
@@ -251,6 +258,7 @@ terminal.registerCommands([
   blogCommand,
   contactCommand,
   settingsCommand,
+  changelogCommand,
   ddateCommand,
   figletCommand,
   lolcatCommand,

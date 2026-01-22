@@ -92,6 +92,26 @@ export class FileSystemInitializer {
     return contentNodes;
   }
 
+  /**
+   * Load the CHANGELOG.md file from the project root using Vite's import.meta.glob
+   */
+  private static loadChangelogFile(): string {
+    const changelogFiles: Record<string, { default: string }> = import.meta.glob(
+      '../../../CHANGELOG.md',
+      {
+        query: '?raw',
+        eager: true,
+      }
+    );
+
+    // Get the first (and only) entry
+    const entries = Object.values(changelogFiles);
+    if (entries.length > 0) {
+      return entries[0].default;
+    }
+    return '';
+  }
+
   public static createDefaultStructure(): FileSystemNode {
     const root = this.createDirectoryNode('');
     const rootChildren = root.children!;
@@ -209,6 +229,12 @@ Type 'blog' to read posts.
       portfolio.children!.set(filename, fileNode);
     }
 
+    // /home/darin/CHANGELOG.md - project changelog loaded from root
+    const changelogContent = this.loadChangelogFile();
+    if (changelogContent) {
+      darin.children!.set('CHANGELOG.md', this.createFileNode('CHANGELOG.md', changelogContent));
+    }
+
     // /usr directory
     const usr = this.createDirectoryNode('usr');
     rootChildren.set('usr', usr);
@@ -264,6 +290,10 @@ Type 'blog' to read posts.
     localBin.children!.set(
       'settings',
       this.createFileNode('settings', '[Custom command: settings]')
+    );
+    localBin.children!.set(
+      'changelog',
+      this.createFileNode('changelog', '[Custom command: changelog]')
     );
 
     return root;
