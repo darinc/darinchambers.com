@@ -32,7 +32,7 @@ export const STORAGE_KEYS = {
 export const MESSAGES = {
   EMPTY_PORTFOLIO: 'No portfolio projects yet. Check back soon!',
   EMPTY_BLOG: 'No blog posts yet. Check back soon!',
-  EMPTY_POSTS: 'No posts yet. Check back soon!',
+  EMPTY_POSTS: 'No notes yet. Check back soon!',
   NO_TAGS_AVAILABLE: 'No tags available yet.',
 } as const;
 
