@@ -1,11 +1,11 @@
 /**
- * Unit tests for Posts Command
+ * Unit tests for Notes Command
  *
- * Tests empty states, tag listing, tag filtering, post detail, and posted links.
+ * Tests empty states, tag listing, tag filtering, note detail, and posted links.
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { createPostsCommand } from '../../../../src/commands/local/posts';
+import { createNotesCommand } from '../../../../src/commands/local/notes';
 import { MESSAGES } from '../../../../src/constants';
 import type { Command, CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
@@ -61,24 +61,24 @@ Short thought about ${title}.
 `;
 }
 
-describe('Posts Command', () => {
-  let postsCommand: Command;
+describe('Notes Command', () => {
+  let notesCommand: Command;
 
-  describe('empty posts', () => {
+  describe('empty notes', () => {
     beforeEach(() => {
       const mockFs = createMockFs(new Map());
-      postsCommand = createPostsCommand(mockFs);
+      notesCommand = createNotesCommand(mockFs);
     });
 
-    it('should return friendly message when posts are empty', () => {
-      const result = postsCommand.execute([]) as CommandResult;
+    it('should return friendly message when notes are empty', () => {
+      const result = notesCommand.execute([]) as CommandResult;
 
       expect(result.output).toContain(MESSAGES.EMPTY_POSTS);
       expect(result.html).toBe(true);
     });
 
-    it('should return no tags available when --tags called on empty posts', () => {
-      const result = postsCommand.execute(['--tags']) as CommandResult;
+    it('should return no tags available when --tags called on empty notes', () => {
+      const result = notesCommand.execute(['--tags']) as CommandResult;
 
       expect(result.output).toContain(MESSAGES.NO_TAGS_AVAILABLE);
       expect(result.html).toBe(true);
@@ -93,26 +93,26 @@ describe('Posts Command', () => {
         ['2026-03-01-post3.md', createPostFile('Post 3', '2026-03-01', ['Web', 'React'])],
       ]);
       const mockFs = createMockFs(files);
-      postsCommand = createPostsCommand(mockFs);
+      notesCommand = createNotesCommand(mockFs);
     });
 
     it('should show top tags when filtering returns no results', () => {
-      const result = postsCommand.execute(['--tags', 'nonexistent']) as CommandResult;
+      const result = notesCommand.execute(['--tags', 'nonexistent']) as CommandResult;
 
-      expect(result.output).toContain("No posts found with tag 'nonexistent'");
+      expect(result.output).toContain("No notes found with tag 'nonexistent'");
       expect(result.output).toContain('Try one of these tags:');
       expect(result.error).toBe(false);
     });
   });
 
   describe('--tags listing', () => {
-    it('should list tags with counts when posts exist', () => {
+    it('should list tags with counts when notes exist', () => {
       const files = new Map([
         ['2026-01-01-post1.md', createPostFile('Post 1', '2026-01-01', ['AI', 'ML'])],
         ['2026-02-01-post2.md', createPostFile('Post 2', '2026-02-01', ['AI'])],
       ]);
       const mockFs = createMockFs(files);
-      const cmd = createPostsCommand(mockFs);
+      const cmd = createNotesCommand(mockFs);
 
       const result = cmd.execute(['--tags']) as CommandResult;
 
@@ -129,7 +129,7 @@ describe('Posts Command', () => {
         ['2026-02-01-second.md', createPostFile('Second Post', '2026-02-01', ['Web'])],
       ]);
       const mockFs = createMockFs(files);
-      const cmd = createPostsCommand(mockFs);
+      const cmd = createNotesCommand(mockFs);
 
       const result = cmd.execute(['2']) as CommandResult;
 
@@ -142,7 +142,7 @@ describe('Posts Command', () => {
         ['2026-01-01-my-thought.md', createPostFile('My Thought', '2026-01-01', ['AI'])],
       ]);
       const mockFs = createMockFs(files);
-      const cmd = createPostsCommand(mockFs);
+      const cmd = createNotesCommand(mockFs);
 
       const result = cmd.execute(['my-thought']) as CommandResult;
 
@@ -150,16 +150,16 @@ describe('Posts Command', () => {
       expect(result.html).toBe(true);
     });
 
-    it('should return error for non-existent post', () => {
+    it('should return error for non-existent note', () => {
       const files = new Map([
         ['2026-01-01-post1.md', createPostFile('Post 1', '2026-01-01', ['AI'])],
       ]);
       const mockFs = createMockFs(files);
-      const cmd = createPostsCommand(mockFs);
+      const cmd = createNotesCommand(mockFs);
 
       const result = cmd.execute(['nonexistent']) as CommandResult;
 
-      expect(result.output).toContain("Post 'nonexistent' not found");
+      expect(result.output).toContain("Note 'nonexistent' not found");
       expect(result.error).toBe(true);
     });
   });
@@ -178,7 +178,7 @@ describe('Posts Command', () => {
         ],
       ]);
       const mockFs = createMockFs(files);
-      const cmd = createPostsCommand(mockFs);
+      const cmd = createNotesCommand(mockFs);
 
       const result = cmd.execute([]) as CommandResult;
 
@@ -203,7 +203,7 @@ describe('Posts Command', () => {
         ],
       ]);
       const mockFs = createMockFs(files);
-      const cmd = createPostsCommand(mockFs);
+      const cmd = createNotesCommand(mockFs);
 
       const result = cmd.execute([]) as CommandResult;
 
@@ -218,7 +218,7 @@ describe('Posts Command', () => {
         ['2026-01-01-plain.md', createPostFile('Plain Post', '2026-01-01', ['misc'])],
       ]);
       const mockFs = createMockFs(files);
-      const cmd = createPostsCommand(mockFs);
+      const cmd = createNotesCommand(mockFs);
 
       const result = cmd.execute([]) as CommandResult;
 
@@ -230,11 +230,11 @@ describe('Posts Command', () => {
   describe('help', () => {
     it('should show help text', () => {
       const mockFs = createMockFs(new Map());
-      const cmd = createPostsCommand(mockFs);
+      const cmd = createNotesCommand(mockFs);
 
       const result = cmd.execute(['--help']) as CommandResult;
 
-      expect(result.output).toContain('Usage: posts');
+      expect(result.output).toContain('Usage: notes');
       expect(result.output).toContain('--tags');
     });
   });

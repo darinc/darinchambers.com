@@ -51,15 +51,15 @@ export class Router {
         pattern: /^\/blog\/?$/,
         commandBuilder: () => 'blog',
       },
-      // Post detail route: /posts/:postId
+      // Note detail route: /notes/:noteId
       {
-        pattern: /^\/posts\/([a-zA-Z0-9-]+)$/,
-        commandBuilder: (matches) => `posts ${matches[1]}`,
+        pattern: /^\/notes\/([a-zA-Z0-9-]+)$/,
+        commandBuilder: (matches) => `notes ${matches[1]}`,
       },
-      // Posts list route: /posts
+      // Notes list route: /notes
       {
-        pattern: /^\/posts\/?$/,
-        commandBuilder: () => 'posts',
+        pattern: /^\/notes\/?$/,
+        commandBuilder: () => 'notes',
       },
       // About route: /about
       {
@@ -275,13 +275,13 @@ export class Router {
       return null;
     }
 
-    // Handle posts commands
-    if (trimmed.startsWith('posts ') && !trimmed.includes('--tag')) {
-      const postId = trimmed.substring(6).trim();
+    // Handle notes commands
+    if (trimmed.startsWith('notes ') && !trimmed.includes('--tag')) {
+      const noteId = trimmed.substring(6).trim();
 
       const validIds = this.getValidPostIds();
-      if (validIds.has(postId)) {
-        return `/posts/${postId}`;
+      if (validIds.has(noteId)) {
+        return `/notes/${noteId}`;
       }
 
       return null;
@@ -305,7 +305,7 @@ export class Router {
     // Handle simple command mappings
     const commandMap: Record<string, string> = {
       blog: '/blog',
-      posts: '/posts',
+      notes: '/notes',
       about: '/about',
       portfolio: '/portfolio',
       contact: '/contact',

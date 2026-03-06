@@ -315,7 +315,7 @@ Type 'blog' to read posts.
       this.createFileNode('portfolio', '[Custom command: portfolio]')
     );
     localBin.children!.set('blog', this.createFileNode('blog', '[Custom command: blog]'));
-    localBin.children!.set('posts', this.createFileNode('posts', '[Custom command: posts]'));
+    localBin.children!.set('notes', this.createFileNode('notes', '[Custom command: notes]'));
     localBin.children!.set('contact', this.createFileNode('contact', '[Custom command: contact]'));
     localBin.children!.set(
       'settings',

@@ -27,7 +27,7 @@ export class ContentFormatter {
   /**
    * Format a tag as a clickable button
    */
-  private static formatClickableTag(tag: string, command: 'portfolio' | 'blog' | 'posts'): string {
+  private static formatClickableTag(tag: string, command: 'portfolio' | 'blog' | 'notes'): string {
     const cmd = `${command} --tags ${tag}`;
     return `<button data-command="${cmd}" class="tag-link">${tag}</button>`;
   }
@@ -159,18 +159,18 @@ ${post.content}
   }
 
   /**
-   * Format posts list as markdown (short-form, full content inline)
+   * Format notes list as markdown (short-form, full content inline)
    */
   static formatPostList(posts: Post[], filterTag?: string): string {
-    const header = filterTag ? `# Posts - Tag: ${filterTag}` : '# Posts';
+    const header = filterTag ? `# Notes - Tag: ${filterTag}` : '# Notes';
 
     const items = posts
       .map((post, index) => {
-        const tags = post.tags.map((t: string) => this.formatClickableTag(t, 'posts')).join(' ');
+        const tags = post.tags.map((t: string) => this.formatClickableTag(t, 'notes')).join(' ');
         const postNumber = posts.length - index;
         const { badges, links } = this.formatPostedLinks(post.posted);
 
-        return `### <a href="/posts/${post.id}" data-command="posts ${post.id}">${postNumber}. ${post.title}</a>
+        return `### <a href="/notes/${post.id}" data-command="notes ${post.id}">${postNumber}. ${post.title}</a>
 
 **${post.date}**${badges}
 
@@ -182,8 +182,8 @@ ${post.content}${links}
       .join('\n\n---\n\n');
 
     const footer = filterTag
-      ? '\n\n---\n\n<a href="/posts" data-command="posts">← Back to All Posts</a>'
-      : '\n\n---\n\n**Filter by tag:** Type `posts --tags <tag>` or `posts --tags` to list all tags';
+      ? '\n\n---\n\n<a href="/notes" data-command="notes">← Back to All Notes</a>'
+      : '\n\n---\n\n**Filter by tag:** Type `notes --tags <tag>` or `notes --tags` to list all tags';
 
     return `${header}
 
@@ -194,7 +194,7 @@ ${items}${footer}`;
    * Format a single post as markdown
    */
   static formatPostDetail(post: Post): string {
-    const tags = post.tags.map((t) => this.formatClickableTag(t, 'posts')).join(' ');
+    const tags = post.tags.map((t) => this.formatClickableTag(t, 'notes')).join(' ');
     const { badges, links } = this.formatPostedLinks(post.posted);
 
     return `# ${post.title}
@@ -209,6 +209,6 @@ ${post.content}${links}
 
 **Tags:** ${tags}
 
-<a href="/posts" data-command="posts">← Back to Posts</a>`;
+<a href="/notes" data-command="notes">← Back to Notes</a>`;
   }
 }

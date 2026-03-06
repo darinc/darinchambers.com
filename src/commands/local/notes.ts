@@ -1,8 +1,8 @@
 /**
- * Posts Command
+ * Notes Command
  *
- * Lists and displays short-form posts with support for filtering by tags.
- * Posts are short-form content (LinkedIn/X style) shown with full content
+ * Lists and displays short-form notes with support for filtering by tags.
+ * Notes are short-form content (LinkedIn/X style) shown with full content
  * inline in list view. Supports --tags flag for filtering by category.
  */
 import { MESSAGES, PATHS } from '../../constants';
@@ -14,31 +14,31 @@ import type { Post } from '../../types/post';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { Command } from '../Command';
 
-export function createPostsCommand(fs: IFileSystem): Command {
+export function createNotesCommand(fs: IFileSystem): Command {
   return {
-    name: 'posts',
-    description: 'List and read short-form posts',
+    name: 'notes',
+    description: 'List and read short-form notes',
     execute: (args: string[], _stdin?: string) => {
       const cmdArgs = new CommandArgs(args);
 
       if (cmdArgs.hasFlag('help')) {
         return {
-          output: `Usage: posts [options] [post-id|number]
+          output: `Usage: notes [options] [note-id|number]
 
 Description:
-  List and read short-form posts
+  List and read short-form notes
 
 Options:
   --tags               List all available tags
-  --tags <tag>         Filter posts by tag
+  --tags <tag>         Filter notes by tag
 
 Examples:
-  posts                         # List all posts
-  posts 1                       # Read post #1
-  posts --tags                  # List all tags
-  posts --tags AI               # Filter by single-word tag
-  posts --tags Web-Development  # Filter by hyphenated tag
-  posts post-id                 # Read specific post by ID`,
+  notes                         # List all notes
+  notes 1                       # Read note #1
+  notes --tags                  # List all tags
+  notes --tags AI               # Filter by single-word tag
+  notes --tags Web-Development  # Filter by hyphenated tag
+  notes note-id                 # Read specific note by ID`,
         };
       }
 
@@ -63,7 +63,7 @@ Examples:
         }
 
         if (posts.length === 0 && !hasTags && !postId) {
-          const markdown = `# Posts
+          const markdown = `# Notes
 
 ${MESSAGES.EMPTY_POSTS}`;
           const html = MarkdownService.render(markdown);
@@ -85,7 +85,7 @@ ${MESSAGES.EMPTY_POSTS}`;
             const sortedTags = Array.from(allTags).sort();
 
             if (sortedTags.length === 0) {
-              const markdown = `# Post Tags
+              const markdown = `# Note Tags
 
 ${MESSAGES.NO_TAGS_AVAILABLE}`;
               const html = MarkdownService.render(markdown);
@@ -95,17 +95,17 @@ ${MESSAGES.NO_TAGS_AVAILABLE}`;
             const tagList = sortedTags
               .map((tag) => {
                 const count = tagCounts.get(tag) ?? 0;
-                return `- <button data-command="posts --tags ${tag}" class="tag-link">${tag}</button> (${count} post${count !== 1 ? 's' : ''})`;
+                return `- <button data-command="notes --tags ${tag}" class="tag-link">${tag}</button> (${count} note${count !== 1 ? 's' : ''})`;
               })
               .join('\n');
 
-            const markdown = `# Post Tags
+            const markdown = `# Note Tags
 
 ${tagList}
 
 ---
 
-**Usage:** Type \`posts --tags <tag>\` to filter posts`;
+**Usage:** Type \`notes --tags <tag>\` to filter notes`;
 
             const html = MarkdownService.render(markdown);
             return { output: html, html: true, scrollBehavior: 'top' };
@@ -125,7 +125,7 @@ ${tagList}
 
           if (!post) {
             return {
-              output: `Post '${postId}' not found.\nUse 'posts' to list all posts.\nTry 'posts --help' for more information`,
+              output: `Note '${postId}' not found.\nUse 'notes' to list all notes.\nTry 'notes --help' for more information`,
               error: true,
             };
           }
@@ -158,7 +158,7 @@ ${tagList}
               topTags.length > 0 ? `\nTry one of these tags: ${topTags.join(', ')}` : '';
 
             return {
-              output: `No posts found with tag '${filterTag}'.${suggestion}\nUse 'posts' to see all posts.`,
+              output: `No notes found with tag '${filterTag}'.${suggestion}\nUse 'notes' to see all notes.`,
               error: false,
             };
           }
