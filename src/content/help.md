@@ -17,6 +17,7 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`about`** - Learn about my background and expertise
 - **`portfolio`** - View my projects and accomplishments
 - **`blog`** - Read my blog posts and articles
+- **`posts`** - Short-form posts and thoughts
 - **`contact`** - Get in touch with me
 - **`changelog`** - View project version history
 
@@ -60,6 +61,7 @@ Try these commands to explore:
 about           # Learn about me
 portfolio       # See my work
 blog            # Read my posts
+posts           # Short-form thoughts
 tree            # Explore the file structure
 ls ~            # List home directory
 ```

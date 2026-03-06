@@ -10,6 +10,7 @@ export const PATHS = {
   HOME_GUEST: '/home/guest',
   CONTENT_BLOG: '/home/darin/blog',
   CONTENT_PORTFOLIO: '/home/darin/portfolio',
+  CONTENT_POSTS: '/home/darin/posts',
   CONTENT_HELP: '/home/darin/content/help.md',
   CONTENT_ABOUT: '/home/darin/content/about.md',
   CONTENT_CONTACT: '/home/darin/content/contact.md',
@@ -31,6 +32,7 @@ export const STORAGE_KEYS = {
 export const MESSAGES = {
   EMPTY_PORTFOLIO: 'No portfolio projects yet. Check back soon!',
   EMPTY_BLOG: 'No blog posts yet. Check back soon!',
+  EMPTY_POSTS: 'No posts yet. Check back soon!',
   NO_TAGS_AVAILABLE: 'No tags available yet.',
 } as const;
 

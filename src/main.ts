@@ -25,6 +25,7 @@ import { createBlogCommand } from './commands/local/blog';
 import { createChangelogCommand } from './commands/local/changelog';
 import { createContactCommand } from './commands/local/contact';
 import { createPortfolioCommand } from './commands/local/portfolio';
+import { createPostsCommand } from './commands/local/posts';
 import { createSettingsCommand } from './commands/local/settings';
 import { bootCommand } from './commands/novelty/boot';
 import { bsodCommand } from './commands/novelty/bsod';
@@ -211,6 +212,7 @@ const aboutCommand = createAboutCommand(fileSystem);
 const contactCommand = createContactCommand(fileSystem);
 const portfolioCommand = createPortfolioCommand(fileSystem);
 const blogCommand = createBlogCommand(fileSystem);
+const postsCommand = createPostsCommand(fileSystem);
 
 // Create changelog command - load content from virtual filesystem
 const changelogContent = fileSystem.exists('/home/darin/CHANGELOG.md')
@@ -256,6 +258,7 @@ terminal.registerCommands([
   aboutCommand,
   portfolioCommand,
   blogCommand,
+  postsCommand,
   contactCommand,
   settingsCommand,
   changelogCommand,
@@ -276,6 +279,7 @@ const navItems: NavItem[] = [
   { label: 'about', command: 'about' },
   { label: 'portfolio', command: 'portfolio' },
   { label: 'blog', command: 'blog' },
+  { label: 'posts', command: 'posts' },
   { label: 'contact', command: 'contact' },
   { label: 'settings', command: 'settings' },
   { label: 'help', command: 'help' },
@@ -301,6 +305,7 @@ const navigation = new Navigation(navLinksElement, (command: string) => {
     about: '/about',
     portfolio: '/portfolio',
     blog: '/blog',
+    posts: '/posts',
     contact: '/contact',
     skills: '/skills',
     settings: '/settings',

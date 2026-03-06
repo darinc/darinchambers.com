@@ -7,6 +7,7 @@
 
 import { PATHS } from '../constants';
 import { BlogParser } from './BlogParser';
+import { PostParser } from './PostParser';
 import type { Terminal } from '../components/Terminal';
 import type { IFileSystem } from './fs/IFileSystem';
 
@@ -49,6 +50,16 @@ export class Router {
       {
         pattern: /^\/blog\/?$/,
         commandBuilder: () => 'blog',
+      },
+      // Post detail route: /posts/:postId
+      {
+        pattern: /^\/posts\/([a-zA-Z0-9-]+)$/,
+        commandBuilder: (matches) => `posts ${matches[1]}`,
+      },
+      // Posts list route: /posts
+      {
+        pattern: /^\/posts\/?$/,
+        commandBuilder: () => 'posts',
       },
       // About route: /about
       {
@@ -220,6 +231,27 @@ export class Router {
   }
 
   /**
+   * Get all valid post IDs from the file system.
+   * @returns Set of valid post IDs
+   */
+  private getValidPostIds(): Set<string> {
+    try {
+      const postsDir = PATHS.CONTENT_POSTS;
+      const files = this.fileSystem.list(postsDir);
+      const postFiles = files.filter((f) => f.endsWith('.md'));
+
+      const validIds = new Set<string>();
+      for (const filename of postFiles) {
+        const id = PostParser.getIdFromFilename(filename);
+        validIds.add(id);
+      }
+      return validIds;
+    } catch {
+      return new Set();
+    }
+  }
+
+  /**
    * Get the route path for a given command.
    * Useful for updating URL when user types commands directly.
    *
@@ -243,6 +275,18 @@ export class Router {
       return null;
     }
 
+    // Handle posts commands
+    if (trimmed.startsWith('posts ') && !trimmed.includes('--tag')) {
+      const postId = trimmed.substring(6).trim();
+
+      const validIds = this.getValidPostIds();
+      if (validIds.has(postId)) {
+        return `/posts/${postId}`;
+      }
+
+      return null;
+    }
+
     // Handle portfolio commands with tag filtering
     if (trimmed.startsWith('portfolio --tags ')) {
       const tagsValue = trimmed.substring('portfolio --tags '.length).trim();
@@ -261,6 +305,7 @@ export class Router {
     // Handle simple command mappings
     const commandMap: Record<string, string> = {
       blog: '/blog',
+      posts: '/posts',
       about: '/about',
       portfolio: '/portfolio',
       contact: '/contact',

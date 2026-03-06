@@ -79,7 +79,7 @@ settings font-size 16    # Adjust font size
 ```
 darinchambers.com/
 ├── src/
-│   ├── commands/        # 33 command implementations
+│   ├── commands/        # 34 command implementations
 │   ├── components/      # UI components
 │   ├── content/         # Markdown content (blog, portfolio)
 │   ├── utils/           # Parsers, managers, renderers

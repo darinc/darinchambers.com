@@ -128,7 +128,7 @@ interface Command {
 - Supports both sync and async execution
 - Pipeline support via stdin parameter
 
-**Example**: All 33 commands implement this interface (ls, cd, cat, about, blog, etc.)
+**Example**: All 34 commands implement this interface (ls, cd, cat, about, blog, etc.)
 
 ### 2. Dependency Injection ✅
 

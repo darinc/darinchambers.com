@@ -72,6 +72,27 @@ export class FileSystemInitializer {
   }
 
   /**
+   * Dynamically load all post markdown files using Vite's import.meta.glob
+   */
+  private static loadPostFiles(): Map<string, FileSystemNode> {
+    const postFiles: Record<string, { default: string }> = import.meta.glob(
+      '../../content/posts/*.md',
+      {
+        query: '?raw',
+        eager: true,
+      }
+    );
+
+    const postNodes = new Map<string, FileSystemNode>();
+    for (const [key, module] of Object.entries(postFiles)) {
+      const filename = key.split('/').pop()!;
+      const content = module.default;
+      postNodes.set(filename, this.createFileNode(filename, content));
+    }
+    return postNodes;
+  }
+
+  /**
    * Dynamically load root content markdown files using Vite's import.meta.glob
    */
   private static loadContentFiles(): Map<string, FileSystemNode> {
@@ -213,6 +234,14 @@ Type 'blog' to read posts.
       blog.children!.set(filename, fileNode);
     }
 
+    // /home/darin/posts directory with dynamically loaded markdown post files
+    const posts = this.createDirectoryNode('posts');
+    darin.children!.set('posts', posts);
+    const postFiles = this.loadPostFiles();
+    for (const [filename, fileNode] of postFiles) {
+      posts.children!.set(filename, fileNode);
+    }
+
     // /home/darin/content directory with dynamically loaded markdown content files
     const content = this.createDirectoryNode('content');
     darin.children!.set('content', content);
@@ -286,6 +315,7 @@ Type 'blog' to read posts.
       this.createFileNode('portfolio', '[Custom command: portfolio]')
     );
     localBin.children!.set('blog', this.createFileNode('blog', '[Custom command: blog]'));
+    localBin.children!.set('posts', this.createFileNode('posts', '[Custom command: posts]'));
     localBin.children!.set('contact', this.createFileNode('contact', '[Custom command: contact]'));
     localBin.children!.set(
       'settings',

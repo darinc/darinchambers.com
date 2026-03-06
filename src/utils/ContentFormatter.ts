@@ -1,5 +1,6 @@
 import type { BlogPost } from '../types/blog';
 import type { Project } from '../types/portfolio';
+import type { Post } from '../types/post';
 
 /**
  * ContentFormatter - Utility for generating markdown from structured data
@@ -10,8 +11,8 @@ export class ContentFormatter {
   /**
    * Format a tag as a clickable button
    */
-  private static formatClickableTag(tag: string, command: 'portfolio' | 'blog'): string {
-    const cmd = command === 'portfolio' ? `portfolio --tags ${tag}` : `blog --tags ${tag}`;
+  private static formatClickableTag(tag: string, command: 'portfolio' | 'blog' | 'posts'): string {
+    const cmd = `${command} --tags ${tag}`;
     return `<button data-command="${cmd}" class="tag-link">${tag}</button>`;
   }
   /**
@@ -115,5 +116,83 @@ ${post.content}
 **Tags:** ${tags}
 
 <a href="/blog" data-command="blog">← Back to Blog</a>`;
+  }
+
+  /**
+   * Format posted links as platform badges and links
+   */
+  private static formatPostedLinks(posted?: Post['posted']): {
+    badges: string;
+    links: string;
+  } {
+    if (!posted || posted.length === 0) {
+      return { badges: '', links: '' };
+    }
+
+    const badges = posted.map((p) => p.platform).join(' · ');
+    const links = posted
+      .map(
+        (p) => `<a href="${p.url}" target="_blank" rel="noopener noreferrer">${p.platform} →</a>`
+      )
+      .join(' · ');
+
+    return {
+      badges: ` · ${badges}`,
+      links: `\n\n**Posted on:** ${links}`,
+    };
+  }
+
+  /**
+   * Format posts list as markdown (short-form, full content inline)
+   */
+  static formatPostList(posts: Post[], filterTag?: string): string {
+    const header = filterTag ? `# Posts - Tag: ${filterTag}` : '# Posts';
+
+    const items = posts
+      .map((post, index) => {
+        const tags = post.tags.map((t: string) => this.formatClickableTag(t, 'posts')).join(' ');
+        const postNumber = posts.length - index;
+        const { badges, links } = this.formatPostedLinks(post.posted);
+
+        return `### <a href="/posts/${post.id}" data-command="posts ${post.id}">${postNumber}. ${post.title}</a>
+
+**${post.date}**${badges}
+
+${post.content}${links}
+
+**Tags:** ${tags}
+`;
+      })
+      .join('\n\n---\n\n');
+
+    const footer = filterTag
+      ? '\n\n---\n\n<a href="/posts" data-command="posts">← Back to All Posts</a>'
+      : '\n\n---\n\n**Filter by tag:** Type `posts --tags <tag>` or `posts --tags` to list all tags';
+
+    return `${header}
+
+${items}${footer}`;
+  }
+
+  /**
+   * Format a single post as markdown
+   */
+  static formatPostDetail(post: Post): string {
+    const tags = post.tags.map((t) => this.formatClickableTag(t, 'posts')).join(' ');
+    const { badges, links } = this.formatPostedLinks(post.posted);
+
+    return `# ${post.title}
+
+**${post.date}**${badges}
+
+---
+
+${post.content}${links}
+
+---
+
+**Tags:** ${tags}
+
+<a href="/posts" data-command="posts">← Back to Posts</a>`;
   }
 }
