@@ -45,6 +45,7 @@ import { AliasManager } from './utils/AliasManager';
 import { CommandArgs } from './utils/CommandArgs';
 import { CommandDispatcher } from './utils/CommandDispatcher';
 import { CommandExecutor } from './utils/CommandExecutor';
+import { ContentFormatter } from './utils/ContentFormatter';
 import { EnvVarManager } from './utils/EnvVarManager';
 import { FileSystemInitializer } from './utils/fs/FileSystemInitializer';
 import { FileSystemService } from './utils/fs/FileSystemService';
@@ -149,7 +150,11 @@ const helpCommand: Command = {
       // Otherwise show the main help content
       const content = fileSystem.readFile(PATHS.CONTENT_HELP);
       const html = MarkdownService.render(content);
-      return { output: html, html: true, scrollBehavior: 'top' };
+      const clickableHtml = ContentFormatter.makeCommandsClickable(
+        html,
+        dispatcher.getCommandNames()
+      );
+      return { output: clickableHtml, html: true, scrollBehavior: 'top' };
     } catch (error) {
       return {
         output: error instanceof Error ? error.message : String(error),
@@ -208,7 +213,7 @@ const unaliasCommand = createUnaliasCommand(aliasManager);
 const whoamiCommand = createWhoamiCommand(terminal);
 
 // Create content commands
-const aboutCommand = createAboutCommand(fileSystem);
+const aboutCommand = createAboutCommand(fileSystem, ['portfolio', 'blog', 'posts', 'contact']);
 const contactCommand = createContactCommand(fileSystem);
 const portfolioCommand = createPortfolioCommand(fileSystem);
 const blogCommand = createBlogCommand(fileSystem);

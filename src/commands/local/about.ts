@@ -7,11 +7,12 @@
  */
 import { PATHS } from '../../constants';
 import { CommandArgs } from '../../utils/CommandArgs';
+import { ContentFormatter } from '../../utils/ContentFormatter';
 import { MarkdownService } from '../../utils/MarkdownService';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { Command } from '../Command';
 
-export function createAboutCommand(fs: IFileSystem): Command {
+export function createAboutCommand(fs: IFileSystem, commandNames: string[] = []): Command {
   return {
     name: 'about',
     description: 'Display bio and expertise overview',
@@ -33,7 +34,8 @@ Examples:
       try {
         const content = fs.readFile(PATHS.CONTENT_ABOUT);
         const html = MarkdownService.render(content);
-        return { output: html, html: true, scrollBehavior: 'top' };
+        const clickableHtml = ContentFormatter.makeCommandsClickable(html, commandNames);
+        return { output: clickableHtml, html: true, scrollBehavior: 'top' };
       } catch (error) {
         return {
           output: error instanceof Error ? error.message : String(error),

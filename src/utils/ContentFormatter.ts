@@ -9,6 +9,22 @@ import type { Post } from '../types/post';
 
 export class ContentFormatter {
   /**
+   * Post-process rendered HTML to make inline `<code>commandName</code>` clickable
+   * when the command name matches a known command.
+   * Safe for fenced code blocks since `<pre><code>` content won't match single command names.
+   */
+  static makeCommandsClickable(html: string, commandNames: string[]): string {
+    const commandSet = new Set(commandNames);
+    return html.replace(/<code>([^<]+)<\/code>/g, (match, name: string) => {
+      const trimmed = name.trim();
+      if (commandSet.has(trimmed)) {
+        return `<a data-command="${trimmed}" class="command-link"><code>${trimmed}</code></a>`;
+      }
+      return match;
+    });
+  }
+
+  /**
    * Format a tag as a clickable button
    */
   private static formatClickableTag(tag: string, command: 'portfolio' | 'blog' | 'posts'): string {

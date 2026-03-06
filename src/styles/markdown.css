@@ -213,6 +213,17 @@
   outline-offset: 2px;
 }
 
+/* Clickable command link styles */
+.markdown-output .command-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.markdown-output .command-link:hover code {
+  text-shadow: 0 0 8px var(--terminal-accent);
+  background: var(--terminal-accent-15);
+}
+
 /* Responsive images */
 .markdown-output img {
   max-width: 100%;
