@@ -32,6 +32,9 @@ export class Terminal {
   private promptFormatter: PromptFormatter;
   private router?: IRouter;
   private screensaverManager?: ScreensaverManager;
+  private isFullscreen = false;
+  private fullscreenExitHandler: (() => void) | null = null;
+  private fullscreenExitCommand: string | null = null;
 
   constructor(
     private dispatcher: CommandDispatcher,
@@ -350,6 +353,11 @@ export class Terminal {
       this.output.clear();
     }
 
+    // Handle fullscreen mode (hide header/nav)
+    if (result.fullscreen) {
+      this.enterFullscreen(result.fullscreenExitCommand, result.fullscreenDuration);
+    }
+
     // Handle clear command specially
     if (result.output === COMMAND_SIGNALS.CLEAR_SCREEN) {
       this.output.clear();
@@ -382,6 +390,20 @@ export class Terminal {
           this.output.performScrollBehavior(result.scrollBehavior);
         });
       }
+    }
+
+    // Handle scheduled follow-up command (e.g., reboot → boot)
+    if (result.scheduledCommand) {
+      const { command, delayMs, clearBefore } = result.scheduledCommand;
+      setTimeout(() => {
+        // Reset fullscreen state so the scheduled command can re-enter
+        // with its own settings (e.g., boot sets fullscreenDuration)
+        this.resetFullscreen();
+        if (clearBefore) {
+          this.output.clear();
+        }
+        void this.executeCommand(command, true);
+      }, delayMs);
     }
   }
 
@@ -478,6 +500,107 @@ export class Terminal {
   clearScreensaver(): void {
     this.stopScreensaverAnimations();
     this.output.clearScreensaverOutput();
+  }
+
+  /**
+   * Enter fullscreen mode by hiding header and nav.
+   * Sets up listener to exit on user interaction.
+   * @param exitCommand Optional command to execute when exiting fullscreen
+   * @param duration Optional duration in ms to auto-exit fullscreen
+   */
+  private enterFullscreen(exitCommand?: string, duration?: number): void {
+    if (this.isFullscreen) return;
+
+    this.isFullscreen = true;
+    this.fullscreenExitCommand = exitCommand ?? null;
+
+    const header = document.getElementById('terminal-header');
+    const nav = document.getElementById('terminal-nav');
+    const inputLine = document.getElementById('terminal-input-line');
+
+    header?.classList.add('fullscreen-hidden');
+    nav?.classList.add('fullscreen-hidden');
+    inputLine?.classList.add('fullscreen-hidden');
+
+    // Create exit handler that removes itself after first interaction
+    this.fullscreenExitHandler = () => {
+      this.exitFullscreen();
+    };
+
+    // Delay adding listeners to avoid the Enter key that triggered the command
+    // from immediately exiting fullscreen mode
+    setTimeout(() => {
+      if (!this.isFullscreen || !this.fullscreenExitHandler) return;
+
+      // Listen for any user interaction to exit fullscreen
+      // Use { once: true } so handlers auto-remove after firing
+      document.addEventListener('keydown', this.fullscreenExitHandler, { once: true });
+      document.addEventListener('click', this.fullscreenExitHandler, { once: true });
+      document.addEventListener('touchstart', this.fullscreenExitHandler, { once: true });
+      document.addEventListener('wheel', this.fullscreenExitHandler, { once: true });
+    }, 100);
+
+    // Auto-exit fullscreen after specified duration
+    if (duration !== undefined) {
+      setTimeout(() => {
+        this.exitFullscreen();
+      }, duration);
+    }
+  }
+
+  /**
+   * Reset fullscreen state and clean up listeners without restoring UI.
+   * Used when transitioning between fullscreen commands (e.g., reboot → boot).
+   */
+  private resetFullscreen(): void {
+    this.isFullscreen = false;
+    this.fullscreenExitCommand = null;
+    if (this.fullscreenExitHandler) {
+      document.removeEventListener('keydown', this.fullscreenExitHandler);
+      document.removeEventListener('click', this.fullscreenExitHandler);
+      document.removeEventListener('touchstart', this.fullscreenExitHandler);
+      document.removeEventListener('wheel', this.fullscreenExitHandler);
+      this.fullscreenExitHandler = null;
+    }
+  }
+
+  /**
+   * Exit fullscreen mode by restoring header and nav.
+   * Cleans up interaction listeners and optionally executes a follow-up command.
+   */
+  private exitFullscreen(): void {
+    if (!this.isFullscreen) return;
+
+    this.isFullscreen = false;
+
+    // Capture exit command before clearing state
+    const exitCommand = this.fullscreenExitCommand;
+    this.fullscreenExitCommand = null;
+
+    const header = document.getElementById('terminal-header');
+    const nav = document.getElementById('terminal-nav');
+    const inputLine = document.getElementById('terminal-input-line');
+
+    header?.classList.remove('fullscreen-hidden');
+    nav?.classList.remove('fullscreen-hidden');
+    inputLine?.classList.remove('fullscreen-hidden');
+
+    // Clean up any remaining listeners (in case exit was called directly)
+    if (this.fullscreenExitHandler) {
+      document.removeEventListener('keydown', this.fullscreenExitHandler);
+      document.removeEventListener('click', this.fullscreenExitHandler);
+      document.removeEventListener('touchstart', this.fullscreenExitHandler);
+      document.removeEventListener('wheel', this.fullscreenExitHandler);
+      this.fullscreenExitHandler = null;
+    }
+
+    // Execute follow-up command if specified (e.g., boot after shutdown)
+    if (exitCommand) {
+      // Small delay to let the UI restore before executing the command
+      setTimeout(() => {
+        void this.executeCommand(exitCommand, true);
+      }, 100);
+    }
   }
 
   /**

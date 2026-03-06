@@ -74,12 +74,17 @@ function getBootSequence(fast: boolean): BootLine[] {
 }
 
 /**
- * Generate HTML for boot sequence with staggered animation delays
+ * Generate HTML for boot sequence with staggered animation delays.
+ * Returns the HTML and the delay (ms) when the welcome line appears.
  */
-export function generateBootHtml(fast: boolean, startDelay = 0): string {
+export function generateBootHtml(
+  fast: boolean,
+  startDelay = 0
+): { html: string; welcomeDelay: number } {
   const sequence = getBootSequence(fast);
   const baseDelay = fast ? 80 : 120; // ms between lines
 
+  let welcomeDelay = 0;
   const lines = sequence.map((line, index) => {
     const delay = startDelay + index * baseDelay;
     const cssClass = `boot-line boot-line-${line.type}`;
@@ -89,10 +94,14 @@ export function generateBootHtml(fast: boolean, startDelay = 0): string {
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
+    if (line.type === 'welcome') {
+      welcomeDelay = delay;
+    }
+
     return `<div class="${cssClass}" style="animation-delay: ${delay}ms;">${escapedText}</div>`;
   });
 
-  return lines.join('\n');
+  return { html: lines.join('\n'), welcomeDelay };
 }
 
 /**
@@ -128,7 +137,7 @@ Note: Messages appear with timed animation. Scroll or type to stop.`,
     }
 
     const fast = cmdArgs.hasFlag('fast');
-    const bootHtml = generateBootHtml(fast);
+    const { html: bootHtml, welcomeDelay } = generateBootHtml(fast);
 
     const html = `<div class="boot-sequence boot-startup" data-boot-type="boot">
 ${bootHtml}
@@ -138,6 +147,8 @@ ${bootHtml}
       output: html,
       html: true,
       clearBefore: true,
+      fullscreen: true,
+      fullscreenDuration: welcomeDelay,
       scrollBehavior: 'top',
     };
   },

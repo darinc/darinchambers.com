@@ -23,6 +23,11 @@ describe('boot command', () => {
     expect(result.error).toBeUndefined();
   });
 
+  it('should enable fullscreen mode to hide header/nav', () => {
+    const result = bootCommand.execute([]) as CommandResult;
+    expect(result.fullscreen).toBe(true);
+  });
+
   it('should contain boot-sequence class', () => {
     const result = bootCommand.execute([]) as CommandResult;
     expect(result.output).toContain('class="boot-sequence');
@@ -100,7 +105,7 @@ describe('boot command', () => {
 
   it('should escape HTML special characters (XSS prevention)', () => {
     // The boot command uses hardcoded messages, so we test the generateBootHtml function
-    const html = generateBootHtml(false);
+    const { html } = generateBootHtml(false);
     // Verify no unescaped script tags are present
     expect(html).not.toContain('<script>');
     // The HTML should properly escape any special characters
@@ -110,14 +115,15 @@ describe('boot command', () => {
 });
 
 describe('generateBootHtml', () => {
-  it('should return HTML string', () => {
-    const html = generateBootHtml(false);
+  it('should return HTML string and welcomeDelay', () => {
+    const { html, welcomeDelay } = generateBootHtml(false);
     expect(typeof html).toBe('string');
     expect(html.length).toBeGreaterThan(0);
+    expect(welcomeDelay).toBeGreaterThan(0);
   });
 
   it('should include boot-line classes', () => {
-    const html = generateBootHtml(false);
+    const { html } = generateBootHtml(false);
     expect(html).toContain('boot-line');
     expect(html).toContain('boot-line-bios');
     expect(html).toContain('boot-line-kernel');
@@ -126,14 +132,14 @@ describe('generateBootHtml', () => {
   });
 
   it('should accept startDelay parameter', () => {
-    const html = generateBootHtml(false, 5000);
+    const { html } = generateBootHtml(false, 5000);
     // First line should have 5000ms delay
     expect(html).toContain('animation-delay: 5000ms');
   });
 
   it('should calculate delays based on startDelay', () => {
     const startDelay = 3000;
-    const html = generateBootHtml(false, startDelay);
+    const { html } = generateBootHtml(false, startDelay);
 
     // Extract first delay
     const firstDelay = /animation-delay:\s*(\d+)ms/.exec(html);
@@ -142,9 +148,15 @@ describe('generateBootHtml', () => {
   });
 
   it('should produce shorter output with fast=true', () => {
-    const normalHtml = generateBootHtml(false);
-    const fastHtml = generateBootHtml(true);
+    const { html: normalHtml } = generateBootHtml(false);
+    const { html: fastHtml } = generateBootHtml(true);
 
     expect(fastHtml.length).toBeLessThan(normalHtml.length);
+  });
+
+  it('should return welcomeDelay matching the welcome line timing', () => {
+    const { welcomeDelay } = generateBootHtml(false);
+    // Full sequence: 29 lines, welcome at index 27, 120ms per line
+    expect(welcomeDelay).toBe(27 * 120);
   });
 });

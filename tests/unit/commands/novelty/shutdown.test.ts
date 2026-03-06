@@ -23,6 +23,11 @@ describe('shutdown command', () => {
     expect(result.error).toBeUndefined();
   });
 
+  it('should enable fullscreen mode to hide header/nav', () => {
+    const result = shutdownCommand.execute([]) as CommandResult;
+    expect(result.fullscreen).toBe(true);
+  });
+
   it('should contain boot-sequence class', () => {
     const result = shutdownCommand.execute([]) as CommandResult;
     expect(result.output).toContain('class="boot-sequence');

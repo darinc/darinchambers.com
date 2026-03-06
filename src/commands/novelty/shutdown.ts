@@ -115,6 +115,8 @@ ${shutdownHtml}
       output: html,
       html: true,
       clearBefore: true,
+      fullscreen: true,
+      fullscreenExitCommand: 'boot',
       scrollBehavior: 'top',
     };
   },

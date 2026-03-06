@@ -206,8 +206,12 @@ export class TerminalOutput {
 
       // Use browser-native scrollIntoView - more reliable than manual calculations
       lastCommand.scrollIntoView({ behavior: 'instant', block: 'start' });
+    } else if (commandLines.length === 1) {
+      // Single element (e.g., after clear + fullscreen content) - scroll to its start
+      const singleElement = commandLines[0] as HTMLElement;
+      singleElement.scrollIntoView({ behavior: 'instant', block: 'start' });
     } else {
-      // Fallback to bottom if we can't find the command
+      // Fallback to bottom if we can't find any content
       this.scrollToBottom();
     }
   }
