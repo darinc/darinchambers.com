@@ -225,6 +225,46 @@
   }
 }
 
+@keyframes make-brew-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.make-container {
+  line-height: 1.4;
+}
+
+.make-line {
+  opacity: 0;
+  animation: boot-line-appear 0.05s ease forwards;
+}
+
+.make-progress-track {
+  display: inline;
+}
+
+.make-progress-track::before {
+  content: '[';
+}
+
+.make-progress-track::after {
+  content: ']';
+}
+
+.make-progress-bar {
+  display: inline-block;
+  width: 0%;
+  max-width: 20ch;
+  height: 1em;
+  vertical-align: text-top;
+  background: var(--terminal-accent);
+  animation: make-brew-fill 2s ease-in forwards;
+}
+
 @keyframes boot-overlay-appear {
   from {
     opacity: 0;

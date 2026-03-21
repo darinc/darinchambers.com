@@ -1,6 +1,6 @@
 # Darin Chambers - Terminal Portfolio
 
-[![Version](https://img.shields.io/badge/version-0.26.2-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.26.3-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
@@ -79,7 +79,7 @@ settings font-size 16    # Adjust font size
 ```
 darinchambers.com/
 ├── src/
-│   ├── commands/        # 37 command implementations
+│   ├── commands/        # 40 command implementations
 │   ├── components/      # UI components
 │   ├── content/         # Markdown content (blog, portfolio)
 │   ├── utils/           # Parsers, managers, renderers

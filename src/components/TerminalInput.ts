@@ -236,6 +236,10 @@ export class TerminalInput {
     this.fileSystem = fileSystem;
   }
 
+  setInputType(type: 'text' | 'password'): void {
+    this.inputElement.type = type;
+  }
+
   getHistory(): string[] {
     return [...this.history];
   }

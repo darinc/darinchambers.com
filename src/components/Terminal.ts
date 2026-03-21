@@ -32,6 +32,7 @@ export class Terminal {
   private promptFormatter: PromptFormatter;
   private router?: IRouter;
   private screensaverManager?: ScreensaverManager;
+  private inputInterceptor: ((value: string) => void | Promise<void>) | null = null;
   private isFullscreen = false;
   private fullscreenExitHandler: (() => void) | null = null;
   private fullscreenExitCommand: string | null = null;
@@ -313,6 +314,17 @@ export class Terminal {
 
   private setupInputHandler(): void {
     this.input.onSubmit(async (value) => {
+      // Check for input interceptor (e.g., password prompt for sudo)
+      if (this.inputInterceptor) {
+        const interceptor = this.inputInterceptor;
+        this.inputInterceptor = null;
+        this.input.clear();
+        // Do NOT echo input (it's a password) or add to history
+        await interceptor(value.trim());
+        setTimeout(() => this.input.focus(true), 100);
+        return;
+      }
+
       const trimmedValue = value.trim();
 
       // Clear input immediately (before async operations)
@@ -466,6 +478,37 @@ export class Terminal {
   setCurrentPath(path: string): void {
     this.currentPath = path;
     this.updatePrompt();
+  }
+
+  setInputInterceptor(handler: ((value: string) => void | Promise<void>) | null): void {
+    this.inputInterceptor = handler;
+  }
+
+  writeOutput(text: string): void {
+    this.output.write(text);
+  }
+
+  writeError(text: string): void {
+    this.output.writeError(text);
+  }
+
+  /**
+   * Display a CommandResult using the full rendering pipeline
+   * (handles HTML, errors, scroll behavior, etc.)
+   */
+  showResult(result: CommandResult): void {
+    this.displayResult(result);
+  }
+
+  /**
+   * Show or hide the input line (prompt + input field).
+   * Used by commands that run animations and want to hide the prompt.
+   */
+  setInputLineVisible(visible: boolean): void {
+    const inputLine = document.getElementById('terminal-input-line');
+    if (inputLine) {
+      inputLine.style.display = visible ? '' : 'none';
+    }
   }
 
   focus(force = false): void {

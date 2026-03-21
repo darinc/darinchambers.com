@@ -8,10 +8,12 @@ import { createAliasCommand } from './commands/core/alias';
 import { dateCommand } from './commands/core/date';
 import { echoCommand } from './commands/core/echo';
 import { createEnvCommand } from './commands/core/env';
+import { createExitCommand } from './commands/core/exit';
 import { createExportCommand } from './commands/core/export';
 import { createHistoryCommand } from './commands/core/history';
 import { createManCommand } from './commands/core/man';
 import { createRenderCommand } from './commands/core/render';
+import { createSudoCommand } from './commands/core/sudo';
 import { createUnaliasCommand } from './commands/core/unalias';
 import { createWhichCommand } from './commands/core/which';
 import { createWhoamiCommand } from './commands/core/whoami';
@@ -36,6 +38,7 @@ import { ddateCommand } from './commands/novelty/ddate';
 import { figletCommand } from './commands/novelty/figlet';
 import { createLifeCommand } from './commands/novelty/life';
 import { lolcatCommand } from './commands/novelty/lolcat';
+import { createMakeCommand } from './commands/novelty/make';
 import { createMatrixCommand } from './commands/novelty/matrix';
 import { rebootCommand } from './commands/novelty/reboot';
 import { shutdownCommand } from './commands/novelty/shutdown';
@@ -243,12 +246,19 @@ const exportCommand = createExportCommand(envVarManager);
 // Create novelty commands
 const matrixCommand = createMatrixCommand(themeManager);
 const lifeCommand = createLifeCommand(themeManager);
+const makeCommand = createMakeCommand(terminal);
 
 // Create which command
 const whichCommand = createWhichCommand(dispatcher, aliasManager);
 
 // Create man command
 const manCommand = createManCommand(dispatcher);
+
+// Create sudo and exit commands
+const sudoCommand = createSudoCommand(terminal, executor);
+const exitCommand = createExitCommand(terminal, envVarManager, fileSystem, (path) =>
+  terminal.setCurrentPath(path)
+);
 
 terminal.registerCommands([
   helpCommand,
@@ -288,6 +298,9 @@ terminal.registerCommands([
   bsodCommand,
   whichCommand,
   manCommand,
+  sudoCommand,
+  exitCommand,
+  makeCommand,
 ]);
 
 // Set up navigation items

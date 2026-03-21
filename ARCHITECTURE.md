@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-**Last Updated:** 2026-03-21 (v0.26.2)
+**Last Updated:** 2026-03-21 (v0.26.3)
 
 ## Table of Contents
 
@@ -128,7 +128,7 @@ interface Command {
 - Supports both sync and async execution
 - Pipeline support via stdin parameter
 
-**Example**: All 37 commands implement this interface (ls, cd, cat, about, blog, etc.)
+**Example**: All 40 commands implement this interface (ls, cd, cat, about, blog, etc.)
 
 ### 2. Dependency Injection ✅
 

@@ -137,8 +137,77 @@ export class FileSystemInitializer {
     const root = this.createDirectoryNode('');
     const rootChildren = root.children!;
 
-    // /root directory
-    rootChildren.set('root', this.createDirectoryNode('root'));
+    // /root directory (restricted)
+    const rootDir = this.createDirectoryNode('root');
+    rootDir.permissions = 'drwx------';
+    rootDir.owner = 'root';
+    rootChildren.set('root', rootDir);
+
+    rootDir.children!.set(
+      '.bashrc',
+      this.createFileNode(
+        '.bashrc',
+        `# /root/.bashrc
+# TODO: fix the thing
+# TODO: also fix the other thing
+# TODO: figure out what "the thing" was
+
+export PS1='\\u@\\h:\\w# '
+alias please='sudo'
+alias yolo='rm -rf / --no-preserve-root'  # DO NOT RUN
+alias coffee='echo "brewing..."'
+
+# Note to self: stop SSHing into prod at 2am
+`
+      )
+    );
+    rootDir.children!.set(
+      '.bash_history',
+      this.createFileNode(
+        '.bash_history',
+        `ls
+cd /var/log
+tail -f syslog
+sudo systemctl restart nginx
+sudo systemctl restart nginx
+sudo systemctl restart nginx
+why-is-this-not-working
+man patience
+echo "I should go to bed"
+uptime
+coffee
+echo "one more fix..."
+git push --force origin main
+git push --force origin main
+git reflog
+echo "thank god for reflog"
+history -c
+`
+      )
+    );
+    rootDir.children!.set(
+      'notes.txt',
+      this.createFileNode(
+        'notes.txt',
+        `Admin Notes
+===========
+1. The portfolio site runs on vibes and vanilla TypeScript
+2. No frameworks were harmed in the making of this website
+3. If you're reading this, you figured out the password
+   (it was on the sticky note, wasn't it?)
+4. Congratulations, you have root access to a website
+   that runs entirely in your browser.
+5. Remember: with great power comes great responsibility.
+   Also, there's nothing destructive you can actually do here.
+   But it's fun to pretend.
+- Darin
+`
+      )
+    );
+    // Set root ownership on /root files
+    for (const node of rootDir.children!.values()) {
+      node.owner = 'root';
+    }
 
     // /home directory
     const home = this.createDirectoryNode('home');
@@ -164,6 +233,24 @@ Type 'cd /home/darin' to explore more.
     // /home/darin directory with easter eggs
     const darin = this.createDirectoryNode('darin');
     home.children!.set('darin', darin);
+    darin.children!.set(
+      '.post-it',
+      this.createFileNode(
+        '.post-it',
+        `=============================
+    STICKY NOTE - DO NOT LOSE
+=============================
+
+WiFi: CoffeeShop5G
+Netflix: darin@email.com / password123
+Server root: hunter2
+Spotify: nice try
+AWS Console: ... I should really use a password manager
+
+Remember: Delete this file before anyone finds it.
+`
+      )
+    );
     darin.children!.set(
       '.secret',
       this.createFileNode(
@@ -295,6 +382,9 @@ Type 'blog' to read posts.
     bin.children!.set('render', this.createFileNode('render', '[Core command: render]'));
     bin.children!.set('which', this.createFileNode('which', '[Core command: which]'));
     bin.children!.set('man', this.createFileNode('man', '[Core command: man]'));
+    bin.children!.set('sudo', this.createFileNode('sudo', '[Core command: sudo]'));
+    bin.children!.set('exit', this.createFileNode('exit', '[Core command: exit]'));
+    bin.children!.set('make', this.createFileNode('make', '[Novelty command: make]'));
 
     // Novelty commands
     bin.children!.set('ddate', this.createFileNode('ddate', '[Novelty command: ddate]'));
