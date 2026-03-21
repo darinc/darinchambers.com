@@ -14,7 +14,7 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 - No framework - vanilla JavaScript/TypeScript
 - Dependencies: marked (markdown), figlet (ASCII art), DOMPurify (XSS protection)
 
-**Bundle Size:** ~108KB total (gzipped: ~108KB) (gzipped)
+**Bundle Size:** ~112KB total (gzipped: ~112KB) (gzipped)
 **Test Coverage:** 80%+ target (90%+ current, 60+ test files)
 **Deployment:** GitHub Pages
 
@@ -81,7 +81,7 @@ Terminal (orchestrator)
 ├── ScreensaverManager (idle detection, screensaver activation)
 └── CommandExecutor (parse, expand aliases/vars, execute)
     └── CommandDispatcher (route to specific command)
-        └── Command implementations (34 commands)
+        └── Command implementations (37 commands)
 ```
 
 **State Management:**
@@ -140,7 +140,7 @@ Implementation: `PipelineParser.ts` splits by `|`, passes stdout as stdin to nex
 ```
 src/
 ├── animations/        # Screensaver animations (Matrix rain, etc.)
-├── commands/          # Command implementations (34 commands)
+├── commands/          # Command implementations (37 commands)
 │   ├── core/         # Core terminal commands (echo, date, env, export, etc.)
 │   ├── fs/           # File system commands (ls, cd, pwd, cat, tree)
 │   ├── local/        # Content commands (about, blog, portfolio, contact, settings)
@@ -211,9 +211,21 @@ import { MarkdownService } from './utils/MarkdownService';
    ]);
    ```
 
-3. **Add tests** in `tests/unit/commands/category/mycommand.test.ts`
+3. **Add to virtual file system** in `src/utils/fs/FileSystemInitializer.ts` so `which` and `ls /usr/bin/` work:
+   - Core/fs/novelty commands → add to `/usr/bin/` section:
+     ```typescript
+     bin.children!.set('mycommand', this.createFileNode('mycommand', '[Core command: mycommand]'));
+     ```
+   - Local/content commands → add to `/usr/local/bin/` section:
+     ```typescript
+     localBin.children!.set('mycommand', this.createFileNode('mycommand', '[Custom command: mycommand]'));
+     ```
 
-4. **Update help** in `src/content/help.md` (if user-facing)
+4. **Implement `--help` flag** so `man <command>` and `help <command>` work. Handle via `CommandArgs.hasFlag('help')` and return Usage, Description, Options, and Examples sections.
+
+5. **Add tests** in `tests/unit/commands/category/mycommand.test.ts`
+
+6. **Update help** in `src/content/help.md` (if user-facing)
 
 ### Adding Blog Posts
 

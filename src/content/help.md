@@ -6,6 +6,7 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 
 - **`help`** - Show this help message
 - **`help <command>`** - Show detailed help for a specific command
+- **`man`** - Display manual pages for commands
 - **`<command> --help`** - Show detailed help for any command
 
 **Example:** `help ls` or `ls --help`
@@ -28,7 +29,9 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`pwd`** - Print working directory
 - **`cat`** - Display file contents
 - **`tree`** - Show directory structure
+- **`mkdir`** - Create directories
 - **`rm`** - Remove files or directories
+- **`rmdir`** - Remove empty directories
 - **`render`** - Render markdown files
 
 ### Core Utilities

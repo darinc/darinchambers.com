@@ -164,6 +164,10 @@ export class FileSystemService implements IFileSystem {
       name: fileName,
       type: 'file',
       content,
+      size: content.length,
+      permissions: '-rw-r--r--',
+      owner: 'darin',
+      modifiedTime: new Date(),
     };
     current.children!.set(fileName, fileNode);
   }

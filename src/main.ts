@@ -10,6 +10,7 @@ import { echoCommand } from './commands/core/echo';
 import { createEnvCommand } from './commands/core/env';
 import { createExportCommand } from './commands/core/export';
 import { createHistoryCommand } from './commands/core/history';
+import { createManCommand } from './commands/core/man';
 import { createRenderCommand } from './commands/core/render';
 import { createUnaliasCommand } from './commands/core/unalias';
 import { createWhichCommand } from './commands/core/which';
@@ -17,8 +18,10 @@ import { createWhoamiCommand } from './commands/core/whoami';
 import { createCatCommand } from './commands/fs/cat';
 import { createCdCommand } from './commands/fs/cd';
 import { createLsCommand } from './commands/fs/ls';
+import { createMkdirCommand } from './commands/fs/mkdir';
 import { createPwdCommand } from './commands/fs/pwd';
 import { createRmCommand } from './commands/fs/rm';
+import { createRmdirCommand } from './commands/fs/rmdir';
 import { createTreeCommand } from './commands/fs/tree';
 import { createAboutCommand } from './commands/local/about';
 import { createBlogCommand } from './commands/local/blog';
@@ -200,7 +203,9 @@ const cdCommand = createCdCommand(
 const pwdCommand = createPwdCommand(fileSystem);
 const catCommand = createCatCommand(fileSystem);
 const treeCommand = createTreeCommand(fileSystem);
+const mkdirCommand = createMkdirCommand(fileSystem);
 const rmCommand = createRmCommand(fileSystem, dispatcher);
+const rmdirCommand = createRmdirCommand(fileSystem);
 
 // Create history command
 const historyCommand = createHistoryCommand(terminal.getInput());
@@ -242,6 +247,9 @@ const lifeCommand = createLifeCommand(themeManager);
 // Create which command
 const whichCommand = createWhichCommand(dispatcher, aliasManager);
 
+// Create man command
+const manCommand = createManCommand(dispatcher);
+
 terminal.registerCommands([
   helpCommand,
   clearCommand,
@@ -258,7 +266,9 @@ terminal.registerCommands([
   pwdCommand,
   catCommand,
   treeCommand,
+  mkdirCommand,
   rmCommand,
+  rmdirCommand,
   renderCommand,
   aboutCommand,
   portfolioCommand,
@@ -277,6 +287,7 @@ terminal.registerCommands([
   rebootCommand,
   bsodCommand,
   whichCommand,
+  manCommand,
 ]);
 
 // Set up navigation items

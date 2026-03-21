@@ -289,9 +289,12 @@ Type 'blog' to read posts.
     bin.children!.set('pwd', this.createFileNode('pwd', '[Core command: pwd]'));
     bin.children!.set('cat', this.createFileNode('cat', '[Core command: cat]'));
     bin.children!.set('tree', this.createFileNode('tree', '[Core command: tree]'));
+    bin.children!.set('mkdir', this.createFileNode('mkdir', '[Core command: mkdir]'));
     bin.children!.set('rm', this.createFileNode('rm', '[Core command: rm]'));
+    bin.children!.set('rmdir', this.createFileNode('rmdir', '[Core command: rmdir]'));
     bin.children!.set('render', this.createFileNode('render', '[Core command: render]'));
     bin.children!.set('which', this.createFileNode('which', '[Core command: which]'));
+    bin.children!.set('man', this.createFileNode('man', '[Core command: man]'));
 
     // Novelty commands
     bin.children!.set('ddate', this.createFileNode('ddate', '[Novelty command: ddate]'));
