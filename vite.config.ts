@@ -9,9 +9,9 @@ export default defineConfig({
   },
   // Development server configuration
   server: {
-    port: 5173,
+    port: 5175,
     // SPA fallback - serve index.html for all routes during development
     // This is enabled by default in Vite, but making it explicit
-    allowedHosts: ['5464e8875bf3.ngrok-free.app'],
+    // allowedHosts: ['5464e8875bf3.ngrok-free.app'],
   },
 });

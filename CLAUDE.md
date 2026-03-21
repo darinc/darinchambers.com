@@ -24,7 +24,7 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 
 ```bash
 # Development
-pnpm dev              # Start dev server on http://localhost:5173
+pnpm dev              # Start dev server on http://localhost:5175
 pnpm dev:host         # Start dev server with network access
 
 # Building
@@ -331,7 +331,7 @@ tags: ['tag1', 'tag2']
 
 ### Running the Development Server
 
-The dev server runs on port 5173. If you need to access it from another device on the network, use `pnpm dev:host`.
+The dev server runs on port 5175. If you need to access it from another device on the network, use `pnpm dev:host`.
 
 ### Building for Production
 

@@ -1,6 +1,6 @@
 # Darin Chambers - Terminal Portfolio
 
-[![Version](https://img.shields.io/badge/version-0.26.3-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.26.4-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
@@ -40,7 +40,7 @@ pnpm install
 pnpm dev
 ```
 
-Visit `http://localhost:5173`
+Visit `http://localhost:5175`
 
 ### Development Commands
 
