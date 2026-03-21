@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.27.0] - 2026-03-21
+
+### Added
+- Build-time prerendering for SEO and AI crawler access — generates static HTML pages with semantic content, per-page meta tags, Open Graph, Twitter Cards, and JSON-LD structured data
+- Auto-generated sitemap.xml from discovered content at build time
+- Hidden semantic HTML (`seo-content` class) so crawlers get real content while humans get the terminal experience
+
+### Removed
+- Static `public/sitemap.xml` replaced by auto-generated version
+
 ## [0.26.5] - 2026-03-21
 
 ### Changed

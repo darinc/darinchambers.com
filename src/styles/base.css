@@ -34,3 +34,16 @@ body.border-enabled {
 .fullscreen-hidden {
   display: none !important;
 }
+
+/* Hidden semantic content for SEO / screen readers */
+.seo-content {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

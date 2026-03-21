@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-**Last Updated:** 2026-03-21 (v0.26.4)
+**Last Updated:** 2026-03-21 (v0.27.0)
 
 ## Table of Contents
 
@@ -914,7 +914,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'
 
 ### Bundle Optimization
 
-- **Bundle Size**: ~112KB total (110KB JS, 11KB CSS) - gzipped and minified
+- **Bundle Size**: ~114KB total (110KB JS, 11KB CSS) - gzipped and minified
 - **Code Splitting**: Not needed (single-page application with small bundle)
 - **Tree Shaking**: Enabled via Vite (ES modules)
 - **Minification**: esbuild minification

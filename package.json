@@ -1,12 +1,12 @@
 {
   "name": "darinchambers.com",
-  "version": "0.26.5",
+  "version": "0.27.0",
   "description": "Terminal-inspired personal website showcasing AI and software engineering expertise",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:host": "vite --host",
-    "build": "tsc --project tsconfig.build.json && vite build",
+    "build": "tsc --project tsconfig.build.json && vite build && node scripts/prerender.js",
     "preview": "vite preview",
     "deploy": "pnpm build && gh-pages -d dist",
     "test": "vitest",
