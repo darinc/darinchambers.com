@@ -402,7 +402,7 @@ Description:
 Examples:
   about                # Show bio and background`};try{const i=o.readFile(Ee.CONTENT_ABOUT),s=K.render(i);return{output:ze.makeCommandsClickable(s,e),html:!0,scrollBehavior:"top"}}catch(i){return{output:i instanceof Error?i.message:String(i),error:!0}}}}}function Ss(o){if(typeof o!="object"||o===null)return!1;const e=o;return typeof e.title=="string"&&typeof e.date=="string"&&typeof e.summary=="string"&&Array.isArray(e.tags)&&e.tags.every(t=>typeof t=="string")}class _o{static parseFrontmatter(e){const t=e.split(`
 `);if(t[0]?.trim()!=="---")throw new Error("Invalid frontmatter: must start with ---");let n=-1;for(let a=1;a<t.length;a++)if(t[a].trim()==="---"){n=a;break}if(n===-1)throw new Error("Invalid frontmatter: no closing ---");const r=t.slice(1,n),i=t.slice(n+1),s={};for(const a of r){const l=a.indexOf(":");if(l===-1)continue;const d=a.substring(0,l).trim(),u=a.substring(l+1).trim();if(u.startsWith("[")&&u.endsWith("]")){const $=u.substring(1,u.length-1);s[d]=$.split(",").map(f=>f.trim().replace(/^["']|["']$/g,"")).filter(f=>f.length>0)}else s[d]=u.replace(/^["']|["']$/g,"")}if(!Ss(s)){const a=[];throw s.title||a.push("title"),s.date||a.push("date"),s.summary||a.push("summary"),Array.isArray(s.tags)||a.push("tags"),new Error(`Invalid blog frontmatter: missing or invalid fields: ${a.join(", ")}`)}return{frontmatter:s,markdown:i.join(`
-`).trim()}}static parseBlogPost(e,t){const{frontmatter:n,markdown:r}=this.parseFrontmatter(t);return{id:e.replace(/^\d{4}-\d{2}-\d{2}-/,"").replace(/\.md$/,""),title:n.title,date:n.date,summary:n.summary,content:r,tags:n.tags}}static getIdFromFilename(e){return e.replace(/^\d{4}-\d{2}-\d{2}-/,"").replace(/\.md$/,"")}}function vs(o){return{name:"blog",description:"List and read blog posts",execute:(e,t)=>{const n=new W(e);if(n.hasFlag("help"))return{output:`Usage: blog [options] [post-id|number]
+`).trim()}}static parseBlogPost(e,t){const{frontmatter:n,markdown:r}=this.parseFrontmatter(t);return{id:e.replace(/^\d{4}-\d{2}-\d{2}-(\d{2}-)?/,"").replace(/\.md$/,""),title:n.title,date:n.date,summary:n.summary,content:r,tags:n.tags}}static getIdFromFilename(e){return e.replace(/^\d{4}-\d{2}-\d{2}-(\d{2}-)?/,"").replace(/\.md$/,"")}}function vs(o){return{name:"blog",description:"List and read blog posts",execute:(e,t)=>{const n=new W(e);if(n.hasFlag("help"))return{output:`Usage: blog [options] [post-id|number]
 
 Description:
   List and read blog posts
@@ -8362,6 +8362,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.27.3] - 2026-06-13
+
+### Changed
+- Blog post URLs no longer carry the numeric sequence prefix (e.g. \`/blog/01-foo\` is now \`/blog/foo\`)
+
+### Fixed
+- Prerendering fails the build loudly when an HTML injection marker is missing, instead of silently shipping pages without meta tags or SEO content
+- A single malformed content file is now skipped with a warning rather than aborting the whole prerender build
+- The empty \`/notes\` section is no longer prerendered or listed in the sitemap until a note exists
+
+### Removed
+- Unused \`sanitizeHtmlCustom\` helper
 
 ## [0.27.2] - 2026-06-13
 
