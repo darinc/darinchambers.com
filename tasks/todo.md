@@ -164,9 +164,25 @@ tab-trap (5+updated). Coverage 80.96% branch, 1887 passing. Shipped as v0.27.2; 
 
 Shipped as v0.27.3. Coverage 80.85% branch, 1889 passing; type-check/lint/format/build all green.
 
-**DEFERRED — needs owner decision (2.7a):** sort blog by frontmatter date. The love-letter post's filename
-date (11-14) ≠ its frontmatter date (11-16); "sort by frontmatter date" would silently treat 11-16 as
-authoritative and move it above the 11-15 post. Which date is correct is a content call — left for the owner.
+- **2.7a** RESOLVED: owner confirmed 11-14 is authoritative, so the love-letter post's frontmatter date was
+  corrected to 2025-11-14 (filename = frontmatter); no sort-logic change needed.
 
-**Remaining Phase 2 (larger refactors, not started):** 2.1 dead markdown renderer (DECISION: delete vs keep),
-2.2 unify frontmatter parsers, 2.3 collapse content commands, 2.4 slim Terminal.ts. Phase 3 docs truth-up.
+### Phase 2 (refactors) — DONE & verified (2026-06-13)
+
+- **2.2** Shared frontmatter helpers in `src/utils/frontmatter.ts`; Blog/Portfolio/Post parsers now delegate
+  the `---` scan, value parsing, and date-prefix id extraction. (frontmatter.ts 100% covered.)
+- **2.3** `createContentCommand` factory shares the blog+notes flow. `portfolio` left separate on purpose
+  (order sort, ascending numbering, multi-tag filtering, tolerant parse → a shared abstraction would leak).
+- **2.4** Broke up the 698-line `Terminal.ts` (now ~446) into `FullscreenController` + `SettingsUIController`.
+  Added a FullscreenController unit test; browser-verified the settings event-delegation (theme switch
+  applied `--terminal-accent: #00ff99` end-to-end). Branch coverage rose to 81.75%.
+
+Refactors shipped without version bumps (behavior-preserving). All CI green.
+
+**Still open:**
+
+- **2.1 dead markdown renderer** — logged as **GitHub issue #1** (delete vs keep as documented fallback);
+  awaiting owner decision.
+- **Phase 3 docs truth-up** — reconcile bundle numbers (note: <100KB target dropped by owner), fix
+  SECURITY.md "0 vulnerabilities", CLAUDE.md WCAG/contrast/presets-location claims, pnpm v9→v10 in workflows.
+- Minor: dead-code/UX quirk in `Router.getPathForCommand:296`; `dist` missing `favicon.ico`.
