@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.27.2] - 2026-06-13
+
+### Accessibility
+- Honor the `prefers-reduced-motion` setting: the auto-firing screensaver is suppressed, the matrix rain renders a static frame, and non-essential CSS animations/transitions are neutralized
+- Tab and Shift+Tab can now move focus out of the command input instead of being trapped (Tab is only captured for completion when there is text to complete)
+- Added visible keyboard focus indicators to all interactive settings controls (theme buttons, sliders, checkboxes, selects, color pickers, reset button, and collapsible sections)
+
 ## [0.27.1] - 2026-06-13
 
 ### Fixed

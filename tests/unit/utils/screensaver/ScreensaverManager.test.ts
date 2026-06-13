@@ -89,6 +89,45 @@ describe('ScreensaverManager', () => {
     });
   });
 
+  describe('Reduced motion', () => {
+    afterEach(() => {
+      // Restore jsdom default (no matchMedia) so other suites are unaffected
+      delete (window as { matchMedia?: unknown }).matchMedia;
+    });
+
+    function mockReducedMotion(matches: boolean): void {
+      (window as { matchMedia?: unknown }).matchMedia = vi.fn((query: string) => ({
+        matches: query.includes('prefers-reduced-motion') ? matches : false,
+        media: query,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      }));
+    }
+
+    it('reports disabled when the user prefers reduced motion, even if the setting is on', () => {
+      settingsManager.setScreensaverEnabled(true);
+      mockReducedMotion(true);
+
+      expect(screensaverManager.isEnabled()).toBe(false);
+    });
+
+    it('still respects the setting when reduced motion is not requested', () => {
+      settingsManager.setScreensaverEnabled(true);
+      mockReducedMotion(false);
+
+      expect(screensaverManager.isEnabled()).toBe(true);
+    });
+
+    it('does not arm the idle timer under reduced motion', () => {
+      settingsManager.setScreensaverEnabled(true);
+      mockReducedMotion(true);
+
+      screensaverManager.startIdleTimer();
+
+      expect(screensaverManager.getState()).toBe('disabled');
+    });
+  });
+
   describe('Activity Recording', () => {
     it('should reset idle timer on activity', () => {
       screensaverManager.startIdleTimer();

@@ -5,6 +5,8 @@
  * This runs in the main JavaScript bundle (not stripped by sanitization).
  */
 
+import { prefersReducedMotion } from '../utils/prefersReducedMotion';
+
 interface MatrixAnimation {
   animationId: number | null;
   frameCount: number;
@@ -56,6 +58,12 @@ export function startMatrixRainAnimation(rainElement: HTMLElement): void {
   const matrixChars = rainElement.dataset.matrixChars ?? '';
   if (!matrixChars) {
     console.warn('[Matrix] No character set found in data-matrix-chars');
+    return;
+  }
+
+  // Respect reduced-motion: render the initial characters statically and skip
+  // the per-frame shuffle loop (the CSS fall/glow animations are also disabled).
+  if (prefersReducedMotion()) {
     return;
   }
 

@@ -47,3 +47,17 @@ body.border-enabled {
   white-space: nowrap;
   border: 0;
 }
+
+/* Respect users who prefer reduced motion (WCAG 2.2.2 / 2.3.3):
+   neutralize non-essential animation, infinite loops, and smooth scrolling.
+   Motion-heavy features (screensaver, matrix rain) are additionally gated in JS. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

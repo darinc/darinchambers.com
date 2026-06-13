@@ -9,6 +9,7 @@
  */
 
 import { SCREENSAVER_CONSTANTS } from '../../constants';
+import { prefersReducedMotion } from '../prefersReducedMotion';
 import type { Terminal } from '../../components/Terminal';
 import type { ScreensaverState } from '../../types/screensaver';
 import type { SettingsManager } from '../SettingsManager';
@@ -178,8 +179,15 @@ export class ScreensaverManager {
 
   /**
    * Check if screensaver is enabled
+   *
+   * The screensaver is an auto-playing, full-screen animation, so it is
+   * suppressed entirely for users who prefer reduced motion (WCAG 2.2.2),
+   * regardless of the stored setting.
    */
   isEnabled(): boolean {
+    if (prefersReducedMotion()) {
+      return false;
+    }
     return this.settingsManager.getScreensaverEnabled();
   }
 

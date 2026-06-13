@@ -30,6 +30,12 @@ export class TerminalInput {
         this.navigateHistory('down');
         break;
       case 'Tab':
+        // Avoid trapping keyboard users (WCAG 2.1.2): Shift+Tab always moves
+        // focus backward, and Tab on an empty input moves focus forward. Only
+        // consume Tab for completion when there is text to complete.
+        if (e.shiftKey || this.inputElement.value.trim() === '') {
+          return;
+        }
         e.preventDefault();
         this.handleTabCompletion();
         break;

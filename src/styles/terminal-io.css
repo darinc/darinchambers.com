@@ -128,6 +128,15 @@
   }
 }
 
+/* Under reduced motion, hold the matrix at a static frame instead of letting
+   the global reset run the fall once and fling columns off-screen. */
+@media (prefers-reduced-motion: reduce) {
+  .matrix-column,
+  .matrix-char-bright {
+    animation: none !important;
+  }
+}
+
 /* Conway's Game of Life styles */
 .life-container {
   position: relative;

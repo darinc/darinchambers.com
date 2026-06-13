@@ -197,6 +197,46 @@ describe('TerminalInput', () => {
       expect(inputElement.value).toBe('');
     });
 
+    it('should consume Tab for completion when input has text (no keyboard trap on content)', () => {
+      inputElement.value = 'cle';
+      const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+
+      inputElement.dispatchEvent(event);
+
+      // Tab is consumed (preventDefault) so it completes instead of moving focus
+      expect(event.defaultPrevented).toBe(true);
+      expect(inputElement.value).toBe('clear');
+    });
+
+    it('should NOT trap Tab when input is empty (lets focus move out)', () => {
+      inputElement.value = '';
+      const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+
+      inputElement.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it('should NOT trap Tab when input is only whitespace', () => {
+      inputElement.value = '   ';
+      const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+
+      inputElement.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it('should let Shift+Tab move focus backward even with text present', () => {
+      inputElement.value = 'cle';
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, cancelable: true });
+
+      inputElement.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(false);
+      // Shift+Tab does not trigger completion
+      expect(inputElement.value).toBe('cle');
+    });
+
     it('should do nothing when no matches', () => {
       inputElement.value = 'xyz';
 
@@ -277,8 +317,9 @@ describe('TerminalInput', () => {
       expect(preventDefaultSpy).toHaveBeenCalled();
     });
 
-    it('should prevent default on Tab', () => {
+    it('should prevent default on Tab when there is text to complete', () => {
       terminalInput.setAvailableCommands(['test']);
+      inputElement.value = 'te';
 
       const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
       const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
@@ -286,6 +327,18 @@ describe('TerminalInput', () => {
       inputElement.dispatchEvent(event);
 
       expect(preventDefaultSpy).toHaveBeenCalled();
+    });
+
+    it('should NOT prevent default on Tab with an empty input (no keyboard trap)', () => {
+      terminalInput.setAvailableCommands(['test']);
+      inputElement.value = '';
+
+      const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+      inputElement.dispatchEvent(event);
+
+      expect(preventDefaultSpy).not.toHaveBeenCalled();
     });
   });
 
