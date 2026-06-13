@@ -3,8 +3,8 @@ import { stopAllMatrixAnimations } from '../animations/matrixRain';
 import { COMMAND_SIGNALS } from '../constants';
 import { initEmailProtection } from '../utils/EmailProtection';
 import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
-import { sanitizeHtml } from '../utils/sanitizeHtml';
-import { generateSettingsUI } from './SettingsUI';
+import { FullscreenController } from './FullscreenController';
+import { SettingsUIController } from './SettingsUIController';
 import { TerminalInput } from './TerminalInput';
 import { TerminalOutput } from './TerminalOutput';
 import type { Command, CommandResult } from '../commands/Command';
@@ -33,9 +33,8 @@ export class Terminal {
   private router?: IRouter;
   private screensaverManager?: ScreensaverManager;
   private inputInterceptor: ((value: string) => void | Promise<void>) | null = null;
-  private isFullscreen = false;
-  private fullscreenExitHandler: (() => void) | null = null;
-  private fullscreenExitCommand: string | null = null;
+  private readonly fullscreen: FullscreenController;
+  private readonly settingsUI: SettingsUIController;
 
   constructor(
     private dispatcher: CommandDispatcher,
@@ -55,10 +54,22 @@ export class Terminal {
     this.output = new TerminalOutput(outputElement);
     this.input = new TerminalInput(inputElement, promptElement);
     this.promptFormatter = new PromptFormatter(envVarManager);
+    this.fullscreen = new FullscreenController(
+      (command) => void this.executeCommand(command, true)
+    );
+    this.settingsUI = new SettingsUIController({
+      settingsManager: this.settingsManager,
+      themeManager: this.themeManager,
+      executeCommand: (command) => void this.executeCommand(command, false),
+      getRouter: () => this.router,
+      onSettingsChanged: () => {
+        this.updatePrompt();
+        this.screensaverManager?.handleSettingsChange();
+      },
+    });
 
     this.setupInputHandler();
     this.setupClickHandler(outputElement);
-    this.setupSettingsUIHandler();
     this.setupKeyboardHandlers();
     this.setupMobileViewportHandler();
     this.updatePrompt();
@@ -150,168 +161,6 @@ export class Terminal {
     });
   }
 
-  private setupSettingsUIHandler(): void {
-    // Listen for settings commands from UI
-    document.addEventListener('terminal-command', (e: Event) => {
-      const customEvent = e as CustomEvent<string>;
-      void this.executeCommand(customEvent.detail, false);
-    });
-
-    // Event delegation for settings UI controls (replaces inline event handlers)
-    // This enables strict CSP by avoiding inline onclick/onchange handlers
-    document.addEventListener('click', (e: Event) => {
-      const target = e.target as HTMLElement;
-
-      // Handle buttons with data-command attribute
-      // Exclude navigation buttons (they have their own click handlers that should run first)
-      if (target.closest('[data-command]') && !target.closest('.nav-link')) {
-        const button = target.closest('[data-command]')!;
-        const command = button.getAttribute('data-command');
-        if (command) {
-          // Prevent default behavior for anchor tags
-          if (button.tagName === 'A') {
-            e.preventDefault();
-          }
-
-          // If we have a router and this command maps to a route, use router.navigate()
-          // to properly update URL and trigger navigation callbacks
-          if (this.router) {
-            const path = this.router.getPathForCommand(command);
-            if (path) {
-              this.router.navigate(path, false);
-              return;
-            }
-          }
-
-          // Otherwise, execute command directly
-          void this.executeCommand(command, false);
-        }
-      }
-    });
-
-    // Handle input changes (checkboxes, ranges, selects, color pickers)
-    document.addEventListener('change', (e: Event) => {
-      const target = e.target as HTMLInputElement | HTMLSelectElement;
-      const commandTemplate = target.getAttribute('data-command-template');
-      const settingType = target.getAttribute('data-setting-type');
-
-      if (!commandTemplate) return;
-
-      let command = '';
-
-      // Handle checkboxes
-      if (target instanceof HTMLInputElement && target.type === 'checkbox') {
-        command = `${commandTemplate} ${target.checked ? 'on' : 'off'}`;
-      }
-      // Handle color pickers
-      else if (target instanceof HTMLInputElement && target.type === 'color') {
-        command = `${commandTemplate} ${target.value}`;
-      }
-      // Handle range sliders
-      else if (target instanceof HTMLInputElement && target.type === 'range') {
-        command = `${commandTemplate} ${target.value}`;
-      }
-      // Handle select dropdowns (font-family needs quotes)
-      else if (target instanceof HTMLSelectElement) {
-        if (settingType === 'font-family') {
-          command = `${commandTemplate} "${target.value}"`;
-        } else {
-          command = `${commandTemplate} ${target.value}`;
-        }
-      }
-
-      if (command) {
-        void this.executeCommand(command, false);
-      }
-    });
-
-    // Handle range input updates for live value display
-    document.addEventListener('input', (e: Event) => {
-      const target = e.target as HTMLInputElement;
-
-      if (target.type === 'range') {
-        const settingType = target.getAttribute('data-setting-type');
-
-        // Update font size display
-        if (settingType === 'font-size') {
-          const displayElement = document.getElementById('font-size-value');
-          if (displayElement) {
-            displayElement.textContent = `${target.value}px`;
-          }
-        }
-        // Update animation speed display
-        else if (settingType === 'animation-speed') {
-          const displayElement = document.getElementById('animation-speed-value');
-          if (displayElement) {
-            displayElement.textContent = `${target.value}x`;
-          }
-        }
-      }
-    });
-
-    // Listen for settings changes to refresh all settings panels and update prompt
-    document.addEventListener('settings-changed', () => {
-      this.refreshSettingsPanels();
-      this.updatePrompt();
-      this.screensaverManager?.handleSettingsChange();
-    });
-  }
-
-  private refreshSettingsPanels(): void {
-    if (!this.settingsManager || !this.themeManager) {
-      return;
-    }
-
-    // Find all settings panels in the DOM
-    const panels = document.querySelectorAll('[data-settings-panel]');
-    if (panels.length === 0) {
-      return;
-    }
-
-    // Store currently focused element to restore focus after refresh
-    const wasInPanel = Array.from(panels).some((panel) => panel.contains(document.activeElement));
-
-    // Generate fresh HTML with current settings
-    const freshHTML = generateSettingsUI(this.settingsManager, this.themeManager);
-
-    // Update each panel's content (sanitize to prevent XSS)
-    panels.forEach((panel) => {
-      const cleanHTML = freshHTML
-        .replace(
-          '<aside class="settings-panel" role="complementary" aria-label="Terminal settings" data-settings-panel="true">',
-          ''
-        )
-        .replace(/<\/aside>$/, '');
-      panel.innerHTML = sanitizeHtml(cleanHTML);
-    });
-
-    // If focus was in the panel before refresh, move it to first focusable element
-    if (wasInPanel && panels.length > 0) {
-      const firstPanel = panels[0];
-      const firstFocusable = firstPanel.querySelector<HTMLElement>('button, input, select');
-      if (firstFocusable) {
-        firstFocusable.focus();
-      }
-    }
-  }
-
-  /**
-   * Focus first focusable element in newly rendered settings panel.
-   * Called after settings command output is displayed.
-   */
-  private focusSettingsPanelIfPresent(): void {
-    // Use setTimeout to wait for DOM update
-    setTimeout(() => {
-      const settingsPanel = document.querySelector('[data-settings-panel]');
-      if (settingsPanel) {
-        const firstFocusable = settingsPanel.querySelector<HTMLElement>('button, input, select');
-        if (firstFocusable) {
-          firstFocusable.focus();
-        }
-      }
-    }, 0);
-  }
-
   private setupInputHandler(): void {
     this.input.onSubmit(async (value) => {
       // Check for input interceptor (e.g., password prompt for sudo)
@@ -367,7 +216,7 @@ export class Terminal {
 
     // Handle fullscreen mode (hide header/nav)
     if (result.fullscreen) {
-      this.enterFullscreen(result.fullscreenExitCommand, result.fullscreenDuration);
+      this.fullscreen.enter(result.fullscreenExitCommand, result.fullscreenDuration);
     }
 
     // Handle clear command specially
@@ -395,7 +244,7 @@ export class Terminal {
         });
 
         // Focus settings panel if it was just rendered
-        this.focusSettingsPanelIfPresent();
+        this.settingsUI.focusPanelIfPresent();
       } else {
         // Regular text output with callback for scroll behavior
         this.output.write(result.output, undefined, () => {
@@ -410,7 +259,7 @@ export class Terminal {
       setTimeout(() => {
         // Reset fullscreen state so the scheduled command can re-enter
         // with its own settings (e.g., boot sets fullscreenDuration)
-        this.resetFullscreen();
+        this.fullscreen.reset();
         if (clearBefore) {
           this.output.clear();
         }
@@ -543,107 +392,6 @@ export class Terminal {
   clearScreensaver(): void {
     this.stopScreensaverAnimations();
     this.output.clearScreensaverOutput();
-  }
-
-  /**
-   * Enter fullscreen mode by hiding header and nav.
-   * Sets up listener to exit on user interaction.
-   * @param exitCommand Optional command to execute when exiting fullscreen
-   * @param duration Optional duration in ms to auto-exit fullscreen
-   */
-  private enterFullscreen(exitCommand?: string, duration?: number): void {
-    if (this.isFullscreen) return;
-
-    this.isFullscreen = true;
-    this.fullscreenExitCommand = exitCommand ?? null;
-
-    const header = document.getElementById('terminal-header');
-    const nav = document.getElementById('terminal-nav');
-    const inputLine = document.getElementById('terminal-input-line');
-
-    header?.classList.add('fullscreen-hidden');
-    nav?.classList.add('fullscreen-hidden');
-    inputLine?.classList.add('fullscreen-hidden');
-
-    // Create exit handler that removes itself after first interaction
-    this.fullscreenExitHandler = () => {
-      this.exitFullscreen();
-    };
-
-    // Delay adding listeners to avoid the Enter key that triggered the command
-    // from immediately exiting fullscreen mode
-    setTimeout(() => {
-      if (!this.isFullscreen || !this.fullscreenExitHandler) return;
-
-      // Listen for any user interaction to exit fullscreen
-      // Use { once: true } so handlers auto-remove after firing
-      document.addEventListener('keydown', this.fullscreenExitHandler, { once: true });
-      document.addEventListener('click', this.fullscreenExitHandler, { once: true });
-      document.addEventListener('touchstart', this.fullscreenExitHandler, { once: true });
-      document.addEventListener('wheel', this.fullscreenExitHandler, { once: true });
-    }, 100);
-
-    // Auto-exit fullscreen after specified duration
-    if (duration !== undefined) {
-      setTimeout(() => {
-        this.exitFullscreen();
-      }, duration);
-    }
-  }
-
-  /**
-   * Reset fullscreen state and clean up listeners without restoring UI.
-   * Used when transitioning between fullscreen commands (e.g., reboot → boot).
-   */
-  private resetFullscreen(): void {
-    this.isFullscreen = false;
-    this.fullscreenExitCommand = null;
-    if (this.fullscreenExitHandler) {
-      document.removeEventListener('keydown', this.fullscreenExitHandler);
-      document.removeEventListener('click', this.fullscreenExitHandler);
-      document.removeEventListener('touchstart', this.fullscreenExitHandler);
-      document.removeEventListener('wheel', this.fullscreenExitHandler);
-      this.fullscreenExitHandler = null;
-    }
-  }
-
-  /**
-   * Exit fullscreen mode by restoring header and nav.
-   * Cleans up interaction listeners and optionally executes a follow-up command.
-   */
-  private exitFullscreen(): void {
-    if (!this.isFullscreen) return;
-
-    this.isFullscreen = false;
-
-    // Capture exit command before clearing state
-    const exitCommand = this.fullscreenExitCommand;
-    this.fullscreenExitCommand = null;
-
-    const header = document.getElementById('terminal-header');
-    const nav = document.getElementById('terminal-nav');
-    const inputLine = document.getElementById('terminal-input-line');
-
-    header?.classList.remove('fullscreen-hidden');
-    nav?.classList.remove('fullscreen-hidden');
-    inputLine?.classList.remove('fullscreen-hidden');
-
-    // Clean up any remaining listeners (in case exit was called directly)
-    if (this.fullscreenExitHandler) {
-      document.removeEventListener('keydown', this.fullscreenExitHandler);
-      document.removeEventListener('click', this.fullscreenExitHandler);
-      document.removeEventListener('touchstart', this.fullscreenExitHandler);
-      document.removeEventListener('wheel', this.fullscreenExitHandler);
-      this.fullscreenExitHandler = null;
-    }
-
-    // Execute follow-up command if specified (e.g., boot after shutdown)
-    if (exitCommand) {
-      // Small delay to let the UI restore before executing the command
-      setTimeout(() => {
-        void this.executeCommand(exitCommand, true);
-      }, 100);
-    }
   }
 
   /**

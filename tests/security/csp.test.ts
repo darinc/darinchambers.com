@@ -139,12 +139,13 @@ describe('Content Security Policy Tests', () => {
     });
 
     it('should use event delegation instead of inline handlers', () => {
-      const terminalPath = join(__dirname, '../../src/components/Terminal.ts');
-      const terminalContent = readFileSync(terminalPath, 'utf-8');
+      // data-command event delegation lives in SettingsUIController (extracted from Terminal)
+      const controllerPath = join(__dirname, '../../src/components/SettingsUIController.ts');
+      const controllerContent = readFileSync(controllerPath, 'utf-8');
 
       // Should have event delegation setup
-      expect(terminalContent).toContain('addEventListener');
-      expect(terminalContent).toContain('data-command');
+      expect(controllerContent).toContain('addEventListener');
+      expect(controllerContent).toContain('data-command');
     });
 
     it('should sanitize all innerHTML usage', () => {
