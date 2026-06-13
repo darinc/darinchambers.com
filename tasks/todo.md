@@ -134,3 +134,20 @@ format:check ✓, coverage gate ✓, build ✓.
 
 Out of scope but noted: `dist/` is missing `favicon.ico` (console 404); `<100KB` bundle target dropped
 by owner; pnpm pinned to v9 in workflows (Phase 3).
+
+Shipped as v0.27.1 (two commits) on 2026-06-13. CI green; gated deploy fired via workflow_run; CSP
+confirmed live at https://darinchambers.com/.
+
+### Phase 1 — DONE & verified (2026-06-13)
+
+- **1.1 prefers-reduced-motion.** New `prefersReducedMotion()` helper. `ScreensaverManager.isEnabled()`
+  returns false under reduced motion (auto screensaver fully suppressed — WCAG 2.2.2). `matrixRain` skips
+  the rAF shuffle loop. Global CSS reset in `base.css` neutralizes animation/transition/smooth-scroll;
+  targeted rule holds the matrix at a static frame. Browser-verified via `emulateMedia` (body transition
+  collapsed to 1e-05s; media matches).
+- **1.2 Tab keyboard trap.** `TerminalInput` only consumes Tab for completion when there's text; Shift+Tab
+  and Tab-on-empty pass through. Browser-verified: focus moves off the input on Tab.
+- **1.3 Focus-visible.** Added `:focus-visible` outlines to all interactive settings controls.
+
+Tests added: `prefersReducedMotion.test.ts` (3), ScreensaverManager reduced-motion (3), TerminalInput
+tab-trap (5+updated). Coverage 80.96% branch, 1887 passing. Shipped as v0.27.2; CI green.
