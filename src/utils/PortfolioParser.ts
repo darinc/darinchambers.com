@@ -1,3 +1,4 @@
+import { splitFrontmatter, parseFrontmatterFields } from './frontmatter';
 import type { Project } from '../types/portfolio';
 
 export interface PortfolioFrontmatter {
@@ -49,58 +50,15 @@ export class PortfolioParser {
     frontmatter: PortfolioFrontmatter;
     markdown: string;
   } {
-    const lines = content.split('\n');
+    const { frontmatterLines, markdown } = splitFrontmatter(content);
 
-    // Check if content starts with frontmatter delimiter
-    if (lines[0]?.trim() !== '---') {
-      throw new Error('Invalid frontmatter: must start with ---');
-    }
-
-    // Find closing delimiter
-    let endIndex = -1;
-    for (let i = 1; i < lines.length; i++) {
-      if (lines[i].trim() === '---') {
-        endIndex = i;
-        break;
-      }
-    }
-
-    if (endIndex === -1) {
-      throw new Error('Invalid frontmatter: no closing ---');
-    }
-
-    // Extract frontmatter lines
-    const frontmatterLines = lines.slice(1, endIndex);
-    const markdownLines = lines.slice(endIndex + 1);
-
-    // Parse frontmatter
-    const frontmatter: Record<string, string | string[] | number> = {};
-    for (const line of frontmatterLines) {
-      const colonIndex = line.indexOf(':');
-      if (colonIndex === -1) continue;
-
-      const key = line.substring(0, colonIndex).trim();
-      const value = line.substring(colonIndex + 1).trim();
-
-      // Handle array values like technologies: ["tech1", "tech2"]
-      if (value.startsWith('[') && value.endsWith(']')) {
-        // Remove brackets and split by comma
-        const arrayContent = value.substring(1, value.length - 1);
-        frontmatter[key] = arrayContent
-          .split(',')
-          .map((item) => item.trim().replace(/^["']|["']$/g, ''))
-          .filter((item) => item.length > 0);
-      } else {
-        // Remove quotes if present
-        const stringValue = value.replace(/^["']|["']$/g, '');
-        // Try to parse as number only for 'order' field
-        // (year should stay as string since it can be ranges like "2018-2022")
-        if (key === 'order') {
-          const numValue = Number(stringValue);
-          frontmatter[key] = !isNaN(numValue) ? numValue : stringValue;
-        } else {
-          frontmatter[key] = stringValue;
-        }
+    // Coerce 'order' to a number (year stays a string — it can be a range like "2018-2022").
+    const frontmatter: Record<string, string | string[] | number> =
+      parseFrontmatterFields(frontmatterLines);
+    if (typeof frontmatter.order === 'string') {
+      const numValue = Number(frontmatter.order);
+      if (!isNaN(numValue)) {
+        frontmatter.order = numValue;
       }
     }
 
@@ -119,10 +77,7 @@ export class PortfolioParser {
       );
     }
 
-    return {
-      frontmatter,
-      markdown: markdownLines.join('\n').trim(),
-    };
+    return { frontmatter, markdown };
   }
 
   /**

@@ -1,3 +1,4 @@
+import { splitFrontmatter, parseFrontmatterValue, idFromDatedFilename } from './frontmatter';
 import type { Post, PostedLink } from '../types/post';
 
 export interface PostFrontmatter {
@@ -88,26 +89,7 @@ export class PostParser {
    * Parse YAML frontmatter from markdown content
    */
   static parseFrontmatter(content: string): { frontmatter: PostFrontmatter; markdown: string } {
-    const lines = content.split('\n');
-
-    if (lines[0]?.trim() !== '---') {
-      throw new Error('Invalid frontmatter: must start with ---');
-    }
-
-    let endIndex = -1;
-    for (let i = 1; i < lines.length; i++) {
-      if (lines[i].trim() === '---') {
-        endIndex = i;
-        break;
-      }
-    }
-
-    if (endIndex === -1) {
-      throw new Error('Invalid frontmatter: no closing ---');
-    }
-
-    const frontmatterLines = lines.slice(1, endIndex);
-    const markdownLines = lines.slice(endIndex + 1);
+    const { frontmatterLines, markdown } = splitFrontmatter(content);
 
     const frontmatter: Record<string, string | string[] | PostedLink[]> = {};
     let i = 0;
@@ -141,16 +123,8 @@ export class PostParser {
         continue;
       }
 
-      // Handle inline array values like tags: [tag1, tag2]
-      if (value.startsWith('[') && value.endsWith(']')) {
-        const arrayContent = value.substring(1, value.length - 1);
-        frontmatter[key] = arrayContent
-          .split(',')
-          .map((item) => item.trim().replace(/^["']|["']$/g, ''))
-          .filter((item) => item.length > 0);
-      } else {
-        frontmatter[key] = value.replace(/^["']|["']$/g, '');
-      }
+      // Inline scalar or array value (e.g. tags: [tag1, tag2])
+      frontmatter[key] = parseFrontmatterValue(value);
 
       i++;
     }
@@ -164,10 +138,7 @@ export class PostParser {
       throw new Error(`Invalid post frontmatter: missing or invalid fields: ${missing.join(', ')}`);
     }
 
-    return {
-      frontmatter,
-      markdown: markdownLines.join('\n').trim(),
-    };
+    return { frontmatter, markdown };
   }
 
   /**
@@ -192,6 +163,6 @@ export class PostParser {
    * Get post ID from filename (strip date prefix and .md extension)
    */
   static getIdFromFilename(filename: string): string {
-    return filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+    return idFromDatedFilename(filename);
   }
 }
