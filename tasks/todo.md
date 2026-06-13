@@ -151,3 +151,22 @@ confirmed live at https://darinchambers.com/.
 
 Tests added: `prefersReducedMotion.test.ts` (3), ScreensaverManager reduced-motion (3), TerminalInput
 tab-trap (5+updated). Coverage 80.96% branch, 1887 passing. Shipped as v0.27.2; CI green.
+
+### Phase 2 (low-risk subset) — DONE & verified (2026-06-13)
+
+- **2.5a** Deleted unused `sanitizeHtmlCustom` (sanitizeHtml.ts now 100% covered).
+- **2.6** Prerender hardened: `replaceOrThrow` throws if any inject marker is missing (no more silent
+  empty-SEO pages); per-file `safeReadContent` try/catch warns-and-skips a bad `.md` instead of aborting.
+- **2.7b** Blog slug drops the optional `NN-` sequence (BlogParser ×2 + prerender `blogSlug`). Browser-
+  verified prerender↔runtime consistency: `/blog/building-a-minimal-production-graph-library` resolves and
+  renders (graph SVG present).
+- **2.7c** Empty `/notes` no longer prerendered or added to the sitemap (build now emits 11 pages, not 12).
+
+Shipped as v0.27.3. Coverage 80.85% branch, 1889 passing; type-check/lint/format/build all green.
+
+**DEFERRED — needs owner decision (2.7a):** sort blog by frontmatter date. The love-letter post's filename
+date (11-14) ≠ its frontmatter date (11-16); "sort by frontmatter date" would silently treat 11-16 as
+authoritative and move it above the 11-15 post. Which date is correct is a content call — left for the owner.
+
+**Remaining Phase 2 (larger refactors, not started):** 2.1 dead markdown renderer (DECISION: delete vs keep),
+2.2 unify frontmatter parsers, 2.3 collapse content commands, 2.4 slim Terminal.ts. Phase 3 docs truth-up.

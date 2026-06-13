@@ -132,20 +132,3 @@ export function sanitizeHtml(html: string): string {
     RETURN_DOM_FRAGMENT: false,
   });
 }
-
-/**
- * Sanitize HTML with custom configuration
- *
- * Use this when you need more specific control over sanitization,
- * such as allowing additional tags or attributes.
- *
- * @param html - The HTML string to sanitize
- * @param config - DOMPurify configuration object
- * @returns Sanitized HTML
- */
-export function sanitizeHtmlCustom(
-  html: string,
-  config: Parameters<typeof DOMPurify.sanitize>[1]
-): string {
-  return DOMPurify.sanitize(html, config);
-}

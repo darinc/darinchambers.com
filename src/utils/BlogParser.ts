@@ -110,7 +110,7 @@ export class BlogParser {
 
     // Extract ID from filename (remove date prefix and .md extension)
     // e.g., "2024-09-15-ai-production-lessons.md" -> "ai-production-lessons"
-    const id = filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+    const id = filename.replace(/^\d{4}-\d{2}-\d{2}-(\d{2}-)?/, '').replace(/\.md$/, '');
 
     return {
       id,
@@ -126,6 +126,6 @@ export class BlogParser {
    * Get blog post ID from filename
    */
   static getIdFromFilename(filename: string): string {
-    return filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+    return filename.replace(/^\d{4}-\d{2}-\d{2}-(\d{2}-)?/, '').replace(/\.md$/, '');
   }
 }

@@ -42,7 +42,10 @@ function parseFrontmatter(raw) {
     const key = line.slice(0, colonIdx).trim();
     let value = line.slice(colonIdx + 1).trim();
     // Strip surrounding quotes
-    if ((value.startsWith("'") && value.endsWith("'")) || (value.startsWith('"') && value.endsWith('"'))) {
+    if (
+      (value.startsWith("'") && value.endsWith("'")) ||
+      (value.startsWith('"') && value.endsWith('"'))
+    ) {
       value = value.slice(1, -1);
     }
     // Parse arrays
@@ -62,7 +65,10 @@ function parseFrontmatter(raw) {
     meta[key] = value;
   }
 
-  const body = lines.slice(endIndex + 1).join('\n').trim();
+  const body = lines
+    .slice(endIndex + 1)
+    .join('\n')
+    .trim();
   return { meta, body };
 }
 
@@ -81,7 +87,8 @@ function writeFileSafe(p, content) {
 
 function blogSlug(filename) {
   // 2025-11-14-a-love-letter... → a-love-letter...
-  return filename.replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-/, '');
+  // 2025-09-20-01-building-... → building-...  (strips optional NN- sequence)
+  return filename.replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-(\d{2}-)?/, '');
 }
 
 function renderMarkdown(md) {
@@ -89,35 +96,96 @@ function renderMarkdown(md) {
 }
 
 function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 // ---------------------------------------------------------------------------
 // Template manipulation
 // ---------------------------------------------------------------------------
 
+/**
+ * Replace that throws when the marker is absent, so template drift (a change to
+ * index.html or Vite's output) fails the build loudly instead of silently
+ * shipping pages with missing meta tags or SEO content.
+ */
+function replaceOrThrow(content, pattern, replacement, label) {
+  const matched = typeof pattern === 'string' ? content.includes(pattern) : pattern.test(content);
+  if (!matched) {
+    throw new Error(
+      `[prerender] Marker not found while injecting "${label}" — template may have changed.`
+    );
+  }
+  return content.replace(pattern, replacement);
+}
+
 function injectMeta(template, { title, description, url, type, jsonLd }) {
   let result = template;
 
   // Replace existing <title> with per-page title
-  result = result.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(title)}</title>`);
+  result = replaceOrThrow(
+    result,
+    /<title>[^<]*<\/title>/,
+    `<title>${escapeHtml(title)}</title>`,
+    'title'
+  );
 
   // Replace existing <meta name="description"> with per-page description
-  result = result.replace(
+  result = replaceOrThrow(
+    result,
     /<meta name="description"[^>]*>/,
-    `<meta name="description" content="${escapeHtml(description)}">`
+    `<meta name="description" content="${escapeHtml(description)}">`,
+    'meta description'
   );
 
   // Replace existing OG tags with per-page values
-  result = result.replace(/<meta property="og:type"[^>]*>/, `<meta property="og:type" content="${type || 'website'}">`);
-  result = result.replace(/<meta property="og:url"[^>]*>/, `<meta property="og:url" content="${url}">`);
-  result = result.replace(/<meta property="og:title"[^>]*>/, `<meta property="og:title" content="${escapeHtml(title)}">`);
-  result = result.replace(/<meta property="og:description"[^>]*>/, `<meta property="og:description" content="${escapeHtml(description)}">`);
+  result = replaceOrThrow(
+    result,
+    /<meta property="og:type"[^>]*>/,
+    `<meta property="og:type" content="${type || 'website'}">`,
+    'og:type'
+  );
+  result = replaceOrThrow(
+    result,
+    /<meta property="og:url"[^>]*>/,
+    `<meta property="og:url" content="${url}">`,
+    'og:url'
+  );
+  result = replaceOrThrow(
+    result,
+    /<meta property="og:title"[^>]*>/,
+    `<meta property="og:title" content="${escapeHtml(title)}">`,
+    'og:title'
+  );
+  result = replaceOrThrow(
+    result,
+    /<meta property="og:description"[^>]*>/,
+    `<meta property="og:description" content="${escapeHtml(description)}">`,
+    'og:description'
+  );
 
   // Replace existing Twitter tags with per-page values
-  result = result.replace(/<meta name="twitter:url"[^>]*>/, `<meta name="twitter:url" content="${url}">`);
-  result = result.replace(/<meta name="twitter:title"[^>]*>/, `<meta name="twitter:title" content="${escapeHtml(title)}">`);
-  result = result.replace(/<meta name="twitter:description"[^>]*>/, `<meta name="twitter:description" content="${escapeHtml(description)}">`);
+  result = replaceOrThrow(
+    result,
+    /<meta name="twitter:url"[^>]*>/,
+    `<meta name="twitter:url" content="${url}">`,
+    'twitter:url'
+  );
+  result = replaceOrThrow(
+    result,
+    /<meta name="twitter:title"[^>]*>/,
+    `<meta name="twitter:title" content="${escapeHtml(title)}">`,
+    'twitter:title'
+  );
+  result = replaceOrThrow(
+    result,
+    /<meta name="twitter:description"[^>]*>/,
+    `<meta name="twitter:description" content="${escapeHtml(description)}">`,
+    'twitter:description'
+  );
 
   // Inject canonical link and JSON-LD before </head>
   const extras = [
@@ -127,14 +195,19 @@ function injectMeta(template, { title, description, url, type, jsonLd }) {
     .filter(Boolean)
     .join('\n');
 
-  result = result.replace('</head>', `${extras}\n</head>`);
+  result = replaceOrThrow(result, '</head>', `${extras}\n</head>`, 'head close');
 
   return result;
 }
 
 function injectContent(template, html) {
   const section = `<section class="seo-content" aria-hidden="true">\n${html}\n</section>\n  `;
-  return template.replace('<body>\n  <header', `<body>\n  ${section}<header`);
+  return replaceOrThrow(
+    template,
+    '<body>\n  <header',
+    `<body>\n  ${section}<header`,
+    'body content'
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -188,12 +261,9 @@ function personSchema() {
     '@type': 'Person',
     name: 'Darin Chambers',
     jobTitle: 'Technologist, Inventor',
-    description: 'Building What\'s Next on Rock-Solid Foundations',
+    description: "Building What's Next on Rock-Solid Foundations",
     url: SITE_URL,
-    sameAs: [
-      'https://www.linkedin.com/in/darinchambers',
-      'https://github.com/darinc',
-    ],
+    sameAs: ['https://www.linkedin.com/in/darinchambers', 'https://github.com/darinc'],
   };
 }
 
@@ -264,6 +334,21 @@ function contactPageSchema() {
 // Content discovery
 // ---------------------------------------------------------------------------
 
+/**
+ * Read + parse one content file, returning null (with a warning) on failure so a
+ * single malformed .md doesn't abort the entire build.
+ */
+function safeReadContent(dir, filename, buildEntry) {
+  try {
+    const raw = readFile(path.join(dir, filename));
+    const { meta, body } = parseFrontmatter(raw);
+    return buildEntry(meta, body);
+  } catch (err) {
+    console.warn(`[prerender] Skipping ${filename}: ${err.message}`);
+    return null;
+  }
+}
+
 function discoverBlogPosts() {
   const dir = path.join(CONTENT, 'blog');
   if (!fs.existsSync(dir)) return [];
@@ -272,11 +357,10 @@ function discoverBlogPosts() {
     .filter((f) => f.endsWith('.md'))
     .sort()
     .reverse()
-    .map((f) => {
-      const raw = readFile(path.join(dir, f));
-      const { meta, body } = parseFrontmatter(raw);
-      return { filename: f, slug: blogSlug(f), meta, body };
-    });
+    .map((f) =>
+      safeReadContent(dir, f, (meta, body) => ({ filename: f, slug: blogSlug(f), meta, body }))
+    )
+    .filter(Boolean);
 }
 
 function discoverPortfolioProjects() {
@@ -285,12 +369,15 @@ function discoverPortfolioProjects() {
   return fs
     .readdirSync(dir)
     .filter((f) => f.endsWith('.md'))
-    .map((f) => {
-      const raw = readFile(path.join(dir, f));
-      const { meta, body } = parseFrontmatter(raw);
-      const slug = meta.id || f.replace(/\.md$/, '');
-      return { filename: f, slug, meta, body };
-    });
+    .map((f) =>
+      safeReadContent(dir, f, (meta, body) => ({
+        filename: f,
+        slug: meta.id || f.replace(/\.md$/, ''),
+        meta,
+        body,
+      }))
+    )
+    .filter(Boolean);
 }
 
 function discoverNotes() {
@@ -301,12 +388,15 @@ function discoverNotes() {
     .filter((f) => f.endsWith('.md'))
     .sort()
     .reverse()
-    .map((f) => {
-      const raw = readFile(path.join(dir, f));
-      const { meta, body } = parseFrontmatter(raw);
-      const slug = f.replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-(\d{2}-)?/, '');
-      return { filename: f, slug, meta, body };
-    });
+    .map((f) =>
+      safeReadContent(dir, f, (meta, body) => ({
+        filename: f,
+        slug: f.replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-(\d{2}-)?/, ''),
+        meta,
+        body,
+      }))
+    )
+    .filter(Boolean);
 }
 
 // ---------------------------------------------------------------------------
@@ -318,7 +408,8 @@ function generateAboutPage(template) {
   const contentHtml = renderMarkdown(raw);
   const page = buildPage(template, {
     title: 'Darin Chambers - Technologist, Inventor',
-    description: 'Technologist, Inventor | Building What\'s Next on Rock-Solid Foundations. 30+ years of experience in software engineering, AI, and distributed systems.',
+    description:
+      "Technologist, Inventor | Building What's Next on Rock-Solid Foundations. 30+ years of experience in software engineering, AI, and distributed systems.",
     url: `${SITE_URL}/about`,
     jsonLd: personSchema(),
     contentHtml,
@@ -328,7 +419,8 @@ function generateAboutPage(template) {
   // Also enrich the root index.html with about content
   const rootPage = buildPage(template, {
     title: 'Darin Chambers - Technologist, Inventor',
-    description: 'Technologist, Inventor | Building What\'s Next on Rock-Solid Foundations. 30+ years of experience in software engineering, AI, and distributed systems.',
+    description:
+      "Technologist, Inventor | Building What's Next on Rock-Solid Foundations. 30+ years of experience in software engineering, AI, and distributed systems.",
     url: SITE_URL,
     jsonLd: personSchema(),
     contentHtml,
@@ -417,6 +509,13 @@ function generatePortfolioPages(template) {
 function generateNotesPages(template) {
   const notes = discoverNotes();
 
+  // Nothing to publish yet — don't ship a thin "No notes yet" page or a
+  // sitemap entry for it (keeps an empty section out of the crawl index).
+  if (notes.length === 0) {
+    console.log('[prerender] No notes found; skipping /notes pages.');
+    return notes;
+  }
+
   for (const note of notes) {
     const contentHtml = renderMarkdown(note.body);
     const page = buildPage(template, {
@@ -429,14 +528,10 @@ function generateNotesPages(template) {
     writeFileSafe(path.join(DIST, 'notes', note.slug, 'index.html'), page);
   }
 
-  // Listing page
-  const listItems =
-    notes.length > 0
-      ? notes.map(
-          (n) =>
-            `<li><a href="/notes/${n.slug}">${escapeHtml(n.meta.title || n.slug)}</a></li>`
-        )
-      : ['<li>No notes yet.</li>'];
+  // Listing page (only reached when there is at least one note)
+  const listItems = notes.map(
+    (n) => `<li><a href="/notes/${n.slug}">${escapeHtml(n.meta.title || n.slug)}</a></li>`
+  );
 
   const listHtml = ['<h1>Notes</h1>', '<ul>', ...listItems, '</ul>'].join('\n');
 
@@ -472,7 +567,12 @@ function generateHelpPage(template) {
     title: 'Help - Darin Chambers Terminal',
     description: 'Interactive terminal help — available commands and features.',
     url: `${SITE_URL}/help`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Terminal Help', url: `${SITE_URL}/help` },
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Terminal Help',
+      url: `${SITE_URL}/help`,
+    },
     contentHtml,
   });
   writeFileSafe(path.join(DIST, 'help', 'index.html'), page);
@@ -502,13 +602,18 @@ function generateSitemap(blogPosts, portfolioProjects, notes) {
       changefreq: 'monthly',
       lastmod: today,
     })),
-    { loc: '/notes', priority: '0.7', changefreq: 'weekly', lastmod: today },
-    ...notes.map((n) => ({
-      loc: `/notes/${n.slug}`,
-      priority: '0.6',
-      changefreq: 'monthly',
-      lastmod: n.meta.date || today,
-    })),
+    // Only advertise /notes once there is something to read there.
+    ...(notes.length > 0
+      ? [
+          { loc: '/notes', priority: '0.7', changefreq: 'weekly', lastmod: today },
+          ...notes.map((n) => ({
+            loc: `/notes/${n.slug}`,
+            priority: '0.6',
+            changefreq: 'monthly',
+            lastmod: n.meta.date || today,
+          })),
+        ]
+      : []),
     { loc: '/contact', priority: '0.6', changefreq: 'monthly', lastmod: today },
     { loc: '/help', priority: '0.4', changefreq: 'monthly', lastmod: today },
   ];
@@ -545,9 +650,11 @@ function main() {
 
   const totalPages =
     2 + // root + about
-    1 + blogPosts.length + // blog listing + posts
-    1 + portfolioProjects.length + // portfolio listing + projects
-    1 + notes.length + // notes listing + notes
+    1 +
+    blogPosts.length + // blog listing + posts
+    1 +
+    portfolioProjects.length + // portfolio listing + projects
+    (notes.length > 0 ? 1 + notes.length : 0) + // notes listing + notes (none when empty)
     1 + // contact
     1; // help
 

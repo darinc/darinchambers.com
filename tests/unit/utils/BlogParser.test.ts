@@ -345,5 +345,18 @@ Content`;
     it('should handle filename without extension', () => {
       expect(BlogParser.getIdFromFilename('2024-01-01-test')).toBe('test');
     });
+
+    it('should strip an optional two-digit sequence number after the date', () => {
+      expect(
+        BlogParser.getIdFromFilename('2025-09-20-01-building-a-minimal-production-graph-library.md')
+      ).toBe('building-a-minimal-production-graph-library');
+    });
+
+    it('should not strip a non-sequence segment that happens to follow the date', () => {
+      // "ai-..." is not a two-digit sequence, so it must be preserved
+      expect(BlogParser.getIdFromFilename('2024-09-15-ai-production-lessons.md')).toBe(
+        'ai-production-lessons'
+      );
+    });
   });
 });
