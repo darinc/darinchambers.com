@@ -2,31 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://darinchambers.com/</loc>
-    <lastmod>2026-03-21</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://darinchambers.com/about</loc>
-    <lastmod>2026-03-21</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://darinchambers.com/blog</loc>
-    <lastmod>2026-03-21</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://darinchambers.com/blog/leet-status-unlocked</loc>
     <lastmod>2025-11-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://darinchambers.com/blog/building-an-enterprise-grade-graph-library-in-one-week</loc>
-    <lastmod>2025-11-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -43,32 +37,38 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://darinchambers.com/blog/01-building-a-minimal-production-graph-library</loc>
+    <lastmod>2025-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://darinchambers.com/portfolio</loc>
-    <lastmod>2026-03-21</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://darinchambers.com/portfolio/hypergrowing-a-unicorn</loc>
-    <lastmod>2026-03-21</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://darinchambers.com/notes</loc>
-    <lastmod>2026-03-21</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://darinchambers.com/contact</loc>
-    <lastmod>2026-03-21</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://darinchambers.com/help</loc>
-    <lastmod>2026-03-21</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
