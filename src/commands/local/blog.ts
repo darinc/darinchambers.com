@@ -4,26 +4,21 @@
  * Lists and displays blog posts with support for filtering by tags. Shows post summaries
  * with dates and tags when listing, or renders full post content with markdown formatting
  * when a specific post is requested. Supports --tags flag for filtering posts by category.
+ *
+ * The list/filter/open flow is shared with `notes` via createContentCommand.
  */
 import { MESSAGES, PATHS } from '../../constants';
 import { BlogParser } from '../../utils/BlogParser';
-import { CommandArgs } from '../../utils/CommandArgs';
 import { ContentFormatter } from '../../utils/ContentFormatter';
-import { MarkdownService } from '../../utils/MarkdownService';
-import type { BlogPost } from '../../types/blog';
+import { createContentCommand } from './createContentCommand';
 import type { IFileSystem } from '../../utils/fs/IFileSystem';
 import type { Command } from '../Command';
 
 export function createBlogCommand(fs: IFileSystem): Command {
-  return {
+  return createContentCommand(fs, {
     name: 'blog',
     description: 'List and read blog posts',
-    execute: (args: string[], _stdin?: string) => {
-      const cmdArgs = new CommandArgs(args);
-
-      if (cmdArgs.hasFlag('help')) {
-        return {
-          output: `Usage: blog [options] [post-id|number]
+    help: `Usage: blog [options] [post-id|number]
 
 Description:
   List and read blog posts
@@ -40,153 +35,16 @@ Examples:
   blog --tags Web-Development   # Filter by hyphenated tag
   blog --tags "Web Development" # Filter by quoted multi-word tag
   blog post-id                  # Read specific post by ID`,
-        };
-      }
-
-      const blogDir = PATHS.CONTENT_BLOG;
-
-      try {
-        // Get all blog files from the filesystem
-        const files = fs.list(blogDir);
-        const blogFiles = files
-          .filter((f) => f.endsWith('.md'))
-          .sort()
-          .reverse(); // Newest first
-
-        // Parse command arguments
-        const tagsValue = cmdArgs.getFlag('tags');
-        const hasTags = cmdArgs.hasFlag('tags');
-        const postId = cmdArgs.getPositional(0);
-
-        // Parse all blog posts
-        const posts: BlogPost[] = [];
-        for (const filename of blogFiles) {
-          const content = fs.readFile(`${blogDir}/${filename}`);
-          const post = BlogParser.parseBlogPost(filename, content);
-          posts.push(post);
-        }
-
-        // Handle empty blog
-        if (posts.length === 0 && !hasTags && !postId) {
-          const markdown = `# Blog
-
-${MESSAGES.EMPTY_BLOG}`;
-          const html = MarkdownService.render(markdown);
-          return { output: html, html: true, scrollBehavior: 'top' };
-        }
-
-        // Handle --tags flag
-        if (hasTags) {
-          // If --tags has no value, list all available tags
-          if (typeof tagsValue === 'boolean' || !tagsValue) {
-            const allTags = new Set<string>();
-            const tagCounts = new Map<string, number>();
-
-            posts.forEach((post) => {
-              post.tags?.forEach((tag) => {
-                allTags.add(tag);
-                tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
-              });
-            });
-
-            const sortedTags = Array.from(allTags).sort();
-
-            if (sortedTags.length === 0) {
-              const markdown = `# Blog Tags
-
-${MESSAGES.NO_TAGS_AVAILABLE}`;
-              const html = MarkdownService.render(markdown);
-              return { output: html, html: true, scrollBehavior: 'top' };
-            }
-
-            const tagList = sortedTags
-              .map((tag) => {
-                const count = tagCounts.get(tag) ?? 0;
-                return `- <button data-command="blog --tags ${tag}" class="tag-link">${tag}</button> (${count} post${count !== 1 ? 's' : ''})`;
-              })
-              .join('\n');
-
-            const markdown = `# Blog Tags
-
-${tagList}
-
----
-
-**Usage:** Type \`blog --tags <tag>\` to filter posts`;
-
-            const html = MarkdownService.render(markdown);
-            return { output: html, html: true, scrollBehavior: 'top' };
-          }
-        }
-
-        // Show specific blog post
-        if (postId) {
-          let post: BlogPost | undefined;
-
-          // Check if postId is a number (e.g., "1", "2", "3")
-          const postNumber = parseInt(postId, 10);
-          if (!isNaN(postNumber) && postNumber > 0 && postNumber <= posts.length) {
-            // Convert display number to array index (newest = highest number = index 0)
-            const arrayIndex = posts.length - postNumber;
-            post = posts[arrayIndex];
-          } else {
-            // Otherwise try to find by ID
-            post = posts.find((p) => p.id === postId);
-          }
-
-          if (!post) {
-            return {
-              output: `Blog post '${postId}' not found.\nUse 'blog' to list all posts.\nTry 'blog --help' for more information`,
-              error: true,
-            };
-          }
-
-          const markdown = ContentFormatter.formatBlogPost(post);
-          const html = MarkdownService.render(markdown);
-          return { output: html, html: true, scrollBehavior: 'top' };
-        }
-
-        // Filter by tag if requested
-        let filteredPosts = posts;
-        const filterTag = typeof tagsValue === 'string' ? tagsValue : undefined;
-        if (filterTag) {
-          filteredPosts = posts.filter((p) =>
-            p.tags.some((t) => t.toLowerCase() === filterTag.toLowerCase())
-          );
-
-          if (filteredPosts.length === 0) {
-            // Get top 5 most popular tags to suggest
-            const tagCounts = new Map<string, number>();
-            posts.forEach((post) => {
-              post.tags?.forEach((tag) => {
-                tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
-              });
-            });
-            const topTags = Array.from(tagCounts.entries())
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 5)
-              .map(([tag]) => tag);
-
-            const suggestion =
-              topTags.length > 0 ? `\nTry one of these tags: ${topTags.join(', ')}` : '';
-
-            return {
-              output: `No blog posts found with tag '${filterTag}'.${suggestion}\nUse 'blog' to see all posts.`,
-              error: false,
-            };
-          }
-        }
-
-        // List all blog posts (or filtered posts)
-        const markdown = ContentFormatter.formatBlogList(filteredPosts, filterTag);
-        const html = MarkdownService.render(markdown);
-        return { output: html, html: true, scrollBehavior: 'top' };
-      } catch (error) {
-        return {
-          output: error instanceof Error ? error.message : String(error),
-          error: true,
-        };
-      }
-    },
-  };
+    dir: PATHS.CONTENT_BLOG,
+    emptyMessage: MESSAGES.EMPTY_BLOG,
+    heading: 'Blog',
+    tagsHeading: 'Blog Tags',
+    countNoun: 'post',
+    pluralNoun: 'posts',
+    notFoundLabel: 'Blog post',
+    filterMissLabel: 'blog posts',
+    parse: (filename, content) => BlogParser.parseBlogPost(filename, content),
+    formatList: (items, filterTag) => ContentFormatter.formatBlogList(items, filterTag),
+    formatDetail: (item) => ContentFormatter.formatBlogPost(item),
+  });
 }
