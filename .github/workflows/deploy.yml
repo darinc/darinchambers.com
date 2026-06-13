@@ -1,19 +1,28 @@
 name: Deploy to GitHub Pages
 
+# Deploy ONLY after the CI workflow succeeds on main, so production never
+# ships from a red build. Manual deploys are still possible via workflow_dispatch.
 on:
-  push:
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Gate: run on a successful CI completion, or on a manual dispatch.
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Deploy exactly the commit CI validated (falls back to the dispatched ref).
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.27.1] - 2026-06-13
+
+### Fixed
+- GitHub Pages deploy now runs only after CI succeeds, so production no longer ships from a failing build
+- Restored the 80% branch-coverage gate with added tests for content formatting, prompt formatting, the virtual filesystem, and routing
+
+### Security
+- Content-Security-Policy is now delivered to production via a build-time meta tag (GitHub Pages does not honor `_headers`)
+- Updated dompurify from 3.3.0 to 3.4.10 to patch a known mXSS advisory
+
 ## [0.27.0] - 2026-03-21
 
 ### Added

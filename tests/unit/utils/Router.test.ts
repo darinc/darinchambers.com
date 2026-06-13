@@ -47,6 +47,9 @@ describe('Router', () => {
         if (path === '/home/darin/blog') {
           return ['2024-01-01-test-post.md', '2024-01-02-my-post-123.md'];
         }
+        if (path === '/home/darin/posts') {
+          return ['2024-03-03-my-note.md', 'not-markdown.txt'];
+        }
         return [];
       }),
       readFile: vi.fn(),
@@ -279,6 +282,36 @@ describe('Router', () => {
     it('should handle whitespace in commands', () => {
       expect(router.getPathForCommand('  blog  ')).toBe('/blog');
       expect(router.getPathForCommand('  about  ')).toBe('/about');
+    });
+
+    it('should return null for a blog post id that does not exist', () => {
+      expect(router.getPathForCommand('blog does-not-exist')).toBeNull();
+    });
+
+    it('should return /notes for the bare "notes" command', () => {
+      expect(router.getPathForCommand('notes')).toBe('/notes');
+    });
+
+    it('should return /notes/:noteId for a valid note id', () => {
+      // mock posts dir contains 2024-03-03-my-note.md -> id "my-note"
+      expect(router.getPathForCommand('notes my-note')).toBe('/notes/my-note');
+    });
+
+    it('should return null for a note id that does not exist', () => {
+      expect(router.getPathForCommand('notes ghost-note')).toBeNull();
+    });
+
+    it('should ignore notes commands with --tags flag (no detail route)', () => {
+      // The --tag guard skips the note-detail branch, and the full string is
+      // not a bare command in the map, so it resolves to null.
+      expect(router.getPathForCommand('notes --tags ideas')).toBeNull();
+    });
+
+    it('should treat "portfolio --tags" with no tag value as a project id', () => {
+      // After the outer trim the trailing space is gone, so the
+      // "portfolio --tags " (with trailing space) branch is skipped and the
+      // generic "portfolio <id>" branch treats "--tags" as the project id.
+      expect(router.getPathForCommand('portfolio --tags ')).toBe('/portfolio/--tags');
     });
   });
 

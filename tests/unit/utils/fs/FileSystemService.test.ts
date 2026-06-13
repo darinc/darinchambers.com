@@ -243,4 +243,89 @@ describe('FileSystemService', () => {
       expect(node).toBeNull();
     });
   });
+
+  describe('writeFile error paths', () => {
+    it('should throw when a path component is a file, not a directory', () => {
+      // test.txt is a file; writing "into" it should fail
+      expect(() => fs.writeFile('~/test.txt/child.txt', 'data')).toThrow('Not a directory');
+    });
+  });
+
+  describe('createDirectory', () => {
+    it('should create a new directory', () => {
+      fs.createDirectory('~/newdir');
+      expect(fs.isDirectory('~/newdir')).toBe(true);
+    });
+
+    it('should create nested directories that do not yet exist', () => {
+      fs.createDirectory('~/a/b/c');
+      expect(fs.isDirectory('~/a')).toBe(true);
+      expect(fs.isDirectory('~/a/b')).toBe(true);
+      expect(fs.isDirectory('~/a/b/c')).toBe(true);
+    });
+
+    it('should be a no-op for an existing directory and preserve its contents', () => {
+      fs.createDirectory('~/docs');
+      expect(fs.isDirectory('~/docs')).toBe(true);
+      // readme.md should still be present inside docs
+      expect(fs.list('~/docs')).toEqual(['readme.md']);
+    });
+
+    it('should throw when a path component exists but is a file', () => {
+      expect(() => fs.createDirectory('~/test.txt/sub')).toThrow(
+        'File exists but is not a directory'
+      );
+    });
+  });
+
+  describe('deleteFile', () => {
+    it('should delete an existing file', () => {
+      expect(fs.exists('~/test.txt')).toBe(true);
+      fs.deleteFile('~/test.txt');
+      expect(fs.exists('~/test.txt')).toBe(false);
+    });
+
+    it('should throw when the file does not exist', () => {
+      expect(() => fs.deleteFile('~/missing.txt')).toThrow('No such file or directory');
+    });
+
+    it('should throw when the target is a directory', () => {
+      expect(() => fs.deleteFile('~/docs')).toThrow('Is a directory');
+    });
+
+    it('should delete a file with an absolute path', () => {
+      fs.deleteFile('/home/darin/docs/readme.md');
+      expect(fs.exists('/home/darin/docs/readme.md')).toBe(false);
+    });
+  });
+
+  describe('deleteDirectory', () => {
+    it('should refuse to delete the root directory', () => {
+      expect(() => fs.deleteDirectory('/')).toThrow('Permission denied');
+    });
+
+    it('should throw when the directory does not exist', () => {
+      expect(() => fs.deleteDirectory('~/missing')).toThrow('No such file or directory');
+    });
+
+    it('should throw when the target is a file', () => {
+      expect(() => fs.deleteDirectory('~/test.txt')).toThrow('Not a directory');
+    });
+
+    it('should throw when deleting a non-empty directory without recursive flag', () => {
+      expect(() => fs.deleteDirectory('~/docs')).toThrow('Directory not empty');
+    });
+
+    it('should delete a non-empty directory when recursive is true', () => {
+      expect(fs.isDirectory('~/docs')).toBe(true);
+      fs.deleteDirectory('~/docs', true);
+      expect(fs.exists('~/docs')).toBe(false);
+    });
+
+    it('should delete an empty directory without the recursive flag', () => {
+      fs.createDirectory('~/empty');
+      fs.deleteDirectory('~/empty');
+      expect(fs.exists('~/empty')).toBe(false);
+    });
+  });
 });

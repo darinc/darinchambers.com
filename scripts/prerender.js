@@ -137,6 +137,41 @@ function injectContent(template, html) {
   return template.replace('<body>\n  <header', `<body>\n  ${section}<header`);
 }
 
+// ---------------------------------------------------------------------------
+// Content Security Policy
+//
+// GitHub Pages ignores public/_headers (Cloudflare/Netlify syntax), so the CSP
+// must travel with the document. We inject a <meta http-equiv> here at build
+// time — the Vite dev server is untouched, which is why index.html ships without
+// it. Header-only directives (frame-ancestors, HSTS, X-Frame-Options) cannot be
+// delivered via <meta> and are intentionally omitted; clickjacking/HSTS
+// protection requires a host that honors HTTP headers.
+// Policy mirrors the vetted one in public/_headers.
+// ---------------------------------------------------------------------------
+
+const CSP_POLICY = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "img-src 'self' data:",
+  "font-src 'self' https://fonts.gstatic.com",
+  "connect-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self' mailto:",
+  'upgrade-insecure-requests',
+].join('; ');
+
+function injectCsp(template) {
+  const marker = '<head>';
+  if (!template.includes(marker)) {
+    throw new Error('[prerender] Could not find <head> marker to inject CSP meta tag.');
+  }
+  return template.replace(
+    marker,
+    `${marker}\n  <meta http-equiv="Content-Security-Policy" content="${CSP_POLICY}">`
+  );
+}
+
 function buildPage(template, { title, description, url, type, jsonLd, contentHtml }) {
   let page = injectMeta(template, { title, description, url, type, jsonLd });
   page = injectContent(page, contentHtml);
@@ -498,7 +533,7 @@ function generateSitemap(blogPosts, portfolioProjects, notes) {
 function main() {
   console.log('[prerender] Starting build-time prerendering...');
 
-  const template = readFile(path.join(DIST, 'index.html'));
+  const template = injectCsp(readFile(path.join(DIST, 'index.html')));
 
   generateAboutPage(template);
   const blogPosts = generateBlogPages(template);
