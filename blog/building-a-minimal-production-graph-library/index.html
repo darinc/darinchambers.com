@@ -33,8 +33,8 @@
 
   <title>Building the Exact Graph Library I Needed - Darin Chambers</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <script type="module" crossorigin src="/assets/index-Dh0qg68o.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-CFmzWrGZ.css">
+  <script type="module" crossorigin src="/assets/index-jzUHfBgg.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DknvE66a.css">
   <link rel="canonical" href="https://darinchambers.com/blog/building-a-minimal-production-graph-library">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Building the Exact Graph Library I Needed","datePublished":"2025-09-20","author":{"@type":"Person","name":"Darin Chambers"},"description":"Every graph library is either a massive toolkit or a heavyweight framework. I needed something specific: zero-dependency, SVG-based, force-directed, mobile-ready, under 30KB. So Claude Code and I built it in a week.","keywords":"open-source, visualization, typescript, ai-engineering, claude-code","url":"https://darinchambers.com/blog/building-a-minimal-production-graph-library"}</script>
 </head>
@@ -43,20 +43,12 @@
 <p>Every graph visualization library makes the same trade-off. D3 (~90KB) gives you raw primitives and expects you to build everything yourself. Cytoscape (~170KB) gives you everything and expects you to carry the weight. I needed neither. I needed a focused, opinionated library that renders force-directed SVG graphs with touch support, dark mode, and nothing else. 28KB gzipped. Zero dependencies.</p>
 <p>So I built <a href="https://github.com/darinc/svgnet" target="_blank" rel="noopener noreferrer">svgnet</a>. Check out the <a href="https://darinc.github.io/svgnet" target="_blank" rel="noopener noreferrer">project page</a>.</p>
 <div class="side-by-side-layout">
-<div class="content-column">
-
-<h2>The Starting Point</h2>
+<div class="content-column"><h2>The Starting Point</h2>
 <p>A lunchtime prompt to Gemini Pro 2.5 produced a working prototype. SVG rendering, basic force-directed layout, functional but monolithic. It proved the concept: you don&#39;t need D3&#39;s entire ecosystem to draw nodes and edges.</p>
 <p>That prototype became the specification. Over the next week, Claude Code and I rebuilt it into a production library through a series of deliberate engineering sprints. Not exploratory — directed. I made the architectural decisions, Claude handled the volume.</p>
 </div>
-<div class="graph-column">
-
-<div id="blog-graph-demo" class="graph-container" data-graph-src="/data/blog-graph-demo.json" style="width: 100%; height: 350px; border: 1px solid #333;"></div>
-
-</div>
-</div>
-
-<h2>Architecture Over Iteration</h2>
+<div class="graph-column"><div id="blog-graph-demo" class="graph-container" data-graph-src="/data/blog-graph-demo.json" style="width: 100%; height: 350px; border: 1px solid #333;"></div></div>
+</div><h2>Architecture Over Iteration</h2>
 <p>The prototype was a 1,500-line God Object. That&#39;s fine for a proof of concept. It&#39;s not fine for a library other people might use.</p>
 <p>We broke it into a modular system: a physics engine, a renderer, an event bus, and a UI manager. Each component owns one concern. Dependency injection wires them together. The main class dropped by 70%.</p>
 <p>Then we migrated the entire codebase to strict TypeScript, writing tests at every step. By the end of the first 24 hours of real work, we had 92 unit tests and a CI/CD pipeline.</p>
