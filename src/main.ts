@@ -29,6 +29,7 @@ import { createAboutCommand } from './commands/local/about';
 import { createBlogCommand } from './commands/local/blog';
 import { createChangelogCommand } from './commands/local/changelog';
 import { createContactCommand } from './commands/local/contact';
+import { createGamesCommand } from './commands/local/games';
 import { createNotesCommand } from './commands/local/notes';
 import { createPortfolioCommand } from './commands/local/portfolio';
 import { createSettingsCommand } from './commands/local/settings';
@@ -228,6 +229,7 @@ const contactCommand = createContactCommand(fileSystem);
 const portfolioCommand = createPortfolioCommand(fileSystem);
 const blogCommand = createBlogCommand(fileSystem);
 const notesCommand = createNotesCommand(fileSystem);
+const gamesCommand = createGamesCommand();
 
 // Create changelog command - load content from virtual filesystem
 const changelogContent = fileSystem.exists('/home/darin/CHANGELOG.md')
@@ -291,6 +293,7 @@ terminal.registerCommands([
   blogCommand,
   notesCommand,
   contactCommand,
+  gamesCommand,
   settingsCommand,
   changelogCommand,
   ddateCommand,
@@ -317,6 +320,7 @@ const navItems: NavItem[] = [
   { label: 'blog', command: 'blog' },
   { label: 'notes', command: 'notes' },
   { label: 'contact', command: 'contact' },
+  { label: 'games', command: 'games' },
   { label: 'settings', command: 'settings' },
   { label: 'help', command: 'help' },
 ];
@@ -343,6 +347,7 @@ const navigation = new Navigation(navLinksElement, (command: string) => {
     blog: '/blog',
     notes: '/notes',
     contact: '/contact',
+    games: '/games',
     skills: '/skills',
     settings: '/settings',
     help: '/help',

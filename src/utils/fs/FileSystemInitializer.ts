@@ -414,6 +414,7 @@ Type 'blog' to read posts.
     localBin.children!.set('blog', this.createFileNode('blog', '[Custom command: blog]'));
     localBin.children!.set('notes', this.createFileNode('notes', '[Custom command: notes]'));
     localBin.children!.set('contact', this.createFileNode('contact', '[Custom command: contact]'));
+    localBin.children!.set('games', this.createFileNode('games', '[Custom command: games]'));
     localBin.children!.set(
       'settings',
       this.createFileNode('settings', '[Custom command: settings]')

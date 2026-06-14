@@ -153,6 +153,12 @@ describe('Router', () => {
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('life', false);
     });
 
+    it('should parse /games route', () => {
+      window.location.pathname = '/games';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('games', false);
+    });
+
     it('should redirect unknown routes to home', () => {
       window.location.pathname = '/unknown-route';
 
@@ -219,6 +225,10 @@ describe('Router', () => {
 
     it('should return /about for "about" command', () => {
       expect(router.getPathForCommand('about')).toBe('/about');
+    });
+
+    it('should return /games for "games" command', () => {
+      expect(router.getPathForCommand('games')).toBe('/games');
     });
 
     it('should return /portfolio for "portfolio" command', () => {
