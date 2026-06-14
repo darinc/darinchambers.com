@@ -217,5 +217,11 @@ unrs-resolver]` (pnpm 10 blocks postinstall build scripts); switched eslint.conf
 
 - **2.1 dead markdown renderer** — logged as **GitHub issue #1** (delete vs keep as documented fallback);
   awaiting owner decision.
-- Minor: dead-code/UX quirk in `Router.getPathForCommand:296`; `dist` missing `favicon.ico` (still 404 in
-  the vite-8 build — a real, separate small fix if wanted).
+- Minor: dead-code/UX quirk in `Router.getPathForCommand:296`.
+
+### Favicon 404 — FIXED & verified (2026-06-14, shipped as v0.27.4)
+
+Added `public/favicon.svg` (terminal-prompt glyph in the default DC palette), a generated multi-resolution
+`favicon.ico` (16/32/48 via rsvg-convert + ImageMagick), and `apple-touch-icon.png` (180); referenced all
+three in `index.html` (SVG primary, ICO fallback, apple-touch). Browser + live-site verified: all assets
+200, console clean, no more `/favicon.ico` 404. Patch bump + CHANGELOG per convention (commit `5c6ad70`).
