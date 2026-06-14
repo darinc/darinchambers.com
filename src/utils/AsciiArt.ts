@@ -1,7 +1,12 @@
+import { siteConfig } from '../site.config';
+
 export class AsciiArt {
   /**
-   * Generate ASCII art for "DARIN CHAMBERS" using block-style characters
-   * Returns HTML with rainbow gradient styling
+   * Generate the block-style ASCII banner.
+   *
+   * NOTE: this is bespoke block-character art and is intentionally NOT derived from
+   * siteConfig.name — see TEMPLATE.md and the plan's Scope Boundaries. Replace it by
+   * hand (or regenerate with figlet) when forking.
    */
   static generateHeader(): string {
     const asciiText = `
@@ -20,6 +25,6 @@ export class AsciiArt {
    * Get the tagline text
    */
   static getTagline(): string {
-    return "Technologist, Inventor | Building What's Next on Rock-Solid Foundations";
+    return siteConfig.tagline;
   }
 }

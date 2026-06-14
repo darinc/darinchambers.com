@@ -1,3 +1,4 @@
+import { siteConfig } from '../../site.config';
 import { CommandArgs } from '../../utils/CommandArgs';
 import type { Command } from '../Command';
 
@@ -23,10 +24,13 @@ function getBootSequence(fast: boolean): BootLine[] {
     { type: 'bios', text: '  Primary Master: Virtual SSD 256GB' },
     // Kernel loading
     { type: 'kernel', text: 'Loading kernel...' },
-    { type: 'kernel', text: '[    0.000000] Linux version 6.8.0-darin (darin@darinchambers.com)' },
     {
       type: 'kernel',
-      text: '[    0.000001] Command line: BOOT_IMAGE=/vmlinuz-6.8.0-darin root=/dev/sda1',
+      text: `[    0.000000] Linux version 6.8.0-${siteConfig.username} (${siteConfig.username}@${siteConfig.domain})`,
+    },
+    {
+      type: 'kernel',
+      text: `[    0.000001] Command line: BOOT_IMAGE=/vmlinuz-6.8.0-${siteConfig.username} root=/dev/sda1`,
     },
     {
       type: 'kernel',
@@ -49,9 +53,9 @@ function getBootSequence(fast: boolean): BootLine[] {
     { type: 'ok', text: 'Started Terminal Emulator' },
     { type: 'ok', text: 'Reached target Multi-User System' },
     // Login prompt
-    { type: 'info', text: 'darinchambers.com login: darin' },
+    { type: 'info', text: `${siteConfig.domain} login: ${siteConfig.username}` },
     { type: 'info', text: 'Password: ********' },
-    { type: 'welcome', text: 'Welcome to darinchambers.com!' },
+    { type: 'welcome', text: `Welcome to ${siteConfig.domain}!` },
     { type: 'info', text: "Type 'help' for available commands." },
   ];
 
@@ -61,12 +65,12 @@ function getBootSequence(fast: boolean): BootLine[] {
       { type: 'bios', text: 'PHOENIX BIOS v4.0' },
       { type: 'bios', text: 'Memory Test: 16384 MB OK' },
       { type: 'kernel', text: 'Loading kernel...' },
-      { type: 'kernel', text: '[    0.000000] Linux version 6.8.0-darin' },
+      { type: 'kernel', text: `[    0.000000] Linux version 6.8.0-${siteConfig.username}` },
       { type: 'ok', text: 'Started System Logging Service' },
       { type: 'ok', text: 'Started Network Manager' },
       { type: 'ok', text: 'Started Terminal Emulator' },
       { type: 'ok', text: 'Reached target Multi-User System' },
-      { type: 'welcome', text: 'Welcome to darinchambers.com!' },
+      { type: 'welcome', text: `Welcome to ${siteConfig.domain}!` },
     ];
   }
 
