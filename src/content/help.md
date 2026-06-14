@@ -20,6 +20,7 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`blog`** - Read my blog posts and articles
 - **`notes`** - Short-form notes and thoughts
 - **`contact`** - Get in touch with me
+- **`games`** - List playable games
 - **`changelog`** - View project version history
 
 ### File System

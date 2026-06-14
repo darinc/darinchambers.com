@@ -107,6 +107,11 @@ export class Router {
         pattern: /^\/life\/?$/,
         commandBuilder: () => 'life',
       },
+      // Games route: /games
+      {
+        pattern: /^\/games\/?$/,
+        commandBuilder: () => 'games',
+      },
       // Home route: /
       {
         pattern: /^\/$/,
@@ -309,6 +314,7 @@ export class Router {
       about: '/about',
       portfolio: '/portfolio',
       contact: '/contact',
+      games: '/games',
       settings: '/settings',
       help: '/help',
       matrix: '/matrix',
