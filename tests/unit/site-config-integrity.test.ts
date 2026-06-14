@@ -14,6 +14,11 @@ import { siteConfig } from '../../src/site.config';
  * It reads the literals from `siteConfig` (never hardcodes them) and matches on
  * word boundaries, so the username is not flagged when it is merely a substring
  * of a larger token (e.g. `darin` inside `darinchambers.com` or `darinDir`).
+ *
+ * Assumes a distinctive username. A common dictionary word (e.g. "me", "dev",
+ * "test") occurs throughout normal code/comments and would make this guard fail
+ * on an otherwise-legitimate fork — TEMPLATE.md tells forkers to pick a
+ * distinctive word for exactly this reason.
  */
 
 // Tests run with the repo root as cwd (vitest), so resolve scan paths from there.
@@ -96,6 +101,8 @@ describe('site config integrity guard', () => {
     // Real reintroductions are caught.
     expect(match(`owner: '${siteConfig.username}'`)).toBe(true);
     expect(match(`/home/${siteConfig.username}/blog`)).toBe(true);
+    // Email-style literals are caught too ('@' is a word boundary).
+    expect(match(`${siteConfig.username}@example.com`)).toBe(true);
 
     // The username as a substring of a larger token is NOT a false positive.
     expect(match(`${siteConfig.username}chambers.com`)).toBe(false);

@@ -130,7 +130,10 @@ function replaceOrThrow(content, pattern, replacement, label) {
       `[prerender] Marker not found while injecting "${label}" — template may have changed.`
     );
   }
-  return content.replace(pattern, replacement);
+  // Use a function replacer so `$`-sequences in the replacement (e.g. a config
+  // name/tagline containing `$&` or `$1`) are inserted literally, not treated as
+  // String.replace special patterns.
+  return content.replace(pattern, () => replacement);
 }
 
 function injectMeta(template, { title, description, url, type, jsonLd }) {

@@ -37,7 +37,9 @@ full suite enforce this, so `pnpm validate` stays green after you change it.
 ```jsonc
 {
   // Terminal/Unix username → /home/<username>, the prompt, $USER / $HOME.
-  // Renaming this is safe: the suite + the integrity guard prove nothing hardcodes it.
+  // Pick a distinctive word: the integrity guard scans the codebase for this value,
+  // so a common word like "me" or "dev" would flag unrelated code. Renaming is
+  // otherwise safe — the suite + guard prove nothing else hardcodes it.
   "username": "darin",
   "name": "Darin Chambers", // display name → page titles, meta tags, JSON-LD
   "tagline": "Technologist, Inventor | ...", // under the header + in meta descriptions

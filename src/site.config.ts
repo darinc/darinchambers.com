@@ -34,7 +34,30 @@ export interface SiteConfig {
   defaultTheme: ThemePresetName;
 }
 
-export const siteConfig: SiteConfig = rawConfig as SiteConfig;
+const config = rawConfig as SiteConfig;
+
+/**
+ * Fail fast on a malformed fork config. The JSON crosses into typed code via the
+ * cast above, so an empty value or wrong shape would otherwise surface as a
+ * confusing runtime break far from its cause. This is the one seam to guard.
+ */
+function assertNonEmptyString(value: unknown, field: string): void {
+  if (typeof value !== 'string' || value.trim() === '') {
+    throw new Error(`site.config.json: "${field}" must be a non-empty string`);
+  }
+}
+
+assertNonEmptyString(config.username, 'username');
+assertNonEmptyString(config.name, 'name');
+assertNonEmptyString(config.tagline, 'tagline');
+assertNonEmptyString(config.domain, 'domain');
+assertNonEmptyString(config.siteUrl, 'siteUrl');
+assertNonEmptyString(config.email, 'email');
+assertNonEmptyString(config.social.github, 'social.github');
+assertNonEmptyString(config.social.linkedin, 'social.linkedin');
+assertNonEmptyString(config.defaultTheme, 'defaultTheme');
+
+export const siteConfig: SiteConfig = config;
 
 /** Virtual filesystem home directory derived from the username, e.g. `/home/darin`. */
 export const homeDir = `/home/${siteConfig.username}`;
