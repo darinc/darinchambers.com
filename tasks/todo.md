@@ -85,16 +85,18 @@ Everything else below is real but secondary to closing that gap.
 
 ## Phase 3 — Documentation truth-up
 
-- [ ] **3.1 Reconcile bundle-size claims.** Real size ≈ **118KB gzipped** (~422KB raw). Docs variously
-      say 86KB / 114KB / 121KB and the "<100KB gzipped" target is violated. Pick one canonical number;
-      update CLAUDE.md (lines 17, 447, 466), README, DEPLOYMENT.md, ARCHITECTURE.md. Make
-      `scripts/update-docs.js` measure real gzip (`zlib.gzipSync`) instead of the `*0.28` estimate, and
-      fix its stale regexes (they don't match most doc locations today).
-- [ ] **3.2 Fix false security/a11y claims.** SECURITY.md "0 known vulnerabilities" is false; CLAUDE.md
-      WCAG-AA + contrast claims are overstated; theme presets live in `ThemeManager.ts`, not
-      `constants.ts`; dependency versions are stale. Update after Phases 0–1 actually deliver them.
-- [ ] **3.3 Pin pnpm 10 in workflows.** Both workflows use `pnpm/action-setup@v4 version: 9` while the
-      repo uses pnpm 10.x; `--frozen-lockfile` can break across pnpm majors.
+- [x] **3.1 Reconcile bundle-size claims.** Canonicalized to **~119KB gzipped** (~417KB raw) across
+      README, CLAUDE.md (×3), ARCHITECTURE.md, DEPLOYMENT.md; dropped the abandoned `<100KB` target.
+      `scripts/update-docs.js` now measures real gzip via `zlib.gzipSync` (was a fixed-ratio estimate)
+      and its bundle-size regexes were rewritten to match the new canonical phrasing.
+- [x] **3.2 Fix false security/a11y claims.** SECURITY.md "0 vulnerabilities" corrected (prod deps clean
+      via `pnpm audit --prod`; dev/build tree carries advisories that never ship); dompurify 3.3.0→3.4.10;
+      supported-versions 0.13.x→0.27.x; CSP documented as a prerender-injected `<meta>` (GH Pages ignores
+      `_headers`) with header-only protections marked inactive and the policy synced to `CSP_POLICY`.
+      Theme-preset location fixed (ThemeManager.initializePresets, not constants.ts) in CLAUDE.md +
+      CONTRIBUTING.md; added missing `dc` preset; softened blanket WCAG-AA claim to delivered scope.
+- [x] **3.3 Pin pnpm 10 in workflows.** Both workflows bumped `pnpm/action-setup` version 9 → 10. First
+      CI run on v10 with `--frozen-lockfile` confirmed green.
 
 ---
 
@@ -179,10 +181,25 @@ Shipped as v0.27.3. Coverage 80.85% branch, 1889 passing; type-check/lint/format
 
 Refactors shipped without version bumps (behavior-preserving). All CI green.
 
+### Phase 3 (docs truth-up) — DONE & verified (2026-06-13)
+
+- **3.1** Bundle size canonicalized to ~119KB gzipped (measured) across all docs; `<100KB` target dropped.
+  `scripts/update-docs.js` now measures real gzip (`zlib.gzipSync`) and its regexes match the new phrasing.
+- **3.2** SECURITY.md truthed up: "0 vulnerabilities" → prod-deps-clean vs dev-tree-has-advisories framing;
+  dompurify 3.3.0→3.4.10; supported-versions 0.13.x→0.27.x; CSP documented as prerender `<meta>` (not
+  `_headers`), header-only protections marked inactive, policy synced to `CSP_POLICY`. Theme-preset location
+  corrected (ThemeManager.initializePresets) in CLAUDE.md + CONTRIBUTING.md; added `dc` preset; softened the
+  blanket WCAG-AA claim to delivered scope (reduced-motion, keyboard nav, focus-visible).
+- **3.3** pnpm pinned v9→v10 in both workflows; first v10 CI run with `--frozen-lockfile` confirmed green.
+
+Shipped without a version bump (docs/ci only). Commits `e968144` (docs), `5979351` (ci), `10a4a7d` (lint
+cleanup). Full `pnpm validate` green locally; CI green on push.
+
 **Still open:**
 
 - **2.1 dead markdown renderer** — logged as **GitHub issue #1** (delete vs keep as documented fallback);
   awaiting owner decision.
-- **Phase 3 docs truth-up** — reconcile bundle numbers (note: <100KB target dropped by owner), fix
-  SECURITY.md "0 vulnerabilities", CLAUDE.md WCAG/contrast/presets-location claims, pnpm v9→v10 in workflows.
 - Minor: dead-code/UX quirk in `Router.getPathForCommand:296`; `dist` missing `favicon.ico`.
+- Forward-looking (not urgent): GitHub is forcing Node-20 actions to Node 24 on 2026-06-16; the pinned
+  actions (`checkout@v4`, `setup-node@v4`, `upload-artifact@v4`, `codecov-action@v4`, `pnpm/action-setup@v4`)
+  emit a deprecation annotation. Bump action majors when convenient.
