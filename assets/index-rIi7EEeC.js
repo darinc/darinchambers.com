@@ -8321,6 +8321,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.27.4] - 2026-06-14
+
+### Added
+- Site favicon: an SVG icon for modern browsers, a multi-resolution \`favicon.ico\` fallback, and an apple-touch-icon for iOS home screens
+
+### Fixed
+- The browser no longer logs a 404 for \`/favicon.ico\` — the icon files are now shipped and referenced
+
+### Changed
+- Updated the toolchain and dependencies to current majors (Vite 8, TypeScript 6, ESLint 10, jsdom 29, marked 18, glob 13, and others); CI now runs on Node 22 with Node-24-based GitHub Actions
+
 ## [0.27.3] - 2026-06-13
 
 ### Changed
