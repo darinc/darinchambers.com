@@ -86,6 +86,7 @@ Terminal (orchestrator)
 
 **State Management:**
 
+- `siteConfig` (`src/site.config.ts` ← `src/site.config.json`): single source of truth for personalized identity (username, display name, tagline, domain, email, socials, default theme). Drives `PATHS`, the prompt/env, prerender SEO, and the deploy domain — renaming the username is a one-file edit guarded by `tests/unit/site-config-integrity.test.ts`. See `TEMPLATE.md`.
 - `SettingsManager`: localStorage + virtual filesystem (`~/.settings`)
 - `EnvVarManager`: Environment variables ($HOME, $PWD, etc.)
 - `AliasManager`: Command aliases (`/home/guest/.alias`)

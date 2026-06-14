@@ -105,8 +105,10 @@ pnpm install
 pnpm reset-content     # clear the example posts, notes, and projects
 ```
 
-Then follow [TEMPLATE.md](TEMPLATE.md) to swap in your name, domain, socials, and
-icons. It lists every personalized value and exactly which file to change.
+Then edit one file — `src/site.config.json` — to swap in your name, terminal
+username, domain, socials, and tagline. See [TEMPLATE.md](TEMPLATE.md) for the full
+guide, including the short list of values (icons, DNS/npm metadata) that live
+outside the config.
 
 ## Documentation
 
