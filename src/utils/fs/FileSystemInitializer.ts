@@ -1,3 +1,4 @@
+import { homeDir, siteConfig } from '../../site.config';
 import type { FileSystemNode } from './types';
 
 export class FileSystemInitializer {
@@ -8,7 +9,7 @@ export class FileSystemInitializer {
       type: 'directory',
       children: new Map(),
       permissions: 'drwxr-xr-x',
-      owner: 'darin',
+      owner: siteConfig.username,
       size: 4096,
       modifiedTime: new Date(),
       isHidden,
@@ -22,7 +23,7 @@ export class FileSystemInitializer {
       type: 'file',
       content,
       permissions: '-rw-r--r--',
-      owner: 'darin',
+      owner: siteConfig.username,
       size: content.length,
       modifiedTime: new Date(),
       isHidden,
@@ -220,20 +221,20 @@ history -c
       'README.txt',
       this.createFileNode(
         'README.txt',
-        `Welcome to darinchambers.com!
+        `Welcome to ${siteConfig.domain}!
 
 This is a terminal-inspired personal website showcasing expertise in AI and software engineering.
 
 Type 'help' to see available commands.
-Type 'cd /home/darin' to explore more.
+Type 'cd ${homeDir}' to explore more.
 `
       )
     );
 
-    // /home/darin directory with easter eggs
-    const darin = this.createDirectoryNode('darin');
-    home.children!.set('darin', darin);
-    darin.children!.set(
+    // User home directory with easter eggs
+    const userHome = this.createDirectoryNode(siteConfig.username);
+    home.children!.set(siteConfig.username, userHome);
+    userHome.children!.set(
       '.post-it',
       this.createFileNode(
         '.post-it',
@@ -242,7 +243,7 @@ Type 'cd /home/darin' to explore more.
 =============================
 
 WiFi: CoffeeShop5G
-Netflix: darin@email.com / password123
+Netflix: ${siteConfig.username}@email.com / password123
 Server root: hunter2
 Spotify: nice try
 AWS Console: ... I should really use a password manager
@@ -251,7 +252,7 @@ Remember: Delete this file before anyone finds it.
 `
       )
     );
-    darin.children!.set(
+    userHome.children!.set(
       '.secret',
       this.createFileNode(
         '.secret',
@@ -263,11 +264,11 @@ Keep exploring...
 `
       )
     );
-    darin.children!.set(
+    userHome.children!.set(
       'about.txt',
       this.createFileNode(
         'about.txt',
-        `Darin Chambers
+        `${siteConfig.name}
 Technologist, Inventor
 
 30 years of experience building innovative solutions.
@@ -277,7 +278,7 @@ Building What's Next on Rock-Solid Foundations.
 `
       )
     );
-    darin.children!.set(
+    userHome.children!.set(
       'projects.txt',
       this.createFileNode(
         'projects.txt',
@@ -291,7 +292,7 @@ Type 'portfolio' for detailed information.
 `
       )
     );
-    darin.children!.set(
+    userHome.children!.set(
       'contact.txt',
       this.createFileNode(
         'contact.txt',
@@ -301,7 +302,7 @@ Type 'contact' to see all contact information.
 `
       )
     );
-    darin.children!.set(
+    userHome.children!.set(
       'blog.txt',
       this.createFileNode(
         'blog.txt',
@@ -313,42 +314,42 @@ Type 'blog' to read posts.
       )
     );
 
-    // /home/darin/blog directory with dynamically loaded markdown blog posts
+    // ~/blog directory with dynamically loaded markdown blog posts
     const blog = this.createDirectoryNode('blog');
-    darin.children!.set('blog', blog);
+    userHome.children!.set('blog', blog);
     const blogFiles = this.loadBlogFiles();
     for (const [filename, fileNode] of blogFiles) {
       blog.children!.set(filename, fileNode);
     }
 
-    // /home/darin/posts directory with dynamically loaded markdown post files
+    // ~/posts directory with dynamically loaded markdown post files
     const posts = this.createDirectoryNode('posts');
-    darin.children!.set('posts', posts);
+    userHome.children!.set('posts', posts);
     const postFiles = this.loadPostFiles();
     for (const [filename, fileNode] of postFiles) {
       posts.children!.set(filename, fileNode);
     }
 
-    // /home/darin/content directory with dynamically loaded markdown content files
+    // ~/content directory with dynamically loaded markdown content files
     const content = this.createDirectoryNode('content');
-    darin.children!.set('content', content);
+    userHome.children!.set('content', content);
     const contentFiles = this.loadContentFiles();
     for (const [filename, fileNode] of contentFiles) {
       content.children!.set(filename, fileNode);
     }
 
-    // /home/darin/portfolio directory with dynamically loaded markdown portfolio files
+    // ~/portfolio directory with dynamically loaded markdown portfolio files
     const portfolio = this.createDirectoryNode('portfolio');
-    darin.children!.set('portfolio', portfolio);
+    userHome.children!.set('portfolio', portfolio);
     const portfolioFiles = this.loadPortfolioFiles();
     for (const [filename, fileNode] of portfolioFiles) {
       portfolio.children!.set(filename, fileNode);
     }
 
-    // /home/darin/CHANGELOG.md - project changelog loaded from root
+    // ~/CHANGELOG.md - project changelog loaded from root
     const changelogContent = this.loadChangelogFile();
     if (changelogContent) {
-      darin.children!.set('CHANGELOG.md', this.createFileNode('CHANGELOG.md', changelogContent));
+      userHome.children!.set('CHANGELOG.md', this.createFileNode('CHANGELOG.md', changelogContent));
     }
 
     // /usr directory

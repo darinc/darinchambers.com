@@ -5,6 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { siteConfig } from '../../../../src/site.config';
 import { FileSystemService } from '../../../../src/utils/fs/FileSystemService';
 import { ScreensaverManager } from '../../../../src/utils/screensaver/ScreensaverManager';
 import { SettingsManager } from '../../../../src/utils/SettingsManager';
@@ -35,9 +36,9 @@ describe('ScreensaverManager', () => {
             type: 'directory',
             children: new Map([
               [
-                'darin',
+                siteConfig.username,
                 {
-                  name: 'darin',
+                  name: siteConfig.username,
                   type: 'directory',
                   children: new Map(),
                 },

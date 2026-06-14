@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { siteConfig } from '../../../src/site.config';
 import { Router } from '../../../src/utils/Router';
 import type { Terminal } from '../../../src/components/Terminal';
 import type { IFileSystem } from '../../../src/utils/fs/IFileSystem';
@@ -44,10 +45,10 @@ describe('Router', () => {
     // Create mock filesystem with test blog posts
     mockFileSystem = {
       list: vi.fn((path: string) => {
-        if (path === '/home/darin/blog') {
+        if (path === `/home/${siteConfig.username}/blog`) {
           return ['2024-01-01-test-post.md', '2024-01-02-my-post-123.md'];
         }
-        if (path === '/home/darin/posts') {
+        if (path === `/home/${siteConfig.username}/posts`) {
           return ['2024-03-03-my-note.md', 'not-markdown.txt'];
         }
         return [];

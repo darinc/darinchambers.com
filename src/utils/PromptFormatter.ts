@@ -26,7 +26,7 @@ import type { EnvVarManager } from './EnvVarManager';
 export interface PromptContext {
   user: string;
   hostname: string;
-  pwd: string; // Full path: /home/darin/blog/posts
+  pwd: string; // Full path: /home/<user>/blog/posts
   shortPwd: string; // With ~ expansion: ~/blog/posts
   lastDir: string; // Last directory only: posts
   isRoot: boolean;
@@ -207,7 +207,7 @@ export class PromptFormatter {
   /**
    * Extract last directory from a path.
    *
-   * @param path Path string (e.g., "~/blog/posts" or "/home/darin")
+   * @param path Path string (e.g., "~/blog/posts" or "/home/<user>")
    * @returns Last directory component or "~" if at home, "/" if at root
    */
   static getLastDir(path: string): string {

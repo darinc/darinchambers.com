@@ -1,6 +1,7 @@
 import { stopAllLifeAnimations } from '../animations/gameOfLife';
 import { stopAllMatrixAnimations } from '../animations/matrixRain';
 import { COMMAND_SIGNALS } from '../constants';
+import { siteConfig } from '../site.config';
 import { initEmailProtection } from '../utils/EmailProtection';
 import { PromptFormatter, type PromptContext } from '../utils/PromptFormatter';
 import { FullscreenController } from './FullscreenController';
@@ -26,8 +27,8 @@ interface IRouter {
 export class Terminal {
   private input: TerminalInput;
   private output: TerminalOutput;
-  private username = 'darin';
-  private hostname = 'darinchambers.com';
+  private username = siteConfig.username;
+  private hostname = siteConfig.domain;
   private currentPath = '~';
   private promptFormatter: PromptFormatter;
   private router?: IRouter;

@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { siteConfig } from '../../src/site.config';
 import {
   setupCompleteTerminal,
   teardownIntegrationTest,
@@ -37,7 +38,7 @@ describe('Settings Persistence Integration', () => {
     it('should persist theme change to filesystem', async () => {
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
 
-      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
+      const fileContent = context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`);
       const settings = JSON.parse(fileContent);
       expect(settings.theme.preset).toBe('yellow');
     });
@@ -66,7 +67,7 @@ describe('Settings Persistence Integration', () => {
       expect(stored.theme.preset).toBe('green');
 
       // Check filesystem
-      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
+      const fileContent = context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`);
       const fileSettings = JSON.parse(fileContent);
       expect(fileSettings.theme.preset).toBe('green');
 
@@ -104,7 +105,7 @@ describe('Settings Persistence Integration', () => {
     it('should persist fontSize change to filesystem', async () => {
       await executeCommandAndWait(context.terminal, 'settings fontSize 18');
 
-      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
+      const fileContent = context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`);
       const settings = JSON.parse(fileContent);
       expect(settings.font.size).toBe(18);
     });
@@ -124,7 +125,7 @@ describe('Settings Persistence Integration', () => {
       const stored = JSON.parse(localStorage.getItem('terminal_settings')!);
       expect(stored.font.family).toBe('Courier New');
 
-      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
+      const fileContent = context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`);
       const settings = JSON.parse(fileContent);
       expect(settings.font.family).toBe('Courier New');
     });
@@ -156,7 +157,7 @@ describe('Settings Persistence Integration', () => {
       expect(stored.font.size).toBe(18);
       expect(stored.font.family).toBe('monospace');
 
-      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
+      const fileContent = context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`);
       const fileSettings = JSON.parse(fileContent);
       expect(fileSettings.theme.preset).toBe('yellow');
       expect(fileSettings.font.size).toBe(18);
@@ -207,10 +208,13 @@ describe('Settings Persistence Integration', () => {
         },
         prompt: { format: '\\W \\$ ' },
       };
-      context.fileSystem.writeFile('/home/darin/.settings', JSON.stringify(settingsData, null, 2));
+      context.fileSystem.writeFile(
+        `/home/${siteConfig.username}/.settings`,
+        JSON.stringify(settingsData, null, 2)
+      );
 
       // Read settings using cat command
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/.settings');
+      await executeCommandAndWait(context.terminal, `cat /home/${siteConfig.username}/.settings`);
 
       const outputLines = getAllOutputLines();
       const fullOutput = outputLines.map((line) => line.textContent).join('\n');
@@ -233,7 +237,7 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
 
       // Verify filesystem has the setting
-      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
+      const fileContent = context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`);
       const fileSettings = JSON.parse(fileContent);
       expect(fileSettings.theme.preset).toBe('yellow');
     });
@@ -245,7 +249,9 @@ describe('Settings Persistence Integration', () => {
 
         // Verify consistency
         const localStorageData = JSON.parse(localStorage.getItem('terminal_settings')!);
-        const fileData = JSON.parse(context.fileSystem.readFile('/home/darin/.settings'));
+        const fileData = JSON.parse(
+          context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`)
+        );
 
         expect(localStorageData.theme.preset).toBe(theme);
         expect(fileData.theme.preset).toBe(theme);
@@ -350,7 +356,7 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings theme paper');
 
       // Read via cat
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/.settings');
+      await executeCommandAndWait(context.terminal, `cat /home/${siteConfig.username}/.settings`);
 
       const outputLines = getAllOutputLines();
       const fullOutput = outputLines.map((line) => line.textContent).join('\n');
@@ -363,7 +369,7 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
 
       // List config directory
-      await executeCommandAndWait(context.terminal, 'ls /home/darin/.config');
+      await executeCommandAndWait(context.terminal, `ls /home/${siteConfig.username}/.config`);
 
       const output = getLastOutputLine();
       expect(output?.textContent).toContain('settings.json');
@@ -374,7 +380,7 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings theme light-blue');
 
       // Change directory
-      await executeCommandAndWait(context.terminal, 'cd /home/darin/documents');
+      await executeCommandAndWait(context.terminal, `cd /home/${siteConfig.username}/documents`);
 
       // Settings should still be accessible
       await executeCommandAndWait(context.terminal, 'settings');
@@ -411,7 +417,9 @@ describe('Settings Persistence Integration', () => {
       expect(localData.font.size).toBe(20); // Should preserve fontSize
 
       // Verify filesystem
-      const fileData = JSON.parse(context.fileSystem.readFile('/home/darin/.settings'));
+      const fileData = JSON.parse(
+        context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`)
+      );
       expect(fileData.theme.preset).toBe('green');
       expect(fileData.font.size).toBe(20);
     });
@@ -426,7 +434,9 @@ describe('Settings Persistence Integration', () => {
 
       // Final state should be consistent
       const localData = JSON.parse(localStorage.getItem('terminal_settings')!);
-      const fileData = JSON.parse(context.fileSystem.readFile('/home/darin/.settings'));
+      const fileData = JSON.parse(
+        context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`)
+      );
 
       expect(localData.theme.preset).toBe(fileData.theme.preset);
       expect(localData.theme.preset).toBe('green');
@@ -451,7 +461,7 @@ describe('Settings Persistence Integration', () => {
   describe('Edge Cases', () => {
     it('should handle empty settings file', async () => {
       // Create empty settings file
-      context.fileSystem.writeFile('/home/darin/.settings', '{}');
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/.settings`, '{}');
 
       // Try to change setting
       await executeCommandAndWait(context.terminal, 'settings theme yellow');
@@ -463,7 +473,7 @@ describe('Settings Persistence Integration', () => {
 
     it('should handle corrupted settings file', async () => {
       // Write invalid JSON
-      context.fileSystem.writeFile('/home/darin/.settings', 'invalid json {');
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/.settings`, 'invalid json {');
 
       // Should handle gracefully
       await executeCommandAndWait(context.terminal, 'settings theme light-blue');
@@ -480,7 +490,7 @@ describe('Settings Persistence Integration', () => {
       await executeCommandAndWait(context.terminal, 'settings theme green');
 
       // Should create new settings file
-      const fileContent = context.fileSystem.readFile('/home/darin/.settings');
+      const fileContent = context.fileSystem.readFile(`/home/${siteConfig.username}/.settings`);
       expect(fileContent).toBeTruthy();
       expect(JSON.parse(fileContent).theme.preset).toBe('green');
     });

@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createSudoCommand } from '../../../../src/commands/core/sudo';
+import { siteConfig } from '../../../../src/site.config';
 import type { Terminal } from '../../../../src/components/Terminal';
 import type { CommandExecutor } from '../../../../src/utils/CommandExecutor';
 
 function createMocks() {
   const mockTerminal = {
-    getUsername: vi.fn().mockReturnValue('darin'),
+    getUsername: vi.fn().mockReturnValue(siteConfig.username),
     setUsername: vi.fn(),
     setInputInterceptor: vi.fn(),
     writeError: vi.fn(),
@@ -66,7 +67,9 @@ describe('sudo command', () => {
     const resultPromise = command.execute(['ls']);
 
     expect(mockTerminal.getInput().setInputType).toHaveBeenCalledWith('password');
-    expect(mockTerminal.getInput().setPrompt).toHaveBeenCalledWith('[sudo] password for darin: ');
+    expect(mockTerminal.getInput().setPrompt).toHaveBeenCalledWith(
+      `[sudo] password for ${siteConfig.username}: `
+    );
     expect(mockTerminal.setInputInterceptor).toHaveBeenCalled();
 
     // Resolve the promise so the test doesn't leak

@@ -1,4 +1,5 @@
 import { PATHS } from '../../constants';
+import { siteConfig } from '../../site.config';
 import { FileSystemError } from '../errors';
 import type { IFileSystem } from './IFileSystem';
 import type { FileSystemNode } from './types';
@@ -6,11 +7,11 @@ import type { FileSystemNode } from './types';
 export class FileSystemService implements IFileSystem {
   private root: FileSystemNode;
   private currentPath: string;
-  private currentUsername = 'darin';
+  private currentUsername = siteConfig.username;
 
   constructor(rootNode: FileSystemNode) {
     this.root = rootNode;
-    this.currentPath = PATHS.HOME_DARIN;
+    this.currentPath = PATHS.HOME;
   }
 
   getCurrentPath(): string {
@@ -166,7 +167,7 @@ export class FileSystemService implements IFileSystem {
       content,
       size: content.length,
       permissions: '-rw-r--r--',
-      owner: 'darin',
+      owner: siteConfig.username,
       modifiedTime: new Date(),
     };
     current.children!.set(fileName, fileNode);

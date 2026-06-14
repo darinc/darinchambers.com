@@ -1,3 +1,4 @@
+import { siteConfig } from '../site.config';
 import type { FileSystemNode } from './fs/types';
 
 /**
@@ -56,7 +57,7 @@ export function formatModifiedTime(date: Date): string {
 export function formatLongListing(node: FileSystemNode, humanReadable: boolean): string {
   const permissions = node.permissions ?? '-rw-r--r--';
   const links = '1'; // Simplified: always show 1 link
-  const owner = node.owner ?? 'darin';
+  const owner = node.owner ?? siteConfig.username;
   const group = 'staff'; // Simplified: always show staff as group
   const size = formatFileSize(node.size ?? 0, humanReadable);
   const modTime = formatModifiedTime(node.modifiedTime ?? new Date());

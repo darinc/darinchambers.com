@@ -1,3 +1,4 @@
+import { siteConfig } from '../../site.config';
 import { CommandArgs } from '../../utils/CommandArgs';
 import type { Command } from '../Command';
 
@@ -14,9 +15,9 @@ interface ShutdownLine {
  */
 function getShutdownSequence(): ShutdownLine[] {
   return [
-    { type: 'info', text: 'Broadcast message from root@darinchambers.com:' },
+    { type: 'info', text: `Broadcast message from root@${siteConfig.domain}:` },
     { type: 'info', text: 'The system is going down for poweroff NOW!' },
-    { type: 'ok', text: 'Stopped Session c1 of user darin' },
+    { type: 'ok', text: `Stopped Session c1 of user ${siteConfig.username}` },
     { type: 'ok', text: 'Stopped Target - Graphical Interface' },
     { type: 'ok', text: 'Stopped Code Editor Process' },
     { type: 'ok', text: 'Stopped Docker Container Runtime' },

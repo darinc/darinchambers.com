@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { siteConfig } from '../../../src/site.config';
 import { CommandExecutor } from '../../../src/utils/CommandExecutor';
 import type { CommandResult } from '../../../src/commands/Command';
 import type { AliasManager } from '../../../src/utils/AliasManager';
@@ -57,13 +58,13 @@ describe('CommandExecutor', () => {
 
   describe('Alias Resolution', () => {
     it('should resolve aliases before execution', async () => {
-      mockAliasManager.resolve.mockReturnValue('list /home/darin');
+      mockAliasManager.resolve.mockReturnValue(`list /home/${siteConfig.username}`);
       mockDispatcher.dispatch.mockResolvedValue({ output: 'file1 file2' });
 
       await executor.execute('ll');
 
       expect(mockAliasManager.resolve).toHaveBeenCalledWith('ll');
-      expect(mockDispatcher.dispatch).toHaveBeenCalledWith('list /home/darin');
+      expect(mockDispatcher.dispatch).toHaveBeenCalledWith(`list /home/${siteConfig.username}`);
     });
 
     it('should handle commands with no aliases', async () => {
@@ -187,14 +188,16 @@ describe('CommandExecutor', () => {
 
   describe('Alias Resolution with Pipelines', () => {
     it('should resolve aliases then detect pipelines', async () => {
-      mockAliasManager.resolve.mockReturnValue('cat /home/darin/blog/post.md | render');
+      mockAliasManager.resolve.mockReturnValue(
+        `cat /home/${siteConfig.username}/blog/post.md | render`
+      );
       mockDispatcher.dispatchPipeline.mockResolvedValue({ output: '<h1>Post</h1>', html: true });
 
       const result = await executor.execute('readpost');
 
       expect(mockAliasManager.resolve).toHaveBeenCalledWith('readpost');
       expect(mockDispatcher.dispatchPipeline).toHaveBeenCalledWith(
-        'cat /home/darin/blog/post.md | render'
+        `cat /home/${siteConfig.username}/blog/post.md | render`
       );
       expect(result.html).toBe(true);
     });

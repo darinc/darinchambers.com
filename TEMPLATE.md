@@ -1,8 +1,7 @@
 # Make It Your Own
 
 This repo is MIT-licensed — you're welcome to fork it into your own terminal
-portfolio. This guide lists everything that's personalized to the original
-author and exactly where to change it.
+portfolio. This guide shows how to make it yours.
 
 There are two steps: **clear the example content**, then **swap the identity**.
 
@@ -29,83 +28,59 @@ frontmatter formats.
 
 ## 2. Swap the identity
 
-The site has a few distinct identity values. Search-and-replace is risky
-(`darin` is also a substring of paths), so change them at the specific spots below.
+Almost everything is driven by one file: **`src/site.config.json`**. Edit it and the
+display name, terminal username, domain, email, social links, tagline, and default
+theme update everywhere — the app, the SEO/meta build, and the deploy — with no other
+code changes. A regression test (`tests/unit/site-config-integrity.test.ts`) plus the
+full suite enforce this, so `pnpm validate` stays green after you change it.
 
-### Display name & tagline — "Darin Chambers"
+```jsonc
+{
+  // Terminal/Unix username → /home/<username>, the prompt, $USER / $HOME.
+  // Pick a distinctive word: the integrity guard scans the codebase for this value,
+  // so a common word like "me" or "dev" would flag unrelated code. Renaming is
+  // otherwise safe — the suite + guard prove nothing else hardcodes it.
+  "username": "darin",
+  "name": "Darin Chambers", // display name → page titles, meta tags, JSON-LD
+  "tagline": "Technologist, Inventor | ...", // under the header + in meta descriptions
+  "domain": "darinchambers.com", // prompt host + public/CNAME (keep them in sync)
+  "siteUrl": "https://darinchambers.com", // canonical URL, sitemap, OG/Twitter, robots
+  "email": "hello@darinchambers.com",
+  "social": {
+    "github": "https://github.com/your-handle", // full profile URLs, not bare handles
+    "linkedin": "https://www.linkedin.com/in/your-handle",
+  },
+  "defaultTheme": "dc", // which built-in theme loads first
+}
+```
 
-| File                    | What to change                                                                                                  |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `index.html`            | `<title>`, `meta[name=description]`, `meta[name=author]`, and the `og:*` / `twitter:*` title & description tags |
-| `scripts/prerender.js`  | the JSON-LD `name` fields, the blog feed name, and `author`                                                     |
-| `src/utils/AsciiArt.ts` | the ASCII banner shown on load (currently "DARIN CHAMBERS")                                                     |
-| `package.json`          | `author`, `description`                                                                                         |
+After editing, run `pnpm validate` to confirm everything still passes, then
+`pnpm build` to regenerate the static SEO pages from your new values.
 
-### Terminal username — `darin` (structural)
+### The short list of things that live outside the config
 
-This one drives the home directory `/home/darin`, the shell prompt (`darin@…`),
-and the `$USER` / `$HOME` env vars, so change all three together:
+A few values genuinely can't read the config — npm/DNS metadata can't import a
+module, and image bytes or bespoke art aren't a string substitution. Change these
+by hand:
 
-| File                                    | What to change                                                                            |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `src/main.ts`                           | `new EnvVarManager(fileSystem, 'darin', 'darinchambers.com')` — first arg is the username |
-| `src/constants.ts`                      | `PATHS.HOME_DARIN` and every `/home/darin/...` content/config path                        |
-| `src/utils/fs/FileSystemInitializer.ts` | the `darin` home directory it creates                                                     |
-
-> Tip: this is the most involved rename — several tests assert `/home/darin` and
-> `darin@…`. If you change it, update those tests (or just run `pnpm validate`,
-> which will point out every mismatch). If you'd rather not, you can keep the
-> internal username as-is and only change the display-facing identity below.
-
-### Domain & site URL — `darinchambers.com`
-
-| File                           | What to change                                                                          |
-| ------------------------------ | --------------------------------------------------------------------------------------- |
-| `src/main.ts`                  | `EnvVarManager(..., 'darinchambers.com')` — second arg is the prompt host               |
-| `scripts/prerender.js`         | `SITE_URL`                                                                              |
-| `index.html`                   | `og:url`, `twitter:url`                                                                 |
-| `public/CNAME`                 | your custom domain (delete this file if you'll use a `username.github.io` page instead) |
-| `public/robots.txt`            | the `Sitemap:` URL                                                                      |
-| `.github/workflows/deploy.yml` | the `cname:` value                                                                      |
-
-### Email & social links
-
-| File                     | What to change                                                                                                                         |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/content/contact.md` | email (the `data-user` / `data-domain` attributes and visible text), LinkedIn, GitHub, blog link — edit after `reset-content` stubs it |
-| `scripts/prerender.js`   | the JSON-LD `sameAs` array (LinkedIn / GitHub URLs)                                                                                    |
-
-### Icons & social image
-
-Replace these files in place (the references in `index.html` keep working):
-
-- `public/favicon.svg`, `public/favicon.ico`, `public/apple-touch-icon.png` — the favicon set
-- `public/og-image.png` — the social-share preview image
-
-### Signature theme (optional) — `dc` / "DC"
-
-The default theme is named after the author's initials.
-
-| File                        | What to change                                               |
-| --------------------------- | ------------------------------------------------------------ |
-| `src/utils/ThemeManager.ts` | the preset `name: 'dc'`, `displayName: 'DC'`, and its colors |
-| `src/types/settings.ts`     | the `'dc'` entry in the `ThemePresetName` union              |
-
-### System-message flavor text (optional)
-
-These novelty commands include the name/host in their output:
-`src/commands/novelty/boot.ts`, `bsod.ts`, `shutdown.ts`, and
-`src/commands/core/exit.ts`.
+| What                   | Where                                                                                            | Why it's separate                                                                                                                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Custom domain (DNS)    | `public/CNAME`                                                                                   | GitHub reads this file directly. Keep it equal to `domain`. **No custom domain?** Delete `public/CNAME` — a `username.github.io/<repo>` fork must remove it, or GitHub Pages will try to claim the original author's domain. |
+| npm metadata           | `package.json` — `author`, `description`, `name`                                                 | Static JSON read by tooling; it can't import a runtime module.                                                                                                                                                               |
+| Favicon & social image | `public/favicon.svg`, `public/favicon.ico`, `public/apple-touch-icon.png`, `public/og-image.png` | Image **bytes** — replace the files in place. The config already drives their URLs.                                                                                                                                          |
+| ASCII banner art       | `src/utils/AsciiArt.ts` (`generateHeader`)                                                       | Bespoke block-character art that can't be derived from your name by substitution. (The tagline rendered beneath it _is_ config-driven.) Regenerate with `figlet` if you like.                                                |
+| Bio / about prose      | `src/content/about.md`, and the `BIO` line in `scripts/prerender.js`                             | Your own multi-sentence writing — authored content, not a one-liner.                                                                                                                                                         |
+| Signature theme (opt.) | `src/utils/ThemeManager.ts` + the `'dc'` entry in `ThemePresetName` (`src/types/settings.ts`)    | The `dc` preset is named after the author's initials. Rename the preset id only if you want to; `defaultTheme` above just selects which preset loads.                                                                        |
 
 ---
 
 ## 3. Reset the project metadata (optional)
 
-| File           | What to change                               |
-| -------------- | -------------------------------------------- |
-| `CHANGELOG.md` | clear it and start your own history          |
-| `package.json` | reset `version` (e.g. to `0.1.0`) and `name` |
-| `README.md`    | the version badge and project description    |
+| File           | What to change                            |
+| -------------- | ----------------------------------------- |
+| `CHANGELOG.md` | clear it and start your own history       |
+| `package.json` | reset `version` (e.g. to `0.1.0`)         |
+| `README.md`    | the version badge and project description |
 
 `pnpm update-docs` re-syncs the version badge and bundle-size figures in the docs
 once you've made changes.
@@ -116,17 +91,18 @@ once you've made changes.
 
 ```bash
 pnpm install
-pnpm validate     # type-check + lint + format + tests
-pnpm build        # production build into dist/
+pnpm validate     # type-check + lint + format + tests (incl. the identity guard)
+pnpm build        # production build into dist/ (regenerates SEO from the config)
 pnpm dev          # preview locally at http://localhost:5175
 ```
 
 Deployment is GitHub Pages via `.github/workflows/deploy.yml` (it runs after CI
-passes). For a custom domain, keep `public/CNAME` and the workflow `cname:` in
-sync; for a `username.github.io/repo` project page, remove the CNAME and set the
-Pages source to GitHub Actions. See `DEPLOYMENT.md` for details.
+passes). The custom domain lives only in `public/CNAME` — Vite copies it into
+`dist/` and the deploy publishes it as-is. For a `username.github.io/<repo>`
+project page, delete `public/CNAME` and set the Pages source to GitHub Actions.
+See `DEPLOYMENT.md` for details.
 
 ---
 
-That's it — clear, swap, deploy. If you build something fun with it, that's the
-whole point. 🚀
+That's it — clear, edit one config file, deploy. If you build something fun with
+it, that's the whole point. 🚀

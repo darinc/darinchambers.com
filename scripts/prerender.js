@@ -15,7 +15,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const CONTENT = path.join(ROOT, 'src', 'content');
-const SITE_URL = 'https://darinchambers.com';
+
+// Single source of truth for identity values. Read as JSON (not imported as a
+// module) so this ESM Node script and the TypeScript app bundle consume the same
+// src/site.config.json with no transpile or generate step. See src/site.config.ts.
+const siteConfig = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'site.config.json'), 'utf8'));
+const SITE_URL = siteConfig.siteUrl;
+const SITE_NAME = siteConfig.name;
+const OG_IMAGE = `${SITE_URL}/og-image.png`;
+// Bio sentence appended to the tagline in the home/about meta description. This is
+// authored prose, not a config value — edit it here (see TEMPLATE.md Scope notes).
+const BIO = '30+ years of experience in software engineering, AI, and distributed systems.';
+const SITE_DESCRIPTION = `${siteConfig.tagline}. ${BIO}`;
 
 // ---------------------------------------------------------------------------
 // Frontmatter parser (lightweight, replicates BlogParser / PortfolioParser)
@@ -119,7 +130,10 @@ function replaceOrThrow(content, pattern, replacement, label) {
       `[prerender] Marker not found while injecting "${label}" — template may have changed.`
     );
   }
-  return content.replace(pattern, replacement);
+  // Use a function replacer so `$`-sequences in the replacement (e.g. a config
+  // name/tagline containing `$&` or `$1`) are inserted literally, not treated as
+  // String.replace special patterns.
+  return content.replace(pattern, () => replacement);
 }
 
 function injectMeta(template, { title, description, url, type, jsonLd }) {
@@ -139,6 +153,14 @@ function injectMeta(template, { title, description, url, type, jsonLd }) {
     /<meta name="description"[^>]*>/,
     `<meta name="description" content="${escapeHtml(description)}">`,
     'meta description'
+  );
+
+  // Replace author (same for every page; index.html ships a static dev fallback)
+  result = replaceOrThrow(
+    result,
+    /<meta name="author"[^>]*>/,
+    `<meta name="author" content="${escapeHtml(SITE_NAME)}">`,
+    'meta author'
   );
 
   // Replace existing OG tags with per-page values
@@ -166,6 +188,12 @@ function injectMeta(template, { title, description, url, type, jsonLd }) {
     `<meta property="og:description" content="${escapeHtml(description)}">`,
     'og:description'
   );
+  result = replaceOrThrow(
+    result,
+    /<meta property="og:image"[^>]*>/,
+    `<meta property="og:image" content="${OG_IMAGE}">`,
+    'og:image'
+  );
 
   // Replace existing Twitter tags with per-page values
   result = replaceOrThrow(
@@ -185,6 +213,12 @@ function injectMeta(template, { title, description, url, type, jsonLd }) {
     /<meta name="twitter:description"[^>]*>/,
     `<meta name="twitter:description" content="${escapeHtml(description)}">`,
     'twitter:description'
+  );
+  result = replaceOrThrow(
+    result,
+    /<meta name="twitter:image"[^>]*>/,
+    `<meta name="twitter:image" content="${OG_IMAGE}">`,
+    'twitter:image'
   );
 
   // Inject canonical link and JSON-LD before </head>
@@ -259,11 +293,11 @@ function personSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: 'Darin Chambers',
+    name: SITE_NAME,
     jobTitle: 'Technologist, Inventor',
     description: "Building What's Next on Rock-Solid Foundations",
     url: SITE_URL,
-    sameAs: ['https://www.linkedin.com/in/darinchambers', 'https://github.com/darinc'],
+    sameAs: [siteConfig.social.linkedin, siteConfig.social.github],
   };
 }
 
@@ -273,7 +307,7 @@ function blogPostingSchema(meta, slug) {
     '@type': 'BlogPosting',
     headline: meta.title,
     datePublished: meta.date,
-    author: { '@type': 'Person', name: 'Darin Chambers' },
+    author: { '@type': 'Person', name: SITE_NAME },
     description: meta.summary || '',
     keywords: Array.isArray(meta.tags) ? meta.tags.join(', ') : '',
     url: `${SITE_URL}/blog/${slug}`,
@@ -284,7 +318,7 @@ function blogListSchema(posts) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    name: 'Darin Chambers Blog',
+    name: `${SITE_NAME} Blog`,
     url: `${SITE_URL}/blog`,
     blogPost: posts.map((p) => ({
       '@type': 'BlogPosting',
@@ -301,7 +335,7 @@ function creativeWorkSchema(meta, slug) {
     '@type': 'CreativeWork',
     name: meta.title,
     description: meta.summary || meta.impact || '',
-    author: { '@type': 'Person', name: 'Darin Chambers' },
+    author: { '@type': 'Person', name: SITE_NAME },
     keywords: Array.isArray(meta.tags) ? meta.tags.join(', ') : '',
     url: `${SITE_URL}/portfolio/${slug}`,
   };
@@ -325,7 +359,7 @@ function contactPageSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
-    name: 'Contact Darin Chambers',
+    name: `Contact ${SITE_NAME}`,
     url: `${SITE_URL}/contact`,
   };
 }
@@ -407,9 +441,8 @@ function generateAboutPage(template) {
   const raw = readFile(path.join(CONTENT, 'about.md'));
   const contentHtml = renderMarkdown(raw);
   const page = buildPage(template, {
-    title: 'Darin Chambers - Technologist, Inventor',
-    description:
-      "Technologist, Inventor | Building What's Next on Rock-Solid Foundations. 30+ years of experience in software engineering, AI, and distributed systems.",
+    title: `${SITE_NAME} - Technologist, Inventor`,
+    description: SITE_DESCRIPTION,
     url: `${SITE_URL}/about`,
     jsonLd: personSchema(),
     contentHtml,
@@ -418,9 +451,8 @@ function generateAboutPage(template) {
 
   // Also enrich the root index.html with about content
   const rootPage = buildPage(template, {
-    title: 'Darin Chambers - Technologist, Inventor',
-    description:
-      "Technologist, Inventor | Building What's Next on Rock-Solid Foundations. 30+ years of experience in software engineering, AI, and distributed systems.",
+    title: `${SITE_NAME} - Technologist, Inventor`,
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
     jsonLd: personSchema(),
     contentHtml,
@@ -435,7 +467,7 @@ function generateBlogPages(template) {
   for (const post of posts) {
     const contentHtml = renderMarkdown(post.body);
     const page = buildPage(template, {
-      title: `${post.meta.title} - Darin Chambers`,
+      title: `${post.meta.title} - ${SITE_NAME}`,
       description: post.meta.summary || post.meta.title,
       url: `${SITE_URL}/blog/${post.slug}`,
       type: 'article',
@@ -457,7 +489,7 @@ function generateBlogPages(template) {
   ].join('\n');
 
   const listPage = buildPage(template, {
-    title: 'Blog - Darin Chambers',
+    title: `Blog - ${SITE_NAME}`,
     description: 'Blog posts about AI, software engineering, and the craft of building software.',
     url: `${SITE_URL}/blog`,
     jsonLd: blogListSchema(posts),
@@ -474,7 +506,7 @@ function generatePortfolioPages(template) {
   for (const project of projects) {
     const contentHtml = renderMarkdown(project.body);
     const page = buildPage(template, {
-      title: `${project.meta.title} - Darin Chambers`,
+      title: `${project.meta.title} - ${SITE_NAME}`,
       description: project.meta.summary || project.meta.impact || project.meta.title,
       url: `${SITE_URL}/portfolio/${project.slug}`,
       jsonLd: creativeWorkSchema(project.meta, project.slug),
@@ -495,7 +527,7 @@ function generatePortfolioPages(template) {
   ].join('\n');
 
   const listPage = buildPage(template, {
-    title: 'Portfolio - Darin Chambers',
+    title: `Portfolio - ${SITE_NAME}`,
     description: 'Projects and accomplishments in software engineering, infrastructure, and AI.',
     url: `${SITE_URL}/portfolio`,
     jsonLd: collectionPageSchema('Portfolio', projects, 'portfolio'),
@@ -519,8 +551,8 @@ function generateNotesPages(template) {
   for (const note of notes) {
     const contentHtml = renderMarkdown(note.body);
     const page = buildPage(template, {
-      title: `${note.meta.title} - Darin Chambers`,
-      description: note.meta.summary || note.meta.title || 'A note by Darin Chambers',
+      title: `${note.meta.title} - ${SITE_NAME}`,
+      description: note.meta.summary || note.meta.title || `A note by ${SITE_NAME}`,
       url: `${SITE_URL}/notes/${note.slug}`,
       jsonLd: blogPostingSchema(note.meta, note.slug),
       contentHtml,
@@ -536,8 +568,8 @@ function generateNotesPages(template) {
   const listHtml = ['<h1>Notes</h1>', '<ul>', ...listItems, '</ul>'].join('\n');
 
   const listPage = buildPage(template, {
-    title: 'Notes - Darin Chambers',
-    description: 'Short-form notes and thoughts by Darin Chambers.',
+    title: `Notes - ${SITE_NAME}`,
+    description: `Short-form notes and thoughts by ${SITE_NAME}.`,
     url: `${SITE_URL}/notes`,
     jsonLd: collectionPageSchema('Notes', notes, 'notes'),
     contentHtml: listHtml,
@@ -551,8 +583,8 @@ function generateContactPage(template) {
   const raw = readFile(path.join(CONTENT, 'contact.md'));
   const contentHtml = renderMarkdown(raw);
   const page = buildPage(template, {
-    title: 'Contact - Darin Chambers',
-    description: 'Get in touch with Darin Chambers. Available via email and LinkedIn.',
+    title: `Contact - ${SITE_NAME}`,
+    description: `Get in touch with ${SITE_NAME}. Available via email and LinkedIn.`,
     url: `${SITE_URL}/contact`,
     jsonLd: contactPageSchema(),
     contentHtml,
@@ -564,7 +596,7 @@ function generateHelpPage(template) {
   const raw = readFile(path.join(CONTENT, 'help.md'));
   const contentHtml = renderMarkdown(raw);
   const page = buildPage(template, {
-    title: 'Help - Darin Chambers Terminal',
+    title: `Help - ${SITE_NAME} Terminal`,
     description: 'Interactive terminal help — available commands and features.',
     url: `${SITE_URL}/help`,
     jsonLd: {
@@ -632,6 +664,19 @@ function generateSitemap(blogPosts, portfolioProjects, notes) {
 }
 
 // ---------------------------------------------------------------------------
+// robots.txt
+//
+// public/robots.txt is copied verbatim into dist/ by Vite as a dev fallback;
+// we overwrite it here so the advertised Sitemap URL derives from the config
+// domain rather than a duplicated literal.
+// ---------------------------------------------------------------------------
+
+function generateRobots() {
+  const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+  writeFileSafe(path.join(DIST, 'robots.txt'), robots);
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -647,6 +692,7 @@ function main() {
   generateContactPage(template);
   generateHelpPage(template);
   generateSitemap(blogPosts, portfolioProjects, notes);
+  generateRobots();
 
   const totalPages =
     2 + // root + about

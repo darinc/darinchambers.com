@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { siteConfig } from '../../src/site.config';
 import { sampleBlogPost, simpleBlogPost, readmeContent } from '../fixtures/integration-data';
 import {
   setupCompleteTerminal,
@@ -18,9 +19,9 @@ describe('Pipeline Execution Integration', () => {
     context = setupCompleteTerminal();
 
     // Add test files to filesystem
-    context.fileSystem.writeFile('/home/darin/test.md', simpleBlogPost);
-    context.fileSystem.writeFile('/home/darin/blog-test.md', sampleBlogPost);
-    context.fileSystem.writeFile('/home/darin/readme.md', readmeContent);
+    context.fileSystem.writeFile(`/home/${siteConfig.username}/test.md`, simpleBlogPost);
+    context.fileSystem.writeFile(`/home/${siteConfig.username}/blog-test.md`, sampleBlogPost);
+    context.fileSystem.writeFile(`/home/${siteConfig.username}/readme.md`, readmeContent);
   });
 
   afterEach(() => {
@@ -47,7 +48,10 @@ describe('Pipeline Execution Integration', () => {
     });
 
     it('should pipe file content to render', async () => {
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/test.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/test.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -69,16 +73,22 @@ describe('Pipeline Execution Integration', () => {
 
     it('should pass data through multiple stages', async () => {
       // Create a test file
-      context.fileSystem.writeFile('/home/darin/multi-pipe.txt', 'test content');
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/multi-pipe.txt`, 'test content');
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/multi-pipe.txt | echo | cat');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/multi-pipe.txt | echo | cat`
+      );
 
       const output = getLastOutputLine();
       expect(output?.textContent).toContain('test content');
     });
 
     it('should handle complex markdown through pipeline', async () => {
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/blog-test.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/blog-test.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -103,9 +113,12 @@ describe('Pipeline Execution Integration', () => {
       const multiline = `Line 1
 Line 2
 Line 3`;
-      context.fileSystem.writeFile('/home/darin/multiline.txt', multiline);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/multiline.txt`, multiline);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/multiline.txt | cat');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/multiline.txt | cat`
+      );
 
       // Get all output lines and combine their text content
       const allLines = getAllOutputLines();
@@ -126,9 +139,12 @@ Line 3`;
     it('should transform content through pipeline stages', async () => {
       // Write markdown that will be transformed
       const markdown = '**Bold** and *italic*';
-      context.fileSystem.writeFile('/home/darin/transform.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/transform.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/transform.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/transform.md | render`
+      );
 
       const output = getLastOutputLine();
       // Should contain HTML tags
@@ -189,9 +205,12 @@ Line 3`;
 
     it('should handle render command with code blocks', async () => {
       const markdown = '```javascript\nconst x = 1;\n```';
-      context.fileSystem.writeFile('/home/darin/code.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/code.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/code.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/code.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<pre><code/);
@@ -200,9 +219,12 @@ Line 3`;
 
     it('should handle render command with lists', async () => {
       const markdown = '- Item 1\n- Item 2\n- Item 3';
-      context.fileSystem.writeFile('/home/darin/list.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/list.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/list.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/list.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<ul');
@@ -212,9 +234,12 @@ Line 3`;
 
     it('should handle render command with links', async () => {
       const markdown = '[Link Text](https://example.com)';
-      context.fileSystem.writeFile('/home/darin/link.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/link.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/link.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/link.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<a[^>]*href="https:\/\/example\.com"/);
@@ -224,18 +249,24 @@ Line 3`;
 
   describe('Pipeline with Filesystem Commands', () => {
     it('should pipe cat output to another command', async () => {
-      context.fileSystem.writeFile('/home/darin/data.txt', 'file content');
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/data.txt`, 'file content');
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/data.txt | cat');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/data.txt | cat`
+      );
 
       const output = getLastOutputLine();
       expect(output?.textContent).toContain('file content');
     });
 
     it('should pipe file content after cd', async () => {
-      context.fileSystem.writeFile('/home/darin/documents/doc.txt', 'document content');
+      context.fileSystem.writeFile(
+        `/home/${siteConfig.username}/documents/doc.txt`,
+        'document content'
+      );
 
-      await executeCommandAndWait(context.terminal, 'cd /home/darin/documents');
+      await executeCommandAndWait(context.terminal, `cd /home/${siteConfig.username}/documents`);
       await executeCommandAndWait(context.terminal, 'cat doc.txt | render');
 
       const output = getLastOutputLine();
@@ -243,9 +274,12 @@ Line 3`;
     });
 
     it('should handle absolute paths in piped commands', async () => {
-      context.fileSystem.writeFile('/home/darin/abs.md', '# Absolute');
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/abs.md`, '# Absolute');
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/abs.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/abs.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<h1');
@@ -267,7 +301,7 @@ Line 3`;
       await executeCommandAndWait(context.terminal, 'echo $PWD | cat');
 
       const output = getLastOutputLine();
-      expect(output?.textContent).toMatch(/\/home\/darin/);
+      expect(output?.textContent).toMatch(new RegExp(`/home/${siteConfig.username}`));
     });
 
     it('should expand variables in each stage of pipeline', async () => {
@@ -294,9 +328,12 @@ Line 3`;
     it('should resolve alias in second stage of pipeline', async () => {
       context.aliasManager.setAlias('showdata', 'cat');
 
-      context.fileSystem.writeFile('/home/darin/data.txt', 'test data');
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/data.txt`, 'test data');
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/data.txt | showdata');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/data.txt | showdata`
+      );
 
       const output = getLastOutputLine();
       expect(output?.textContent).toContain('test data');
@@ -306,7 +343,10 @@ Line 3`;
   describe('Complex Pipeline Scenarios', () => {
     it('should handle blog post rendering pipeline', async () => {
       // Simulate typical blog workflow: cat blog post | render
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/blog-test.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/blog-test.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -321,16 +361,22 @@ Line 3`;
     });
 
     it('should handle readme rendering pipeline', async () => {
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/readme.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/readme.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
-      expect(output?.innerHTML).toContain("Darin's Terminal");
+      expect(output?.innerHTML).toContain('Welcome to the Terminal');
     });
 
     it('should handle markdown with frontmatter in pipeline', async () => {
       // Blog post has frontmatter
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/blog-test.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/blog-test.md | render`
+      );
 
       const output = getLastOutputLine();
       // Frontmatter should be parsed and removed from output
@@ -342,12 +388,18 @@ Line 3`;
 
     it('should handle multiple file reads piped to render', async () => {
       // First file
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/test.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/test.md | render`
+      );
       const output1 = getLastOutputLine();
       expect(output1?.innerHTML).toContain('Simple Post');
 
       // Second file
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/blog-test.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/blog-test.md | render`
+      );
       const output2 = getLastOutputLine();
       expect(output2?.innerHTML).toContain('Integration Test Blog Post');
     });
@@ -384,11 +436,11 @@ Line 3`;
     it('should handle large content through pipeline', async () => {
       // Create large content
       const largeContent = '# Large Content\n\n' + 'Lorem ipsum. '.repeat(1000);
-      context.fileSystem.writeFile('/home/darin/large.md', largeContent);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/large.md`, largeContent);
 
       await executeCommandAndWait(
         context.terminal,
-        'cat /home/darin/large.md | render',
+        `cat /home/${siteConfig.username}/large.md | render`,
         200 // Longer timeout for large content
       );
 

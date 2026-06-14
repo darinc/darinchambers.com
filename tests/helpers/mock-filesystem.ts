@@ -5,6 +5,7 @@
  * filesystem-dependent components and commands.
  */
 
+import { siteConfig } from '../../src/site.config';
 import { FileSystemService } from '../../src/utils/fs/FileSystemService';
 import type { FileSystemNode } from '../../src/utils/fs/types';
 
@@ -41,9 +42,9 @@ export function createMockFileSystem(): FileSystemService {
               },
             ],
             [
-              'darin',
+              siteConfig.username,
               {
-                name: 'darin',
+                name: siteConfig.username,
                 type: 'directory',
                 children: new Map([
                   [
@@ -237,7 +238,7 @@ Available commands and usage information.`,
                             name: '.env',
                             type: 'file',
                             isHidden: true,
-                            content: 'USER=darin\nHOME=/home/darin\nPWD=/home/darin\n',
+                            content: `USER=${siteConfig.username}\nHOME=/home/${siteConfig.username}\nPWD=/home/${siteConfig.username}\n`,
                           },
                         ],
                         [
@@ -312,9 +313,9 @@ export function createMinimalFileSystem(): FileSystemService {
           type: 'directory',
           children: new Map([
             [
-              'darin',
+              siteConfig.username,
               {
-                name: 'darin',
+                name: siteConfig.username,
                 type: 'directory',
                 children: new Map(),
               },
@@ -343,9 +344,9 @@ export function createBlogFileSystem(): FileSystemService {
           type: 'directory',
           children: new Map([
             [
-              'darin',
+              siteConfig.username,
               {
-                name: 'darin',
+                name: siteConfig.username,
                 type: 'directory',
                 children: new Map([
                   [
@@ -418,9 +419,9 @@ export function createPortfolioFileSystem(): FileSystemService {
           type: 'directory',
           children: new Map([
             [
-              'darin',
+              siteConfig.username,
               {
-                name: 'darin',
+                name: siteConfig.username,
                 type: 'directory',
                 children: new Map([
                   [

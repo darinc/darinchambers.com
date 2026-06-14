@@ -8,6 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Terminal } from '../../../src/components/Terminal';
 import { COMMAND_SIGNALS } from '../../../src/constants';
+import { siteConfig } from '../../../src/site.config';
 import { setupGlobalMocks } from '../../helpers/dom-setup';
 import type { Command, CommandResult } from '../../../src/commands/Command';
 import type { CommandDispatcher } from '../../../src/utils/CommandDispatcher';
@@ -73,9 +74,9 @@ function createMockThemeManager(): ThemeManager {
 function createMockEnvVarManager(): EnvVarManager {
   return {
     getVariable: vi.fn((name: string) => {
-      if (name === 'PWD') return '/home/darin';
-      if (name === 'HOME') return '/home/darin';
-      if (name === 'USER') return 'darin';
+      if (name === 'PWD') return `/home/${siteConfig.username}`;
+      if (name === 'HOME') return `/home/${siteConfig.username}`;
+      if (name === 'USER') return siteConfig.username;
       return undefined;
     }),
     expandVariables: vi.fn((str: string) => str), // Pass through for testing
@@ -131,7 +132,7 @@ describe('Terminal', () => {
       );
 
       expect(terminal).toBeDefined();
-      expect(terminal.getUsername()).toBe('darin');
+      expect(terminal.getUsername()).toBe(siteConfig.username);
     });
 
     it('should throw error if required DOM elements are missing', () => {

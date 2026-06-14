@@ -1,10 +1,12 @@
 /**
  * Exit Command
  *
- * If the current user is root, switches back to darin and resets HOME/USER/PWD.
- * If the current user is darin, returns a random funny response since there's
+ * If the current user is root, switches back to the regular user and resets HOME/USER/PWD.
+ * If the current user is the regular user, returns a random funny response since there's
  * nowhere to exit to.
  */
+import { PATHS } from '../../constants';
+import { siteConfig } from '../../site.config';
 import { CommandArgs } from '../../utils/CommandArgs';
 import type { Terminal } from '../../components/Terminal';
 import type { EnvVarManager } from '../../utils/EnvVarManager';
@@ -18,7 +20,7 @@ const FUNNY_RESPONSES = [
   'no thank you',
   'nope',
   'exit: permission denied: too interesting to leave',
-  'logout\nConnection to darinchambers.com closed.\n\n...just kidding. Welcome back.',
+  `logout\nConnection to ${siteConfig.domain} closed.\n\n...just kidding. Welcome back.`,
 ];
 
 export function createExitCommand(
@@ -51,13 +53,13 @@ Examples:
         };
       }
 
-      // If root, switch back to darin
+      // If root, switch back to the regular user
       if (terminal.getUsername() === 'root') {
-        terminal.setUsername('darin');
-        envVarManager.setVariable('HOME', '/home/darin');
-        envVarManager.setVariable('USER', 'darin');
-        envVarManager.setVariable('PWD', '/home/darin');
-        fileSystem.changeDirectory('/home/darin');
+        terminal.setUsername(siteConfig.username);
+        envVarManager.setVariable('HOME', PATHS.HOME);
+        envVarManager.setVariable('USER', siteConfig.username);
+        envVarManager.setVariable('PWD', PATHS.HOME);
+        fileSystem.changeDirectory(PATHS.HOME);
         onPathChange(fileSystem.getShortPath());
         return { output: '' };
       }

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { bootCommand, generateBootHtml } from '../../../../src/commands/novelty/boot';
+import { siteConfig } from '../../../../src/site.config';
 import type { CommandResult } from '../../../../src/commands/Command';
 
 describe('boot command', () => {
@@ -65,7 +66,7 @@ describe('boot command', () => {
 
   it('should contain welcome message', () => {
     const result = bootCommand.execute([]) as CommandResult;
-    expect(result.output).toContain('Welcome to darinchambers.com');
+    expect(result.output).toContain(`Welcome to ${siteConfig.domain}`);
   });
 
   it('should have animation delays on boot lines', () => {

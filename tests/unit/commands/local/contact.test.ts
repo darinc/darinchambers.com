@@ -7,6 +7,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createContactCommand } from '../../../../src/commands/local/contact';
 import { PATHS } from '../../../../src/constants';
+import { siteConfig } from '../../../../src/site.config';
 import type { Command, CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
@@ -41,7 +42,7 @@ Location: United States / Eastern Time
     exists: () => true,
     isDirectory: () => false,
     isFile: () => true,
-    getCurrentPath: () => '/home/darin',
+    getCurrentPath: () => `/home/${siteConfig.username}`,
     getShortPath: () => '~',
     setCurrentUsername: () => {},
     changeDirectory: () => {},
@@ -95,7 +96,7 @@ describe('Contact Command', () => {
 
 ## Get in Touch
 
-- Email: <a href="#" class="email-protected">hello@darinchambers.com</a>
+- Email: <a href="#" class="email-protected">hello@${siteConfig.domain}</a>
 - LinkedIn: [linkedin.com/in/darinchambers](https://www.linkedin.com/in/darinchambers)
 - GitHub: [github.com/darinc](https://github.com/darinc)
 
@@ -138,7 +139,7 @@ I love working with people on bold projects and quirky ideas.
     it('should return error message when file not found', () => {
       const mockFs = createMockFs({
         shouldThrow: true,
-        errorMessage: 'File not found: /home/darin/content/contact.md',
+        errorMessage: `File not found: /home/${siteConfig.username}/content/contact.md`,
       });
       contactCommand = createContactCommand(mockFs);
 
@@ -173,7 +174,7 @@ I love working with people on bold projects and quirky ideas.
         exists: () => true,
         isDirectory: () => false,
         isFile: () => true,
-        getCurrentPath: () => '/home/darin',
+        getCurrentPath: () => `/home/${siteConfig.username}`,
         getShortPath: () => '~',
         setCurrentUsername: () => {},
         changeDirectory: () => {},

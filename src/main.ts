@@ -50,6 +50,7 @@ import { Navigation } from './components/Navigation';
 import { Terminal } from './components/Terminal';
 import { PATHS, COMMAND_SIGNALS } from './constants';
 import { SCREENSAVER_CONSTANTS } from './constants';
+import { siteConfig } from './site.config';
 import { AliasManager } from './utils/AliasManager';
 import { CommandArgs } from './utils/CommandArgs';
 import { CommandDispatcher } from './utils/CommandDispatcher';
@@ -84,7 +85,7 @@ const settingsManager = new SettingsManager(fileSystem);
 const themeManager = new ThemeManager(settingsManager);
 
 // Initialize environment variables
-const envVarManager = new EnvVarManager(fileSystem, 'darin', 'darinchambers.com');
+const envVarManager = new EnvVarManager(fileSystem, siteConfig.username, siteConfig.domain);
 
 // Apply saved settings BEFORE terminal initialization
 themeManager.applyCurrentTheme();
@@ -232,9 +233,8 @@ const notesCommand = createNotesCommand(fileSystem);
 const gamesCommand = createGamesCommand();
 
 // Create changelog command - load content from virtual filesystem
-const changelogContent = fileSystem.exists('/home/darin/CHANGELOG.md')
-  ? fileSystem.readFile('/home/darin/CHANGELOG.md')
-  : '';
+const changelogPath = `${PATHS.HOME}/CHANGELOG.md`;
+const changelogContent = fileSystem.exists(changelogPath) ? fileSystem.readFile(changelogPath) : '';
 const changelogCommand = createChangelogCommand(changelogContent);
 
 // Create render command

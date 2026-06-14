@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { siteConfig } from '../../../../src/site.config';
 import { FileSystemService } from '../../../../src/utils/fs/FileSystemService';
 import type { FileSystemNode } from '../../../../src/utils/fs/types';
 
@@ -19,9 +20,9 @@ describe('FileSystemService', () => {
             type: 'directory',
             children: new Map([
               [
-                'darin',
+                siteConfig.username,
                 {
-                  name: 'darin',
+                  name: siteConfig.username,
                   type: 'directory',
                   children: new Map([
                     ['test.txt', { name: 'test.txt', type: 'file', content: 'hello' }],
@@ -61,7 +62,7 @@ describe('FileSystemService', () => {
     });
 
     it('should read file with absolute path', () => {
-      const content = fs.readFile('/home/darin/test.txt');
+      const content = fs.readFile(`/home/${siteConfig.username}/test.txt`);
       expect(content).toBe('hello');
     });
   });
@@ -74,13 +75,13 @@ describe('FileSystemService', () => {
 
     it('should change directory with relative path', () => {
       fs.changeDirectory('docs');
-      expect(fs.getCurrentPath()).toBe('/home/darin/docs');
+      expect(fs.getCurrentPath()).toBe(`/home/${siteConfig.username}/docs`);
     });
 
     it('should handle ~ path', () => {
       fs.changeDirectory('/home');
       fs.changeDirectory('~');
-      expect(fs.getCurrentPath()).toBe('/home/darin');
+      expect(fs.getCurrentPath()).toBe(`/home/${siteConfig.username}`);
     });
 
     it('should throw error for non-existent directory', () => {
@@ -114,7 +115,7 @@ describe('FileSystemService', () => {
 
   describe('getCurrentPath', () => {
     it('should return current path', () => {
-      expect(fs.getCurrentPath()).toBe('/home/darin');
+      expect(fs.getCurrentPath()).toBe(`/home/${siteConfig.username}`);
     });
 
     it('should return updated path after cd', () => {
@@ -202,7 +203,7 @@ describe('FileSystemService', () => {
   describe('getTree', () => {
     it('should return tree structure', () => {
       const tree = fs.getTree('.');
-      expect(tree[0]).toBe('/home/darin');
+      expect(tree[0]).toBe(`/home/${siteConfig.username}`);
       expect(tree.some((line) => line.includes('docs'))).toBe(true);
       expect(tree.some((line) => line.includes('test.txt'))).toBe(true);
     });
@@ -214,15 +215,15 @@ describe('FileSystemService', () => {
 
   describe('setCurrentUsername', () => {
     it('should update username and affect home path resolution', () => {
-      // First, ensure we're at /home/darin
-      expect(fs.getCurrentPath()).toBe('/home/darin');
+      // First, ensure we're at the configured user's home
+      expect(fs.getCurrentPath()).toBe(`/home/${siteConfig.username}`);
 
       // Change username to guest
       fs.setCurrentUsername('guest');
 
       // The current path stays the same, but getShortPath should now reflect guest's home
-      // Since we're at /home/darin but username is guest, it should show full path
-      expect(fs.getShortPath()).toBe('/home/darin');
+      // Since we're at the user's home but username is guest, it should show full path
+      expect(fs.getShortPath()).toBe(`/home/${siteConfig.username}`);
 
       // If we were to cd to /home/guest (which doesn't exist in our mock), it would fail
       // But we can verify the username was set by checking that ~ would resolve to /home/guest
@@ -294,8 +295,8 @@ describe('FileSystemService', () => {
     });
 
     it('should delete a file with an absolute path', () => {
-      fs.deleteFile('/home/darin/docs/readme.md');
-      expect(fs.exists('/home/darin/docs/readme.md')).toBe(false);
+      fs.deleteFile(`/home/${siteConfig.username}/docs/readme.md`);
+      expect(fs.exists(`/home/${siteConfig.username}/docs/readme.md`)).toBe(false);
     });
   });
 

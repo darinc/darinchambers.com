@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createWhoamiCommand } from '../../../../src/commands/core/whoami';
+import { siteConfig } from '../../../../src/site.config';
 import type { CommandResult } from '../../../../src/commands/Command';
 import type { Terminal } from '../../../../src/components/Terminal';
 
@@ -29,13 +30,13 @@ describe('whoami command', () => {
 
   it('should ignore arguments', () => {
     const mockTerminal = {
-      getUsername: vi.fn().mockReturnValue('darin'),
+      getUsername: vi.fn().mockReturnValue(siteConfig.username),
     } as unknown as Terminal;
 
     const command = createWhoamiCommand(mockTerminal);
     const result = command.execute(['arg1', 'arg2']) as CommandResult;
 
-    expect(result.output).toBe('darin');
+    expect(result.output).toBe(siteConfig.username);
   });
 
   it('should ignore stdin', () => {

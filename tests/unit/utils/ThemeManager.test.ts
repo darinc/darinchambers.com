@@ -5,6 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { siteConfig } from '../../../src/site.config';
 import { FileSystemService } from '../../../src/utils/fs/FileSystemService';
 import { SettingsManager } from '../../../src/utils/SettingsManager';
 import { ThemeManager } from '../../../src/utils/ThemeManager';
@@ -32,9 +33,9 @@ describe('ThemeManager', () => {
             type: 'directory',
             children: new Map([
               [
-                'darin',
+                siteConfig.username,
                 {
-                  name: 'darin',
+                  name: siteConfig.username,
                   type: 'directory',
                   children: new Map(),
                 },
@@ -185,7 +186,7 @@ describe('ThemeManager', () => {
     it('should persist theme selection to filesystem', () => {
       themeManager.applyTheme('white');
 
-      const content = fs.readFile('/home/darin/.settings');
+      const content = fs.readFile(`/home/${siteConfig.username}/.settings`);
       const parsed = JSON.parse(content);
 
       expect(parsed.theme.preset).toBe('white');
@@ -440,7 +441,7 @@ describe('ThemeManager', () => {
       expect(parsedLS.theme.preset).toBe('white');
 
       // Check filesystem
-      const fsContent = fs.readFile('/home/darin/.settings');
+      const fsContent = fs.readFile(`/home/${siteConfig.username}/.settings`);
       const parsedFS = JSON.parse(fsContent);
       expect(parsedFS.theme.preset).toBe('white');
     });

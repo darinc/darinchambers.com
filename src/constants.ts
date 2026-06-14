@@ -3,20 +3,21 @@
  * This eliminates magic strings throughout the codebase.
  */
 
+import { homeDir, siteConfig } from './site.config';
 import type { SettingsConfig } from './types/settings';
 
 export const PATHS = {
-  HOME_DARIN: '/home/darin',
+  HOME: homeDir,
   HOME_GUEST: '/home/guest',
-  CONTENT_BLOG: '/home/darin/blog',
-  CONTENT_PORTFOLIO: '/home/darin/portfolio',
-  CONTENT_POSTS: '/home/darin/posts',
-  CONTENT_HELP: '/home/darin/content/help.md',
-  CONTENT_ABOUT: '/home/darin/content/about.md',
-  CONTENT_CONTACT: '/home/darin/content/contact.md',
+  CONTENT_BLOG: `${homeDir}/blog`,
+  CONTENT_PORTFOLIO: `${homeDir}/portfolio`,
+  CONTENT_POSTS: `${homeDir}/posts`,
+  CONTENT_HELP: `${homeDir}/content/help.md`,
+  CONTENT_ABOUT: `${homeDir}/content/about.md`,
+  CONTENT_CONTACT: `${homeDir}/content/contact.md`,
   CONFIG_ALIASES: '/home/guest/.alias',
-  CONFIG_SETTINGS: '/home/darin/.settings',
-  CONFIG_ENV: '/home/darin/.env',
+  CONFIG_SETTINGS: `${homeDir}/.settings`,
+  CONFIG_ENV: `${homeDir}/.env`,
 } as const;
 
 export const COMMAND_SIGNALS = {
@@ -38,7 +39,7 @@ export const MESSAGES = {
 
 export const DEFAULT_SETTINGS: SettingsConfig = {
   theme: {
-    preset: 'dc',
+    preset: siteConfig.defaultTheme,
     customColors: undefined,
   },
   font: {

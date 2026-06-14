@@ -6,6 +6,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { PATHS, STORAGE_KEYS } from '../../../src/constants';
+import { siteConfig } from '../../../src/site.config';
 import { FileSystemService } from '../../../src/utils/fs/FileSystemService';
 import { SettingsManager } from '../../../src/utils/SettingsManager';
 import type { SettingsConfig } from '../../../src/types/settings';
@@ -31,9 +32,9 @@ describe('SettingsManager', () => {
             type: 'directory',
             children: new Map([
               [
-                'darin',
+                siteConfig.username,
                 {
-                  name: 'darin',
+                  name: siteConfig.username,
                   type: 'directory',
                   children: new Map(),
                 },

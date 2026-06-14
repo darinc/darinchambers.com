@@ -1,0 +1,13 @@
+{
+  "username": "darin",
+  "name": "Darin Chambers",
+  "tagline": "Technologist, Inventor | Building What's Next on Rock-Solid Foundations",
+  "domain": "darinchambers.com",
+  "siteUrl": "https://darinchambers.com",
+  "email": "hello@darinchambers.com",
+  "social": {
+    "github": "https://github.com/darinc",
+    "linkedin": "https://www.linkedin.com/in/darinchambers"
+  },
+  "defaultTheme": "dc"
+}
