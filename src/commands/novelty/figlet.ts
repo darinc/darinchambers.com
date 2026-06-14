@@ -84,7 +84,7 @@ Available fonts:
     try {
       // Generate ASCII art using textSync (works in browser)
       const output = figlet.textSync(text, {
-        font: font as figlet.Fonts,
+        font: font,
         horizontalLayout,
       });
 

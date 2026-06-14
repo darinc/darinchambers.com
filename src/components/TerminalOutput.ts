@@ -28,7 +28,7 @@ export class TerminalOutput {
     line.textContent = text;
 
     // Insert before the input line if it exists, otherwise append
-    if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
+    if (this.inputLineElement?.parentElement === this.outputElement) {
       this.outputElement.insertBefore(line, this.inputLineElement);
     } else {
       this.outputElement.appendChild(line);
@@ -68,7 +68,7 @@ export class TerminalOutput {
     }
 
     // Insert before the input line if it exists, otherwise append
-    if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
+    if (this.inputLineElement?.parentElement === this.outputElement) {
       this.outputElement.insertBefore(container, this.inputLineElement);
     } else {
       this.outputElement.appendChild(container);
@@ -110,7 +110,7 @@ export class TerminalOutput {
         }
 
         // Insert before the input line if it exists, otherwise append
-        if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
+        if (this.inputLineElement?.parentElement === this.outputElement) {
           this.outputElement.insertBefore(errorLine, this.inputLineElement);
         } else {
           this.outputElement.appendChild(errorLine);
@@ -142,7 +142,7 @@ export class TerminalOutput {
     }
 
     // Insert before the input line if it exists, otherwise append
-    if (this.inputLineElement && this.inputLineElement.parentElement === this.outputElement) {
+    if (this.inputLineElement?.parentElement === this.outputElement) {
       this.outputElement.insertBefore(line, this.inputLineElement);
     } else {
       this.outputElement.appendChild(line);

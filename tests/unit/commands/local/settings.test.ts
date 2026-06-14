@@ -92,7 +92,7 @@ describe('Settings Command', () => {
           return '';
         },
       } as unknown as CSSStyleDeclaration;
-    }) as any;
+    });
   });
 
   describe('Command metadata', () => {
