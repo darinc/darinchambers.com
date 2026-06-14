@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.30.0] - 2026-06-14
+
+### Added
+- Deep-link route for launching games: `/games/<game>` (e.g. `/games/polartetris`) opens the game directly. Registry-driven, so every game in the registry is automatically routable; unknown game ids fall back to the games list. Typing a game's command keeps the address bar in sync (`/games/polartetris`)
+
 ## [0.29.0] - 2026-06-14
 
 ### Added

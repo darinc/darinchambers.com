@@ -6,6 +6,7 @@
  */
 
 import { PATHS } from '../constants';
+import { GAMES } from '../games/registry';
 import { BlogParser } from './BlogParser';
 import { PostParser } from './PostParser';
 import type { Terminal } from '../components/Terminal';
@@ -107,7 +108,13 @@ export class Router {
         pattern: /^\/life\/?$/,
         commandBuilder: () => 'life',
       },
-      // Games route: /games
+      // Game launch route: /games/:gameId (registry-validated; unknown ids fall back to the list)
+      {
+        pattern: /^\/games\/([^/]+)\/?$/,
+        commandBuilder: (matches) =>
+          GAMES.some((game) => game.command === matches[1]) ? matches[1] : 'games',
+      },
+      // Games list route: /games
       {
         pattern: /^\/games\/?$/,
         commandBuilder: () => 'games',
@@ -305,6 +312,11 @@ export class Router {
     if (trimmed.startsWith('portfolio ')) {
       const projectId = trimmed.substring(10).trim();
       return `/portfolio/${projectId}`;
+    }
+
+    // Game launch commands map under the games section (e.g. /games/polartetris)
+    if (GAMES.some((game) => game.command === trimmed)) {
+      return `/games/${trimmed}`;
     }
 
     // Handle simple command mappings
