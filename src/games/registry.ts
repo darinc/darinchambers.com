@@ -20,4 +20,9 @@ export const GAMES: readonly GameInfo[] = [
     title: 'Polar Tetris',
     description: 'Tetris on a polar (radial) grid — pieces fall inward along concentric rings.',
   },
+  {
+    command: 'life',
+    title: "Conway's Game of Life",
+    description: 'A zero-player cellular automaton — watch patterns evolve across the grid.',
+  },
 ];

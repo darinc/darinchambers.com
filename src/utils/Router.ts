@@ -119,6 +119,12 @@ export class Router {
         pattern: /^\/games\/?$/,
         commandBuilder: () => 'games',
       },
+      // Bin route: /bin/:command - run any command by name (terminal-native).
+      // Unknown names fall through to the terminal's own "command not found".
+      {
+        pattern: /^\/bin\/([^/]+)\/?$/,
+        commandBuilder: (matches) => matches[1],
+      },
       // Home route: /
       {
         pattern: /^\/$/,
@@ -329,8 +335,8 @@ export class Router {
       games: '/games',
       settings: '/settings',
       help: '/help',
-      matrix: '/matrix',
-      life: '/life',
+      // Non-game runnable commands live under /bin (games are handled above).
+      matrix: '/bin/matrix',
     };
 
     return commandMap[trimmed] || null;
