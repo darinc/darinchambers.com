@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { siteConfig } from '../../src/site.config';
 import {
   setupCompleteTerminal,
   teardownIntegrationTest,
@@ -493,10 +494,13 @@ describe('Terminal Component Integration', () => {
   describe('Integration with Other Components', () => {
     it('should work with filesystem changes', async () => {
       // Create a file
-      context.fileSystem.writeFile('/home/darin/integration.txt', 'integrated');
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/integration.txt`, 'integrated');
 
       // Read it via terminal
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/integration.txt');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/integration.txt`
+      );
 
       const output = getLastOutputLine();
       expect(output?.textContent).toContain('integrated');
@@ -525,7 +529,7 @@ describe('Terminal Component Integration', () => {
     });
 
     it('should work with directory navigation', async () => {
-      await executeCommandAndWait(context.terminal, 'cd /home/darin/documents');
+      await executeCommandAndWait(context.terminal, `cd /home/${siteConfig.username}/documents`);
       await executeCommandAndWait(context.terminal, 'pwd');
 
       const output = getLastOutputLine();
@@ -536,7 +540,7 @@ describe('Terminal Component Integration', () => {
   describe('State Management', () => {
     it('should maintain state across multiple commands', async () => {
       // Change directory
-      await executeCommandAndWait(context.terminal, 'cd /home/darin/documents');
+      await executeCommandAndWait(context.terminal, `cd /home/${siteConfig.username}/documents`);
 
       // Execute another command
       await executeCommandAndWait(context.terminal, 'ls');

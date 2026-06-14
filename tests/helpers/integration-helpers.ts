@@ -19,6 +19,7 @@ import { createPortfolioCommand } from '../../src/commands/local/portfolio';
 import { createSettingsCommand } from '../../src/commands/local/settings';
 import { Terminal } from '../../src/components/Terminal';
 import { TerminalOutput } from '../../src/components/TerminalOutput';
+import { siteConfig } from '../../src/site.config';
 import { AliasManager } from '../../src/utils/AliasManager';
 import { CommandDispatcher } from '../../src/utils/CommandDispatcher';
 import { CommandExecutor } from '../../src/utils/CommandExecutor';
@@ -68,7 +69,7 @@ export function setupCompleteTerminal(): IntegrationTestContext {
   const settingsManager = new SettingsManager(fileSystem);
   const themeManager = new ThemeManager(settingsManager);
   const aliasManager = new AliasManager(fileSystem);
-  const envVarManager = new EnvVarManager(fileSystem, 'darin', 'darinchambers.com');
+  const envVarManager = new EnvVarManager(fileSystem, siteConfig.username, siteConfig.domain);
 
   // Apply theme to ensure CSS variables are set
   themeManager.applyCurrentTheme();

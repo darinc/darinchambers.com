@@ -112,7 +112,7 @@ A sample portfolio project for **integration testing**.
 /**
  * README file content
  */
-export const readmeContent = `# Welcome to Darin's Terminal
+export const readmeContent = `# Welcome to the Terminal
 
 This is a terminal-based portfolio website.
 

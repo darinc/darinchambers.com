@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createExitCommand } from '../../../../src/commands/core/exit';
+import { siteConfig } from '../../../../src/site.config';
 import type { CommandResult } from '../../../../src/commands/Command';
 import type { Terminal } from '../../../../src/components/Terminal';
 import type { EnvVarManager } from '../../../../src/utils/EnvVarManager';
@@ -7,7 +8,7 @@ import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
 function createMocks() {
   const mockTerminal = {
-    getUsername: vi.fn().mockReturnValue('darin'),
+    getUsername: vi.fn().mockReturnValue(siteConfig.username),
     setUsername: vi.fn(),
   } as unknown as Terminal;
 
@@ -63,7 +64,7 @@ describe('exit command', () => {
     expect(result.output).toContain('logout');
   });
 
-  it('should switch back to darin when root', () => {
+  it('should switch back to the regular user when root', () => {
     vi.mocked(mockTerminal.getUsername).mockReturnValue('root');
     const command = createExitCommand(
       mockTerminal,
@@ -74,11 +75,17 @@ describe('exit command', () => {
     const result = command.execute([]) as CommandResult;
 
     expect(result.output).toBe('');
-    expect(mockTerminal.setUsername).toHaveBeenCalledWith('darin');
-    expect(mockEnvVarManager.setVariable).toHaveBeenCalledWith('HOME', '/home/darin');
-    expect(mockEnvVarManager.setVariable).toHaveBeenCalledWith('USER', 'darin');
-    expect(mockEnvVarManager.setVariable).toHaveBeenCalledWith('PWD', '/home/darin');
-    expect(mockFileSystem.changeDirectory).toHaveBeenCalledWith('/home/darin');
+    expect(mockTerminal.setUsername).toHaveBeenCalledWith(siteConfig.username);
+    expect(mockEnvVarManager.setVariable).toHaveBeenCalledWith(
+      'HOME',
+      `/home/${siteConfig.username}`
+    );
+    expect(mockEnvVarManager.setVariable).toHaveBeenCalledWith('USER', siteConfig.username);
+    expect(mockEnvVarManager.setVariable).toHaveBeenCalledWith(
+      'PWD',
+      `/home/${siteConfig.username}`
+    );
+    expect(mockFileSystem.changeDirectory).toHaveBeenCalledWith(`/home/${siteConfig.username}`);
     expect(onPathChange).toHaveBeenCalled();
   });
 

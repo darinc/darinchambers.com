@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { siteConfig } from '../../../src/site.config';
 import { PromptFormatter, type PromptContext } from '../../../src/utils/PromptFormatter';
 import type { EnvVarManager } from '../../../src/utils/EnvVarManager';
 
 const baseContext = (overrides: Partial<PromptContext> = {}): PromptContext => ({
-  user: 'darin',
-  hostname: 'darinchambers.com',
-  pwd: '/home/darin/blog/posts',
+  user: siteConfig.username,
+  hostname: siteConfig.domain,
+  pwd: `/home/${siteConfig.username}/blog/posts`,
   shortPwd: '~/blog/posts',
   lastDir: 'posts',
   isRoot: false,
@@ -21,7 +22,9 @@ describe('PromptFormatter.format - bash escapes', () => {
 
   it('should expand user, hostname (short), and full hostname', () => {
     const result = formatter.format('\\u@\\h (\\H)', baseContext());
-    expect(result).toBe('darin@darinchambers (darinchambers.com)');
+    expect(result).toBe(
+      `${siteConfig.username}@${siteConfig.domain.split('.')[0]} (${siteConfig.domain})`
+    );
   });
 
   it('should leave short hostname unchanged when there is no dot', () => {
@@ -102,7 +105,9 @@ describe('PromptFormatter.format - custom tokens', () => {
 
   it('should expand all custom tokens', () => {
     const result = formatter.format('{user}@{hostname}:{path} ({lastdir}) [{pwd}]', baseContext());
-    expect(result).toBe('darin@darinchambers.com:~/blog/posts (posts) [/home/darin/blog/posts]');
+    expect(result).toBe(
+      `${siteConfig.username}@${siteConfig.domain}:~/blog/posts (posts) [/home/${siteConfig.username}/blog/posts]`
+    );
   });
 });
 
@@ -114,7 +119,7 @@ describe('PromptFormatter.format - env var expansion', () => {
     } as unknown as EnvVarManager;
     const formatter = new PromptFormatter(env);
     const result = formatter.format('$GREETING \\u', baseContext());
-    expect(result).toBe('hi darin');
+    expect(result).toBe(`hi ${siteConfig.username}`);
   });
 
   it('should skip env expansion when no manager is provided', () => {
@@ -140,7 +145,7 @@ describe('PromptFormatter.getLastDir', () => {
   });
 
   it('should return the last segment of an absolute path', () => {
-    expect(PromptFormatter.getLastDir('/home/darin/projects')).toBe('projects');
+    expect(PromptFormatter.getLastDir(`/home/${siteConfig.username}/projects`)).toBe('projects');
   });
 
   it('should return ~ when the path only contains the home tilde segment', () => {

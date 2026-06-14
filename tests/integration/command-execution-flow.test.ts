@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { siteConfig } from '../../src/site.config';
 import { expectedOutputPatterns } from '../fixtures/integration-data';
 import {
   setupCompleteTerminal,
@@ -125,21 +126,21 @@ describe('Command Execution Flow Integration', () => {
       await executeCommandAndWait(context.terminal, 'echo $PWD');
 
       const output = getLastOutputLine();
-      expect(output?.textContent).toMatch(/\/home\/darin/);
+      expect(output?.textContent).toMatch(new RegExp(`/home/${siteConfig.username}`));
     });
 
     it('should expand built-in USER variable', async () => {
       await executeCommandAndWait(context.terminal, 'echo $USER');
 
       const output = getLastOutputLine();
-      expect(output?.textContent).toContain('darin');
+      expect(output?.textContent).toContain(siteConfig.username);
     });
 
     it('should expand built-in HOSTNAME variable', async () => {
       await executeCommandAndWait(context.terminal, 'echo $HOSTNAME');
 
       const output = getLastOutputLine();
-      expect(output?.textContent).toContain('darinchambers.com');
+      expect(output?.textContent).toContain(siteConfig.domain);
     });
 
     it('should expand multiple variables in single command', async () => {
@@ -206,7 +207,7 @@ describe('Command Execution Flow Integration', () => {
       await executeCommandAndWait(context.terminal, 'showpwd');
 
       const output = getLastOutputLine();
-      expect(output?.textContent).toMatch(/\/home\/darin/);
+      expect(output?.textContent).toMatch(new RegExp(`/home/${siteConfig.username}`));
     });
 
     it('should not resolve non-existent aliases', async () => {
@@ -307,7 +308,7 @@ describe('Command Execution Flow Integration', () => {
 
   describe('Command Sequencing', () => {
     it('should execute multiple commands in sequence', async () => {
-      await executeCommandAndWait(context.terminal, 'cd /home/darin/documents');
+      await executeCommandAndWait(context.terminal, `cd /home/${siteConfig.username}/documents`);
       await executeCommandAndWait(context.terminal, 'pwd');
       await executeCommandAndWait(context.terminal, 'ls');
 
@@ -315,18 +316,20 @@ describe('Command Execution Flow Integration', () => {
       expect(lines.length).toBeGreaterThan(2);
 
       // Check pwd output
-      const pwdOutput = lines.find((line) => line.textContent?.includes('/home/darin/documents'));
+      const pwdOutput = lines.find((line) =>
+        line.textContent?.includes(`/home/${siteConfig.username}/documents`)
+      );
       expect(pwdOutput).toBeTruthy();
     });
 
     it('should maintain state across commands', async () => {
       // Change directory
-      await executeCommandAndWait(context.terminal, 'cd /home/darin/documents');
+      await executeCommandAndWait(context.terminal, `cd /home/${siteConfig.username}/documents`);
 
       // Verify directory changed
       await executeCommandAndWait(context.terminal, 'pwd');
       const output = getLastOutputLine();
-      expect(output?.textContent).toContain('/home/darin/documents');
+      expect(output?.textContent).toContain(`/home/${siteConfig.username}/documents`);
     });
 
     it('should allow setting and using aliases', async () => {
@@ -362,7 +365,10 @@ describe('Command Execution Flow Integration', () => {
     });
 
     it('should handle command with mixed flags and arguments', async () => {
-      await executeCommandAndWait(context.terminal, 'ls -alh /home/darin/documents');
+      await executeCommandAndWait(
+        context.terminal,
+        `ls -alh /home/${siteConfig.username}/documents`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -375,7 +381,7 @@ describe('Command Execution Flow Integration', () => {
 
       const output = getLastOutputLine();
       expect(output?.textContent).toContain('Current:');
-      expect(output?.textContent).toContain('/home/darin');
+      expect(output?.textContent).toContain(`/home/${siteConfig.username}`);
     });
 
     it('should resolve nested aliases', async () => {

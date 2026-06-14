@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { siteConfig } from '../../../../src/site.config';
 import { FileSystemInitializer } from '../../../../src/utils/fs/FileSystemInitializer';
 
 describe('FileSystemInitializer', () => {
@@ -24,12 +25,12 @@ describe('FileSystemInitializer', () => {
       expect(guestDir!.children!.has('README.txt')).toBe(true);
 
       const readme = guestDir!.children!.get('README.txt');
-      expect(readme!.content).toContain('Welcome to darinchambers.com!');
+      expect(readme!.content).toContain(`Welcome to ${siteConfig.domain}!`);
     });
 
-    it('should create darin user directory with easter eggs', () => {
+    it('should create the user home directory with easter eggs', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const darinDir = root.children!.get('home')!.children!.get('darin');
+      const darinDir = root.children!.get('home')!.children!.get(siteConfig.username);
 
       expect(darinDir).toBeDefined();
       expect(darinDir!.children!.has('.secret')).toBe(true);
@@ -42,7 +43,10 @@ describe('FileSystemInitializer', () => {
   describe('Dynamic Blog File Loading', () => {
     it('should dynamically load blog markdown files', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const blogDir = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
+      const blogDir = root
+        .children!.get('home')!
+        .children!.get(siteConfig.username)!
+        .children!.get('blog');
 
       expect(blogDir).toBeDefined();
       expect(blogDir!.type).toBe('directory');
@@ -51,7 +55,10 @@ describe('FileSystemInitializer', () => {
 
     it('should load only markdown files in blog directory', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const blogDir = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
+      const blogDir = root
+        .children!.get('home')!
+        .children!.get(siteConfig.username)!
+        .children!.get('blog');
 
       for (const [filename] of blogDir!.children!) {
         expect(filename).toMatch(/\.md$/);
@@ -60,7 +67,10 @@ describe('FileSystemInitializer', () => {
 
     it('should create proper file nodes with content for blog files', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const blogDir = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
+      const blogDir = root
+        .children!.get('home')!
+        .children!.get(siteConfig.username)!
+        .children!.get('blog');
 
       for (const [filename, fileNode] of blogDir!.children!) {
         expect(fileNode.type).toBe('file');
@@ -73,7 +83,10 @@ describe('FileSystemInitializer', () => {
 
     it('should include known blog posts', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const blogDir = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
+      const blogDir = root
+        .children!.get('home')!
+        .children!.get(siteConfig.username)!
+        .children!.get('blog');
 
       const expectedPosts = [
         '2025-11-14-a-love-letter-to-developers-and-the-terminal.md',
@@ -88,7 +101,10 @@ describe('FileSystemInitializer', () => {
 
     it('should load blog post content with YAML frontmatter', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const blogDir = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
+      const blogDir = root
+        .children!.get('home')!
+        .children!.get(siteConfig.username)!
+        .children!.get('blog');
 
       const tricksRocksPost = blogDir!.children!.get('2025-11-15-we-trick-rocks-into-thinking.md');
       expect(tricksRocksPost).toBeDefined();
@@ -100,11 +116,14 @@ describe('FileSystemInitializer', () => {
 
     it('should set proper file metadata for blog files', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const blogDir = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
+      const blogDir = root
+        .children!.get('home')!
+        .children!.get(siteConfig.username)!
+        .children!.get('blog');
 
       for (const [, fileNode] of blogDir!.children!) {
         expect(fileNode.permissions).toBe('-rw-r--r--');
-        expect(fileNode.owner).toBe('darin');
+        expect(fileNode.owner).toBe(siteConfig.username);
         expect(fileNode.size).toBe(fileNode.content!.length);
         expect(fileNode.modifiedTime).toBeInstanceOf(Date);
       }
@@ -116,7 +135,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const portfolioDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('portfolio');
 
       expect(portfolioDir).toBeDefined();
@@ -128,7 +147,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const portfolioDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('portfolio');
 
       for (const [filename] of portfolioDir!.children!) {
@@ -140,7 +159,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const portfolioDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('portfolio');
 
       for (const [filename, fileNode] of portfolioDir!.children!) {
@@ -156,7 +175,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const portfolioDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('portfolio');
 
       const expectedProjects = [
@@ -175,7 +194,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const portfolioDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('portfolio');
 
       const scalingProject = portfolioDir!.children!.get('scaling-hypergrowth.md');
@@ -191,12 +210,12 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const portfolioDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('portfolio');
 
       for (const [, fileNode] of portfolioDir!.children!) {
         expect(fileNode.permissions).toBe('-rw-r--r--');
-        expect(fileNode.owner).toBe('darin');
+        expect(fileNode.owner).toBe(siteConfig.username);
         expect(fileNode.size).toBe(fileNode.content!.length);
         expect(fileNode.modifiedTime).toBeInstanceOf(Date);
       }
@@ -206,7 +225,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const portfolioDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('portfolio');
 
       for (const [, fileNode] of portfolioDir!.children!) {
@@ -221,7 +240,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const contentDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('content');
 
       expect(contentDir).toBeDefined();
@@ -233,7 +252,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const contentDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('content');
 
       for (const [filename] of contentDir!.children!) {
@@ -245,7 +264,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const contentDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('content');
 
       for (const [filename, fileNode] of contentDir!.children!) {
@@ -261,7 +280,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const contentDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('content');
 
       const expectedFiles = ['about.md', 'contact.md', 'help.md'];
@@ -275,7 +294,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const contentDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('content');
 
       const aboutFile = contentDir!.children!.get('about.md');
@@ -289,12 +308,12 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const contentDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('content');
 
       for (const [, fileNode] of contentDir!.children!) {
         expect(fileNode.permissions).toBe('-rw-r--r--');
-        expect(fileNode.owner).toBe('darin');
+        expect(fileNode.owner).toBe(siteConfig.username);
         expect(fileNode.size).toBe(fileNode.content!.length);
         expect(fileNode.modifiedTime).toBeInstanceOf(Date);
       }
@@ -304,7 +323,7 @@ describe('FileSystemInitializer', () => {
   describe('File Node Properties', () => {
     it('should set isHidden for hidden files', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const darinDir = root.children!.get('home')!.children!.get('darin');
+      const darinDir = root.children!.get('home')!.children!.get(siteConfig.username);
 
       const secretFile = darinDir!.children!.get('.secret');
       expect(secretFile).toBeDefined();
@@ -313,7 +332,10 @@ describe('FileSystemInitializer', () => {
 
     it('should not set isHidden for regular files', () => {
       const root = FileSystemInitializer.createDefaultStructure();
-      const blogDir = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
+      const blogDir = root
+        .children!.get('home')!
+        .children!.get(siteConfig.username)!
+        .children!.get('blog');
 
       for (const [filename, fileNode] of blogDir!.children!) {
         if (!filename.startsWith('.')) {
@@ -326,7 +348,7 @@ describe('FileSystemInitializer', () => {
       const root = FileSystemInitializer.createDefaultStructure();
       const contentDir = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('content');
 
       for (const [, fileNode] of contentDir!.children!) {
@@ -339,23 +361,26 @@ describe('FileSystemInitializer', () => {
     it('should maintain consistent directory structure', () => {
       const root = FileSystemInitializer.createDefaultStructure();
 
-      // Verify path: /home/darin/blog exists
-      const blogPath = root.children!.get('home')!.children!.get('darin')!.children!.get('blog');
+      // Verify path: <user home>/blog exists
+      const blogPath = root
+        .children!.get('home')!
+        .children!.get(siteConfig.username)!
+        .children!.get('blog');
       expect(blogPath).toBeDefined();
       expect(blogPath!.type).toBe('directory');
 
-      // Verify path: /home/darin/portfolio exists
+      // Verify path: <user home>/portfolio exists
       const portfolioPath = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('portfolio');
       expect(portfolioPath).toBeDefined();
       expect(portfolioPath!.type).toBe('directory');
 
-      // Verify path: /home/darin/content exists
+      // Verify path: <user home>/content exists
       const contentPath = root
         .children!.get('home')!
-        .children!.get('darin')!
+        .children!.get(siteConfig.username)!
         .children!.get('content');
       expect(contentPath).toBeDefined();
       expect(contentPath!.type).toBe('directory');
@@ -366,15 +391,15 @@ describe('FileSystemInitializer', () => {
 
       const directories = [
         root.children!.get('home'),
-        root.children!.get('home')!.children!.get('darin'),
-        root.children!.get('home')!.children!.get('darin')!.children!.get('blog'),
-        root.children!.get('home')!.children!.get('darin')!.children!.get('portfolio'),
-        root.children!.get('home')!.children!.get('darin')!.children!.get('content'),
+        root.children!.get('home')!.children!.get(siteConfig.username),
+        root.children!.get('home')!.children!.get(siteConfig.username)!.children!.get('blog'),
+        root.children!.get('home')!.children!.get(siteConfig.username)!.children!.get('portfolio'),
+        root.children!.get('home')!.children!.get(siteConfig.username)!.children!.get('content'),
       ];
 
       for (const dir of directories) {
         expect(dir!.permissions).toBe('drwxr-xr-x');
-        expect(dir!.owner).toBe('darin');
+        expect(dir!.owner).toBe(siteConfig.username);
         expect(dir!.size).toBe(4096);
       }
     });

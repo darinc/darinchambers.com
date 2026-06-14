@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { siteConfig } from '../../src/site.config';
 import {
   sampleBlogPost,
   simpleBlogPost,
@@ -29,9 +30,12 @@ describe('Markdown Rendering Integration', () => {
 
   describe('Complete Markdown Pipeline', () => {
     it('should render complete blog post with frontmatter', async () => {
-      context.fileSystem.writeFile('/home/darin/test-post.md', sampleBlogPost);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/test-post.md`, sampleBlogPost);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/test-post.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/test-post.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -46,9 +50,12 @@ describe('Markdown Rendering Integration', () => {
     });
 
     it('should render markdown without frontmatter', async () => {
-      context.fileSystem.writeFile('/home/darin/simple.md', simpleBlogPost);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/simple.md`, simpleBlogPost);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/simple.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/simple.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<h1');
@@ -56,9 +63,12 @@ describe('Markdown Rendering Integration', () => {
     });
 
     it('should handle empty markdown', async () => {
-      context.fileSystem.writeFile('/home/darin/empty.md', '');
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/empty.md`, '');
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/empty.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/empty.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -71,9 +81,15 @@ title: Test
 date: 2024-01-01
 ---`;
 
-      context.fileSystem.writeFile('/home/darin/frontmatter-only.md', onlyFrontmatter);
+      context.fileSystem.writeFile(
+        `/home/${siteConfig.username}/frontmatter-only.md`,
+        onlyFrontmatter
+      );
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/frontmatter-only.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/frontmatter-only.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -85,9 +101,12 @@ date: 2024-01-01
   describe('Text Formatting', () => {
     it('should render bold text', async () => {
       const markdown = '**bold text**';
-      context.fileSystem.writeFile('/home/darin/bold.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/bold.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/bold.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/bold.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<strong>');
@@ -96,9 +115,12 @@ date: 2024-01-01
 
     it('should render italic text', async () => {
       const markdown = '*italic text*';
-      context.fileSystem.writeFile('/home/darin/italic.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/italic.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/italic.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/italic.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<em>');
@@ -107,9 +129,12 @@ date: 2024-01-01
 
     it('should render combined formatting', async () => {
       const markdown = '**Bold** and *italic* and ***both***';
-      context.fileSystem.writeFile('/home/darin/combined.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/combined.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/combined.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/combined.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<strong>');
@@ -118,9 +143,12 @@ date: 2024-01-01
 
     it('should render inline code', async () => {
       const markdown = 'This is `inline code` text';
-      context.fileSystem.writeFile('/home/darin/inline-code.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/inline-code.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/inline-code.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/inline-code.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<code>');
@@ -129,9 +157,12 @@ date: 2024-01-01
 
     it('should render strikethrough if supported', async () => {
       const markdown = '~~strikethrough text~~';
-      context.fileSystem.writeFile('/home/darin/strike.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/strike.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/strike.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/strike.md | render`
+      );
 
       const output = getLastOutputLine();
       // May contain <del> or <s> tag if strikethrough is supported
@@ -148,9 +179,12 @@ date: 2024-01-01
 ##### H5
 ###### H6`;
 
-      context.fileSystem.writeFile('/home/darin/headings.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/headings.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/headings.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/headings.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<h1');
@@ -163,9 +197,12 @@ date: 2024-01-01
 
     it('should preserve heading text', async () => {
       const markdown = '# My Heading';
-      context.fileSystem.writeFile('/home/darin/heading-text.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/heading-text.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/heading-text.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/heading-text.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<h1[^>]*>My Heading<\/h1>/);
@@ -173,11 +210,11 @@ date: 2024-01-01
 
     it('should handle headings with formatting', async () => {
       const markdown = '# Heading with **bold** and *italic*';
-      context.fileSystem.writeFile('/home/darin/formatted-heading.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/formatted-heading.md`, markdown);
 
       await executeCommandAndWait(
         context.terminal,
-        'cat /home/darin/formatted-heading.md | render'
+        `cat /home/${siteConfig.username}/formatted-heading.md | render`
       );
 
       const output = getLastOutputLine();
@@ -193,9 +230,12 @@ date: 2024-01-01
 - Item 2
 - Item 3`;
 
-      context.fileSystem.writeFile('/home/darin/ul.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/ul.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/ul.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/ul.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<ul');
@@ -210,9 +250,12 @@ date: 2024-01-01
 2. Second
 3. Third`;
 
-      context.fileSystem.writeFile('/home/darin/ol.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/ol.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/ol.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/ol.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<ol');
@@ -228,9 +271,12 @@ date: 2024-01-01
   - Child 2
 - Parent 2`;
 
-      context.fileSystem.writeFile('/home/darin/nested.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/nested.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/nested.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/nested.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<ul');
@@ -244,9 +290,12 @@ date: 2024-01-01
 - *Italic item*
 - \`Code item\``;
 
-      context.fileSystem.writeFile('/home/darin/formatted-list.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/formatted-list.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/formatted-list.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/formatted-list.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('<strong>');
@@ -258,9 +307,12 @@ date: 2024-01-01
   describe('Code Blocks', () => {
     it('should render code blocks', async () => {
       const markdown = '```\nconst x = 1;\n```';
-      context.fileSystem.writeFile('/home/darin/code.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/code.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/code.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/code.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<pre><code/);
@@ -269,9 +321,12 @@ date: 2024-01-01
 
     it('should render code blocks with language', async () => {
       const markdown = '```javascript\nconst x = 1;\n```';
-      context.fileSystem.writeFile('/home/darin/js-code.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/js-code.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/js-code.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/js-code.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<pre><code/);
@@ -287,9 +342,12 @@ function greet(name: string): string {
 }
 \`\`\``;
 
-      context.fileSystem.writeFile('/home/darin/multiline-code.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/multiline-code.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/multiline-code.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/multiline-code.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<pre><code/);
@@ -304,9 +362,12 @@ function greet(name: string): string {
   less indent
 \`\`\``;
 
-      context.fileSystem.writeFile('/home/darin/indented-code.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/indented-code.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/indented-code.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/indented-code.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<pre><code/);
@@ -317,9 +378,12 @@ function greet(name: string): string {
   describe('Links', () => {
     it('should render inline links', async () => {
       const markdown = '[Link Text](https://example.com)';
-      context.fileSystem.writeFile('/home/darin/link.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/link.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/link.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/link.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<a[^>]*href=["']https:\/\/example\.com["']/);
@@ -328,9 +392,12 @@ function greet(name: string): string {
 
     it('should render links with title', async () => {
       const markdown = '[Link](https://example.com "Title")';
-      context.fileSystem.writeFile('/home/darin/link-title.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/link-title.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/link-title.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/link-title.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<a[^>]*href=/);
@@ -339,9 +406,12 @@ function greet(name: string): string {
 
     it('should render multiple links', async () => {
       const markdown = '[Link 1](https://one.com) and [Link 2](https://two.com)';
-      context.fileSystem.writeFile('/home/darin/multi-link.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/multi-link.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/multi-link.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/multi-link.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/href=["']https:\/\/one\.com["']/);
@@ -350,9 +420,12 @@ function greet(name: string): string {
 
     it('should render links correctly', async () => {
       const markdown = '[External](https://example.com)';
-      context.fileSystem.writeFile('/home/darin/external.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/external.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/external.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/external.md | render`
+      );
 
       const output = getLastOutputLine();
       // Should render link with href
@@ -368,9 +441,12 @@ Paragraph two.
 
 Paragraph three.`;
 
-      context.fileSystem.writeFile('/home/darin/paragraphs.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/paragraphs.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/paragraphs.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/paragraphs.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -381,9 +457,12 @@ Paragraph three.`;
 
     it('should handle single line breaks', async () => {
       const markdown = 'Line one\nLine two';
-      context.fileSystem.writeFile('/home/darin/breaks.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/breaks.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/breaks.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/breaks.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('Line one');
@@ -393,9 +472,12 @@ Paragraph three.`;
 
   describe('XSS Protection', () => {
     it('should sanitize script tags', async () => {
-      context.fileSystem.writeFile('/home/darin/malicious.md', maliciousBlogPost);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/malicious.md`, maliciousBlogPost);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/malicious.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/malicious.md | render`
+      );
 
       const output = getLastOutputLine();
       // Script tags should be removed or escaped
@@ -405,9 +487,12 @@ Paragraph three.`;
 
     it('should sanitize event handlers', async () => {
       const markdown = '<img src="x" onerror="alert(\'XSS\')">';
-      context.fileSystem.writeFile('/home/darin/event.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/event.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/event.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/event.md | render`
+      );
 
       const output = getLastOutputLine();
       // Event handlers should be removed
@@ -417,9 +502,12 @@ Paragraph three.`;
 
     it('should allow safe HTML tags', async () => {
       const markdown = '<strong>Bold</strong> and <em>Italic</em>';
-      context.fileSystem.writeFile('/home/darin/safe-html.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/safe-html.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/safe-html.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/safe-html.md | render`
+      );
 
       const output = getLastOutputLine();
       // Safe tags should be preserved
@@ -431,9 +519,12 @@ Paragraph three.`;
 
     it('should sanitize javascript: links', async () => {
       const markdown = '[Click](javascript:alert("XSS"))';
-      context.fileSystem.writeFile('/home/darin/js-link.md', markdown);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/js-link.md`, markdown);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/js-link.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/js-link.md | render`
+      );
 
       const output = getLastOutputLine();
       // javascript: URLs should be removed or neutralized
@@ -444,11 +535,17 @@ Paragraph three.`;
 
   describe('Frontmatter Parsing', () => {
     it('should parse YAML frontmatter', async () => {
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/test-post.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/test-post.md | render`
+      );
 
-      context.fileSystem.writeFile('/home/darin/test-post.md', sampleBlogPost);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/test-post.md`, sampleBlogPost);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/test-post.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/test-post.md | render`
+      );
 
       const output = getLastOutputLine();
       // Frontmatter should not appear in output
@@ -460,9 +557,12 @@ Paragraph three.`;
 
     it('should handle markdown without frontmatter', async () => {
       const noFrontmatter = '# Just Content\n\nNo frontmatter here.';
-      context.fileSystem.writeFile('/home/darin/no-fm.md', noFrontmatter);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/no-fm.md`, noFrontmatter);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/no-fm.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/no-fm.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('Just Content');
@@ -476,9 +576,15 @@ invalid yaml: [
 
 # Content`;
 
-      context.fileSystem.writeFile('/home/darin/invalid-fm.md', invalidFrontmatter);
+      context.fileSystem.writeFile(
+        `/home/${siteConfig.username}/invalid-fm.md`,
+        invalidFrontmatter
+      );
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/invalid-fm.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/invalid-fm.md | render`
+      );
 
       const output = getLastOutputLine();
       // Should either skip frontmatter or render content
@@ -488,7 +594,10 @@ invalid yaml: [
 
   describe('Blog Post Rendering', () => {
     it('should render complete blog post from blog command', async () => {
-      context.fileSystem.writeFile('/home/darin/blog/test-blog.md', sampleBlogPost);
+      context.fileSystem.writeFile(
+        `/home/${siteConfig.username}/blog/test-blog.md`,
+        sampleBlogPost
+      );
 
       await executeCommandAndWait(context.terminal, 'blog');
 
@@ -498,9 +607,12 @@ invalid yaml: [
     });
 
     it('should render blog post via cat | render', async () => {
-      context.fileSystem.writeFile('/home/darin/blog/post.md', sampleBlogPost);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/blog/post.md`, sampleBlogPost);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/blog/post.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/blog/post.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toMatch(/<h1[^>]*>/);
@@ -538,9 +650,12 @@ Check out [this link](https://example.com) for more info.
 
 Another paragraph here.`;
 
-      context.fileSystem.writeFile('/home/darin/complex.md', complex);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/complex.md`, complex);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/complex.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/complex.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -561,11 +676,11 @@ Another paragraph here.`;
 
     it('should handle very long markdown documents', async () => {
       const longDoc = `# Long Document\n\n${'Paragraph. '.repeat(100)}`;
-      context.fileSystem.writeFile('/home/darin/long.md', longDoc);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/long.md`, longDoc);
 
       await executeCommandAndWait(
         context.terminal,
-        'cat /home/darin/long.md | render',
+        `cat /home/${siteConfig.username}/long.md | render`,
         200 // Longer timeout for large document
       );
 
@@ -578,9 +693,12 @@ Another paragraph here.`;
   describe('Error Handling', () => {
     it('should handle malformed markdown gracefully', async () => {
       const malformed = '# Heading\n**Unclosed bold\n## Another';
-      context.fileSystem.writeFile('/home/darin/malformed.md', malformed);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/malformed.md`, malformed);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/malformed.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/malformed.md | render`
+      );
 
       const output = getLastOutputLine();
       // Should not crash, may handle gracefully
@@ -589,9 +707,12 @@ Another paragraph here.`;
 
     it('should handle special characters', async () => {
       const special = '# Title with & < > " \' characters';
-      context.fileSystem.writeFile('/home/darin/special.md', special);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/special.md`, special);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/special.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/special.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output).toBeTruthy();
@@ -600,9 +721,12 @@ Another paragraph here.`;
 
     it('should handle unicode characters', async () => {
       const unicode = '# 你好 🚀 émojis and 日本語';
-      context.fileSystem.writeFile('/home/darin/unicode.md', unicode);
+      context.fileSystem.writeFile(`/home/${siteConfig.username}/unicode.md`, unicode);
 
-      await executeCommandAndWait(context.terminal, 'cat /home/darin/unicode.md | render');
+      await executeCommandAndWait(
+        context.terminal,
+        `cat /home/${siteConfig.username}/unicode.md | render`
+      );
 
       const output = getLastOutputLine();
       expect(output?.innerHTML).toContain('你好');

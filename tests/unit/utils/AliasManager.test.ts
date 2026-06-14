@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PATHS } from '../../../src/constants';
+import { siteConfig } from '../../../src/site.config';
 import { AliasManager } from '../../../src/utils/AliasManager';
 import type { IFileSystem } from '../../../src/utils/fs/IFileSystem';
 
@@ -16,7 +17,7 @@ describe('AliasManager', () => {
       readFile: vi.fn().mockReturnValue(''),
       writeFile: vi.fn(),
       list: vi.fn().mockReturnValue([]),
-      getCurrentPath: vi.fn().mockReturnValue('/home/darin'),
+      getCurrentPath: vi.fn().mockReturnValue(`/home/${siteConfig.username}`),
       getShortPath: vi.fn().mockReturnValue('~'),
       setCurrentUsername: vi.fn(),
       changeDirectory: vi.fn(),

@@ -6,6 +6,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createMatrixCommand } from '../../../src/commands/novelty/matrix';
+import { siteConfig } from '../../../src/site.config';
 import { FileSystemService } from '../../../src/utils/fs/FileSystemService';
 import { SettingsManager } from '../../../src/utils/SettingsManager';
 import { ThemeManager } from '../../../src/utils/ThemeManager';
@@ -32,9 +33,9 @@ describe('matrix command', () => {
             type: 'directory',
             children: new Map([
               [
-                'darin',
+                siteConfig.username,
                 {
-                  name: 'darin',
+                  name: siteConfig.username,
                   type: 'directory',
                   children: new Map(),
                 },

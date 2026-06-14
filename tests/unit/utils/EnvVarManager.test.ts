@@ -7,6 +7,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { PATHS, STORAGE_KEYS } from '../../../src/constants';
+import { siteConfig } from '../../../src/site.config';
 import { EnvVarManager } from '../../../src/utils/EnvVarManager';
 import type { IFileSystem } from '../../../src/utils/fs/IFileSystem';
 
@@ -25,7 +26,7 @@ function createMockFileSystem(): IFileSystem {
     exists: vi.fn(() => true),
     isDirectory: vi.fn(() => false),
     isFile: vi.fn(() => true),
-    getCurrentPath: vi.fn(() => '/home/darin'),
+    getCurrentPath: vi.fn(() => `/home/${siteConfig.username}`),
     getShortPath: vi.fn(() => '~'),
     setCurrentUsername: vi.fn(),
     changeDirectory: vi.fn(),

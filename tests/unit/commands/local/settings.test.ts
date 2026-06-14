@@ -7,6 +7,7 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { createSettingsCommand } from '../../../../src/commands/local/settings';
+import { siteConfig } from '../../../../src/site.config';
 import { FileSystemService } from '../../../../src/utils/fs/FileSystemService';
 import { SettingsManager } from '../../../../src/utils/SettingsManager';
 import { ThemeManager } from '../../../../src/utils/ThemeManager';
@@ -35,9 +36,9 @@ describe('Settings Command', () => {
             type: 'directory',
             children: new Map([
               [
-                'darin',
+                siteConfig.username,
                 {
-                  name: 'darin',
+                  name: siteConfig.username,
                   type: 'directory',
                   children: new Map(),
                 },

@@ -7,6 +7,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createPortfolioCommand } from '../../../../src/commands/local/portfolio';
 import { MESSAGES } from '../../../../src/constants';
+import { siteConfig } from '../../../../src/site.config';
 import type { Command, CommandResult } from '../../../../src/commands/Command';
 import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 
@@ -14,7 +15,7 @@ import type { IFileSystem } from '../../../../src/utils/fs/IFileSystem';
 function createMockFs(files = new Map<string, string>()): IFileSystem {
   return {
     list: (path: string) => {
-      if (path === '/home/darin/portfolio') {
+      if (path === `/home/${siteConfig.username}/portfolio`) {
         return Array.from(files.keys());
       }
       return [];
@@ -26,7 +27,7 @@ function createMockFs(files = new Map<string, string>()): IFileSystem {
     exists: () => true,
     isDirectory: () => true,
     isFile: () => false,
-    getCurrentPath: () => '/home/darin',
+    getCurrentPath: () => `/home/${siteConfig.username}`,
     getShortPath: () => '~',
     setCurrentUsername: () => {},
     changeDirectory: () => {},
