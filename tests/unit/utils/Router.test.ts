@@ -159,6 +159,18 @@ describe('Router', () => {
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('games', false);
     });
 
+    it('should parse /games/:gameId route into the game launch command', () => {
+      window.location.pathname = '/games/polartetris';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('polartetris', false);
+    });
+
+    it('should fall back to the games list for an unknown game id', () => {
+      window.location.pathname = '/games/not-a-real-game';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('games', false);
+    });
+
     it('should redirect unknown routes to home', () => {
       window.location.pathname = '/unknown-route';
 
@@ -229,6 +241,10 @@ describe('Router', () => {
 
     it('should return /games for "games" command', () => {
       expect(router.getPathForCommand('games')).toBe('/games');
+    });
+
+    it('should return /games/:gameId for a game launch command', () => {
+      expect(router.getPathForCommand('polartetris')).toBe('/games/polartetris');
     });
 
     it('should return /portfolio for "portfolio" command', () => {

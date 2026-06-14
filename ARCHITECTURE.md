@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-**Last Updated:** 2026-06-14 (v0.29.0)
+**Last Updated:** 2026-06-14 (v0.30.0)
 
 ## Table of Contents
 
