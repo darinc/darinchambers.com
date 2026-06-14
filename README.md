@@ -96,8 +96,21 @@ darinchambers.com/
 - Zero known vulnerabilities in production dependencies
 - ~125KB gzipped bundle
 
+## Use This as a Template
+
+Want your own terminal portfolio? Fork the repo, then:
+
+```bash
+pnpm install
+pnpm reset-content     # clear the example posts, notes, and projects
+```
+
+Then follow [TEMPLATE.md](TEMPLATE.md) to swap in your name, domain, socials, and
+icons. It lists every personalized value and exactly which file to change.
+
 ## Documentation
 
+- [TEMPLATE.md](TEMPLATE.md) - Fork it and make it your own
 - [ARCHITECTURE.md](ARCHITECTURE.md) - System design and patterns
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines
 - [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment instructions

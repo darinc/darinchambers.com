@@ -22,6 +22,7 @@
     "type-coverage": "type-coverage --at-least 95",
     "validate": "pnpm type-check && pnpm lint && pnpm format:check && pnpm test:run",
     "update-docs": "node scripts/update-docs.js",
+    "reset-content": "node scripts/reset-content.js",
     "prepare": "husky"
   },
   "keywords": [
