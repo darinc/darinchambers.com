@@ -195,11 +195,27 @@ Refactors shipped without version bumps (behavior-preserving). All CI green.
 Shipped without a version bump (docs/ci only). Commits `e968144` (docs), `5979351` (ci), `10a4a7d` (lint
 cleanup). Full `pnpm validate` green locally; CI green on push.
 
+### Dependency + CI modernization — DONE & verified (2026-06-13)
+
+- **GitHub Actions → Node-24 majors.** checkout v4→v6, setup-node v4→v6, upload-artifact v4→v7,
+  codecov-action v4→v7, pnpm/action-setup v4→v6, peaceiris/actions-gh-pages v3→v4. **Node-20 deprecation
+  annotation is gone.** CI/deploy node-version 20→22 (active LTS, matches local).
+- **Dependencies updated incl. majors.** marked 17→18 (prod), figlet→1.11, vite 7→8, eslint 9→10,
+  typescript 5.9→6.0, jsdom 27→29, glob 10→13, lint-staged 16→17, @types/node 24→25, plus
+  vitest/prettier/typescript-eslint minors. `pnpm audit` **28→2** (remaining 2 are dev-only esbuild
+  advisories via vite, patched in >=0.28.1 which no vite release ships yet — never reach the browser;
+  prod `pnpm audit --prod` stays clean).
+- **Two pnpm-10 gotchas fixed (encoded in repo):** added `pnpm.onlyBuiltDependencies: [esbuild,
+unrs-resolver]` (pnpm 10 blocks postinstall build scripts); switched eslint.config.js to import-x's
+  pure-JS `createNodeResolver` (the native unrs-resolver crashed eslint on the CI linux runner). ESLint 10's
+  `preserve-caught-error` rule → attach `{ cause }` on re-throw → required tsconfig target/lib ES2020→ES2022.
+- **Verified:** type-check, lint, build, 1906 tests, type-coverage 99.22%, CI green, deploy green, and a
+  Playwright smoke-test of the vite-8 production build (banner renders; `help` runs and routes to /help).
+- Commits `0a994df`..`94e3901` (7 commits). No version bump (chore/ci).
+
 **Still open:**
 
 - **2.1 dead markdown renderer** — logged as **GitHub issue #1** (delete vs keep as documented fallback);
   awaiting owner decision.
-- Minor: dead-code/UX quirk in `Router.getPathForCommand:296`; `dist` missing `favicon.ico`.
-- Forward-looking (not urgent): GitHub is forcing Node-20 actions to Node 24 on 2026-06-16; the pinned
-  actions (`checkout@v4`, `setup-node@v4`, `upload-artifact@v4`, `codecov-action@v4`, `pnpm/action-setup@v4`)
-  emit a deprecation annotation. Bump action majors when convenient.
+- Minor: dead-code/UX quirk in `Router.getPathForCommand:296`; `dist` missing `favicon.ico` (still 404 in
+  the vite-8 build — a real, separate small fix if wanted).
