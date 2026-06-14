@@ -19,6 +19,18 @@ export default tseslint.config(
       'import-x': importPlugin,
       'unused-imports': unusedImports,
     },
+    settings: {
+      // Use import-x's built-in pure-JS node resolver instead of the native
+      // unrs-resolver default. The native binding is fragile under pnpm 10 +
+      // CI store caching ("node with invalid interface loaded as resolver");
+      // the JS resolver is deterministic across platforms. TS extensions are
+      // added so bare relative imports (`./Foo`) resolve to `Foo.ts`.
+      'import-x/resolver-next': [
+        importPlugin.createNodeResolver({
+          extensions: ['.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs', '.json', '.node'],
+        }),
+      ],
+    },
     rules: {
       // TypeScript-specific rules
       '@typescript-eslint/no-explicit-any': 'warn',
