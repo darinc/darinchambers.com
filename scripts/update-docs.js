@@ -20,8 +20,8 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import zlib from 'zlib';
 import { fileURLToPath } from 'url';
+import zlib from 'zlib';
 import { glob } from 'glob';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -147,7 +147,7 @@ async function getScreensaverConstants() {
       minTimeout,
       maxTimeout
     };
-  } catch (error) {
+  } catch {
     console.warn('  ⚠️  Could not read screensaver constants, using defaults');
     return {
       defaultTimeout: 5,
@@ -179,7 +179,7 @@ async function getCoveragePercentage() {
 
     const percentage = (totals.covered / totals.total) * 100;
     return Math.round(percentage); // Round to nearest integer
-  } catch (error) {
+  } catch {
     // Coverage data not available (e.g., tests haven't been run with --coverage)
     return null;
   }
