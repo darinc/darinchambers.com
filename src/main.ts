@@ -40,8 +40,10 @@ import { createLifeCommand } from './commands/novelty/life';
 import { lolcatCommand } from './commands/novelty/lolcat';
 import { createMakeCommand } from './commands/novelty/make';
 import { createMatrixCommand } from './commands/novelty/matrix';
+import { createPolarTetrisCommand } from './commands/novelty/polartetris';
 import { rebootCommand } from './commands/novelty/reboot';
 import { shutdownCommand } from './commands/novelty/shutdown';
+import { GameController } from './components/GameController';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { Terminal } from './components/Terminal';
@@ -248,6 +250,10 @@ const matrixCommand = createMatrixCommand(themeManager);
 const lifeCommand = createLifeCommand(themeManager);
 const makeCommand = createMakeCommand(terminal);
 
+// Create the Polar Tetris game (fullscreen overlay launched by command)
+const gameController = new GameController(themeManager, () => terminal.focus(true));
+const polarTetrisCommand = createPolarTetrisCommand(gameController);
+
 // Create which command
 const whichCommand = createWhichCommand(dispatcher, aliasManager);
 
@@ -292,6 +298,7 @@ terminal.registerCommands([
   lolcatCommand,
   matrixCommand,
   lifeCommand,
+  polarTetrisCommand,
   bootCommand,
   shutdownCommand,
   rebootCommand,

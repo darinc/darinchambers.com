@@ -14,7 +14,7 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 - No framework - vanilla JavaScript/TypeScript
 - Dependencies: marked (markdown), figlet (ASCII art), DOMPurify (XSS protection)
 
-**Bundle Size:** ~119KB gzipped (~417KB raw)
+**Bundle Size:** ~124KB gzipped (~417KB raw)
 **Test Coverage:** 80%+ target (90%+ current, 60+ test files)
 **Deployment:** GitHub Pages
 
@@ -81,7 +81,7 @@ Terminal (orchestrator)
 ├── ScreensaverManager (idle detection, screensaver activation)
 └── CommandExecutor (parse, expand aliases/vars, execute)
     └── CommandDispatcher (route to specific command)
-        └── Command implementations (40 commands)
+        └── Command implementations (41 commands)
 ```
 
 **State Management:**
@@ -140,15 +140,16 @@ Implementation: `PipelineParser.ts` splits by `|`, passes stdout as stdin to nex
 ```
 src/
 ├── animations/        # Screensaver animations (Matrix rain, etc.)
-├── commands/          # Command implementations (40 commands)
+├── commands/          # Command implementations (41 commands)
 │   ├── core/         # Core terminal commands (echo, date, env, export, etc.)
 │   ├── fs/           # File system commands (ls, cd, pwd, cat, tree)
 │   ├── local/        # Content commands (about, blog, portfolio, contact, settings)
-│   └── novelty/      # Fun commands (matrix, figlet, ddate)
-├── components/        # UI components (Terminal, TerminalInput, TerminalOutput, etc.)
+│   └── novelty/      # Fun commands (matrix, figlet, ddate, polartetris)
+├── components/        # UI components (Terminal, TerminalInput, TerminalOutput, GameController, etc.)
 ├── content/           # Markdown content
 │   ├── blog/         # Blog posts (YYYY-MM-DD-NN-slug.md format)
 │   └── portfolio/    # Portfolio projects (slug.md format)
+├── games/             # Interactive games (Polar Tetris: engine, sound, high score)
 ├── utils/             # Utilities
 │   ├── fs/           # Virtual file system (FileSystemService, FileSystemInitializer)
 │   ├── markdown/     # Markdown parsing (MarkdownParser, handlers)

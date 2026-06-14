@@ -1,6 +1,6 @@
 # Darin Chambers - Terminal Portfolio
 
-[![Version](https://img.shields.io/badge/version-0.27.4-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.28.0-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
@@ -17,7 +17,7 @@ Try it out: https://darinchambers.com
 - Multiple terminal themes (Green, Amber, White, Cyan, Paper, DC)
 - Accessibility: reduced motion, keyboard navigation, visible focus (WCAG 2.1 AA)
 - Type-safe TypeScript with strict mode
-- ~119KB gzipped bundle
+- ~124KB gzipped bundle
 
 ## Quick Start
 
@@ -60,7 +60,7 @@ pnpm lint                # Run linter
 
 **File System**: `ls`, `cd`, `pwd`, `cat`, `tree`, `render`
 
-**Novelty**: `ddate`, `figlet`, `matrix`
+**Novelty**: `ddate`, `figlet`, `matrix`, `polartetris`
 
 **Advanced**: Command piping, tab completion, command history (arrow keys)
 
@@ -79,7 +79,7 @@ settings font-size 16    # Adjust font size
 ```
 darinchambers.com/
 ├── src/
-│   ├── commands/        # 40 command implementations
+│   ├── commands/        # 41 command implementations
 │   ├── components/      # UI components
 │   ├── content/         # Markdown content (blog, portfolio)
 │   ├── utils/           # Parsers, managers, renderers
@@ -94,7 +94,7 @@ darinchambers.com/
 - Multi-layered XSS protection (DOMPurify + CSP)
 - 1,000+ tests across 50+ test files
 - Zero known vulnerabilities in production dependencies
-- ~119KB gzipped bundle
+- ~124KB gzipped bundle
 
 ## Documentation
 

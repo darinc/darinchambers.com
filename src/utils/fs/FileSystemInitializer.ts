@@ -392,6 +392,10 @@ Type 'blog' to read posts.
     bin.children!.set('lolcat', this.createFileNode('lolcat', '[Novelty command: lolcat]'));
     bin.children!.set('matrix', this.createFileNode('matrix', '[Novelty command: matrix]'));
     bin.children!.set('life', this.createFileNode('life', '[Novelty command: life]'));
+    bin.children!.set(
+      'polartetris',
+      this.createFileNode('polartetris', '[Novelty command: polartetris]')
+    );
     bin.children!.set('boot', this.createFileNode('boot', '[Novelty command: boot]'));
     bin.children!.set('shutdown', this.createFileNode('shutdown', '[Novelty command: shutdown]'));
     bin.children!.set('reboot', this.createFileNode('reboot', '[Novelty command: reboot]'));

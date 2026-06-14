@@ -51,6 +51,7 @@ Welcome to my interactive terminal! This is a Unix-like command-line interface w
 - **`ddate`** - Discordian calendar date
 - **`matrix`** - Matrix digital rain animation
 - **`life`** - Conway's Game of Life
+- **`polartetris`** - Tetris on a polar grid (fullscreen; Esc for menu)
 - **`boot`** - Simulated Linux boot sequence
 - **`shutdown`** - Simulated Linux shutdown
 - **`reboot`** - Full reboot animation
