@@ -3,6 +3,11 @@ import { createGamesCommand } from '../../../../src/commands/local/games';
 import { GAMES } from '../../../../src/games/registry';
 import type { CommandResult } from '../../../../src/commands/Command';
 
+// Markdown rendering HTML-escapes special characters (e.g. ' -> &#39;).
+function escapeForHtml(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/'/g, '&#39;');
+}
+
 describe('games command', () => {
   const cmd = createGamesCommand();
 
@@ -22,7 +27,7 @@ describe('games command', () => {
     expect(result.html).toBe(true);
     expect(result.scrollBehavior).toBe('top');
     for (const game of GAMES) {
-      expect(result.output).toContain(game.title);
+      expect(result.output).toContain(escapeForHtml(game.title));
     }
   });
 

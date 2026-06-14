@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.31.0] - 2026-06-14
+
+### Added
+- `/bin/<command>` route: launch any terminal command by URL (e.g. `/bin/matrix`), mirroring the shell. Unknown names fall through to the terminal's own "command not found"
+
+### Changed
+- Games are now classified explicitly via the games registry. `life` joins `polartetris` as a game, so both appear in the `games` catalog and use the canonical `/games/<game>` path (`/games/life`, `/games/polartetris`)
+- `matrix` (the screensaver, not a game) now uses the canonical `/bin/matrix` path; the legacy flat `/matrix` and `/life` URLs continue to resolve
+
 ## [0.30.0] - 2026-06-14
 
 ### Added

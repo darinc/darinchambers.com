@@ -165,10 +165,28 @@ describe('Router', () => {
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('polartetris', false);
     });
 
+    it('should parse /games/life (life is classified as a game)', () => {
+      window.location.pathname = '/games/life';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('life', false);
+    });
+
     it('should fall back to the games list for an unknown game id', () => {
       window.location.pathname = '/games/not-a-real-game';
       router.handleInitialRoute();
       expect(mockTerminal.executeCommand).toHaveBeenCalledWith('games', false);
+    });
+
+    it('should parse /bin/:command route into the named command', () => {
+      window.location.pathname = '/bin/matrix';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('matrix', false);
+    });
+
+    it('should run a game command via /bin too (universal route)', () => {
+      window.location.pathname = '/bin/polartetris';
+      router.handleInitialRoute();
+      expect(mockTerminal.executeCommand).toHaveBeenCalledWith('polartetris', false);
     });
 
     it('should redirect unknown routes to home', () => {
@@ -269,12 +287,12 @@ describe('Router', () => {
       expect(router.getPathForCommand('help')).toBe('/help');
     });
 
-    it('should return /matrix for "matrix" command', () => {
-      expect(router.getPathForCommand('matrix')).toBe('/matrix');
+    it('should return /bin/matrix for the (non-game) "matrix" command', () => {
+      expect(router.getPathForCommand('matrix')).toBe('/bin/matrix');
     });
 
-    it('should return /life for "life" command', () => {
-      expect(router.getPathForCommand('life')).toBe('/life');
+    it('should return /games/life for "life" (classified as a game)', () => {
+      expect(router.getPathForCommand('life')).toBe('/games/life');
     });
 
     it('should return null for unmapped commands', () => {
