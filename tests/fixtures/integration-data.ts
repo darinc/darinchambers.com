@@ -3,6 +3,8 @@
  * Contains sample data for blog posts, markdown content, and common test scenarios.
  */
 
+import { siteConfig } from '../../src/site.config';
+
 /**
  * Sample blog post with frontmatter
  */
@@ -194,13 +196,13 @@ export const expectedOutputPatterns = {
     permissions: /drwxr-xr-x|rwxr-xr-x/,
   },
   pwdOutput: {
-    path: /\/home\/darin/,
+    path: new RegExp(`/home/${siteConfig.username}`),
   },
   aliasOutput: {
     aliasDefinition: /ll='ls -alh'/,
   },
   envOutput: {
-    variable: /USER=darin/,
+    variable: new RegExp(`USER=${siteConfig.username}`),
   },
   errorOutput: {
     notFound: /not found|No such file or directory/i,
