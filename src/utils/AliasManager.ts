@@ -54,7 +54,8 @@ export class AliasManager {
       this.fileSystem.writeFile(this.aliasFilePath, content);
     } catch (error) {
       throw new Error(
-        `Failed to save aliases: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to save aliases: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error }
       );
     }
   }

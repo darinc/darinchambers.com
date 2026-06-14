@@ -76,7 +76,8 @@ export class SettingsManager {
     } catch (error) {
       console.error('SettingsManager: Failed to save settings to localStorage:', error);
       throw new Error(
-        `Failed to save settings: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to save settings: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error }
       );
     }
   }
