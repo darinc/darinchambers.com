@@ -1,7 +1,7 @@
 ---
 title: 'feat: Config-driven single source of truth for site identity'
 type: feat
-status: active
+status: completed
 date: 2026-06-14
 ---
 
