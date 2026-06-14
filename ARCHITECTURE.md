@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-**Last Updated:** 2026-06-14 (v0.27.3)
+**Last Updated:** 2026-06-14 (v0.28.0)
 
 ## Table of Contents
 
@@ -128,7 +128,7 @@ interface Command {
 - Supports both sync and async execution
 - Pipeline support via stdin parameter
 
-**Example**: All 40 commands implement this interface (ls, cd, cat, about, blog, etc.)
+**Example**: All 41 commands implement this interface (ls, cd, cat, about, blog, etc.)
 
 ### 2. Dependency Injection ✅
 
@@ -914,7 +914,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'
 
 ### Bundle Optimization
 
-- **Bundle Size**: ~119KB gzipped (~417KB raw: ~396KB JS, ~21KB CSS)
+- **Bundle Size**: ~124KB gzipped (~417KB raw: ~396KB JS, ~21KB CSS)
 - **Code Splitting**: Not needed (single-page application with small bundle)
 - **Tree Shaking**: Enabled via Vite (ES modules)
 - **Minification**: esbuild minification

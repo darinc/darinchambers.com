@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.28.0] - 2026-06-14
+
+### Added
+- `polartetris` command: a fullscreen Tetris played on a polar (radial) grid, faithfully ported from the original prototype — pieces fall inward along concentric rings and a spawn timer drops several at once
+- In-game menu (open with Esc / Q / P) offering Resume, Restart, Sound toggle, and Quit game; "Quit game" tears the game down cleanly and returns to the terminal shell
+- Theme-aware game chrome (matches the active terminal theme), persistent high score, WebAudio sound effects, and on-screen touch controls for mobile
+
 ## [0.27.4] - 2026-06-14
 
 ### Added
