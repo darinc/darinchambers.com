@@ -588,10 +588,10 @@ tags: ['tag1', 'tag2']
 
 ### Adding a Theme
 
-1. Add theme preset to `src/constants.ts`
-2. Ensure WCAG AA contrast compliance
-3. Update theme type definitions
-4. Add to settings UI options
+1. Add theme preset to `src/utils/ThemeManager.ts` in `initializePresets()`
+2. Aim for WCAG AA contrast (use a contrast checker)
+3. Add the preset name to `ThemePresetName` in `src/types/settings.ts`
+4. The theme appears in the settings UI automatically
 
 ### Adding Documentation
 

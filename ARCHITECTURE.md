@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-**Last Updated:** 2026-03-21 (v0.27.0)
+**Last Updated:** 2026-06-14 (v0.27.3)
 
 ## Table of Contents
 
@@ -549,7 +549,7 @@ Navigation.setActiveItem() (update aria-current)
 **Responsibilities**:
 
 - Apply theme colors via CSS variables
-- Provide theme presets (green, amber, white, cyan, paper)
+- Provide theme presets (green, amber, white, cyan, paper, dc)
 - Ensure WCAG contrast compliance
 - Sync with SettingsManager
 
@@ -876,16 +876,16 @@ export function sanitizeHtml(html: string): string {
 
 #### Layer 2: Content Security Policy
 
-**Location**: `public/_headers` (production only)
+**Location**: Injected as a `<meta http-equiv="Content-Security-Policy">` into the built HTML by `scripts/prerender.js` (post-build).
 
-**Note**: CSP is configured only in the production `_headers` file for Cloudflare Pages deployment. It is intentionally not included in `index.html` as a meta tag to allow the Vite development server to function properly with hot module replacement (HMR).
+**Note**: GitHub Pages ignores `public/_headers` (that file is Cloudflare/Netlify format), so the CSP is shipped via a meta tag instead. It is deliberately not in `index.html` so the Vite dev server (and its HMR) is unaffected — only the production build carries it. Header-only protections (HSTS, X-Frame-Options/`frame-ancestors`) cannot be delivered via meta and so are not active on GitHub Pages.
 
 **Protection**: Browser blocks inline scripts and restricts resource loading even if sanitization fails
 
 **Headers Configuration**:
 
 ```
-Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; ...
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests
 ```
 
 #### Layer 3: Event Delegation
@@ -914,12 +914,12 @@ Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'
 
 ### Bundle Optimization
 
-- **Bundle Size**: ~114KB total (110KB JS, 11KB CSS) - gzipped and minified
+- **Bundle Size**: ~119KB gzipped (~417KB raw: ~396KB JS, ~21KB CSS)
 - **Code Splitting**: Not needed (single-page application with small bundle)
 - **Tree Shaking**: Enabled via Vite (ES modules)
 - **Minification**: esbuild minification
 - **Content Hashing**: Cache busting enabled
-- **Current Build**: ~281KB uncompressed JavaScript (compresses to ~110KB with gzip)
+- **Current Build**: ~396KB uncompressed JavaScript (compresses to ~114KB with gzip)
 
 ### Runtime Performance
 

@@ -89,7 +89,8 @@ This enables direct navigation to routes like `/blog` or `/portfolio`.
 
 1. TypeScript compilation (type checking)
 2. Vite build (bundle and minify)
-3. Output: ~121KB total (110KB JS, 11KB CSS)
+3. Prerender (`scripts/prerender.js`): per-route static HTML + sitemap for crawlers, and the CSP `<meta>` injection
+4. Output: ~119KB gzipped (~417KB raw: ~396KB JS, ~21KB CSS)
 
 **Vite Config:**
 

@@ -20,6 +20,7 @@
 
 import fs from 'fs/promises';
 import path from 'path';
+import zlib from 'zlib';
 import { fileURLToPath } from 'url';
 import { glob } from 'glob';
 
@@ -90,28 +91,24 @@ async function getBundleSize() {
 
   const files = await fs.readdir(distPath);
 
-  // Calculate JS size (uncompressed)
-  let jsSize = 0;
-  for (const file of files.filter(f => f.match(/^index-.*\.js$/))) {
-    const stat = await fs.stat(path.join(distPath, file));
-    jsSize += stat.size;
-  }
+  // Measure REAL gzipped sizes (what the browser actually downloads), rather
+  // than estimating from a fixed compression ratio.
+  const gzippedTotalKB = async (ext) => {
+    let bytes = 0;
+    for (const file of files.filter(f => f.endsWith(ext))) {
+      const buf = await fs.readFile(path.join(distPath, file));
+      bytes += zlib.gzipSync(buf).length;
+    }
+    return Math.round(bytes / 1024);
+  };
 
-  // Calculate CSS size (uncompressed)
-  let cssSize = 0;
-  for (const file of files.filter(f => f.match(/^index-.*\.css$/))) {
-    const stat = await fs.stat(path.join(distPath, file));
-    cssSize += stat.size;
-  }
-
-  // Estimate gzipped (28% for JS, 22% for CSS based on actual build)
-  const jsGzipped = Math.round(jsSize * 0.28 / 1024);
-  const cssGzipped = Math.round(cssSize * 0.22 / 1024);
+  const js = await gzippedTotalKB('.js');
+  const css = await gzippedTotalKB('.css');
 
   return {
-    js: jsGzipped,
-    css: cssGzipped,
-    total: jsGzipped + cssGzipped
+    js,
+    css,
+    total: js + css
   };
 }
 
@@ -256,9 +253,9 @@ async function updateReadme(metrics) {
     }
   }
 
-  // Pattern 3: Bundle size "~120KB total bundle"
+  // Pattern 3: Bundle size "~118KB gzipped bundle"
   if (metrics.bundleTotal) {
-    const bundlePattern = /(~)(\d+)(KB total bundle)/g;
+    const bundlePattern = /(~)(\d+)(KB gzipped bundle)/g;
     const bundleMatches = [...content.matchAll(bundlePattern)];
     if (bundleMatches.length > 0) {
       const oldSize = bundleMatches[0][2];
@@ -322,9 +319,9 @@ async function updateArchitecture(metrics) {
     }
   }
 
-  // Pattern 3: Bundle sizes
+  // Pattern 3: Bundle sizes ("~118KB gzipped")
   if (metrics.bundleTotal) {
-    const bundlePattern = /(~)(\d+)(KB total)/g;
+    const bundlePattern = /(~)(\d+)(KB gzipped)/g;
     const bundleMatches = [...content.matchAll(bundlePattern)];
     if (bundleMatches.length > 0) {
       const oldSize = bundleMatches[0][2];
@@ -362,33 +359,14 @@ async function updateClaude(metrics) {
   const original = content;
   const changes = [];
 
-  // Pattern 1: Bundle size with gzipped total
+  // Pattern 1: Bundle size (canonical: "**Bundle Size:** ~118KB gzipped")
   if (metrics.bundleTotal) {
-    const bundlePattern1 = /(\*\*Bundle Size:\*\* ~)(\d+)(KB total)(\s*\(gzipped:\s*~)(\d+)(KB\))?/;
+    const bundlePattern1 = /(\*\*Bundle Size:\*\* ~)(\d+)(KB gzipped)/;
     const match = content.match(bundlePattern1);
 
-    if (match) {
-      const oldTotal = match[2];
-      const oldGzipped = match[5] || null;
-
-      if (shouldUpdateBundleSize(oldTotal, metrics.bundleTotal)) {
-        const replacement = `$1${metrics.bundleTotal}$3 (gzipped: ~${metrics.bundleTotal}KB)`;
-        content = content.replace(bundlePattern1, replacement);
-        changes.push(`Bundle size ~${oldTotal}KB → ~${metrics.bundleTotal}KB`);
-      }
-    } else {
-      // Fallback for old format without gzipped
-      const bundlePatternOld = /(\*\*Bundle Size:\*\* ~)(\d+)(KB total)/;
-      if (content.match(bundlePatternOld)) {
-        const oldSize = content.match(bundlePatternOld)[2];
-        if (shouldUpdateBundleSize(oldSize, metrics.bundleTotal)) {
-          content = content.replace(
-            bundlePatternOld,
-            `$1${metrics.bundleTotal}$3 (gzipped: ~${metrics.bundleTotal}KB)`
-          );
-          changes.push(`Bundle size ~${oldSize}KB → ~${metrics.bundleTotal}KB (added gzipped)`);
-        }
-      }
+    if (match && parseInt(match[2]) !== metrics.bundleTotal) {
+      content = content.replace(bundlePattern1, `$1${metrics.bundleTotal}$3`);
+      changes.push(`Bundle size ~${match[2]}KB → ~${metrics.bundleTotal}KB`);
     }
   }
 
@@ -397,7 +375,6 @@ async function updateClaude(metrics) {
   const testMatch = content.match(testPattern);
 
   if (testMatch) {
-    const targetPercent = testMatch[2];
     const currentPercent = testMatch[5].replace('%', '');
     const testMin = parseInt(testMatch[7].replace(/,/g, ''));
     const fileMin = parseInt(testMatch[9]);
@@ -478,7 +455,6 @@ async function updateClaude(metrics) {
   if (content.match(screensaverTimeoutPattern)) {
     const match = content.match(screensaverTimeoutPattern);
     const oldMinutes = match[2];
-    const oldMs = match[4];
 
     if (parseInt(oldMinutes) !== metrics.screensaverDefaultTimeout) {
       const newMs = metrics.screensaverDefaultTimeout * 60; // Convert to thousands

@@ -15,8 +15,8 @@
 
 | Version          | Supported | Status             |
 | ---------------- | --------- | ------------------ |
-| 0.13.x (current) | ✅ Yes    | Active development |
-| < 0.13.0         | ❌ No     | Legacy versions    |
+| 0.27.x (current) | ✅ Yes    | Active development |
+| < 0.27.0         | ❌ No     | Legacy versions    |
 
 **Note**: Once version 1.0.0 is released, security patches will only be provided for the latest minor version.
 
@@ -30,7 +30,7 @@ This application implements multiple layers of security protection:
 
 #### Layer 1: DOMPurify Sanitization
 
-**Library**: `dompurify@3.3.0`
+**Library**: `dompurify@3.4.10`
 **Location**: `src/utils/sanitizeHtml.ts`
 
 All HTML is sanitized before rendering:
@@ -135,25 +135,30 @@ function sanitizeHtml(html: string): string {
 
 #### Layer 2: Content Security Policy (CSP)
 
-**Location**: `public/_headers` (production only)
+**Location**: Injected as a `<meta http-equiv="Content-Security-Policy">` into the built HTML by `scripts/prerender.js` (post-build).
 
-**Note**: CSP is configured only in the production `_headers` file for Cloudflare Pages deployment. It is intentionally not included in `index.html` as a meta tag to allow the Vite development server to function properly with hot module replacement (HMR).
+**Note**: The site is hosted on GitHub Pages, which ignores `public/_headers` (that file is Cloudflare/Netlify format). The CSP is therefore delivered via a meta tag. It is deliberately kept out of `index.html` so the Vite dev server (and its HMR) is unaffected — only the production build carries it.
 
-Strict CSP prevents execution of inline scripts:
+Strict CSP prevents execution of inline scripts. This is the policy actually
+shipped via the meta tag (see `CSP_POLICY` in `scripts/prerender.js`):
 
 ```
 Content-Security-Policy:
   default-src 'self';
   script-src 'self';
-  style-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src 'self' data:;
-  font-src 'self';
+  font-src 'self' https://fonts.gstatic.com;
   connect-src 'self';
   base-uri 'self';
-  form-action 'self';
-  frame-ancestors 'none';
+  form-action 'self' mailto:;
   upgrade-insecure-requests
 ```
+
+> **Note**: `frame-ancestors` is intentionally omitted — browsers ignore it when
+> set via a `<meta>` tag, so it cannot be enforced on GitHub Pages. Clickjacking
+> protection would require a real `X-Frame-Options`/`frame-ancestors` response
+> header from the host.
 
 **Protection Against**:
 
@@ -210,7 +215,11 @@ if (!/^[A-Z_][A-Z0-9_]*$/i.test(name)) {
 
 ### 4. Additional Security Headers
 
-Configured in `public/_headers`:
+The repo keeps a `public/_headers` file (Cloudflare/Netlify format) with the
+hardening below, **but GitHub Pages does not serve it** — these header-only
+protections are currently **not active in production**. They would apply only if
+the site were fronted by a CDN/host that honors `_headers`. The CSP above is the
+exception: it ships via a `<meta>` tag (see Layer 2).
 
 ```
 X-Content-Type-Options: nosniff
@@ -223,9 +232,13 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 ### 5. Dependency Security
 
-- **Zero known vulnerabilities** (last audit: November 2025)
-- Regular `pnpm audit` checks
-- Minimal dependency footprint (3 production dependencies)
+- **Zero known vulnerabilities in production dependencies** (`pnpm audit --prod`,
+  last checked 2026-06-13). The shipped runtime is only `marked`, `figlet`, and
+  `dompurify`.
+- The full dependency tree (including dev/build tooling such as `vite` and
+  `jsdom`) does carry transitive advisories from `pnpm audit`; none of those
+  packages are shipped to the browser.
+- Minimal production footprint (3 production dependencies)
 - All dependencies from trusted sources (npm/pnpm registry)
 
 ---
@@ -313,10 +326,13 @@ Before merging PRs, verify:
 ### Current Security Scan
 
 ```bash
-pnpm audit
+# Production runtime only — this is what reaches users:
+pnpm audit --prod
+# No known vulnerabilities found
 
-# Regular audits show:
-# 0 vulnerabilities (0 low, 0 moderate, 0 high, 0 critical)
+# Full tree (includes dev/build tooling that never ships to the browser):
+pnpm audit
+# Reports transitive advisories in vite/jsdom et al. — not in shipped code.
 ```
 
 ### Production Dependencies
@@ -325,7 +341,7 @@ pnpm audit
 | --------- | ------- | ------------------------------------ |
 | marked    | 17.0.1  | ✅ No known vulnerabilities          |
 | figlet    | 1.9.4   | ✅ No known vulnerabilities          |
-| dompurify | 3.3.0   | ✅ Security library (XSS protection) |
+| dompurify | 3.4.10  | ✅ Security library (XSS protection) |
 
 ### Security Update Policy
 
@@ -504,9 +520,9 @@ We would like to thank the security researchers and contributors who have helped
 
 ---
 
-**Last Updated**: 2025-11-22 (v0.11.0)
-**Security Policy Version**: 1.0
-**Next Review**: January 2026
+**Last Updated**: 2026-06-13 (v0.27.3)
+**Security Policy Version**: 1.1
+**Next Review**: December 2026
 
 ---
 

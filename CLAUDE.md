@@ -14,7 +14,7 @@ This is a terminal-inspired portfolio website built with vanilla TypeScript, Vit
 - No framework - vanilla JavaScript/TypeScript
 - Dependencies: marked (markdown), figlet (ASCII art), DOMPurify (XSS protection)
 
-**Bundle Size:** ~114KB total (gzipped: ~114KB) (gzipped)
+**Bundle Size:** ~119KB gzipped (~417KB raw)
 **Test Coverage:** 80%+ target (90%+ current, 60+ test files)
 **Deployment:** GitHub Pages
 
@@ -305,7 +305,7 @@ tags: ['tag1', 'tag2']
 
 1. HTML escaping (`htmlEscape.ts`)
 2. DOMPurify sanitization (`sanitizeHtml.ts`) before `innerHTML`
-3. Content Security Policy (CSP) in `index.html` and `public/_headers`
+3. Content Security Policy (CSP) injected as a `<meta http-equiv>` at build time by `scripts/prerender.js` (GitHub Pages ignores `public/_headers`)
 4. No inline event handlers (use event delegation)
 
 **Input Validation:**
@@ -344,13 +344,13 @@ The build process:
 **Important files for deployment:**
 
 - `public/_redirects`: SPA routing configuration (`/* /index.html 200`)
-- `public/_headers`: Security headers (CSP, HSTS, etc.)
+- `public/_headers`: Cloudflare/Netlify header format — **not honored by GitHub Pages**. The CSP is shipped instead via a `<meta>` tag injected in `scripts/prerender.js`. Header-only protections (HSTS, X-Frame-Options) cannot be delivered on GitHub Pages.
 
 ### Adding a New Theme
 
-1. Add theme preset to `src/constants.ts` in `THEME_PRESETS`
-2. Ensure WCAG AA contrast compliance (use contrast checker)
-3. Update theme type definitions in `src/types/settings.ts`
+1. Add theme preset to `src/utils/ThemeManager.ts` in `initializePresets()`
+2. Aim for WCAG AA contrast (use a contrast checker — not all presets are formally verified)
+3. Add the preset name to `ThemePresetName` in `src/types/settings.ts`
 4. The theme will automatically appear in settings UI
 
 ### Configuring the Screensaver
@@ -444,7 +444,7 @@ pnpm test:run -- tests/unit/path/to/test.test.ts
 
 ### Performance Issues
 
-- Bundle should be ~86KB total (gzipped)
+- Bundle is ~119KB gzipped
 - Use `pnpm build` to check bundle size
 - Use Chrome DevTools Lighthouse for performance profiling
 - Check for memory leaks with Chrome DevTools Memory profiler
@@ -463,6 +463,6 @@ pnpm test:run -- tests/unit/path/to/test.test.ts
 - **Zero `any` usage**: Strict TypeScript mode, all types must be explicit
 - **Security first**: Multi-layer XSS protection, always sanitize before rendering
 - **Test coverage**: Maintain 80%+ coverage
-- **Bundle size**: Keep total bundle under 100KB (gzipped)
-- **Accessibility**: WCAG 2.1 Level AA compliant
+- **Bundle size**: ~119KB gzipped (no hard size cap)
+- **Accessibility**: Built to WCAG 2.1 AA guidelines (reduced-motion, keyboard nav, focus-visible); not formally audited
 - **Browser support**: Chrome 107+, Firefox 104+, Safari 16+ (via Vite's `baseline-widely-available`)

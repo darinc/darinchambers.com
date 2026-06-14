@@ -1,6 +1,6 @@
 # Darin Chambers - Terminal Portfolio
 
-[![Version](https://img.shields.io/badge/version-0.27.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.27.3-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
@@ -15,9 +15,9 @@ Try it out: https://darinchambers.com
 - Command pipeline support (`|`)
 - Markdown rendering with syntax highlighting
 - Multiple terminal themes (Green, Amber, White, Cyan, Paper, DC)
-- WCAG 2.1 compliant accessibility
+- Accessibility: reduced motion, keyboard navigation, visible focus (WCAG 2.1 AA)
 - Type-safe TypeScript with strict mode
-- 121KB total bundle size
+- ~119KB gzipped bundle
 
 ## Quick Start
 
@@ -93,8 +93,8 @@ darinchambers.com/
 - Strict TypeScript, zero `any` usage
 - Multi-layered XSS protection (DOMPurify + CSP)
 - 1,000+ tests across 50+ test files
-- Zero known vulnerabilities
-- ~114KB total bundle
+- Zero known vulnerabilities in production dependencies
+- ~119KB gzipped bundle
 
 ## Documentation
 
